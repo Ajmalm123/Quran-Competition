@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aslam Holy Qur'an Award</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <link href="{{ url('css/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url('css/style.css') }}" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <section class="header-area">
         <div class="spacer">
@@ -17,106 +19,118 @@
     <section class="form-area pb-0">
         <div class="spacer">
             <div class="form-title">
-               <div class="title-head">
-                <h1>Application For Competition</h1>
-                <p class="pb-0">This form takes on a more boxy appearance, and works well as a modal. Also, note its dual purpose as a sign-up or sign-in form, toggled at the top.</p>
-               </div>
-               <p class="pb-0"><u>See Guidelines</u></p>
+                <div class="title-head">
+                    <h1>Application For Competition</h1>
+                    <p class="pb-0">This form takes on a more boxy appearance, and works well as a modal. Also, note
+                        its dual purpose as a sign-up or sign-in form, toggled at the top.</p>
+                </div>
+                <p class="pb-0"><u>See Guidelines</u></p>
             </div>
         </div>
     </section>
     <section class="form-list">
-       <div class="spacer mt-0">
-        <form runat="server">
-            <h2>Personal Details</h2>
-            <div class="col-md-8">
-                <div class="form-area">
-                    <label for="exampleInputEmail1" class="form-label">Contact Number - ബന്ധപ്പെടാനുള്ള നമ്പർ <sup>*</sup></label>
-                    <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
-                  </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
+        <div class="spacer mt-0">
+            <form runat="server">
+                <h2>Personal Details</h2>
+                <div class="col-md-8">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Gender - ലിംഗം <sup>*</sup></label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions9" id="inlineRadio19" value="option19">
-                                <label class="form-check-label" for="inlineRadio1">Male</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions8" id="inlineRadio29" value="option29">
-                                <label class="form-check-label" for="inlineRadio2">Female</label>
-                              </div>
+                        <label for="exampleInputEmail1" class="form-label">Contact Number - ബന്ധപ്പെടാനുള്ള നമ്പർ
+                            <sup>*</sup></label>
+                        <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Gender - ലിംഗം <sup>*</sup></label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio19" value="option19">
+                                    <label class="form-check-label" for="inlineRadio1">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        id="inlineRadio29" value="option29">
+                                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Date of Birth - ജനന തിയ്യതി (DD/MM/YY)
+                                <sup>*</sup></label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Mother Tongue - മാതൃ
+                                ഭാഷ<sup>*</sup></label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Please Select</option>
+                                <option value="1">Malayalam</option>
+                                <option value="2">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Educational Qualification - വിദ്യാഭ്യാസ
+                                യോഗ്യത <sup>*</sup></label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Please Select</option>
+                                <option value="1">SSLC</option>
+                                <option value="2">Plus Two</option>
+                                <option value="3">Degree</option>
+                                <option value="4">Above Degree</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Aadhar Number - ആധാർ നമ്പർ
+                                <sup>*</sup></label>
+                            <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-area">
+                            <label for="exampleInputEmail1" class="form-label">Job - ജോലി<sup>*</sup></label>
+                            <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Date of Birth  - ജനന തിയ്യതി (DD/MM/YY) <sup>*</sup></label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                      </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Mother Tongue  - മാതൃ ഭാഷ<sup>*</sup></label>
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Please Select</option>
-                            <option value="1">Malayalam</option>
-                            <option value="2">Tamil</option>
-                            <option value="3">Urdu</option>
-                          </select>
-                      </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Educational Qualification  - വിദ്യാഭ്യാസ യോഗ്യത <sup>*</sup></label>
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Please Select</option>
-                            <option value="1">B.Tech</option>
-                            <option value="2"></option>
-                            <option value="3">Urdu</option>
-                          </select>
-                      </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Aadhar Number  - ആധാർ നമ്പർ  <sup>*</sup></label>
-                        <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
-                      </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Job  - ജോലി<sup>*</sup></label>
-                        <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
-                      </div>
-                </div>
-            </div>
         </div>
         <div class="spacer mt-0">
             <h2>Contact Information</h2>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Contact Number  - ബന്ധപ്പെടാനുള്ള നമ്പർ <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">Contact Number - ബന്ധപ്പെടാനുള്ള നമ്പർ
+                            <sup>*</sup></label>
                         <input type="number" class="form-control" id="name" aria-describedby="nameHelp">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Whatsapp  - വാട്സ്ആപ് നമ്പർ  <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">Whatsapp - വാട്സ്ആപ് നമ്പർ
+                            <sup>*</sup></label>
                         <input type="number" class="form-control" id="name" aria-describedby="nameHelp">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Email  - ഇമെയിൽ  <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">Email - ഇമെയിൽ <sup>*</sup></label>
                         <input type="email" class="form-control" id="name" aria-describedby="nameHelp">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Current Address  - വിലാസം   <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">Current Address - വിലാസം
+                            <sup>*</sup></label>
                         <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="floatingTextarea"></textarea>
                     </div>
                     <div class="form-check">
@@ -124,54 +138,71 @@
                         <label class="form-check-label" for="flexCheckChecked">
                             Use permanent address as current address
                         </label>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Permanent Address  - വിലാസം   <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">Permanent Address - വിലാസം
+                            <sup>*</sup></label>
                         <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="floatingTextarea"></textarea>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">District  - ജില്ല  <sup>*</sup></label>
+                        <label for="exampleInputEmail1" class="form-label">District - ജില്ല <sup>*</sup></label>
                         <select class="form-select" aria-label="Default select example">
                             <option selected>Please Select</option>
-                            <option value="1">B.Tech</option>
-                            <option value="2"></option>
-                            <option value="3">Urdu</option>
-                          </select>
+                            <option value="Kasaragod">Kasaragod</option>
+                            <option value="Kannur">Kannur</option>
+                            <option value="Wayanad">Wayanad</option>
+                            <option value="Kozhikode">Kozhikode</option>
+                            <option value="Malappuram">Malappuram</option>
+                            <option value="Palakkad">Palakkad</option>
+                            <option value="Thrissur">Thrissur</option>
+                            <option value="Ernakulam">Ernakulam</option>
+                            <option value="Idukki">Idukki</option>
+                            <option value="Kottayam">Kottayam</option>
+                            <option value="Alappuzha">Alappuzha</option>
+                            <option value="Pathanamthitta">Pathanamthitta</option>
+                            <option value="Kollam">Kollam</option>
+                            <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                        </select>
                     </div>
                 </div>
             </div>
-            </div>
-            <div class="spacer mt-0">
+        </div>
+        <div class="spacer mt-0">
             <h2>Contact Information</h2>
             <div class="col-md-8">
                 <div class="form-area">
-                    <label for="exampleInputEmail1" class="form-label">Name and place of the institution where hifz completed   <sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും </label>
+                    <label for="exampleInputEmail1" class="form-label">Name and place of the institution where hifz
+                        completed <sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും </label>
                     <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Did you earn ijazah in any qira’th? <sup>*</sup><br>ഏതെങ്കിലും ഖിറാഅതിൽ ഇജാസ നേടിയിട്ടുണ്ടോ? </label>
+                        <label for="exampleInputEmail1" class="form-label">Did you earn ijazah in any qira’th?
+                            <sup>*</sup><br>ഏതെങ്കിലും ഖിറാഅതിൽ ഇജാസ നേടിയിട്ടുണ്ടോ? </label>
                         <div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" onclick="showDiv()" type="radio" name="inlineRadioOptions" id="inlineRadio" value="option">
-                                <label class="form-check-label"  for="inlineRadio1">Yes</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" onclick="hideDiv()" type="radio" name="inlineRadioOptions" id="inlineRadio" value="option">
+                                <input class="form-check-input" onclick="showDiv()" type="radio"
+                                    name="inlineRadioOptions" id="inlineRadio" value="option">
+                                <label class="form-check-label" for="inlineRadio1">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick="hideDiv()" type="radio"
+                                    name="inlineRadioOptions" id="inlineRadio" value="option">
                                 <label class="form-check-label" for="inlineRadio2">No</label>
-                              </div>
+                            </div>
                         </div>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-8" id="displaythis">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Qira’th/ Qiraths which earned ijazah<sup>*</sup><br>ഇജാസ നേടിയ ഖിറാഅത് / ഖിറാഅത്തുകൾ </label>
+                        <label for="exampleInputEmail1" class="form-label">Qira’th/ Qiraths which earned
+                            ijazah<sup>*</sup><br>ഇജാസ നേടിയ ഖിറാഅത് / ഖിറാഅത്തുകൾ </label>
                         <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
                     </div>
                 </div>
@@ -179,123 +210,158 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">From where you participate in primary competition <sup>*</sup><br>പ്രാഥമിക മത്സരത്തിൽ പങ്കെടുക്കുന്നത് എവിടെ നിന്ന് ? </label>
+                        <label for="exampleInputEmail1" class="form-label">From where you participate in primary
+                            competition <sup>*</sup><br>പ്രാഥമിക മത്സരത്തിൽ പങ്കെടുക്കുന്നത് എവിടെ നിന്ന് ? </label>
                         <div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" onclick="showDiv1()" type="radio" name="inlineRadioOptionsabroad" id="inlineRadioabroad" value="optionabroad">
-                                <label class="form-check-label"  for="inlineRadioabroad">വിദേശത്ത് നിന്ന</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" onclick="hideDiv1()" type="radio" name="inlineRadioOptionslocal" checked id="inlineRadiolocal" value="optionlocal">
+                                <input class="form-check-input" onclick="showDiv1()" type="radio"
+                                    name="inlineRadioOptions" id="inlineRadioabroad" value="optionabroad">
+                                <label class="form-check-label" for="inlineRadioabroad">വിദേശത്ത് നിന്ന</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick="hideDiv1()" type="radio"
+                                    name="inlineRadioOptions" checked id="inlineRadiolocal" value="optionlocal">
                                 <label class="form-check-label" for="inlineRadiolocal">സ്വദേശത്ത് നിന്ന</label>
-                              </div>
+                            </div>
                         </div>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-area" id="hidenative">
-                        <label for="exampleInputEmail1" class="form-label">From which zone in native ?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?</label>
+                        <label for="exampleInputEmail1" class="form-label">From which zone in native
+                            ?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?</label>
                         <select class="form-select" aria-label="Default select example">
                             <option selected>Please Select</option>
-                            <option value="1">B.Tech</option>
-                            <option value="2"></option>
-                            <option value="3">Urdu</option>
-                          </select>
+                            <option value="1">Kollam</option>
+                            <option value="2">Ernakulam</option>
+                            <option value="3">Malappuram</option>
+                            <option value="4">Kannur</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4" id="showthis">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">From which zone in abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ </label>
+                        <label for="exampleInputEmail1" class="form-label">From which zone in
+                            abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ </label>
                         <select class="form-select" aria-label="Default select example">
                             <option selected>Please Select</option>
-                            <option value="1">B.Tech</option>
-                            <option value="2"></option>
-                            <option value="3">Urdu</option>
-                          </select>
+                            <option value="1">Jeddah</option>
+                            <option value="2">Dubai</option>
+                            <option value="3">Doha</option>
+                            <option value="4">Bahrain</option>
+                            <option value="5">Muscut</option>
+                            <option value="6">Kuwait</option>
+
+                        </select>
                     </div>
                 </div>
             </div>
-            </div>
-            <div class="spacer mt-0">
-                <h2>Upload Documents</h2>
-                <div class="points-area">
-                    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2.29517C6.48 2.29517 2 6.77517 2 12.2952C2 17.8152 6.48 22.2952 12 22.2952C17.52 22.2952 22 17.8152 22 12.2952C22 6.77517 17.52 2.29517 12 2.29517ZM13 17.2952H11V11.2952H13V17.2952ZM13 9.29517H11V7.29517H13V9.29517Z" fill="#9B7858"/>
-                    </svg>
-                    <div class="points">
-                        <ul class="mb-0">
-                            <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and must not exceed 100 KB in size.</li>
-                            <li>Birth certificate and Letter of recomendation should be submitted in either PDF or image format (JPG), and must be clear and legible.</li>
-                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല് കമ്മറ്റിയുടെ/ഇസ്ലാഹി സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത് </li>
-                        </ul>
-                    </div>    
+        </div>
+        <div class="spacer mt-0">
+            <h2>Upload Documents</h2>
+            <div class="points-area">
+                <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2.29517C6.48 2.29517 2 6.77517 2 12.2952C2 17.8152 6.48 22.2952 12 22.2952C17.52 22.2952 22 17.8152 22 12.2952C22 6.77517 17.52 2.29517 12 2.29517ZM13 17.2952H11V11.2952H13V17.2952ZM13 9.29517H11V7.29517H13V9.29517Z"
+                        fill="#9B7858" />
+                </svg>
+                <div class="points">
+                    <ul class="mb-0">
+                        <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and must not
+                            exceed 100 KB in size.</li>
+                        <li>Birth certificate and Letter of recommendation should be submitted in either PDF or image
+                            format (JPG), and must be clear and legible.</li>
+                        <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല് കമ്മറ്റിയുടെ/ഇസ്ലാഹി
+                            സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത് </li>
+                    </ul>
                 </div>
+            </div>
+            <div class="form-area">
+                <label for="exampleInputEmail1" class="form-label">Please attach the following documents - താഴെ പറഞ്ഞ
+                    രേഖകൾ ഉൾപെടുത്തുക </label>
+            </div>
+            <div class="col-md-4">
                 <div class="form-area">
-                    <label for="exampleInputEmail1" class="form-label">Please attach the following documents - താഴെ പറഞ്ഞ രേഖകൾ ഉൾപെടുത്തുക </label>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area" >
-                        <p>1. Photo (Passport size) - ഫോട്ടോ(പാസ്പോർട്ട് സൈസ്)<sup>*</sup></p>
-                        <div class="upload-area" id="passport">
-                            <input accept="image/*" type='file' id="imgInp" />
-                           <div class="upload-text">
-                            <svg  width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z" fill="#2964FA"/>
+                    <p>1. Photo (Passport size) - ഫോട്ടോ(പാസ്പോർട്ട് സൈസ്)<sup>*</sup></p>
+                    <div class="upload-area" id="passport">
+                        <input accept="image/*" type='file' id="imgInp" />
+                        <div class="upload-text">
+                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z"
+                                    fill="#2964FA" />
                             </svg>
-                            <span>Upload File</span>    
-                           </div>
+                            <span>Upload File</span>
                         </div>
-                        <div id="showimage">
-                            <div class="preview-area">
-                                <div class="primary-area">
-                                    <img id="blah" src="#" />
-                                    <div id="filename"></div>
-                                </div>
-                                <svg onclick="showupload()" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 6.70517L17.59 5.29517L12 10.8852L6.41 5.29517L5 6.70517L10.59 12.2952L5 17.8852L6.41 19.2952L12 13.7052L17.59 19.2952L19 17.8852L13.41 12.2952L19 6.70517Z" fill="black"/>
-                                </svg> 
+                    </div>
+                    <div id="showimage">
+                        <div class="preview-area">
+                            <div class="primary-area">
+                                <img id="blah" src="#" />
+                                <div id="filename"></div>
                             </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <p>2. Birth certificate - ജനന സർട്ടിഫിക്കേറ്റ് <sup>*</sup></p>
-                        <div class="upload-area">
-                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z" fill="#2964FA"/>
+                            <svg onclick="showupload()" width="24" height="25" viewBox="0 0 24 25"
+                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19 6.70517L17.59 5.29517L12 10.8852L6.41 5.29517L5 6.70517L10.59 12.2952L5 17.8852L6.41 19.2952L12 13.7052L17.59 19.2952L19 17.8852L13.41 12.2952L19 6.70517Z"
+                                    fill="black" />
                             </svg>
-                            <span>Upload File</span>    
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-area">
-                        <p>3. Letter of Recommendation - റെക്കമെൻഡേഷൻ ലെറ്റർ <sup>*</sup></p>
-                        <div class="upload-area">
-                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z" fill="#2964FA"/>
-                            </svg>
-                            <span>Upload File</span>    
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="spacer mt-0">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        I hereby declare that the information provided in this application is true and correct to the best of my knowledge and belief.  
-                    </label>
-                  </div>
-                  <button type="button" class="btn btn-std">Submit Application</button>
+            <div class="col-md-4">
+                <div class="form-area">
+                    <p>2. Birth certificate - ജനന സർട്ടിഫിക്കേറ്റ് <sup>*</sup></p>
+                    <div class="upload-area">
+                        <input accept="application/pdf, image/*" type='file' id="birthCert" />
+                        <div class="upload-text">
+                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z"
+                                    fill="#2964FA" />
+                            </svg>
+                            <span>Upload File</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-area">
+                    <p>3. Letter of Recommendation - റെക്കമെൻഡേഷൻ ലെറ്റർ <sup>*</sup></p>
+                    <div class="upload-area">
+                        <input accept="application/pdf, image/*" type='file' id="recommendationLetter" />
+                        <div class="upload-text">
+                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18 15.2952V18.2952H6V15.2952H4V18.2952C4 19.3952 4.9 20.2952 6 20.2952H18C19.1 20.2952 20 19.3952 20 18.2952V15.2952H18ZM7 9.29517L8.41 10.7052L11 8.12517V16.2952H13V8.12517L15.59 10.7052L17 9.29517L12 4.29517L7 9.29517Z"
+                                    fill="#2964FA" />
+                            </svg>
+                            <span>Upload File</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="spacer mt-0">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    I hereby declare that the information provided in this application is true and correct to the best
+                    of my knowledge and belief.
+                </label>
+            </div>
+            <button type="button" class="btn btn-std">Submit Application</button>
+        </div>
         </form>
-       </div>
+        </div>
     </section>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="99a4cc3df5457cbbea90be86-text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function showDiv() {
             document.getElementById('displaythis').style.display = 'block';
@@ -304,14 +370,17 @@
         function hideDiv() {
             document.getElementById('displaythis').style.display = 'none';
         }
+
         function showDiv1() {
             document.getElementById('showthis').style.display = 'block';
             document.getElementById('hidenative').style.display = 'none';
         }
+
         function showupload() {
             document.getElementById('showimage').style.display = 'none';
             document.getElementById('passport').style.display = 'block';
         }
+
         function hideDiv1() {
             document.getElementById('showthis').style.display = 'none';
             document.getElementById('hidenative').style.display = 'block';
@@ -327,4 +396,5 @@
         }
     </script>
 </body>
+
 </html>
