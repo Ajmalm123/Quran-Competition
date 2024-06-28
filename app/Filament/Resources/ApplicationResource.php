@@ -9,16 +9,19 @@ use Filament\Tables\Table;
 use App\Models\Application;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Filament\Resources\ApplicationResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
+
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -32,7 +35,7 @@ class ApplicationResource extends Resource
                 Forms\Components\TextInput::make('full_name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('status')
+                Forms\Components\Select::make('gender')
                     ->required()
                     ->options(Application::GENDER),
                 Forms\Components\DatePicker::make('date_of_birth')
@@ -82,9 +85,12 @@ class ApplicationResource extends Resource
                 Forms\Components\Select::make('zone')
                     ->required()
                     ->options(Application::ZONE),
-                FileUpload::make('passport_size_photo')->disk('public')->directory('passport'),
-                FileUpload::make('birth_certificate')->disk('public')->directory('birth-certificate'),
-                FileUpload::make('letter_of_recommendation')->disk('public')->directory('letter-of-recommendation'),
+                Forms\Components\Select::make('status')
+                    ->required()
+                    ->options(Application::STATUS),
+                FileUpload::make('passport_size_photo')->disk('public')->directory('passport')->openable(),
+                FileUpload::make('birth_certificate')->disk('public')->directory('birth-certificate')->openable(),
+                FileUpload::make('letter_of_recommendation')->disk('public')->directory('letter-of-recommendation')->openable(),
             ]);
     }
 
@@ -96,28 +102,19 @@ class ApplicationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('full_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('gender'),
-                Tables\Columns\TextColumn::make('date_of_birth')
-                    ->date()
-                    ->sortable(),
-                // Tables\Columns\TextColumn::make('mother_tongue'),
-                // Tables\Columns\TextColumn::make('educational_qualification'),
-                // Tables\Columns\TextColumn::make('aadhar_number')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('job')
-                //     ->searchable(),
                 Tables\Columns\TextColumn::make('contact_number')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('whatsapp')
-                //     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('district'),
-                Tables\Columns\TextColumn::make('pincode')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('zone'),
+                Tables\Columns\TextColumn::make('date_of_birth')
+                    ->date()
+                    ->sortable(),
+
+
                 // Tables\Columns\TextColumn::make('is_completed_ijazah'),
                 // Tables\Columns\TextColumn::make('primary_competition_participation'),
-                // Tables\Columns\TextColumn::make('zone'),
                 // Tables\Columns\TextColumn::make('passport_size_photo')
                 //     ->searchable(),
                 // Tables\Columns\TextColumn::make('birth_certificate')
@@ -125,25 +122,44 @@ class ApplicationResource extends Resource
                 // Tables\Columns\TextColumn::make('letter_of_recommendation')
                 // ->searchable(),
                 // ImageColumn::make('passport_size_photo'),
+                Tables\Columns\TextColumn::make('status')->badge()->color(function (string $state): string {
+                    return match ($state) {
+                        'Created' => 'grey',
+                        'withheld' => 'warning',
+                        'Approved' => 'success',
+                        'Rejected' => 'danger'
+                    };
+                })->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
             ])
-                ->actions([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Action::make('approve')
-                        ->action(function ($data) {})
-                ])
-            ->bulkActions([ 
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                // Action::make('Approve')->icon('heroicon-o-check')->requiresConfirmation()
+                //     ->action(function ($data) {
+                //         Notification::make()->title('Application Accepted')->success()->send();
+                //     })->hidden(function (Application $application) {
+                //         return  $application->full_name == 'Cedric Mayo';
+                //     }),
+                // Action::make('Reject')->icon('heroicon-o-x-mark')->requiresConfirmation()
+                //     ->color('danger')
+                //     ->action(function ($data) {
+                //         Notification::make()->title('Application Rejected')->success()->send();
+                //     })->hidden(function (Application $application) {
+                //         return  $application->full_name == 'Cedric Mayao';
+                //     }),
+            ])
+            ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
@@ -161,6 +177,7 @@ class ApplicationResource extends Resource
     {
         return [
             'index' => Pages\ListApplications::route('/'),
+            'view' => Pages\ViewApplication::route('/{record}/view'),
             // 'create' => Pages\CreateApplication::route('/create'),
             'edit' => Pages\EditApplication::route('/{record}/edit'),
         ];

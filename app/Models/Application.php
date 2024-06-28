@@ -11,10 +11,10 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'application_id', 'full_name', 'gender', 'date_of_birth', 'mother_tongue', 'educational_qualification', 
-        'aadhar_number', 'job', 'contact_number', 'whatsapp', 'email', 'c_address', 'pr_address', 'district', 
-        'pincode', 'institution_name', 'is_completed_ijazah', 'qirath_with_ijazah', 'primary_competition_participation', 
-        'zone', 'passport_size_photo', 'birth_certificate', 'letter_of_recommendation'
+        'application_id', 'full_name', 'gender', 'date_of_birth', 'mother_tongue', 'educational_qualification',
+        'aadhar_number', 'job', 'contact_number', 'whatsapp', 'email', 'c_address', 'pr_address', 'district',
+        'pincode', 'institution_name', 'is_completed_ijazah', 'qirath_with_ijazah', 'primary_competition_participation',
+        'zone', 'passport_size_photo', 'birth_certificate', 'letter_of_recommendation', 'status'
     ];
 
     const GENDER = [
@@ -50,14 +50,14 @@ class Application extends Model
         'Thiruvananthapuram' => 'Thiruvananthapuram'
     ];
 
-    const IS_COMPLETED_IJAZAH=[
-        'Yes'=>'Yes',
-        'No'=>'No'
+    const IS_COMPLETED_IJAZAH = [
+        'Yes' => 'Yes',
+        'No' => 'No'
     ];
 
-    const PRIMARY_COMPETITION_PARTICIPATION=[
-      'Kerala'=>'Kerala',
-      'native'=>'native'
+    const PRIMARY_COMPETITION_PARTICIPATION = [
+        'Kerala' => 'Kerala',
+        'native' => 'native'
     ];
 
     const ZONE = [
@@ -73,7 +73,14 @@ class Application extends Model
         'Kuwait' => 'Kuwait'
     ];
 
-     /**
+    const STATUS = [
+        'Created' => 'Created',
+        'Approved' => 'Approved',
+        'Rejected' => 'Rejected',
+        'withheld' => 'withheld',
+    ];
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -85,35 +92,57 @@ class Application extends Model
         });
     }
 
-   /**
+    /**
      * Generate a unique application ID.
      *
      * @return string
      */
     protected static function generateUniqueApplicationId()
     {
-        do {
-            $applicationId = self::generateShortId();
-        } while (self::where('application_id', $applicationId)->exists());
+        // Fetch the last used application ID from the database
+        $lastApplicationId = self::getLastApplicationId();
 
-        return $applicationId;
+        // If no ID exists, start from the initial value
+        if (!$lastApplicationId) {
+            return 'APQ241000';
+        }
+
+        // Increment the last application ID
+        $newApplicationId = self::incrementApplicationId($lastApplicationId);
+
+        // Return the new unique application ID
+        return $newApplicationId;
     }
 
     /**
-     * Generate a random string of 10 characters (alphanumeric).
+     * Get the last used application ID from the database.
      *
+     * @return string|null
+     */
+    protected static function getLastApplicationId()
+    {
+        // Adjust this query according to your database setup
+        $lastRecord = self::orderBy('application_id', 'desc')->first();
+        return $lastRecord ? $lastRecord->application_id : null;
+    }
+
+    /**
+     * Increment the application ID.
+     *
+     * @param string $applicationId
      * @return string
      */
-    protected static function generateShortId()
+    protected static function incrementApplicationId($applicationId)
     {
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        $length = 10;
-        $randomString = '';
+        // Extract the numeric part of the ID
+        $numericPart = substr($applicationId, 5);
 
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
+        // Increment the numeric part
+        $incrementedNumericPart = (int)$numericPart + 1;
 
-        return $randomString;
+        // Format the new ID with leading zeros
+        $newApplicationId = 'APQ24' . str_pad($incrementedNumericPart, 4, '0', STR_PAD_LEFT);
+
+        return $newApplicationId;
     }
 }

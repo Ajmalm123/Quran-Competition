@@ -15,7 +15,7 @@ class CreateApplicationsTable extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->string('application_id', 10);
+            $table->string('application_id', 20);
             $table->string('full_name');
             $table->enum('gender', ['Male', 'Female']);
             $table->date('date_of_birth');
@@ -32,7 +32,7 @@ class CreateApplicationsTable extends Migration
                 'Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram', 'Palakkad', 'Thrissur', 'Ernakulam',
                 'Idukki', 'Kottayam', 'Alappuzha', 'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
             ]);
-            $table->string('pincode',10);
+            $table->string('pincode', 10);
             $table->text('institution_name')->nullable();
             $table->enum('is_completed_ijazah', ['Yes', 'No']);
             $table->text('qirath_with_ijazah')->nullable();
@@ -41,7 +41,9 @@ class CreateApplicationsTable extends Migration
             $table->string('passport_size_photo')->nullable();
             $table->string('birth_certificate')->nullable();
             $table->string('letter_of_recommendation')->nullable();
+            $table->enum('status', ['Created', 'withheld', 'Approved', 'Rejected']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
