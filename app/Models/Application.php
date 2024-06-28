@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Application extends Model
 {
@@ -71,4 +72,48 @@ class Application extends Model
         'Muscat' => 'Muscat',
         'Kuwait' => 'Kuwait'
     ];
+
+     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($recitation) {
+            $recitation->application_id = self::generateUniqueApplicationId();
+        });
+    }
+
+   /**
+     * Generate a unique application ID.
+     *
+     * @return string
+     */
+    protected static function generateUniqueApplicationId()
+    {
+        do {
+            $applicationId = self::generateShortId();
+        } while (self::where('application_id', $applicationId)->exists());
+
+        return $applicationId;
+    }
+
+    /**
+     * Generate a random string of 10 characters (alphanumeric).
+     *
+     * @return string
+     */
+    protected static function generateShortId()
+    {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $length = 10;
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
+    }
 }

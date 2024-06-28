@@ -26,9 +26,9 @@ class ApplicationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('application_id')
-                    ->required()
-                    ->maxLength(10),
+                // Forms\Components\TextInput::make('application_id')
+                //     ->required()
+                //     ->maxLength(10),
                 Forms\Components\TextInput::make('full_name')
                     ->required()
                     ->maxLength(255),
