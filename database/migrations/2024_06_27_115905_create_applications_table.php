@@ -27,6 +27,7 @@ class CreateApplicationsTable extends Migration
             $table->string('whatsapp', 15)->nullable();
             $table->string('email');
             $table->text('c_address');
+            $table->text('pr_address');
             $table->enum('district', [
                 'Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram', 'Palakkad', 'Thrissur', 'Ernakulam',
                 'Idukki', 'Kottayam', 'Alappuzha', 'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
@@ -37,6 +38,9 @@ class CreateApplicationsTable extends Migration
             $table->text('qirath_with_ijazah')->nullable();
             $table->enum('primary_competition_participation', ['Kerala', 'native']);
             $table->enum('zone', ['Kollam', 'Ernakulam', 'Malappuram', 'Kannur', 'Jeddah', 'Dubai', 'Doha', 'Bahrain', 'Muscat', 'Kuwait']);
+            $table->string('passport_size_photo')->nullable();
+            $table->string('birth_certificate')->nullable();
+            $table->string('letter_of_recommendation')->nullable();
             $table->timestamps();
         });
     }
