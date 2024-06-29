@@ -8,6 +8,6 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateApplication extends CreateRecord
 {
-    protected ?string $maxContentWidth = 'full';
+    protected ?string $maxContentWidth = '7xl';
     protected static string $resource = ApplicationResource::class;
 }

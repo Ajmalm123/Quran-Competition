@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -9,14 +10,19 @@ use Filament\Tables\Table;
 use App\Models\Application;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Filament\Resources\ApplicationResource\RelationManagers;
-use Filament\Tables\Filters\SelectFilter;
 
 class ApplicationResource extends Resource
 {
@@ -29,68 +35,103 @@ class ApplicationResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('application_id')
-                //     ->required()
-                //     ->maxLength(10),
-                Forms\Components\TextInput::make('full_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('gender')
-                    ->required()
-                    ->options(Application::GENDER),
-                Forms\Components\DatePicker::make('date_of_birth')
-                    ->required(),
-                Forms\Components\Select::make('mother_tongue')
-                    ->required()
-                    ->options(Application::MOTHERTONGUE),
-                Forms\Components\Select::make('educational_qualification')
-                    ->required()
-                    ->options(Application::EDUCATION_QUALIFICATION),
-                Forms\Components\TextInput::make('aadhar_number')
-                    ->required()
-                    ->maxLength(12),
-                Forms\Components\TextInput::make('job')
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('contact_number')
-                    ->required()
-                    ->maxLength(15),
-                Forms\Components\TextInput::make('whatsapp')
-                    ->maxLength(15),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('c_address')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('pr_address')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('district')
-                    ->required()
-                    ->options(Application::DISTRICT),
-                Forms\Components\TextInput::make('pincode')
-                    ->required()
-                    ->maxLength(10),
-                Forms\Components\Textarea::make('institution_name')
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('is_completed_ijazah')
-                    ->required()
-                    ->options(Application::IS_COMPLETED_IJAZAH),
-                Forms\Components\Textarea::make('qirath_with_ijazah')
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('primary_competition_participation')
-                    ->required()
-                    ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
-                Forms\Components\Select::make('zone')
-                    ->required()
-                    ->options(Application::ZONE),
-                Forms\Components\Select::make('status')
-                    ->required()
-                    ->options(Application::STATUS),
-                FileUpload::make('passport_size_photo')->disk('public')->directory('passport')->openable(),
-                FileUpload::make('birth_certificate')->disk('public')->directory('birth-certificate')->openable(),
-                FileUpload::make('letter_of_recommendation')->disk('public')->directory('letter-of-recommendation')->openable(),
+                Forms\Components\Section::make('Application Details')
+                    ->schema([
+                        TextInput::make('application_id')
+                            ->required()
+                            ->maxLength(10)
+                            ->visible(fn ($livewire) => $livewire instanceof EditRecord)
+                            ->readOnly(),
+                        TextInput::make('full_name')
+                            ->required()
+                            ->maxLength(255),
+                        Select::make('gender')
+                            ->required()
+                            ->options(Application::GENDER),
+                        DatePicker::make('date_of_birth')
+                            ->required(),
+                        Select::make('mother_tongue')
+                            ->required()
+                            ->options(Application::MOTHERTONGUE),
+                        Select::make('educational_qualification')
+                            ->required()
+                            ->options(Application::EDUCATION_QUALIFICATION),
+                        TextInput::make('aadhar_number')
+                            ->required()
+                            ->maxLength(12),
+                    ])
+                    ->columns(2),
+                    
+                Forms\Components\Section::make('Contact Information')
+                    ->schema([
+                        TextInput::make('job')
+                            ->maxLength(100),
+                        TextInput::make('contact_number')
+                            ->required()
+                            ->maxLength(15),
+                        TextInput::make('whatsapp')
+                            ->maxLength(15),
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('Addresses')
+                    ->schema([
+                        Textarea::make('c_address')
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('pr_address')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(1),
+
+                Forms\Components\Section::make('Additional Information')
+                    ->schema([
+                        Select::make('district')
+                            ->required()
+                            ->options(Application::DISTRICT),
+                        TextInput::make('pincode')
+                            ->required()
+                            ->maxLength(10),
+                        Textarea::make('institution_name')
+                            ->columnSpanFull(),
+                        Select::make('is_completed_ijazah')
+                            ->required()
+                            ->options(Application::IS_COMPLETED_IJAZAH),
+                        Textarea::make('qirath_with_ijazah')
+                            ->columnSpanFull(),
+                        Select::make('primary_competition_participation')
+                            ->required()
+                            ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
+                        Select::make('zone')
+                            ->required()
+                            ->options(Application::ZONE),
+                        Select::make('status')
+                            ->required()
+                            ->options(Application::STATUS),
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('Documents')
+                    ->schema([
+                        FileUpload::make('passport_size_photo')
+                            ->disk('public')
+                            ->directory('passport')
+                            ->openable(),
+                        FileUpload::make('birth_certificate')
+                            ->disk('public')
+                            ->directory('birth-certificate')
+                            ->openable(),
+                        FileUpload::make('letter_of_recommendation')
+                            ->disk('public')
+                            ->directory('letter-of-recommendation')
+                            ->openable(),
+                    ])
+                    ->columns(1),
             ]);
     }
 
@@ -108,20 +149,12 @@ class ApplicationResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('district'),
                 Tables\Columns\TextColumn::make('zone'),
-                Tables\Columns\TextColumn::make('date_of_birth')
-                    ->date()
-                    ->sortable(),
-
-
-                // Tables\Columns\TextColumn::make('is_completed_ijazah'),
-                // Tables\Columns\TextColumn::make('primary_competition_participation'),
-                // Tables\Columns\TextColumn::make('passport_size_photo')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('birth_certificate')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('letter_of_recommendation')
-                // ->searchable(),
-                // ImageColumn::make('passport_size_photo'),
+                Tables\Columns\TextColumn::make('age')
+                ->label('Age')
+                ->sortable()
+                ->getStateUsing(function ($record) {
+                    return Carbon::parse($record->date_of_birth)->age;
+                }),
                 Tables\Columns\TextColumn::make('status')->badge()->color(function (string $state): string {
                     return match ($state) {
                         'Created' => 'grey',
@@ -141,6 +174,12 @@ class ApplicationResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('status')
+                    ->options([
+                        'Created' => 'Created',
+                        'withheld' => 'withheld',
+                        'Approved' => 'Approved',
+                        'Rejected'=>'Rejected'
+                    ])
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -178,7 +217,7 @@ class ApplicationResource extends Resource
         return [
             'index' => Pages\ListApplications::route('/'),
             'view' => Pages\ViewApplication::route('/{record}/view'),
-            // 'create' => Pages\CreateApplication::route('/create'),
+            'create' => Pages\CreateApplication::route('/create'),
             'edit' => Pages\EditApplication::route('/{record}/edit'),
         ];
     }

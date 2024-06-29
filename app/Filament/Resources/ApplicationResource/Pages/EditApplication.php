@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditApplication extends EditRecord
 {
     protected static string $resource = ApplicationResource::class;
-    protected ?string $maxContentWidth = 'full';
+    protected ?string $maxContentWidth = '7xl';
 
     protected function getHeaderActions(): array
     {

@@ -21,7 +21,7 @@ class ViewApplication extends ViewRecord
                 ->requiresConfirmation()
                 ->color('success')
                 ->action(function (Model $record) {
-                    $record->status = Application::STATUS['approved'];
+                    $record->status = Application::STATUS['Approved'];
                     $record->save();
                     Notification::make()->title('Application Approved')->success()->send();
                 })
@@ -32,7 +32,7 @@ class ViewApplication extends ViewRecord
                 ->requiresConfirmation()
                 ->color('danger')
                 ->action(function (Model $record) {
-                    $record->status = Application::STATUS['rejected'];
+                    $record->status = Application::STATUS['Rejected'];
                     $record->save();
                     Notification::make()->title('Application Rejected')->success()->send();
                 })->hidden(function (Application $application) {
