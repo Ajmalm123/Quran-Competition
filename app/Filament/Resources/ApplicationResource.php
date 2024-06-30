@@ -6,12 +6,14 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Jobs\SendEmailJob;
 use Filament\Tables\Table;
 use App\Models\Application;
 use Filament\Resources\Resource;
 use App\Exports\ApplicationExport;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Blade;
@@ -196,6 +198,19 @@ class ApplicationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('Send Mail')->icon('heroicon-o-envelope')->form([
+                    Forms\Components\TextInput::make('Subject')->label('Subject')->required(),
+                    Forms\Components\Textarea::make('message')->label('Message')->required()
+                ])->action(function (Application $application, array $data): void {
+                    $dispatchData = [
+                        'application' => $application,
+                        'subject' => $data['Subject'],
+                        'message' => $data['message'],
+                    ];
+                    // Dispatch the job
+                    SendEmailJob::dispatch($dispatchData);
+                    Notification::make()->title('Mail Send SuccessFully')->success()->send();
+                }),
                 Tables\Actions\DeleteAction::make(),
                 // Action::make('Approve')->icon('heroicon-o-check')->requiresConfirmation()
                 //     ->action(function ($data) {
