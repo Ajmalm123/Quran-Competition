@@ -32,11 +32,11 @@ class CreateApplicationsTable extends Migration
                 'Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram', 'Palakkad', 'Thrissur', 'Ernakulam',
                 'Idukki', 'Kottayam', 'Alappuzha', 'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
             ]);
-            $table->string('pincode', 10);
+            $table->string('pincode', 10)->nullable();
             $table->text('institution_name')->nullable();
             $table->enum('is_completed_ijazah', ['Yes', 'No']);
             $table->text('qirath_with_ijazah')->nullable();
-            $table->enum('primary_competition_participation', ['Kerala', 'native']);
+            $table->enum('primary_competition_participation', ['Native', 'Abroad']);
             $table->enum('zone', ['Kollam', 'Ernakulam', 'Malappuram', 'Kannur', 'Jeddah', 'Dubai', 'Doha', 'Bahrain', 'Muscat', 'Kuwait']);
             $table->string('passport_size_photo')->nullable();
             $table->string('birth_certificate')->nullable();

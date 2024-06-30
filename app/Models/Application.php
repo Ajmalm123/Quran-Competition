@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = [
         'application_id', 'full_name', 'gender', 'date_of_birth', 'mother_tongue', 'educational_qualification',
@@ -56,8 +57,8 @@ class Application extends Model
     ];
 
     const PRIMARY_COMPETITION_PARTICIPATION = [
-        'Kerala' => 'Kerala',
-        'native' => 'native'
+        'Native' => 'Native',
+        'Abroad' => 'Abroad'
     ];
 
     const ZONE = [

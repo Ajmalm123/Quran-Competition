@@ -63,10 +63,10 @@ class LatestApplications extends BaseWidget
                         'Approved' => 'Approved',
                         'Rejected'=>'Rejected'
                     ])
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()
-            ]);
+                    ]);
+            // ->actions([
+            //     Tables\Actions\ViewAction::make(),
+            //     Tables\Actions\EditAction::make()
+            // ]);
     }
 }

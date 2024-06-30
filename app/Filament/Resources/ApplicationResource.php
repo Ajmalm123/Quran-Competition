@@ -9,19 +9,28 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Application;
 use Filament\Resources\Resource;
+use App\Exports\ApplicationExport;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Blade;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Tables\Columns\ImageColumn;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
+use Webbingbrasil\FilamentAdvancedFilter\Filters\DateFilter;
 use App\Filament\Resources\ApplicationResource\RelationManagers;
 
 class ApplicationResource extends Resource
@@ -37,22 +46,14 @@ class ApplicationResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Application Details')
                     ->schema([
-                        TextInput::make('application_id')
-                            ->required()
-                            ->maxLength(10)
-                            ->visible(fn ($livewire) => $livewire instanceof EditRecord)
-                            ->readOnly(),
                         TextInput::make('full_name')
                             ->required()
                             ->maxLength(255),
+                        DatePicker::make('date_of_birth')
+                            ->required(),
                         Select::make('gender')
                             ->required()
                             ->options(Application::GENDER),
-                        DatePicker::make('date_of_birth')
-                            ->required(),
-                        Select::make('mother_tongue')
-                            ->required()
-                            ->options(Application::MOTHERTONGUE),
                         Select::make('educational_qualification')
                             ->required()
                             ->options(Application::EDUCATION_QUALIFICATION),
@@ -61,11 +62,9 @@ class ApplicationResource extends Resource
                             ->maxLength(12),
                     ])
                     ->columns(2),
-                    
+
                 Forms\Components\Section::make('Contact Information')
                     ->schema([
-                        TextInput::make('job')
-                            ->maxLength(100),
                         TextInput::make('contact_number')
                             ->required()
                             ->maxLength(15),
@@ -75,28 +74,22 @@ class ApplicationResource extends Resource
                             ->email()
                             ->required()
                             ->maxLength(255),
-                    ])
-                    ->columns(2),
-
-                Forms\Components\Section::make('Addresses')
-                    ->schema([
                         Textarea::make('c_address')
                             ->required()
                             ->columnSpanFull(),
                         Textarea::make('pr_address')
                             ->required()
                             ->columnSpanFull(),
-                    ])
-                    ->columns(1),
-
-                Forms\Components\Section::make('Additional Information')
-                    ->schema([
+                        TextInput::make('pincode')
+                            ->maxLength(8),
                         Select::make('district')
                             ->required()
                             ->options(Application::DISTRICT),
-                        TextInput::make('pincode')
-                            ->required()
-                            ->maxLength(10),
+                    ])
+                    ->columns(1),
+
+                Forms\Components\Section::make('Hifz and Participation Details')
+                    ->schema([
                         Textarea::make('institution_name')
                             ->columnSpanFull(),
                         Select::make('is_completed_ijazah')
@@ -135,6 +128,7 @@ class ApplicationResource extends Resource
             ]);
     }
 
+
     public static function table(Table $table): Table
     {
         return $table
@@ -150,11 +144,11 @@ class ApplicationResource extends Resource
                 Tables\Columns\TextColumn::make('district'),
                 Tables\Columns\TextColumn::make('zone'),
                 Tables\Columns\TextColumn::make('age')
-                ->label('Age')
-                ->sortable()
-                ->getStateUsing(function ($record) {
-                    return Carbon::parse($record->date_of_birth)->age;
-                }),
+                    ->label('Age')
+                    ->sortable()
+                    ->getStateUsing(function ($record) {
+                        return Carbon::parse($record->date_of_birth)->age;
+                    }),
                 Tables\Columns\TextColumn::make('status')->badge()->color(function (string $state): string {
                     return match ($state) {
                         'Created' => 'grey',
@@ -164,11 +158,13 @@ class ApplicationResource extends Resource
                     };
                 })->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d h:i A')
+                    ->label('Created Date')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d h:i A')
+                    ->label('Updated Date')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -178,12 +174,29 @@ class ApplicationResource extends Resource
                         'Created' => 'Created',
                         'withheld' => 'withheld',
                         'Approved' => 'Approved',
-                        'Rejected'=>'Rejected'
+                        'Rejected' => 'Rejected'
+                    ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until'),
                     ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 // Action::make('Approve')->icon('heroicon-o-check')->requiresConfirmation()
                 //     ->action(function ($data) {
                 //         Notification::make()->title('Application Accepted')->success()->send();
@@ -201,6 +214,9 @@ class ApplicationResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('export')->label('Export to Excel')->icon('heroicon-o-document-arrow-down')->action(function (Collection $records) {
+                        return Excel::download(new ApplicationExport($records), 'Applications.xlsx');
+                    })
                 ]),
             ]);
     }
