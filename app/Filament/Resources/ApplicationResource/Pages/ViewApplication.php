@@ -5,6 +5,8 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 use Filament\Actions;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
+use Filament\Actions\StaticAction;
+use Filament\Actions\MountableAction;
 use Filament\Infolists\Components\Grid;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
@@ -60,78 +62,78 @@ class ViewApplication extends ViewRecord
                     return $application->status == 'Rejected' || $application->status == 'Approved';
                 }),
             Actions\EditAction::make()->color('info'),
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
         ];
     }
 
-    public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
-    {
-        return $infolist
-            ->schema([
-                Section::make('Application Details')
-                    ->schema([
-                        Grid::make(3)->schema([
-                            ImageEntry::make('passport_size_photo'),
-                            TextEntry::make('full_name'),
-                            TextEntry::make('date_of_birth'),
-                        ]),
-                        Grid::make(3)->schema([
-                            TextEntry::make('educational_qualification'),
-                            TextEntry::make('aadhar_number'),
-                            TextEntry::make('gender'),
-                        ]),
+    // public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
+    // {
+    //     return $infolist
+    //         ->schema([
+    //             Section::make('Application Details')
+    //                 ->schema([
+    //                     Grid::make(3)->schema([
+    //                         ImageEntry::make('passport_size_photo'),
+    //                         TextEntry::make('full_name'),
+    //                         TextEntry::make('date_of_birth'),
+    //                     ]),
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('educational_qualification'),
+    //                         TextEntry::make('aadhar_number'),
+    //                         TextEntry::make('gender'),
+    //                     ]),
 
-                    ]),
-                Section::make('Contact Information')
-                    ->schema([
-                        Grid::make(3)->schema([
-                            TextEntry::make('contact_number'),
-                            TextEntry::make('whatsapp'),
-                            TextEntry::make('email'),
-                        ]),
-                        Grid::make(3)->schema([
-                            TextEntry::make('c_address')->label('Current Address'),
-                            TextEntry::make('pr_address')->label('Permanent Address'),
-                            TextEntry::make('pincode'),
-                        ]),
+    //                 ]),
+    //             Section::make('Contact Information')
+    //                 ->schema([
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('contact_number'),
+    //                         TextEntry::make('whatsapp'),
+    //                         TextEntry::make('email'),
+    //                     ]),
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('c_address')->label('Current Address'),
+    //                         TextEntry::make('pr_address')->label('Permanent Address'),
+    //                         TextEntry::make('pincode'),
+    //                     ]),
 
-                        Grid::make(3)->schema([
-                            TextEntry::make('district'),
-                        ]),
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('district'),
+    //                     ]),
 
-                    ]),
+    //                 ]),
 
-                Section::make('Hifz and Participation Details')
-                    ->schema([
-                        Grid::make(3)->schema([
-                            TextEntry::make('institution_name'),
-                            TextEntry::make('is_completed_ijazah'),
-                            TextEntry::make('qirath_with_ijazah'),
-                        ]),
-                        Grid::make(3)->schema([
-                            TextEntry::make('primary_competition_participation'),
-                            TextEntry::make('zone'),
-                            TextEntry::make('status')
-                                ->badge()
-                                ->color(fn(string $state): string => match ($state) {
-                                    'Created' => 'grey',
-                                    'withheld' => 'warning',
-                                    'Approved' => 'success',
-                                    'Rejected' => 'danger'
-                                })
-                        ]),
+    //             Section::make('Hifz and Participation Details')
+    //                 ->schema([
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('institution_name'),
+    //                         TextEntry::make('is_completed_ijazah'),
+    //                         TextEntry::make('qirath_with_ijazah'),
+    //                     ]),
+    //                     Grid::make(3)->schema([
+    //                         TextEntry::make('primary_competition_participation'),
+    //                         TextEntry::make('zone'),
+    //                         TextEntry::make('status')
+    //                             ->badge()
+    //                             ->color(fn(string $state): string => match ($state) {
+    //                                 'Created' => 'grey',
+    //                                 'withheld' => 'warning',
+    //                                 'Approved' => 'success',
+    //                                 'Rejected' => 'danger'
+    //                             })
+    //                     ]),
 
 
-                    ]),
-                Section::make('Documents')
-                    ->schema([
-                        Grid::make(3)->schema([
-                            ImageEntry::make('birth_certificate'),
-                            ImageEntry::make('letter_of_recommendation'),
-                        ]),
+    //                 ]),
+    //             Section::make('Documents')
+    //                 ->schema([
+    //                     Grid::make(3)->schema([
+    //                         ImageEntry::make('birth_certificate'),
+    //                         ImageEntry::make('letter_of_recommendation'),
+    //                     ]),
 
-                    ]),
+    //                 ]),
 
-            ]);
-    }
+    //         ]);
+    // }
 }

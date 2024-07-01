@@ -13,7 +13,6 @@ class StatsOverview extends BaseWidget
         $approvedCount = Application::where('status', 'Approved')->count();
         $rejectedCount = Application::where('status', 'Rejected')->count();
         $withheldCount = Application::where('status', 'withheld')->count();
-        $statusText = "Approved: $approvedCount\nRejected: $rejectedCount\nWithheld: $withheldCount";
 
         return [
             Stat::make('Total Application Recieved',Application::count()),

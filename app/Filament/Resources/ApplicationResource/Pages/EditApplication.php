@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 use Filament\Forms;
 use Filament\Actions;
 use App\Models\Application;
+use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -25,7 +26,7 @@ class EditApplication extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
         ];
     }
 

@@ -51,8 +51,10 @@ class ApplicationResource extends Resource
                         TextInput::make('full_name')
                             ->required()
                             ->maxLength(255),
-                        DatePicker::make('date_of_birth')
-                            ->required(),
+                        TextInput::make('date_of_birth')->label('Age')
+                            ->required()->formatStateUsing(function ($record) {
+                                return Carbon::parse($record->date_of_birth)->age;
+                            }),
                         Select::make('gender')
                             ->required()
                             ->options(Application::GENDER),
@@ -198,7 +200,7 @@ class ApplicationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Action::make('Send Mail')->icon('heroicon-o-envelope')->form([
+                Action::make('Send Mail')->icon('heroicon-o-envelope')->color('info')->form([
                     Forms\Components\TextInput::make('Subject')->label('Subject')->required(),
                     Forms\Components\Textarea::make('message')->label('Message')->required()
                 ])->action(function (Application $application, array $data): void {
