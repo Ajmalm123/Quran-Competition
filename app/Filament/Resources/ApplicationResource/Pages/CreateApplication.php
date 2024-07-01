@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 
 use Filament\Forms;
 use Filament\Actions;
+use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use Forms\Components\Wizard\Step;
 use Filament\Forms\Components\Grid;
@@ -38,7 +39,13 @@ class CreateApplication extends CreateRecord
 
     protected function afterCreate()
     {
-
+        $dispatchData = [
+            'application' => $this->record,
+            'subject' => 'Application Received',
+            'message' => 'Thank you for your application. We have received it and will review it shortly.',
+        ];
+        // Dispatch the job
+        SendEmailJob::dispatch($dispatchData);
     }
 
     protected function getSteps(): array
