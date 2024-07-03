@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Competition')
             ->login()
+            ->favicon(asset('images/aqa_faviocn.svg'))
             ->topNavigation()
             ->colors([
                 'info' => Color::Blue,

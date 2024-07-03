@@ -3,8 +3,12 @@
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return redirect('/apply');
+// });
+
 Route::get('/', function () {
-    return redirect('/apply');
+    return view('blank');
 });
 
 Route::get('/apply', function () {

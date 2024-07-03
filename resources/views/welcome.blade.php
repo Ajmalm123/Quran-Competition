@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aslam Holy Qur'an Award</title>
+    <link rel="icon" href="{{ asset('images/aqa_faviocn.svg') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -116,7 +117,8 @@
                                 യോഗ്യത <sup>*</sup></label>
                             <select class="form-select" aria-label="Default select example"
                                 name="educational_qualification">
-                                <option value="0" {{ old('educational_qualification') == '0' ? 'selected' : '' }}>
+                                <option value="0"
+                                    {{ old('educational_qualification') == '0' ? 'selected' : '' }}>
                                     Please Select</option>
                                 <option value="SSLC"
                                     {{ old('educational_qualification') == 'SSLC' ? 'selected' : '' }}>SSLC</option>
@@ -519,7 +521,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        
         function showDiv() {
             document.getElementById('displaythis').style.display = 'block';
         }
