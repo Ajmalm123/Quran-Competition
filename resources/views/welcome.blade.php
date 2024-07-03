@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aslam Holy Qur'an Award</title>
+    <title>AP Aslam Holy Qur'an Award</title>
     <link rel="icon" href="{{ asset('images/aqa_faviocn.svg') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
                 <h2>Personal Details</h2>
                 <div class="col-md-8">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര്
+                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര് (Type in English)
                             <sup>*</sup></label>
                         <input type="tel" class="form-control" id="name" name="full_name"
                             aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
