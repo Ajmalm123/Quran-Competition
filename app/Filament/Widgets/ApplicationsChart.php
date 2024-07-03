@@ -12,6 +12,17 @@ class ApplicationsChart extends ChartWidget
     protected static ?string $maxHeight = '300px';
     protected static ?int $sort = 2;
 
+    protected static ?array $options = [
+        'scales' => [
+            'x' => [
+                'display' => false,
+            ],
+            'y' => [
+                'display' => false,
+            ],
+        ],
+    ];
+
     protected function getData(): array
     {
         $approvedCount = Application::where('status', 'Approved')->count();
