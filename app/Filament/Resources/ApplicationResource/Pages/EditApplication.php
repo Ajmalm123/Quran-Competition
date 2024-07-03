@@ -69,6 +69,7 @@ class EditApplication extends EditRecord
                         Select::make('gender')
                             ->required()
                             ->options(Application::GENDER),
+                        TextInput::make('job')
                     ]),
                 ])->icon('heroicon-o-users'),
             Forms\Components\Wizard\Step::make('Contact Information')
