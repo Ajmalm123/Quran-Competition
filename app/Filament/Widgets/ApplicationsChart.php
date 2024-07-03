@@ -8,8 +8,10 @@ use Filament\Widgets\ChartWidget;
 class ApplicationsChart extends ChartWidget
 {
     protected static ?string $heading = 'Applications Overview';
-    protected int |string|array $columnSpan = 1;
-    protected static ?string $maxHeight = '300px';
+    protected int|string|array $columnSpan = '1/2'; // Half width
+
+
+    protected static ?string $maxHeight = '400px';
     protected static ?int $sort = 2;
 
     protected static ?array $options = [
@@ -21,6 +23,8 @@ class ApplicationsChart extends ChartWidget
                 'display' => false,
             ],
         ],
+        'aspectRatio' => 1, // This will make the chart square
+        'maintainAspectRatio' => true,
     ];
 
     protected function getData(): array
