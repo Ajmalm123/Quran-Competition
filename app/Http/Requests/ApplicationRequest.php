@@ -26,6 +26,7 @@ class ApplicationRequest extends FormRequest
 
     public function rules()
     {
+        dd($this);
         return [
             'full_name' => 'required|string|max:255',
             'gender' => 'required|in:Male,Female',
@@ -107,8 +108,8 @@ class ApplicationRequest extends FormRequest
         ];
     }
 
-    // public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    // {
-    //     dd($validator->errors());
-    // }
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        dd($validator->errors());
+    }
 }
