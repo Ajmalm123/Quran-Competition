@@ -54,13 +54,12 @@ class ApplicationResource extends Resource
                         ->disk('public')
                         ->directory('passport')
                         ->image()
-                        ->imagePreviewHeight('250')
+                        ->imagePreviewHeight('220')
                         ->columnSpan(1),
                     Grid::make(1)->schema([
                         TextInput::make('full_name')
                             ->required()
-                            ->maxLength(255)
-                            ->columnSpan(2),
+                            ->maxLength(255),
                         Grid::make(3)->schema([
                             TextInput::make('age')
                                 ->formatStateUsing(function ($record) {
@@ -73,7 +72,7 @@ class ApplicationResource extends Resource
                                 ->options([
                                     Application::GENDER
                                 ]),
-                        ])->columnSpan(2),
+                        ]),
                         Grid::make(4)->schema([
                             Select::make('educational_qualification')
                                 ->required()
@@ -89,7 +88,7 @@ class ApplicationResource extends Resource
                             TextInput::make('aadhar_number')
                                 ->required()
                                 ->maxLength(12),
-                        ])->columnSpan(2),
+                        ]),
                     ])->columnSpan(2),
                 ]),
             ]),
