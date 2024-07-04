@@ -95,26 +95,37 @@ class ApplicationResource extends Resource
 
             Forms\Components\Section::make('Contact Information')
                 ->schema([
-                    TextInput::make('contact_number')
-                        ->required()
-                        ->maxLength(15),
-                    TextInput::make('whatsapp')
-                        ->maxLength(15),
-                    TextInput::make('email')
-                        ->email()
-                        ->required()
-                        ->maxLength(255),
-                    Textarea::make('c_address')
-                        ->required()
-                        ->columnSpanFull(),
-                    Textarea::make('pr_address')
-                        ->required()
-                        ->columnSpanFull(),
-                    TextInput::make('pincode')
-                        ->maxLength(8),
-                    Select::make('district')
-                        ->required()
-                        ->options(Application::DISTRICT),
+                    Grid::make(3)
+                        ->schema([
+                            TextInput::make('contact_number')
+                                ->label('Contact Number')
+                                ->required()
+                                ->maxLength(15),
+                            TextInput::make('whatsapp')
+                                ->label('WhatsApp')
+                                ->maxLength(15),
+                            TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->maxLength(255),
+                        ]),
+                    Grid::make(3)
+                        ->schema([
+                            Textarea::make('c_address')
+                                ->label('Current Address')
+                                ->required()
+                                ->columnSpan(1),
+                            Textarea::make('pr_address')
+                                ->label('Permanent Address')
+                                ->required()
+                                ->columnSpan(1),
+                            Select::make('district')
+                                ->label('District')
+                                ->required()
+                                ->options(Application::DISTRICT)
+                                ->columnSpan(1),
+                        ]),
+         
                 ])
                 ->columns(1),
 
@@ -221,8 +232,6 @@ class ApplicationResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
                 Action::make('Send Mail')->icon('heroicon-o-envelope')->color('info')->form([
                     Forms\Components\TextInput::make('Subject')->label('Subject')->required(),
                     Forms\Components\Textarea::make('message')->label('Message')->required()
@@ -236,7 +245,10 @@ class ApplicationResource extends Resource
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->title('Mail Send SuccessFully')->success()->send();
                 }),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\EditAction::make(),
+
+                // Tables\Actions\DeleteAction::make(),
                 // Action::make('Approve')->icon('heroicon-o-check')->requiresConfirmation()
                 //     ->action(function ($data) {
                 //         Notification::make()->title('Application Accepted')->success()->send();

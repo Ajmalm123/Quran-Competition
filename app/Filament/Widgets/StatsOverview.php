@@ -15,10 +15,20 @@ class StatsOverview extends BaseWidget
         $withheldCount = Application::where('status', 'withheld')->count();
 
         return [
-            Stat::make('Total Application Recieved',Application::count()),
-            Stat::make('Approved', $approvedCount),
-            Stat::make('Rejected', $rejectedCount),
+            Stat::make('Total Application Received', Application::count())
+                ->url(route('filament.admin.resources.applications.index')),
+            Stat::make('Approved', $approvedCount)
+                ->url(route('filament.admin.resources.applications.index', [
+                    'tableFilters[status][value]' => 'Approved'
+                ])),
+            Stat::make('Rejected', $rejectedCount)
+                ->url(route('filament.admin.resources.applications.index', [
+                    'tableFilters[status][value]' => 'Rejected'
+                ])),
             Stat::make('Withheld', $withheldCount)
+                ->url(route('filament.admin.resources.applications.index', [
+                    'tableFilters[status][value]' => 'withheld'
+                ]))
         ];
     }
 }
