@@ -25,6 +25,21 @@ class ViewApplication extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('status')
+                ->label(function (Application $record) {
+                    return $record->status;
+                })
+                ->badge()
+                ->color(function (Application $record) {
+                    return match ($record->status) {
+                        Application::STATUS['Approved'] => 'success',
+                        Application::STATUS['Rejected'] => 'danger',
+                        Application::STATUS['withheld'] => 'warning',
+                        Application::STATUS['Created'] => 'grey',
+                        default => 'info',
+                    };
+                })
+                ->disabled(),
             Actions\Action::make('approve')
                 ->requiresConfirmation()
                 ->color('success')

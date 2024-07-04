@@ -15,6 +15,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Support\Facades\Log;
+use Filament\Forms\Components\Radio;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Blade;
@@ -48,7 +49,7 @@ class ApplicationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make()->schema([
+            Section::make()->schema([   
                 Grid::make(3)->schema([
                     FileUpload::make('passport_size_photo')
                         ->disk('public')
@@ -125,34 +126,36 @@ class ApplicationResource extends Resource
                                 ->options(Application::DISTRICT)
                                 ->columnSpan(1),
                         ]),
-         
+
                 ])
                 ->columns(1),
 
             Forms\Components\Section::make('Hifz and Participation Details')
                 ->schema([
                     Textarea::make('institution_name')
+                        ->required()
                         ->columnSpanFull(),
-                    Select::make('is_completed_ijazah')
-                        ->required()
-                        ->options(Application::IS_COMPLETED_IJAZAH),
-                    Textarea::make('qirath_with_ijazah')
-                        ->columnSpanFull(),
-                    Select::make('primary_competition_participation')
-                        ->required()
-                        ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
-                    Select::make('zone')
-                        ->required()
-                        ->options(Application::ZONE),
-                    Select::make('status')
-                        ->required()
-                        ->options(Application::STATUS),
+                    Grid::make(2)
+                        ->schema([
+                            Select::make('is_completed_ijazah')
+                                ->required()
+                                ->options(Application::IS_COMPLETED_IJAZAH),
+                            Textarea::make('qirath_with_ijazah')->columnSpan(1),
+                        ]),
+                    Grid::make(3)
+                        ->schema([
+                            Select::make('primary_competition_participation')
+                                ->required()
+                                ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
+                            Select::make('zone')
+                                ->required()
+                                ->options(Application::ZONE),
+                        ]),
                 ])
-                ->columns(2),
+                ->columns(1),
 
             Forms\Components\Section::make('Documents')
                 ->schema([
-
                     FileUpload::make('birth_certificate')
                         ->disk('public')
                         ->directory('birth-certificate')
@@ -162,7 +165,7 @@ class ApplicationResource extends Resource
                         ->directory('letter-of-recommendation')
                         ->openable(),
                 ])
-                ->columns(1),
+                ->columns(2),
         ]);
     }
 

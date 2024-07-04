@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ApplicationResource\Pages;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Actions;
 use App\Models\Application;
@@ -41,37 +42,44 @@ class EditApplication extends EditRecord
         return [
             Forms\Components\Wizard\Step::make('Application Details')
                 ->schema([
-                    Grid::make(3)->schema([
-                        FileUpload::make('passport_size_photo')
+                    Forms\Components\Grid::make(3)->schema([
+                        Forms\Components\FileUpload::make('passport_size_photo')
                             ->disk('public')
                             ->directory('passport')
-                            ->openable(),
-                        TextInput::make('full_name')
-                            ->required()
-                            ->maxLength(255)
+                            ->image()
+                            ->imagePreviewHeight('220')
                             ->columnSpan(1),
-                        DatePicker::make('date_of_birth')
-                            ->required()
-                            ->columnSpan(1),
-
-                        // ->columnSpan(1),
+                        Forms\Components\Grid::make(1)->schema([
+                            Forms\Components\TextInput::make('full_name')
+                                ->required()
+                                ->maxLength(255),
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\TextInput::make('age')
+                                    ->disabled()
+                                    ->dehydrated(false)
+                                    ->formatStateUsing(fn ($record) => $record?->date_of_birth ? Carbon::parse($record->date_of_birth)->age : null),
+                                Forms\Components\DatePicker::make('date_of_birth')
+                                    ->required(),
+                                Forms\Components\Select::make('gender')
+                                    ->required()
+                                    ->options(Application::GENDER),
+                            ]),
+                            Forms\Components\Grid::make(4)->schema([
+                                Forms\Components\Select::make('educational_qualification')
+                                    ->required()
+                                    ->options(Application::EDUCATION_QUALIFICATION),
+                                Forms\Components\TextInput::make('job'),
+                                Forms\Components\Select::make('mother_tongue')
+                                    ->required()
+                                    ->options(Application::MOTHERTONGUE),
+                                Forms\Components\TextInput::make('aadhar_number')
+                                    ->required()
+                                    ->maxLength(12),
+                            ]),
+                        ])->columnSpan(2),
                     ]),
-                    Grid::make(3)->schema([
-                        Select::make('educational_qualification')
-                            ->required()
-                            ->options(Application::EDUCATION_QUALIFICATION),
-                        // ->columnSpan(1),
-                        TextInput::make('aadhar_number')
-                            ->numeric()
-                            ->required()
-                            ->maxLength(12),
-                        // ->columnSpan(1),
-                        Select::make('gender')
-                            ->required()
-                            ->options(Application::GENDER),
-                        TextInput::make('job')
-                    ]),
-                ])->icon('heroicon-o-users'),
+                ])
+                ->icon('heroicon-o-users'),
             Forms\Components\Wizard\Step::make('Contact Information')
                 ->schema([
                     Grid::make(3)->schema([
