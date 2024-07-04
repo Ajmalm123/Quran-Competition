@@ -36,7 +36,7 @@
 
                                 <td style="padding:0; ">
                                     <table width="600"
-                                        style="background-image: url('{{ asset('images/header-bg.png') }}');border-spacing: 0;margin:40px 40px 0 40px;padding:20px;">
+                                        style="background-image: url('{{ url('/images/header-bg.png') }}');border-spacing: 0;margin:40px 40px 0 40px;padding:20px;">
                                         <tbody>
                                             <tr>
                                                 <td width="600" style="padding-left:16px;">
@@ -46,7 +46,7 @@
                                                     </h1>
                                                 </td>
                                                 <td width="800" style="padding-left:20px;text-align:right;">
-                                                    <img src="{{ asset('/images/logo-email.svg') }}">
+                                                    <img src="{{ url('/images/logo-email.svg') }}">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -115,7 +115,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center;padding-top:40px;">
-                                    <img src="{{ asset('/images/footer-mail-logo.svg') }}">
+                                    <img src="{{ url('/images/footer-mail-logo.svg') }}">
                                 </td>
                             </tr>
                             <tr>
