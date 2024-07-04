@@ -31,6 +31,7 @@ class SendEmailJob implements ShouldQueue
     {
         try {
             Mail::to($this->data['application']->email)->send(new Application([
+                'page' => $this->data['page'],
                 'application' => $this->data['application'],
                 'subject' => $this->data['subject'],
                 'message' => $this->data['message'],
