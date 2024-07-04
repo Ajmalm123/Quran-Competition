@@ -56,7 +56,6 @@ class ApplicationResource extends Resource
                         ->image()
                         ->imagePreviewHeight('250')
                         ->columnSpan(1),
-
                     Grid::make(1)->schema([
                         TextInput::make('full_name')
                             ->required()
@@ -73,18 +72,15 @@ class ApplicationResource extends Resource
                                 ->required()
                                 ->options([
                                     Application::GENDER
-
                                 ]),
-                        ])->columnSpan(3),
+                        ])->columnSpan(2),
                         Grid::make(4)->schema([
                             Select::make('educational_qualification')
                                 ->required()
                                 ->options([
                                     Application::EDUCATION_QUALIFICATION
                                 ]),
-
                             TextInput::make('job'),
-
                             Select::make('mother_tongue')
                                 ->required()
                                 ->options([
@@ -93,7 +89,7 @@ class ApplicationResource extends Resource
                             TextInput::make('aadhar_number')
                                 ->required()
                                 ->maxLength(12),
-                        ])->columnSpan(4),
+                        ])->columnSpan(2),
                     ])->columnSpan(2),
                 ]),
             ]),
