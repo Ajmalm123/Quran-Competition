@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AP Aslam Holy Qur'an Award</title>
-    <link rel="icon" href="{{ asset('images/aqa_faviocn.svg') }}" type="image/x-icon">
+    <title>Aslam Holy Qur'an Award</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -38,7 +37,8 @@
                     <p class="pb-0">This form takes on a more boxy appearance, and works well as a modal. Also, note
                         its dual purpose as a sign-up or sign-in form, toggled at the top.</p>
                 </div>
-                <p class="pb-0"><u>See Guidelines</u></p>
+                <p class="pb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer;"><u>See
+                        Guidelines</u></p>
             </div>
         </div>
     </section>
@@ -49,7 +49,7 @@
                 <h2>Personal Details</h2>
                 <div class="col-md-8">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര് (Type in English)
+                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര്
                             <sup>*</sup></label>
                         <input type="tel" class="form-control" id="name" name="full_name"
                             aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
@@ -446,8 +446,8 @@
                                     <img id="blah" src="#" alt="your image" />
                                     <div id="filename">{{ old('passport_size_photo') }}</div>
                                 </div>
-                                <svg onclick="showupload()" width="24" height="25" viewBox="0 0 24 25"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg style="cursor:pointer;" onclick="showupload()" width="24" height="25"
+                                    viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M19 6.70517L17.59 5.29517L12 10.8852L6.41 5.29517L5 6.70517L10.59 12.2952L5 17.8852L6.41 19.2952L12 13.7052L17.59 19.2952L19 17.8852L13.41 12.2952L19 6.70517Z"
                                         fill="black" />
@@ -462,8 +462,8 @@
                 <div class="col-md-4">
                     <div class="form-area">
                         <p>2. Birth certificate - ജനന സർട്ടിഫിക്കേറ്റ് <sup>*</sup></p>
-                        <div class="upload-area">
-                            <input accept="application/pdf, image/*" type='file' id="birthCert"
+                        <div class="upload-area" id="birthcertificate">
+                            <input accept="application/pdf, image/*" type='file' id="imgInpbirth"
                                 name="birth_certificate" />
                             <div class="upload-text">
                                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
@@ -475,6 +475,21 @@
                                 <span>Upload File</span>
                             </div>
                         </div>
+                        <div id="showimage-birth">
+                            <div class="preview-area">
+                                <div class="primary-area">
+                                    <img id="blahbirth" src="#" alt="your image" />
+                                    <div id="filename-birth">{{ old('birth_certificate') }}</div>
+                                </div>
+                                <svg style="cursor:pointer;" onclick="showuploadbirth()" width="24"
+                                    height="25" viewBox="0 0 24 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M19 6.70517L17.59 5.29517L12 10.8852L6.41 5.29517L5 6.70517L10.59 12.2952L5 17.8852L6.41 19.2952L12 13.7052L17.59 19.2952L19 17.8852L13.41 12.2952L19 6.70517Z"
+                                        fill="black" />
+                                </svg>
+                            </div>
+                        </div>
                         @error('birth_certificate')
                             <span class="error" role="alert">{{ $message }}</span>
                         @enderror
@@ -483,8 +498,8 @@
                 <div class="col-md-4">
                     <div class="form-area">
                         <p>3. Letter of Recommendation - റെക്കമെൻഡേഷൻ ലെറ്റർ <sup>*</sup></p>
-                        <div class="upload-area">
-                            <input accept="application/pdf, image/*" type='file' id="recommendationLetter"
+                        <div class="upload-area" id="recommendation">
+                            <input accept="application/pdf, image/*" type='file' id="imgInpletter"
                                 name="letter_of_recommendation" />
                             <div class="upload-text">
                                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
@@ -494,6 +509,21 @@
                                         fill="#2964FA" />
                                 </svg>
                                 <span>Upload File</span>
+                            </div>
+                        </div>
+                        <div id="showimage-letter">
+                            <div class="preview-area">
+                                <div class="primary-area">
+                                    <img id="blahletter" src="#" alt="your image" />
+                                    <div id="filename-letter">{{ old('letter_of_recommendation') }}</div>
+                                </div>
+                                <svg style="cursor:pointer;" onclick="showuploadletter()" width="24"
+                                    height="25" viewBox="0 0 24 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M19 6.70517L17.59 5.29517L12 10.8852L6.41 5.29517L5 6.70517L10.59 12.2952L5 17.8852L6.41 19.2952L12 13.7052L17.59 19.2952L19 17.8852L13.41 12.2952L19 6.70517Z"
+                                        fill="black" />
+                                </svg>
                             </div>
                         </div>
                         @error('letter_of_recommendation')
@@ -514,6 +544,68 @@
                 <button type="submit" class="btn btn-std">Submit Application</button>
             </div>
         </form>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered guideline-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Guidelines</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        <div class="modal-detail-area">
+                            <h4>Hifz and Participation Details</h4>
+                            <ul>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                            </ul>
+                            <h4>Hifz and Participation Details</h4>
+                            <ul>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
+                                    must not exceed 100 KB in size.</l1>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#successmodal">
+            Launch static backdrop modal
+        </button>
+        <div class="modal fade" id="successmodal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered guideline-modal ">
+                <div class="modal-content">
+                    <div class="modal-body pb-0">
+                        <div class="modal-detail-area success-modal">
+                            <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
+                            <h5>Application Submitted
+                                Successfully !</h5>
+                            <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
+                                purpose as a sign-up or sign-in form, toggled at the top.</p>
+                            <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
+                                aria-label="Close">Okay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -539,6 +631,16 @@
             document.getElementById('passport').style.display = 'block';
         }
 
+        function showuploadbirth() {
+            document.getElementById('showimage-birth').style.display = 'none';
+            document.getElementById('birthcertificate').style.display = 'block';
+        }
+
+        function showuploadletter() {
+            document.getElementById('showimage-letter').style.display = 'none';
+            document.getElementById('recommendation').style.display = 'block';
+        }
+
         function hideDiv1() {
             document.getElementById('showthis').style.display = 'none';
             document.getElementById('hidenative').style.display = 'block';
@@ -550,6 +652,24 @@
             if (file) {
                 blah.src = URL.createObjectURL(file);
                 document.getElementById('filename').textContent = ` ${file.name}`;
+            }
+        }
+        imgInpbirth.onchange = evt => {
+            document.getElementById('showimage-birth').style.display = 'block';
+            document.getElementById('birthcertificate').style.display = 'none';
+            const [file] = imgInpbirth.files
+            if (file) {
+                blahbirth.src = URL.createObjectURL(file);
+                document.getElementById('filename-birth').textContent = ` ${file.name}`;
+            }
+        }
+        imgInpletter.onchange = evt => {
+            document.getElementById('showimage-letter').style.display = 'block';
+            document.getElementById('recommendation').style.display = 'none';
+            const [file] = imgInpletter.files
+            if (file) {
+                blahletter.src = URL.createObjectURL(file);
+                document.getElementById('filename-letter').textContent = ` ${file.name}`;
             }
         }
 
