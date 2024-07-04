@@ -69,7 +69,9 @@
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
-                                    <h5>{{ $mailData['message'] }}</h5>
+                                    <h5
+                                        style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
+                                        {{ $mailData['message'] }}</h5>
                                     {{-- <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
                                         We are pleased to confirm that we have received your application for the primary
