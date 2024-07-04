@@ -26,7 +26,7 @@ class ApplicationRequest extends FormRequest
 
     public function rules()
     {
-        dd($this);
+        // dd($this);
         return [
             'full_name' => 'required|string|max:255',
             'gender' => 'required|in:Male,Female',
