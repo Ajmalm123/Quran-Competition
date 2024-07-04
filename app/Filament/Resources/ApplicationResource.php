@@ -241,6 +241,7 @@ class ApplicationResource extends Resource
                     Forms\Components\Textarea::make('message')->label('Message')->required()
                 ])->action(function (Application $application, array $data): void {
                     $dispatchData = [
+                        'page' => 'emails.send-mail',
                         'application' => $application,
                         'subject' => $data['Subject'],
                         'message' => $data['message'],
