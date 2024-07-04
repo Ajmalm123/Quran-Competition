@@ -46,7 +46,7 @@
                                                     </h1>
                                                 </td>
                                                 <td width="800" style="padding-left:20px;text-align:right;">
-                                                    <img src="{{ url('/images/logo-email.svg') }}">
+                                                    <img src="{{ url('/images/logo-email.png') }}">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -115,7 +115,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center;padding-top:40px;">
-                                    <img src="{{ url('/images/footer-mail-logo.svg') }}">
+                                    <img src="{{ url('/images/footer-mail-logo.png') }}">
                                 </td>
                             </tr>
                             <tr>
