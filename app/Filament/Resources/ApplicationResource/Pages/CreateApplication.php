@@ -39,6 +39,7 @@ class CreateApplication extends CreateRecord
     protected function afterCreate()
     {
         $dispatchData = [
+            'page' => 'emails.application-recieved',
             'application' => $this->record,
             'subject' => 'Application Received',
             'message' => 'Thank you for your application. We have received it and will review it shortly.',

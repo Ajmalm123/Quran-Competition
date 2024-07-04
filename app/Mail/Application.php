@@ -22,7 +22,6 @@ class Application extends Mailable
     public function __construct($mailData)
     {
         $this->mailData = $mailData;
-
     }
 
     /**
@@ -41,7 +40,7 @@ class Application extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.application',
+            view: $this->mailData['page'],
         );
     }
 

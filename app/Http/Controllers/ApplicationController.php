@@ -37,6 +37,7 @@ class ApplicationController extends Controller
 
             // Prepare data for the job
             $dispatchData = [
+                'page' => 'emails.application-recieved',
                 'application' => $application,
                 'subject' => 'Application Received',
                 'message' => 'Thank you for your application. We have received it and will review it shortly.',

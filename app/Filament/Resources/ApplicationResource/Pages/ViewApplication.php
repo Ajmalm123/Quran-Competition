@@ -47,6 +47,7 @@ class ViewApplication extends ViewRecord
                     $record->status = Application::STATUS['Approved'];
                     $record->save();
                     $dispatchData = [
+                        'page' => 'emails.application',
                         'application' => $record,
                         'subject' => 'Application Approved',
                         'message' => 'We are pleased to inform you that your application has been approved.',
@@ -66,6 +67,7 @@ class ViewApplication extends ViewRecord
                     $record->status = Application::STATUS['Rejected'];
                     $record->save();
                     $dispatchData = [
+                        'page' => 'emails.application',
                         'application' => $record,
                         'subject' => 'Application Rejected',
                         'message' => 'We regret to inform you that your application has been rejected.',
