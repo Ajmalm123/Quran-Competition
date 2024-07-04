@@ -47,6 +47,7 @@ class EditApplication extends EditRecord
                             ->disk('public')
                             ->directory('passport')
                             ->image()
+                            ->openable()
                             ->imagePreviewHeight('220')
                             ->columnSpan(1),
                         Forms\Components\Grid::make(1)->schema([

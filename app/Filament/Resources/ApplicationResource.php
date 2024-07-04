@@ -49,11 +49,12 @@ class ApplicationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make()->schema([   
+            Section::make()->schema([
                 Grid::make(3)->schema([
                     FileUpload::make('passport_size_photo')
                         ->disk('public')
                         ->directory('passport')
+                        ->openable()
                         ->image()
                         ->imagePreviewHeight('220')
                         ->columnSpan(1),
