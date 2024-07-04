@@ -83,10 +83,7 @@ class ApplicationResource extends Resource
                                     Application::EDUCATION_QUALIFICATION
                                 ]),
 
-                            TextInput::make('age')
-                                ->numeric()
-                                ->minValue(0)
-                                ->maxValue(150),
+                            TextInput::make('job'),
 
                             Select::make('mother_tongue')
                                 ->required()
@@ -97,7 +94,6 @@ class ApplicationResource extends Resource
                                 ->required()
                                 ->maxLength(12),
                         ])->columnSpan(4),
-
                     ])->columnSpan(2),
                 ]),
             ]),
@@ -221,11 +217,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
             ])
