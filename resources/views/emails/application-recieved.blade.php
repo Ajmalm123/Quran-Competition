@@ -39,13 +39,13 @@
                                         style="background-image: url('{{ url('/images/header-bg.png') }}');border-spacing: 0;margin:40px 40px 0 40px;padding:20px;">
                                         <tbody>
                                             <tr>
-                                                <td width="600" style="padding-left:16px;">
+                                                <td width="300" style="padding-left:16px;">
                                                     <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy
                                                         Qur’an</h1>
                                                     <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2024
                                                     </h1>
                                                 </td>
-                                                <td width="800" style="padding-left:20px;text-align:right;">
+                                                <td width="300" style="padding-left:20px;text-align:right;">
                                                     <img src="{{ url('/images/logo-email.png') }}">
                                                 </td>
                                             </tr>
@@ -79,7 +79,8 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Your Application ID is:{{ $mailData['application']->application_id }}</h5>
+                                        Your Application ID is: <b>{{ $mailData['application']->application_id }}</b>
+                                    </h5>
                                 </td>
                             </tr>
                             <tr>
