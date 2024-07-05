@@ -79,6 +79,13 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
+                                        Your Application ID is:{{ $mailData['application']->application_id }}</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0px 20px;">
+                                    <h5
+                                        style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
                                         Thank you for your interest and participation. We will review your submission
                                         and keep you updated on the status.</h5>
                                 </td>
