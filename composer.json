@@ -12,6 +12,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
+        "pxlrbt/filament-environment-indicator": "^2.0",
         "webbingbrasil/filament-advancedfilter": "^3.0"
     },
     "require-dev": {

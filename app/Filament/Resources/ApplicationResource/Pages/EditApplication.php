@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Actions;
 use App\Models\Application;
+use Filament\Actions\Action;
 use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -37,6 +38,7 @@ class EditApplication extends EditRecord
     }
 
 
+
     protected function getSteps(): array
     {
         return [
@@ -58,7 +60,7 @@ class EditApplication extends EditRecord
                                 Forms\Components\TextInput::make('age')
                                     ->disabled()
                                     ->dehydrated(false)
-                                    ->formatStateUsing(fn ($record) => $record?->date_of_birth ? Carbon::parse($record->date_of_birth)->age : null),
+                                    ->formatStateUsing(fn($record) => $record?->date_of_birth ? Carbon::parse($record->date_of_birth)->age : null),
                                 Forms\Components\DatePicker::make('date_of_birth')
                                     ->required(),
                                 Forms\Components\Select::make('gender')

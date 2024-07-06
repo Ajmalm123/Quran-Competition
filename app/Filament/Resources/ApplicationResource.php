@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
 use Webbingbrasil\FilamentAdvancedFilter\Filters\DateFilter;
 use App\Filament\Resources\ApplicationResource\RelationManagers;
+use App\Filament\Resources\ApplicationResource\Actions\ExportPdfAction;
 
 class ApplicationResource extends Resource
 {
@@ -251,6 +252,8 @@ class ApplicationResource extends Resource
                     Notification::make()->title('Mail Send SuccessFully')->success()->send();
                 }),
                 Tables\Actions\ViewAction::make(),
+                ExportPdfAction::make(),
+
                 // Tables\Actions\EditAction::make(),
 
                 // Tables\Actions\DeleteAction::make(),
