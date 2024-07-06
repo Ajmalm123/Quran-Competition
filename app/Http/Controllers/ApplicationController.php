@@ -48,7 +48,8 @@ class ApplicationController extends Controller
 
             return redirect()->route('apply')
                 ->with('success', 'Application created successfully.');
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) {
             // Log the exception for debugging purposes
             Log::error("Error creating application: " . $e->getMessage());
 

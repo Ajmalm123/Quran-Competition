@@ -13,8 +13,22 @@
 
 <body>
     @if (session()->has('success'))
-        <div class="alert alert-success">
-            {{ session()->get('success') }}
+        <div class="modal fade" id="successmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered guideline-modal ">
+                <div class="modal-content">
+                    <div class="modal-body pb-0">
+                        <div class="modal-detail-area success-modal">
+                            <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
+                            <h5>Application Submitted
+                                Successfully !</h5>
+                            <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
+                                purpose as a sign-up or sign-in form, toggled at the top.</p>
+                            <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
+                                aria-label="Close">Okay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 
@@ -51,7 +65,7 @@
                     <div class="form-area">
                         <label for="exampleInputEmail1" class="form-label">Full Name - പേര്
                             <sup>*</sup></label>
-                        <input type="tel" class="form-control" id="name" name="full_name"
+                        <input type="text" class="form-control" id="name" name="full_name"
                             aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
                         @error('full_name')
                             <span class="error" role="alert">{{ $message }}</span>
@@ -65,14 +79,15 @@
                             <div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="inlineRadio19"
-                                        value="Male" {{ old('gender') == 'Male' ? 'checked' : '' }}>
+                                        value="Male"checked>
                                     <label class="form-check-label" for="inlineRadio1">Male</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="inlineRadio29"
-                                        value="Female" {{ old('gender') == 'Female' ? 'checked' : '' }}>
+                                        value="Female" {{ old('gender') == 'Female' ? 'checked' : '' }} disabled>
                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                 </div>
+
                             </div>
                             <span class="error" role="alert">
                                 @error('gender')
@@ -170,8 +185,8 @@
                         <div class="form-area">
                             <label for="exampleInputEmail1" class="form-label">Contact Number - ബന്ധപ്പെടാനുള്ള നമ്പർ
                                 <sup>*</sup></label>
-                            <input type="number" class="form-control" id="contactNumber" name="contact_number"
-                                aria-describedby="nameHelp" value="{{ old('contact_number') }}">
+                            <input type="text" class="form-control" id="contactNumber" name="contact_number"
+                                aria-describedby="nameHelp" value="{{ old('contact_number') }}" maxlength="10">
                             @error('contact_number')
                                 <span class="error" role="alert">{{ $message }}</span>
                             @enderror
@@ -181,8 +196,8 @@
                         <div class="form-area">
                             <label for="exampleInputEmail1" class="form-label">Whatsapp - വാട്സ്ആപ് നമ്പർ
                                 <sup>*</sup></label>
-                            <input type="number" class="form-control" id="whatsappNumber" name="whatsapp"
-                                aria-describedby="nameHelp" value="{{ old('whatsapp') }}">
+                            <input type="text" class="form-control" id="whatsappNumber" name="whatsapp"
+                                aria-describedby="nameHelp" value="{{ old('whatsapp') }}" maxlength="10">
                             @error('whatsapp')
                                 <span class="error" role="alert">{{ $message }}</span>
                             @enderror
@@ -200,26 +215,26 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Current Address - വിലാസം
+                            <label for="current_address" class="form-label">Current Address - വിലാസം
                                 <sup>*</sup></label>
-                            <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="floatingTextarea"
+                            <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="current_address"
                                 name="c_address">{{ old('c_address') }}</textarea>
                             @error('c_address')
                                 <span class="error" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                            <label class="form-check-label" for="flexCheckChecked">
+                            <input class="form-check-input" type="checkbox" id="use_permanent_address">
+                            <label class="form-check-label" for="use_permanent_address">
                                 Use permanent address as current address
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Permanent Address - വിലാസം
+                            <label for="permanent_address" class="form-label">Permanent Address - വിലാസം
                                 <sup>*</sup></label>
-                            <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="floatingTextarea"
+                            <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="permanent_address"
                                 name="pr_address">{{ old('pr_address') }}</textarea>
                             @error('pr_address')
                                 <span class="error" role="alert">{{ $message }}</span>
@@ -276,8 +291,8 @@
                 <h2>Contact Information</h2>
                 <div class="col-md-8">
                     <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Name and place of the institution where
-                            hifz completed <sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും </label>
+                        <label for="institution_name" class="form-label">Name and place of the institution where hifz
+                            completed <sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും</label>
                         <input type="text" class="form-control" id="institution_name" aria-describedby="nameHelp"
                             name="institution_name" value="{{ old('institution_name') }}">
                         @error('institution_name')
@@ -288,34 +303,32 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Did you earn ijazah in any qira’th?
-                                <sup>*</sup><br>ഏതെങ്കിലും ഖിറാഅതിൽ ഇജാസ നേടിയിട്ടുണ്ടോ? </label>
+                            <label class="form-label">Did you earn ijazah in any qira'th? <sup>*</sup><br>ഏതെങ്കിലും
+                                ഖിറാഅതിൽ ഇജാസ നേടിയിട്ടുണ്ടോ?</label>
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" onclick="showDiv()" type="radio"
-                                        name="is_completed_ijazah" id="inlineRadio" value="Yes"
+                                    <input class="form-check-input" type="radio" name="is_completed_ijazah"
+                                        id="ijazahYes" value="Yes"
                                         {{ old('is_completed_ijazah') == 'Yes' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                    <label class="form-check-label" for="ijazahYes">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" onclick="hideDiv()" type="radio"
-                                        name="is_completed_ijazah" id="inlineRadio" value="No"
+                                    <input class="form-check-input" type="radio" name="is_completed_ijazah"
+                                        id="ijazahNo" value="No"
                                         {{ old('is_completed_ijazah') == 'No' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                    <label class="form-check-label" for="ijazahNo">No</label>
                                 </div>
                             </div>
-                            <span class="error" role="alert">
-                                @error('is_completed_ijazah')
-                                    {{ $message }}</br>
-                                @enderror
-                            </span>
+                            @error('is_completed_ijazah')
+                                <span class="error" role="alert">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
-                    <div class="col-md-8" id="displaythis"
+                    <div class="col-md-8" id="qirathIjazahSection"
                         style="{{ old('is_completed_ijazah') == 'Yes' ? '' : 'display:none;' }}">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Qira’th/ Qiraths which earned
-                                ijazah<sup>*</sup><br>ഇജാസ നേടിയ ഖിറാഅത് / ഖിറാഅത്തുകൾ </label>
+                            <label for="qirath_with_ijazah" class="form-label">Qira'th/ Qiraths which earned
+                                ijazah<sup>*</sup><br>ഇജാസ നേടിയ ഖിറാഅത് / ഖിറാഅത്തുകൾ</label>
                             <input type="text" class="form-control" id="qirath_with_ijazah"
                                 name="qirath_with_ijazah" aria-describedby="nameHelp"
                                 value="{{ old('qirath_with_ijazah') }}">
@@ -328,77 +341,80 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">From where you participate in primary
-                                competition <sup>*</sup><br>പ്രാഥമിക മത്സരത്തിൽ പങ്കെടുക്കുന്നത് എവിടെ നിന്ന് ? </label>
+                            <label class="form-label">From where you participate in primary competition
+                                <sup>*</sup><br>പ്രാഥമിക മത്സരത്തിൽ പങ്കെടുക്കുന്നത് എവിടെ നിന്ന് ?</label>
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" onclick="showDiv1()" type="radio"
-                                        name="primary_competition_participation" id="inlineRadioabroad"
+                                    <input class="form-check-input" type="radio"
+                                        name="primary_competition_participation" id="participationAbroad"
                                         value="Abroad"
                                         {{ old('primary_competition_participation') == 'Abroad' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="inlineRadioabroad">വിദേശത്ത് നിന്ന</label>
+                                    <label class="form-check-label" for="participationAbroad">വിദേശത്ത് നിന്ന</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" onclick="hideDiv1()" type="radio"
-                                        name="primary_competition_participation" id="inlineRadiolocal" value="Native"
+                                    <input class="form-check-input" type="radio"
+                                        name="primary_competition_participation" id="participationNative"
+                                        value="Native"
                                         {{ old('primary_competition_participation') == 'Native' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="inlineRadiolocal">സ്വദേശത്ത് നിന്ന</label>
+                                    <label class="form-check-label" for="participationNative">സ്വദേശത്ത് നിന്ന</label>
                                 </div>
                             </div>
-                            <span class="error" role="alert">
-                                @error('primary_competition_participation')
-                                    {{ $message }}</br>
-                                @enderror
-                            </span>
+                            @error('primary_competition_participation')
+                                <span class="error" role="alert">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
-                    <div class="col-md-4" id="hidenative"
+                    <div class="col-md-4" id="nativeZoneSection"
                         style="{{ old('primary_competition_participation') == 'Native' ? '' : 'display:none;' }}">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">From which zone in native
-                                ?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?</label>
-                            <select class="form-select" aria-label="Default select example" name="zone">
-                                <option value="0" {{ old('zone') == '0' ? 'selected' : '' }}>Please Select
+                            <label for="native_zone" class="form-label">From which zone in
+                                native?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?</label>
+                            <select class="form-select" aria-label="Default select example" name="zone"
+                                id="native_zone">
+                                <option value="">Please Select</option>
+                                <option value="Kollam" {{ old('native_zone') == 'Kollam' ? 'selected' : '' }}>Kollam
                                 </option>
-                                <option value="Kollam" {{ old('zone') == 'Kollam' ? 'selected' : '' }}>Kollam</option>
-                                <option value="Ernakulam" {{ old('zone') == 'Ernakulam' ? 'selected' : '' }}>Ernakulam
-                                </option>
-                                <option value="Malappuram" {{ old('zone') == 'Malappuram' ? 'selected' : '' }}>
+                                <option value="Ernakulam" {{ old('native_zone') == 'Ernakulam' ? 'selected' : '' }}>
+                                    Ernakulam</option>
+                                <option value="Malappuram" {{ old('native_zone') == 'Malappuram' ? 'selected' : '' }}>
                                     Malappuram</option>
-                                <option value="Kannur" {{ old('zone') == 'Kannur' ? 'selected' : '' }}>Kannur</option>
+                                <option value="Kannur" {{ old('native_zone') == 'Kannur' ? 'selected' : '' }}>Kannur
+                                </option>
                             </select>
-                            <span class="error" role="alert">
-                                @error('zone')
-                                    {{ $message }}</br>
-                                @enderror
-                            </span>
+                            @error('native_zone')
+                                <span class="error" role="alert">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
-                    <div class="col-md-4" id="showthis"
+                    <div class="col-md-4" id="abroadZoneSection"
                         style="{{ old('primary_competition_participation') == 'Abroad' ? '' : 'display:none;' }}">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">From which zone in
-                                abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ </label>
-                            <select class="form-select" aria-label="Default select example" name="zone">
-                                <option value="0" {{ old('zone') == '0' ? 'selected' : '' }}>Please Select
+                            <label for="abroad_zone" class="form-label">From which zone in
+                                abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ</label>
+                            <select class="form-select" aria-label="Default select example" name="zone"
+                                id="abroad_zone">
+                                <option value="">Please Select</option>
+                                <option value="Jeddah" {{ old('abroad_zone') == 'Jeddah' ? 'selected' : '' }}>Jeddah
                                 </option>
-                                <option value="Jeddah" {{ old('zone') == 'Jeddah' ? 'selected' : '' }}>Jeddah</option>
-                                <option value="Dubai" {{ old('zone') == 'Dubai' ? 'selected' : '' }}>Dubai</option>
-                                <option value="Doha" {{ old('zone') == 'Doha' ? 'selected' : '' }}>Doha</option>
-                                <option value="Bahrain" {{ old('zone') == 'Bahrain' ? 'selected' : '' }}>Bahrain
+                                <option value="Dubai" {{ old('abroad_zone') == 'Dubai' ? 'selected' : '' }}>Dubai
                                 </option>
-                                <option value="Muscat" {{ old('zone') == 'Muscat' ? 'selected' : '' }}>Muscat</option>
-                                <option value="Kuwait" {{ old('zone') == 'Kuwait' ? 'selected' : '' }}>Kuwait</option>
+                                <option value="Doha" {{ old('abroad_zone') == 'Doha' ? 'selected' : '' }}>Doha
+                                </option>
+                                <option value="Bahrain" {{ old('abroad_zone') == 'Bahrain' ? 'selected' : '' }}>
+                                    Bahrain</option>
+                                <option value="Muscat" {{ old('abroad_zone') == 'Muscat' ? 'selected' : '' }}>Muscat
+                                </option>
+                                <option value="Kuwait" {{ old('abroad_zone') == 'Kuwait' ? 'selected' : '' }}>Kuwait
+                                </option>
                             </select>
-                            <span class="error" role="alert">
-                                @error('zone')
-                                    {{ $message }}</br>
-                                @enderror
-                            </span>
+                            @error('abroad_zone')
+                                <span class="error" role="alert">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="spacer mt-0">
                 <h2>Upload Documents</h2>
@@ -586,45 +602,99 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#successmodal">
+        {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#successmodal">
             Launch static backdrop modal
-        </button>
-        <div class="modal fade" id="successmodal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered guideline-modal ">
-                <div class="modal-content">
-                    <div class="modal-body pb-0">
-                        <div class="modal-detail-area success-modal">
-                            <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
-                            <h5>Application Submitted
-                                Successfully !</h5>
-                            <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
-                                purpose as a sign-up or sign-in form, toggled at the top.</p>
-                            <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
-                                aria-label="Close">Okay</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </button> --}}
+
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="99a4cc3df5457cbbea90be86-text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    @if (session()->has('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var successModal = new bootstrap.Modal(document.getElementById('successmodal'));
+                successModal.show();
+            });
+        </script>
+    @endif
     <script>
-        function showDiv() {
-            document.getElementById('displaythis').style.display = 'block';
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const currentAddress = document.getElementById('current_address');
+            const permanentAddress = document.getElementById('permanent_address');
+            const checkbox = document.getElementById('use_permanent_address');
 
-        function hideDiv() {
-            document.getElementById('displaythis').style.display = 'none';
-        }
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    permanentAddress.value = currentAddress.value;
+                } else {
+                    permanentAddress.value = '';
+                }
+            });
+            const ijazahRadios = document.querySelectorAll('input[name="is_completed_ijazah"]');
+            const qirathIjazahSection = document.getElementById('qirathIjazahSection');
+            const qirathIjazahInput = document.getElementById('qirath_with_ijazah');
 
-        function showDiv1() {
-            document.getElementById('showthis').style.display = 'block';
-            document.getElementById('hidenative').style.display = 'none';
-        }
+            const participationRadios = document.querySelectorAll(
+                'input[name="primary_competition_participation"]');
+            const nativeZoneSection = document.getElementById('nativeZoneSection');
+            const abroadZoneSection = document.getElementById('abroadZoneSection');
+            const nativeZoneSelect = document.getElementById('native_zone');
+            const abroadZoneSelect = document.getElementById('abroad_zone');
+
+            function toggleIjazahSection() {
+                qirathIjazahSection.style.display = this.value === 'Yes' ? '' : 'none';
+                if (this.value === 'No') {
+                    qirathIjazahInput.value = '';
+                }
+            }
+
+            function toggleZones() {
+                if (this.value === 'Native') {
+                    nativeZoneSection.style.display = '';
+                    abroadZoneSection.style.display = 'none';
+                    abroadZoneSelect.value = '';
+                } else if (this.value === 'Abroad') {
+                    nativeZoneSection.style.display = 'none';
+                    abroadZoneSection.style.display = '';
+                    nativeZoneSelect.value = '';
+                }
+            }
+
+            ijazahRadios.forEach(radio => {
+                radio.addEventListener('change', toggleIjazahSection);
+            });
+
+            participationRadios.forEach(radio => {
+                radio.addEventListener('change', toggleZones);
+            });
+
+            // Initialize on page load
+            const selectedIjazah = document.querySelector('input[name="is_completed_ijazah"]:checked');
+            if (selectedIjazah) {
+                toggleIjazahSection.call(selectedIjazah);
+            }
+
+            const selectedParticipation = document.querySelector(
+                'input[name="primary_competition_participation"]:checked');
+            if (selectedParticipation) {
+                toggleZones.call(selectedParticipation);
+            }
+        });
+        // function showDiv() {
+        //     document.getElementById('displaythis').style.display = 'block';
+        // }
+
+        // function hideDiv() {
+        //     document.getElementById('displaythis').style.display = 'none';
+        // }
+
+        // function showDiv1() {
+        //     document.getElementById('showthis').style.display = 'block';
+        //     document.getElementById('hidenative').style.display = 'none';
+        // }
 
         function showupload() {
             document.getElementById('showimage').style.display = 'none';
