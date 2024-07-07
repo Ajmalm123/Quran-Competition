@@ -44,9 +44,9 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
-            // ->plugins([
-            //     EnvironmentIndicatorPlugin::make(),
-            // ])
+            ->plugins([
+                EnvironmentIndicatorPlugin::make(),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
