@@ -219,6 +219,13 @@ class ApplicationResource extends Resource
                         'Approved' => 'Approved',
                         'Rejected' => 'Rejected'
                     ]),
+                SelectFilter::make('district')
+                    ->options(Application::DISTRICT)
+                    ->label('District'),
+                SelectFilter::make('zone')
+                    ->options(Application::ZONE)
+                    ->label('Zone'),
+                // ->hidden(),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -228,11 +235,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
             ])
