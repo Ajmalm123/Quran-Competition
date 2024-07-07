@@ -16,7 +16,7 @@ class StatsOverview extends BaseWidget
     protected static ?string $pollingInterval = '15s';
     protected int | string | array $columnSpan = 'full';
 
-    // protected static ?int $columns = 4;
+    protected static ?int $columns = 4;
 
 
 
