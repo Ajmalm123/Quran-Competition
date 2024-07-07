@@ -5,12 +5,14 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 use Filament\Actions;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
+use Filament\Actions\Action;
 use Filament\Actions\StaticAction;
 use Filament\Actions\MountableAction;
 use Filament\Infolists\Components\Grid;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\IconPosition;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
@@ -25,21 +27,34 @@ class ViewApplication extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('status')
-                ->label(function (Application $record) {
-                    return $record->status;
-                })
-                ->badge()
-                ->color(function (Application $record) {
-                    return match ($record->status) {
-                        Application::STATUS['Approved'] => 'success',
-                        Application::STATUS['Rejected'] => 'danger',
-                        Application::STATUS['withheld'] => 'warning',
-                        Application::STATUS['Created'] => 'grey',
-                        default => 'info',
-                    };
-                })
-                ->disabled(),
+            Action::make('status')
+            ->label(function (Application $record) {
+                return ucfirst($record->status);
+            })
+            ->badge()
+            ->icon(function (Application $record) {
+                return match ($record->status) {
+                    Application::STATUS['Approved'] => 'heroicon-o-check-circle',
+                    Application::STATUS['Rejected'] => 'heroicon-o-x-circle',
+                    Application::STATUS['withheld'] => 'heroicon-o-clock',
+                    Application::STATUS['Created'] => 'heroicon-o-document',
+                    default => 'heroicon-o-question-mark-circle',
+                };
+            })
+            ->iconPosition(IconPosition::Before)
+            ->color(function (Application $record) {
+                return match ($record->status) {
+                    Application::STATUS['Approved'] => 'success',
+                    Application::STATUS['Rejected'] => 'danger',
+                    Application::STATUS['withheld'] => 'warning',
+                    Application::STATUS['Created'] => 'gray',
+                    default => 'info',
+                };
+            })
+            ->extraAttributes([
+                'class' => 'font-medium text-sm px-3 py-1.5 rounded-full',
+            ])
+            ->disabled(),
             Actions\Action::make('approve')
                 ->requiresConfirmation()
                 ->color('success')
