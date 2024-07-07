@@ -100,15 +100,15 @@ class StatsOverview extends BaseWidget
                         'tableFilters[district][value]' => $topDistrict->district
                     ])
                     : null),
-            Stat::make('Top Zone', $topZone ? $topZone->zone : 'N/A')
-                ->description($topZone ? $topZone->total . ' applications' : 'No data available')
-                ->descriptionIcon('heroicon-m-map')
-                ->color('primary')
-                ->url($topZone
-                    ? route('filament.admin.resources.applications.index', [
-                        'tableFilters[zone][value]' => $topZone->zone
-                    ])
-                    : null),
+            // Stat::make('Top Zone', $topZone ? $topZone->zone : 'N/A')
+            //     ->description($topZone ? $topZone->total . ' applications' : 'No data available')
+            //     ->descriptionIcon('heroicon-m-map')
+            //     ->color('primary')
+            //     ->url($topZone
+            //         ? route('filament.admin.resources.applications.index', [
+            //             'tableFilters[zone][value]' => $topZone->zone
+            //         ])
+            //         : null),
         ];
     }
 }
