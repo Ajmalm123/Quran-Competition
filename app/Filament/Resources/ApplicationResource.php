@@ -14,29 +14,23 @@ use App\Exports\ApplicationExport;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
-use Illuminate\Support\Facades\Log;
-use Filament\Forms\Components\Radio;
 use Maatwebsite\Excel\Facades\Excel;
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Facades\Blade;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ApplicationResource\Pages;
-use Webbingbrasil\FilamentAdvancedFilter\Filters\DateFilter;
-use App\Filament\Resources\ApplicationResource\RelationManagers;
 use App\Filament\Resources\ApplicationResource\Actions\ExportPdfAction;
 
 class ApplicationResource extends Resource
@@ -176,56 +170,85 @@ class ApplicationResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('application_id')
+                ImageColumn::make('passport_size_photo')
+                    ->circular()
+                    ->defaultImageUrl(url('/images/default-avatar.png'))
+                    ->label('Photo'),
+                TextColumn::make('application_id')
+                    ->searchable()
+                    ->copyable()
+                    ->icon('heroicon-o-identification'),
+                TextColumn::make('full_name')
+                    ->searchable()
+                    ->weight('bold')
+                    ->sortable(),
+                TextColumn::make('contact_number')
+                    ->searchable()
+                    ->copyable()
+                    ->icon('heroicon-o-phone'),
+                TextColumn::make('email')
+                    ->searchable()
+                    ->copyable()
+                    ->icon('heroicon-o-envelope'),
+                BadgeColumn::make('district')
+                    ->colors(['primary'])
                     ->searchable(),
-                Tables\Columns\TextColumn::make('full_name')
+                BadgeColumn::make('zone')
+                    ->colors(['secondary'])
                     ->searchable(),
-                Tables\Columns\TextColumn::make('contact_number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('district'),
-                Tables\Columns\TextColumn::make('zone'),
-                Tables\Columns\TextColumn::make('age')
+                TextColumn::make('age')
                     ->label('Age')
-                    ->sortable()
-                    ->getStateUsing(function ($record) {
-                        return Carbon::parse($record->date_of_birth)->age;
-                    }),
-                Tables\Columns\TextColumn::make('status')->badge()->color(function (string $state): string {
-                    return match ($state) {
-                        'Created' => 'grey',
-                        'withheld' => 'warning',
-                        'Approved' => 'success',
-                        'Rejected' => 'danger'
-                    };
-                })->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
+                    })
+                    ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
+                    // ->description(fn($record) => Carbon::parse($record->date_of_birth)->format('M d, Y')),                // ->icon('heroicon-o-cake'),
+                BadgeColumn::make('status')
+                    ->colors([
+                        'gray' => 'Created',
+                        'warning' => 'Withheld',
+                        'success' => 'Approved',
+                        'danger' => 'Rejected'
+                    ])
+                    ->icons([
+                        'heroicon-o-document' => 'Created',
+                        'heroicon-o-clock' => 'Withheld',
+                        'heroicon-o-check-circle' => 'Approved',
+                        'heroicon-o-x-circle' => 'Rejected'
+                    ])
+                    ->sortable(),
+                TextColumn::make('created_at')
                     ->dateTime('Y-m-d h:i A')
                     ->label('Created Date')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime('Y-m-d h:i A')
                     ->label('Updated Date')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('status')
                     ->options([
                         'Created' => 'Created',
-                        'withheld' => 'withheld',
+                        'Withheld' => 'Withheld',
                         'Approved' => 'Approved',
                         'Rejected' => 'Rejected'
-                    ]),
+                    ])
+                    ->multiple()
+                    ->indicator('Status'),
                 SelectFilter::make('district')
                     ->options(Application::DISTRICT)
-                    ->label('District'),
+                    ->label('District')
+                    ->multiple()
+                    ->indicator('District'),
                 SelectFilter::make('zone')
                     ->options(Application::ZONE)
-                    ->label('Zone'),
-                // ->hidden(),
+                    ->label('Zone')
+                    ->multiple()
+                    ->indicator('Zone'),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -242,49 +265,54 @@ class ApplicationResource extends Resource
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['created_from'] ?? null) {
+                            $indicators['created_from'] = 'Created from ' . Carbon::parse($data['created_from'])->toFormattedDateString();
+                        }
+                        if ($data['created_until'] ?? null) {
+                            $indicators['created_until'] = 'Created until ' . Carbon::parse($data['created_until'])->toFormattedDateString();
+                        }
+                        return $indicators;
+                    }),
             ])
+            ->filtersFormColumns(3)
             ->actions([
-                Action::make('Send Mail')->icon('heroicon-o-envelope')->color('info')->form([
-                    Forms\Components\TextInput::make('Subject')->label('Subject')->required(),
-                    Forms\Components\Textarea::make('message')->label('Message')->required()
-                ])->action(function (Application $application, array $data): void {
-                    $dispatchData = [
-                        'page' => 'emails.send-mail',
-                        'application' => $application,
-                        'subject' => $data['Subject'],
-                        'message' => $data['message'],
-                    ];
-                    // Dispatch the job
-                    SendEmailJob::dispatch($dispatchData);
-                    Notification::make()->title('Mail Send SuccessFully')->success()->send();
-                }),
-                Tables\Actions\ViewAction::make(),
+                Action::make('Send Mail')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->form([
+                        TextInput::make('Subject')->label('Subject')->required(),
+                        Textarea::make('message')->label('Message')->required()
+                    ])
+                    ->action(function (Application $application, array $data): void {
+                        $dispatchData = [
+                            'page' => 'emails.send-mail',
+                            'application' => $application,
+                            'subject' => $data['Subject'],
+                            'message' => $data['message'],
+                        ];
+                        SendEmailJob::dispatch($dispatchData);
+                        Notification::make()->title('Mail Sent Successfully')->success()->send();
+                    }),
+                Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
                 ExportPdfAction::make(),
 
-                // Tables\Actions\EditAction::make(),
-
-                // Tables\Actions\DeleteAction::make(),
-                // Action::make('Approve')->icon('heroicon-o-check')->requiresConfirmation()
-                //     ->action(function ($data) {
-                //         Notification::make()->title('Application Accepted')->success()->send();
-                //     })->hidden(function (Application $application) {
-                //         return  $application->full_name == 'Cedric Mayo';
-                //     }),
-                // Action::make('Reject')->icon('heroicon-o-x-mark')->requiresConfirmation()
-                //     ->color('danger')
-                //     ->action(function ($data) {
-                //         Notification::make()->title('Application Rejected')->success()->send();
-                //     })->hidden(function (Application $application) {
-                //         return  $application->full_name == 'Cedric Mayao';
-                //     }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('export')->label('Export to Excel')->icon('heroicon-o-document-arrow-down')->action(function (Collection $records) {
                         return Excel::download(new ApplicationExport($records), 'Applications.xlsx');
-                    })
-                ]),
+                    })->deselectRecordsAfterCompletion(),
+                    BulkAction::make('approve')
+                        ->label('Approve Selected')
+                        ->icon('heroicon-o-check')
+                        ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
+                        ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                ])
             ]);
     }
 
