@@ -14,9 +14,9 @@ class StatsOverview extends BaseWidget
     use InteractsWithPageTable;
 
     protected static ?string $pollingInterval = '15s';
-    protected int | string | array $columnSpan = 'full';
+    // protected int | string | array $columnSpan = 'full';
 
-    protected static ?int $columns = 4;
+    // protected static ?int $columns = 4;
 
 
 
@@ -100,15 +100,15 @@ class StatsOverview extends BaseWidget
                         'tableFilters[district][value]' => $topDistrict->district
                     ])
                     : null),
-            // Stat::make('Top Zone', $topZone ? $topZone->zone : 'N/A')
-            //     ->description($topZone ? $topZone->total . ' applications' : 'No data available')
-            //     ->descriptionIcon('heroicon-m-map')
-            //     ->color('primary')
-            //     ->url($topZone
-            //         ? route('filament.admin.resources.applications.index', [
-            //             'tableFilters[zone][value]' => $topZone->zone
-            //         ])
-            //         : null),
+            Stat::make('Top Zone', $topZone ? $topZone->zone : 'N/A')
+                ->description($topZone ? $topZone->total . ' applications' : 'No data available')
+                ->descriptionIcon('heroicon-m-map')
+                ->color('primary')
+                ->url($topZone
+                    ? route('filament.admin.resources.applications.index', [
+                        'tableFilters[zone][value]' => $topZone->zone
+                    ])
+                    : null),
         ];
     }
 }
