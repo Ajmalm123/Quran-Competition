@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Rules;
-
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +23,7 @@ class PassportSizePhoto implements Rule
 
         // Check file dimensions
         $image = getimagesize($value->getPathname());
-        if ($image[0] != 300 || $image[1] != 400) {
+        if ($image[0] > 300 || $image[1] > 400) {
             $this->failureReason = 'dimensions';
             return false;
         }
@@ -41,9 +39,9 @@ class PassportSizePhoto implements Rule
             case 'file size':
                 return 'The :attribute must not exceed 100 KB in size.';
             case 'dimensions':
-                return 'The :attribute must have dimensions of 300px width by 400px height.';
+                return 'The :attribute must have a maximum width of 300px and a maximum height of 400px.';
             default:
-                return 'The :attribute must be a JPG image with dimensions of 300px width by 400px height and must not exceed 100 KB in size.';
+                return 'The :attribute must be a JPG image with a maximum width of 300px and a maximum height of 400px, and must not exceed 100 KB in size.';
         }
     }
 }
