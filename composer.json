@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
         "pxlrbt/filament-environment-indicator": "^2.0",
+        "rickdbcn/filament-email": "^1.4",
         "webbingbrasil/filament-advancedfilter": "^3.0"
     },
     "require-dev": {
