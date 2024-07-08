@@ -46,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 EnvironmentIndicatorPlugin::make(),
-                \RickDBCN\FilamentEmail\FilamentEmail::make()
+                // \RickDBCN\FilamentEmail\FilamentEmail::make()
             ])
             ->middleware([
                 EncryptCookies::class,
