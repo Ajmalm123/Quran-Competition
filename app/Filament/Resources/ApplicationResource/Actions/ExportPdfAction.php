@@ -17,11 +17,11 @@ class ExportPdfAction extends Action
     {
         parent::setUp();
 
-        $this->label('Export PDF')
+        $this->label('')
             ->icon('heroicon-o-document-arrow-down')
+            ->tooltip('Export PDF')  // Add this line
             ->action(function (Model $record) {
                 $pdf = PDF::loadView('pdf.application-pdf', ['record' => $record]);
-            
                 return response()->streamDownload(function () use ($pdf) {
                     echo $pdf->output();
                 }, "{$record->application_id}.pdf");

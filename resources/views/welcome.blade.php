@@ -100,13 +100,18 @@
                         <div class="form-area">
                             <label for="dob" class="form-label">Date of Birth - ജനന തിയ്യതി (DD/MM/YY)
                                 <sup>*</sup></label>
-                            <input type="text" class="form-control" id="dob" name="date_of_birth"
-                                value="{{ old('date_of_birth') }}" aria-describedby="emailHelp" contenteditable="true">
+                            <div style="position: relative">
+                                <input type="text" class="form-control" id="dob" name="date_of_birth"
+                                    value="" aria-describedby="emailHelp" contenteditable="true">
+                                <img style="position: absolute;top: 12px;right: 10px;"
+                                    src="{{ url('/images/calendar (2).svg') }}" alt="calender">
+                            </div>
                             @error('date_of_birth')
                                 <span class="error" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="form-area">
                             <label for="exampleInputEmail1" class="form-label">Mother Tongue - മാതൃ
@@ -421,24 +426,30 @@
                 <div class="points-area">
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12 2.29517C6.48 2.29517 2 6.77517 2 12.2952C2 17.8152 6.48 22.2952 12 22.2952C17.52 22.2952 22 17.8152 22 12.2952C22 6.77517 17.52 2.29517 12 2.29517ZM13 17.2952H11V11.2952H13V17.2952ZM13 9.29517H11V7.29517H13V9.29517Z"
+                        <path d=" M12 2.29517C6.48 2.29517 2 6.77517 2 12.2952C2 17.8152 6.48 22.2952 12 22.2952C17.52
+                                    22.2952 22 17.8152 22 12.2952C22 6.77517 17.52 2.29517 12 2.29517ZM13
+                                    17.2952H11V11.2952H13V17.2952ZM13 9.29517H11V7.29517H13V9.29517Z"
                             fill="#9B7858" />
                     </svg>
                     <div class="points">
                         <ul class="mb-0">
-                            <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and must
+                            <li>Photo should be in JPG format, with dimensions of 300px width by 400px
+                                height, and must
                                 not exceed 100 KB in size.</li>
-                            <li>Birth certificate and Letter of recommendation should be submitted in either PDF or
+                            <li>Birth certificate and Letter of recommendation should be submitted in either
+                                PDF or
                                 image format (JPG), and must be clear and legible.</li>
-                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല് കമ്മറ്റിയുടെ/ഇസ്ലാഹി
-                                സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത്
+                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല്
+                                കമ്മറ്റിയുടെ/ഇസ്ലാഹി
+                                സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ്
+                                ചെയ്യേണ്ടത്
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="form-area">
-                    <label for="exampleInputEmail1" class="form-label">Please attach the following documents - താഴെ
+                    <label for="exampleInputEmail1" class="form-label">Please attach the following
+                        documents - താഴെ
                         പറഞ്ഞ രേഖകൾ ഉൾപെടുത്തുക </label>
                 </div>
                 <div class="col-md-4">
@@ -552,7 +563,8 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
-                        I hereby declare that the information provided in this application is true and correct to the
+                        I hereby declare that the information provided in this application is true and
+                        correct to the
                         best
                         of my knowledge and belief.
                     </label>
@@ -621,7 +633,7 @@
     @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            
+
             const currentAddress = document.getElementById('current_address');
             const permanentAddress = document.getElementById('permanent_address');
             const checkbox = document.getElementById('use_permanent_address');

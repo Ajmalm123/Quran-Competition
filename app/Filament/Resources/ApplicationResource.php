@@ -176,8 +176,8 @@ class ApplicationResource extends Resource
                     ->label('Photo'),
                 TextColumn::make('application_id')
                     ->searchable()
-                    ->copyable()
-                    ->icon('heroicon-o-identification'),
+                    ->copyable(),
+                // ->icon('heroicon-o-identification'),
                 TextColumn::make('full_name')
                     ->searchable()
                     ->weight('bold')
@@ -190,19 +190,19 @@ class ApplicationResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->icon('heroicon-o-envelope'),
-                BadgeColumn::make('district')
-                    ->colors(['primary'])
+                TextColumn::make('district')
+                    // ->colors(['primary'])
                     ->searchable(),
-                BadgeColumn::make('zone')
-                    ->colors(['secondary'])
+                TextColumn::make('zone')
+                    // ->colors(['secondary'])
                     ->searchable(),
                 TextColumn::make('age')
                     ->label('Age')
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
                     })
-                    ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
-                    // ->description(fn($record) => Carbon::parse($record->date_of_birth)->format('M d, Y')),                // ->icon('heroicon-o-cake'),
+                    ->getStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age),
+                // ->description(fn($record) => Carbon::parse($record->date_of_birth)->format('M d, Y')),                // ->icon('heroicon-o-cake'),
                 BadgeColumn::make('status')
                     ->colors([
                         'gray' => 'Created',
@@ -258,11 +258,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -308,7 +308,7 @@ class ApplicationResource extends Resource
                     BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check')
-                        ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
+                        ->action(fn (Collection $records) => $records->each->update(['status' => 'Approved']))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),

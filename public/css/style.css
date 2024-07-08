@@ -256,6 +256,15 @@ body {
 
 #filename {
     padding-left: 10px;
+    word-break: break-all;
+}
+
+#filename-birth {
+    word-break: break-all;
+}
+
+#filename-letter {
+    word-break: break-all;
 }
 
 .guideline-modal .modal-header {
@@ -306,6 +315,7 @@ body {
 
     .form-list .spacer {
         margin: 20px;
+        padding: 15px;
     }
 }
 

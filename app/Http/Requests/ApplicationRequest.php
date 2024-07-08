@@ -19,9 +19,11 @@ class ApplicationRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge([
-            'date_of_birth' => date('Y-m-d', strtotime($this->date_of_birth))
-        ]);
+        if (isset($this->date_of_birth)) {
+            $this->merge([
+                'date_of_birth' => date('Y-m-d', strtotime($this->date_of_birth))
+            ]);
+        }
     }
 
     public function rules()
