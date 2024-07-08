@@ -14,6 +14,22 @@ class StatsOverview extends BaseWidget
     use InteractsWithPageTable;
 
     protected static ?string $pollingInterval = '15s';
+
+    protected function getColumns(): int
+    {
+        // $count = count($this->getCachedStats());
+
+        // if ($count < 3) {
+        //     return 4;
+        // }
+
+        // if (($count % 3) !== 1) {
+        //     return 4;
+        // }
+
+        return 4;
+    }
+
     // protected int | string | array $columnSpan = 'full';
 
     // protected static ?int $columns = 4;
