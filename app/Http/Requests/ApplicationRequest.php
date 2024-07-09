@@ -28,10 +28,9 @@ class ApplicationRequest extends FormRequest
 
     public function rules()
     {
-        // dd($this);
         return [
             'full_name' => 'required|string|max:255',
-            'gender' => 'required|in:Male,Female',
+            'gender' => 'in:Male,Female',
             'date_of_birth' => 'required|date',
             'mother_tongue' => 'required|in:Malayalam,Other',
             'educational_qualification' => 'required|in:SSLC,Plus Two,Degree,Above Degree',
