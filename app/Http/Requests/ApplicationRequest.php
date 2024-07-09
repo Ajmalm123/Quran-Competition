@@ -24,6 +24,11 @@ class ApplicationRequest extends FormRequest
                 'date_of_birth' => date('Y-m-d', strtotime($this->date_of_birth))
             ]);
         }
+        if (isset($this->zone) || isset($this->abroad_zone)) {
+            $this->merge([
+                'zone' => $this->primary_competition_participation == 'Native' ? $this->zone : $this->abroad_zone
+            ]);
+        }
     }
 
     public function rules()
@@ -47,7 +52,8 @@ class ApplicationRequest extends FormRequest
             'is_completed_ijazah' => 'required|in:Yes,No',
             'qirath_with_ijazah' => 'nullable|string',
             'primary_competition_participation' => 'required|in:Native,Abroad',
-            'zone' => 'required|in:Kollam,Ernakulam,Malappuram,Kannur,Jeddah,Dubai,Doha,Bahrain,Muscat,Kuwait',
+            // 'abroad_zone' => 'required_if:primary_competition_participation,Abroad',
+            'zone' => 'required',
             'passport_size_photo' => ['required', 'mimes:jpg,jpeg', new PassportSizePhoto()],
             'birth_certificate' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
             'letter_of_recommendation' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -105,10 +111,14 @@ class ApplicationRequest extends FormRequest
             'primary_competition_participation.required' => 'The primary competition participation is required.',
             'primary_competition_participation.in' => 'Invalid primary competition participation selected.',
             'zone.required' => 'The zone is required.',
-            'zone.in' => 'Please select zone.',
+            // 'zone.in' => 'Please select zone.',
         ];
     }
 
+    // public function afterValidation()
+    // {
+    //     $this->zone = $this->abroad_zone ? $this->abroad_zone : $this->zone;
+    // }
     // public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     // {
     //     dd($validator->errors());

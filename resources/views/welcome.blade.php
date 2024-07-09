@@ -12,31 +12,32 @@
 </head>
 
 <body>
-    @if (session()->has('success'))
-        <div class="modal fade" id="successmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered guideline-modal ">
-                <div class="modal-content">
-                    <div class="modal-body pb-0">
-                        <div class="modal-detail-area success-modal">
-                            <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
-                            <h5>Application Submitted
-                                Successfully !</h5>
-                            <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
-                                purpose as a sign-up or sign-in form, toggled at the top.</p>
-                            <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
-                                aria-label="Close">Okay</button>
-                        </div>
+    {{-- @if (session()->has('success')) --}}
+    <div class="modal fade" id="successmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog modal-dialog-centered guideline-modal ">
+            <div class="modal-content">
+                <div class="modal-body pb-0">
+                    <div class="modal-detail-area success-modal">
+                        <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
+                        <h5>Application Submitted
+                            Successfully !</h5>
+                        <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
+                            purpose as a sign-up or sign-in form, toggled at the top.</p>
+                        <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
+                            aria-label="Close">Okay</button>
                     </div>
                 </div>
             </div>
         </div>
-    @endif
-
+    </div>
+    {{-- @endif --}}
+    {{-- 
     @if (session()->has('error'))
         <div class="alert alert-danger">
             {{ session()->get('error') }}
         </div>
-    @endif
+    @endif --}}
 
     <section class="header-area">
         <div class="spacer">
@@ -67,9 +68,11 @@
                             <sup>*</sup></label>
                         <input type="text" class="form-control" id="name" name="full_name"
                             aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
-                        @error('full_name')
-                            <span class="error" role="alert">{{ $message }}</span>
+                        <span class="error" role="alert">
+                            @error('full_name')
+                                {{ $message }}</span>
                         @enderror
+                        </span>
                     </div>
                 </div>
                 <div class="row">
@@ -107,9 +110,11 @@
                                 right: 10px;"
                                     src="{{ url('/images/calendar (2).svg') }}" alt="calender">
                             </div>
-                            @error('date_of_birth')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('date_of_birth')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
 
@@ -166,19 +171,23 @@
                                 <sup>*</sup></label>
                             <input type="text" class="form-control" id="aadharNumber" name="aadhar_number"
                                 value="{{ old('aadhar_number') }}" aria-describedby="nameHelp" maxlength="12">
-                            @error('aadhar_number')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('aadhar_number')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Job - ജോലി<sup>*</sup></label>
+                            <label for="exampleInputEmail1" class="form-label">Job - ജോലി</label>
                             <input type="text" class="form-control" id="name" name="job"
                                 value="{{ old('job') }}" aria-describedby="nameHelp">
-                            @error('job')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('job')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -193,20 +202,24 @@
                                 <sup>*</sup></label>
                             <input type="text" class="form-control" id="contactNumber" name="contact_number"
                                 aria-describedby="nameHelp" value="{{ old('contact_number') }}" maxlength="10">
-                            @error('contact_number')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('contact_number')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-area">
                             <label for="exampleInputEmail1" class="form-label">Whatsapp - വാട്സ്ആപ് നമ്പർ
-                                <sup>*</sup></label>
+                            </label>
                             <input type="text" class="form-control" id="whatsappNumber" name="whatsapp"
                                 aria-describedby="nameHelp" value="{{ old('whatsapp') }}" maxlength="10">
-                            @error('whatsapp')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('whatsapp')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -214,9 +227,11 @@
                             <label for="exampleInputEmail1" class="form-label">Email - ഇമെയിൽ <sup>*</sup></label>
                             <input type="email" class="form-control" id="name" name="email"
                                 aria-describedby="nameHelp" value="{{ old('email') }}">
-                            @error('email')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('email')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -225,9 +240,11 @@
                                 <sup>*</sup></label>
                             <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="current_address"
                                 name="c_address">{{ old('c_address') }}</textarea>
-                            @error('c_address')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('c_address')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="use_permanent_address">
@@ -242,9 +259,11 @@
                                 <sup>*</sup></label>
                             <textarea class="form-control" style="height:auto;resize:none;" rows="4" id="permanent_address"
                                 name="pr_address">{{ old('pr_address') }}</textarea>
-                            @error('pr_address')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('pr_address')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -298,12 +317,14 @@
                 <div class="col-md-8">
                     <div class="form-area">
                         <label for="institution_name" class="form-label">Name and place of the institution where hifz
-                            completed <sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും</label>
+                            completed<br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും</label>
                         <input type="text" class="form-control" id="institution_name" aria-describedby="nameHelp"
                             name="institution_name" value="{{ old('institution_name') }}">
-                        @error('institution_name')
-                            <span class="error" role="alert">{{ $message }}</span>
-                        @enderror
+                        <span class="error" role="alert">
+                            @error('institution_name')
+                                {{ $message }}
+                            @enderror
+                        </span>
                     </div>
                 </div>
                 <div class="row">
@@ -325,9 +346,11 @@
                                     <label class="form-check-label" for="ijazahNo">No</label>
                                 </div>
                             </div>
-                            @error('is_completed_ijazah')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('is_completed_ijazah')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-8" id="qirathIjazahSection"
@@ -338,9 +361,11 @@
                             <input type="text" class="form-control" id="qirath_with_ijazah"
                                 name="qirath_with_ijazah" aria-describedby="nameHelp"
                                 value="{{ old('qirath_with_ijazah') }}">
-                            @error('qirath_with_ijazah')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('qirath_with_ijazah')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -365,9 +390,11 @@
                                     <label class="form-check-label" for="participationNative">സ്വദേശത്ത് നിന്ന</label>
                                 </div>
                             </div>
-                            @error('primary_competition_participation')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('primary_competition_participation')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4" id="nativeZoneSection"
@@ -387,9 +414,11 @@
                                 <option value="Kannur" {{ old('native_zone') == 'Kannur' ? 'selected' : '' }}>Kannur
                                 </option>
                             </select>
-                            @error('native_zone')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('zone')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4" id="abroadZoneSection"
@@ -397,7 +426,7 @@
                         <div class="form-area">
                             <label for="abroad_zone" class="form-label">From which zone in
                                 abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ</label>
-                            <select class="form-select" aria-label="Default select example" name="zone"
+                            <select class="form-select" aria-label="Default select example" name="abroad_zone"
                                 id="abroad_zone">
                                 <option value="">Please Select</option>
                                 <option value="Jeddah" {{ old('abroad_zone') == 'Jeddah' ? 'selected' : '' }}>Jeddah
@@ -413,9 +442,11 @@
                                 <option value="Kuwait" {{ old('abroad_zone') == 'Kuwait' ? 'selected' : '' }}>Kuwait
                                 </option>
                             </select>
-                            @error('abroad_zone')
-                                <span class="error" role="alert">{{ $message }}</span>
-                            @enderror
+                            <span class="error" role="alert">
+                                @error('zone')
+                                    {{ $message }}
+                                @enderror
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -482,9 +513,11 @@
                                 </svg>
                             </div>
                         </div>
-                        @error('passport_size_photo')
-                            <span class="error" role="alert">{{ $message }}</span>
-                        @enderror
+                        <span class="error" role="alert">
+                            @error('passport_size_photo')
+                                {{ $message }}
+                            @enderror
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -518,9 +551,11 @@
                                 </svg>
                             </div>
                         </div>
-                        @error('birth_certificate')
-                            <span class="error" role="alert">{{ $message }}</span>
-                        @enderror
+                        <span class="error" role="alert">
+                            @error('birth_certificate')
+                                {{ $message }}
+                            @enderror
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -554,9 +589,11 @@
                                 </svg>
                             </div>
                         </div>
-                        @error('letter_of_recommendation')
-                            <span class="error" role="alert">{{ $message }}</span>
-                        @enderror
+                        <span class="error" role="alert">
+                            @error('letter_of_recommendation')
+                                {{ $message }}
+                            @enderror
+                        </span>
                     </div>
                 </div>
             </div>
@@ -570,7 +607,7 @@
                         of my knowledge and belief.
                     </label>
                 </div>
-                <button type="submit" class="btn btn-std">Submit Application</button>
+                <button type="submit" id="myButton" disabled class="btn btn-std">Submit Application</button>
             </div>
         </form>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -792,6 +829,65 @@
             changeMonth: true,
             changeYear: true
         });
+
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+
+                // Clear previous error messages
+                $('.error').empty();
+
+                $.ajax({
+                    url: "{{ route('application.store') }}",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            // Show the success modal
+                            $('#successmodal').modal('show');
+                        } else {
+                            alert('An error occurred. Please check the form for errors.');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 422) {
+                            // Validation errors
+                            var errors = jqXHR.responseJSON.errors;
+                            console.log(errors);
+                            $.each(errors, function(field, messages) {
+                                var errorSpan = $('[name="' + field + '"]').siblings(
+                                    '.error');
+                                if (errorSpan.length === 0) {
+                                    errorSpan = $('[name="' + field + '"]').closest(
+                                        '.form-area').find('.error');
+                                }
+                                errorSpan.html(messages.join('<br>'));
+                            });
+                        } else {
+                            alert(
+                                'An error occurred while processing your application. Please try again later.'
+                            );
+                        }
+                    }
+                });
+            });
+        });
+        document.getElementById('flexCheckDefault').addEventListener('change', function() {
+            var myButton = document.getElementById('myButton');
+            if (this.checked) {
+                myButton.disabled = false;
+                myButton.classList.add('enabled');
+            } else {
+                myButton.disabled = true;
+                myButton.classList.remove('enabled');
+            }
+        });
+    </script>
+
+
     </script>
 </body>
 

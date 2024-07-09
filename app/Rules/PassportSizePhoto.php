@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Rules;
+
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 
@@ -10,10 +12,10 @@ class PassportSizePhoto implements Rule
     public function passes($attribute, $value)
     {
         // Check if it's a valid image file
-        if (!$value->isValid() || !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg'])) {
-            $this->failureReason = 'file type';
-            return false;
-        }
+        // if (!$value->isValid() || !in_array($value->getClientOriginalExtension(), ['jpg', 'jpeg'])) {
+        //     $this->failureReason = 'file type';
+        //     return false;
+        // }
 
         // Check file size (100 KB = 100 * 1024 bytes)
         if ($value->getSize() > 100 * 1024) {

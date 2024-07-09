@@ -261,10 +261,13 @@ body {
 
 #filename-birth {
     word-break: break-all;
+    padding-left: 10px;
 }
 
 #filename-letter {
     word-break: break-all;
+    padding-left: 10px;
+
 }
 
 .guideline-modal .modal-header {
@@ -329,4 +332,16 @@ body {
 
 .error {
     color: red;
+}
+
+.preview-area svg {
+    padding-right: 5px;
+}
+
+#myButton {
+    cursor: not-allowed;
+}
+
+#myButton.enabled {
+    cursor: pointer;
 }
