@@ -28,6 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Competition')
+            // ->brandLogo(asset('images/yuze.svg'))
+            // ->brandLogoHeight('3rem')
             ->login()
             ->favicon(asset('images/aqa_faviocn.svg'))
             ->topNavigation()
