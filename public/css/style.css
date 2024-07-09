@@ -317,6 +317,10 @@ body {
         margin: 20px;
         padding: 15px;
     }
+
+    .form-list h2 {
+        padding-bottom: 12px;
+    }
 }
 
 .error {

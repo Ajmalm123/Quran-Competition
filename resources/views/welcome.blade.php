@@ -103,7 +103,8 @@
                             <div style="position: relative">
                                 <input type="text" class="form-control" id="dob" name="date_of_birth"
                                     value="" aria-describedby="emailHelp" contenteditable="true">
-                                <img style="position: absolute;top: 12px;right: 10px;"
+                                <img style="position: absolute;top: 12px;
+                                right: 10px;"
                                     src="{{ url('/images/calendar (2).svg') }}" alt="calender">
                             </div>
                             @error('date_of_birth')
@@ -562,7 +563,7 @@
             <div class="spacer mt-0">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault" style="font-size: 14px;">
                         I hereby declare that the information provided in this application is true and
                         correct to the
                         best
