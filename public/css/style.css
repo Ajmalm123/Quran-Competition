@@ -321,6 +321,10 @@ body {
     .form-list h2 {
         padding-bottom: 12px;
     }
+
+    .points-area svg {
+        display: none;
+    }
 }
 
 .error {
