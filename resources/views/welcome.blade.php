@@ -41,7 +41,7 @@
 
     <section class="header-area">
         <div class="spacer">
-            <img class="img-fluid" src="{{ url('/images/logo.svg') }}" alt="logo">
+            <img class="img-fluid" src="{{ url('/images/footer-mail-logo.png') }}" alt="logo">
         </div>
     </section>
     <section class="form-area pb-0">
@@ -751,6 +751,7 @@
             document.getElementById('passport').style.display = 'block';
             // Reset the file input
             document.getElementById('imgInp').value = '';
+
         }
 
         function showuploadbirth() {
@@ -911,6 +912,8 @@
             }
         });
     </script>
+
+
 
 
     </script>
