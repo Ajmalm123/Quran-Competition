@@ -746,6 +746,7 @@
         //     document.getElementById('hidenative').style.display = 'none';
         // }
 
+
         function showupload() {
             document.getElementById('showimage').style.display = 'none';
             document.getElementById('passport').style.display = 'block';
@@ -765,7 +766,9 @@
             document.getElementById('showthis').style.display = 'none';
             document.getElementById('hidenative').style.display = 'block';
         }
-        imgInp.onchange = evt => {
+        const imgInp = document.getElementById('imgInp');
+
+        imgInp.addEventListener('change', (evt) => {
             document.getElementById('showimage').style.display = 'block';
             document.getElementById('passport').style.display = 'none';
             const [file] = imgInp.files
@@ -773,7 +776,10 @@
                 blah.src = URL.createObjectURL(file);
                 document.getElementById('filename').textContent = ` ${file.name}`;
             }
-        }
+            imgInp.value = '';
+
+        });
+
         imgInpbirth.onchange = evt => {
             document.getElementById('showimage-birth').style.display = 'block';
             document.getElementById('birthcertificate').style.display = 'none';
@@ -782,6 +788,8 @@
                 blahbirth.src = URL.createObjectURL(file);
                 document.getElementById('filename-birth').textContent = ` ${file.name}`;
             }
+            imgInpbirth.value = '';
+
         }
         imgInpletter.onchange = evt => {
             document.getElementById('showimage-letter').style.display = 'block';
@@ -791,6 +799,8 @@
                 blahletter.src = URL.createObjectURL(file);
                 document.getElementById('filename-letter').textContent = ` ${file.name}`;
             }
+            imgInpletter.value = '';
+
         }
 
         function allowOnlyNumbers(inputElement) {
@@ -819,7 +829,8 @@
 
         allowOnlyNumbers(contactNumberInput);
         allowOnlyNumbers(aadharNumberInput);
-        allowOnlyNumbers(whatsappNumberInput);
+        allowOnlyNumbers(
+            whatsappNumberInput);
 
 
 
@@ -858,8 +869,9 @@
                             var errors = jqXHR.responseJSON.errors;
                             console.log(errors);
                             $.each(errors, function(field, messages) {
-                                var errorSpan = $('[name="' + field + '"]').siblings(
-                                    '.error');
+                                var errorSpan = $('[name="' + field + '"]')
+                                    .siblings(
+                                        '.error');
                                 if (errorSpan.length === 0) {
                                     errorSpan = $('[name="' + field + '"]').closest(
                                         '.form-area').find('.error');
