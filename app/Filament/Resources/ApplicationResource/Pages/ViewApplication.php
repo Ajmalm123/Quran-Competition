@@ -70,7 +70,7 @@ class ViewApplication extends ViewRecord
 
                     // Dispatch the job
                     SendEmailJob::dispatch($dispatchData);
-                    Notification::make()->title('Application Approved')->success()->send();
+                    Notification::make()->success()->title('Application Approved')->send();
                 })
                 ->hidden(function (Application $application) {
                     return $application->status == 'Approved' || $application->status == 'Rejected';

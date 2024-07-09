@@ -2,8 +2,9 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Contracts\Validation\Rule;
 
 class PassportSizePhoto implements Rule
 {
@@ -24,11 +25,13 @@ class PassportSizePhoto implements Rule
         }
 
         // Check file dimensions
-        $image = getimagesize($value->getPathname());
-        if ($image[0] > 300 || $image[1] > 400) {
-            $this->failureReason = 'dimensions';
-            return false;
-        }
+        // $image = getimagesize($value->getPathname());
+        // if ($image[0] > 300 || $image[1] > 400) {
+        //     $this->failureReason = 'dimensions';
+        //     return false;
+        // }
+        File::image()->dimensions(
+            Rule::dimensions()->ratio(1.0));
 
         return true;
     }
