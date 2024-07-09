@@ -88,7 +88,7 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-clock')
                 ->color('warning')
                 ->url(route('filament.admin.resources.applications.index', [
-                    'tableFilters[status][value]' => 'withheld'
+                    'tableFilters[status][value]' => 'Withheld'
                 ])),
 
             Stat::make('Pending Review', $createdCount)

@@ -237,17 +237,17 @@ class ApplicationResource extends Resource
                         'Approved' => 'Approved',
                         'Rejected' => 'Rejected'
                     ])
-                    ->multiple()
+                    // ->multiple()
                     ->indicator('Status'),
                 SelectFilter::make('district')
                     ->options(Application::DISTRICT)
                     ->label('District')
-                    ->multiple()
+                    // ->multiple()
                     ->indicator('District'),
                 SelectFilter::make('zone')
                     ->options(Application::ZONE)
                     ->label('Zone')
-                    ->multiple()
+                    // ->multiple()
                     ->indicator('Zone'),
                 Filter::make('created_at')
                     ->form([
