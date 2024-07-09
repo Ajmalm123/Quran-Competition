@@ -746,20 +746,23 @@
         //     document.getElementById('hidenative').style.display = 'none';
         // }
 
-
         function showupload() {
             document.getElementById('showimage').style.display = 'none';
             document.getElementById('passport').style.display = 'block';
+            // Reset the file input
+            document.getElementById('imgInp').value = '';
         }
 
         function showuploadbirth() {
             document.getElementById('showimage-birth').style.display = 'none';
             document.getElementById('birthcertificate').style.display = 'block';
+            document.getElementById('imgInpbirth').value = '';
         }
 
         function showuploadletter() {
             document.getElementById('showimage-letter').style.display = 'none';
             document.getElementById('recommendation').style.display = 'block';
+            document.getElementById('imgInpletter').value = '';
         }
 
         function hideDiv1() {
@@ -768,38 +771,48 @@
         }
         const imgInp = document.getElementById('imgInp');
 
-        imgInp.addEventListener('change', (evt) => {
-            document.getElementById('showimage').style.display = 'block';
-            document.getElementById('passport').style.display = 'none';
-            const [file] = imgInp.files
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files;
             if (file) {
+                document.getElementById('showimage').style.display = 'block';
+                document.getElementById('passport').style.display = 'none';
                 blah.src = URL.createObjectURL(file);
                 document.getElementById('filename').textContent = ` ${file.name}`;
+            } else {
+                // If no file is selected, hide the preview
+                document.getElementById('showimage').style.display = 'none';
+                document.getElementById('passport').style.display = 'block';
             }
-            imgInp.value = '';
-
-        });
+        }
 
         imgInpbirth.onchange = evt => {
-            document.getElementById('showimage-birth').style.display = 'block';
-            document.getElementById('birthcertificate').style.display = 'none';
             const [file] = imgInpbirth.files
             if (file) {
+                document.getElementById('showimage-birth').style.display = 'block';
+                document.getElementById('birthcertificate').style.display = 'none';
                 blahbirth.src = URL.createObjectURL(file);
                 document.getElementById('filename-birth').textContent = ` ${file.name}`;
+            } else {
+                // If no file is selected, hide the preview
+                document.getElementById('showimage-birth').style.display = 'none';
+                document.getElementById('birthcertificate').style.display = 'block';
             }
-            imgInpbirth.value = '';
 
         }
         imgInpletter.onchange = evt => {
-            document.getElementById('showimage-letter').style.display = 'block';
-            document.getElementById('recommendation').style.display = 'none';
             const [file] = imgInpletter.files
             if (file) {
+
+                document.getElementById('showimage-letter').style.display = 'block';
+                document.getElementById('recommendation').style.display = 'none';
+
                 blahletter.src = URL.createObjectURL(file);
                 document.getElementById('filename-letter').textContent = ` ${file.name}`;
+            } else {
+                // If no file is selected, hide the preview
+                document.getElementById('showimage-letter').style.display = 'none';
+                document.getElementById('recommendation').style.display = 'block';
             }
-            imgInpletter.value = '';
 
         }
 

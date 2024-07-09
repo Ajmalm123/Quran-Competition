@@ -13,6 +13,7 @@ class ApplicationController extends Controller
 {
     public function store(ApplicationRequest $request)
     {
+        // dd($request);
         try {
             $validatedData = $request->validated();
             // Handle the file uploads
