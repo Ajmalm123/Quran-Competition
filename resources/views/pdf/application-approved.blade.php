@@ -5,7 +5,7 @@
     <title>ASLAM HOLY QUR’AN AWARD - Emailer</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@100..900&display=swap');
 
         body {
             font-family: "Raleway", sans-serif;
