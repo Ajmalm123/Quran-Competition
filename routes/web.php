@@ -15,4 +15,12 @@ Route::get('/apply', function () {
     return view('welcome');
 })->name('apply');
 
+Route::get('/application', function () {
+    return view('emails.application-recieved');
+});
+Route::get('/approved', function () {
+    return view('emails.application-approved');
+});
+
+
 Route::post('/apply/application', [ApplicationController::class, 'store'])->name('application.store');
