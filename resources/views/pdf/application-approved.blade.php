@@ -2,13 +2,14 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>ASLAM HOLY QUR’AN AWARD - Emailer</title>
 
     <style>
         /* @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); */
 
         body {
-            font-family: DejaVu Sans;
+            font-family: "DejaVu Sans", sans-serif;
             width: 210mm;
             height: 297mm;
             margin: 0;
@@ -213,7 +214,7 @@
                                         style="height: 60px; background-color: #F4F4F4; padding: 0 32px; display: flex; justify-content: space-between; align-items: center;">
                                         <h1 style="font-size: 16px; margin: 0;">ADMIT CARD</h1>
                                         <img src="{{ url('/images/logo_admitcard.png') }}" alt="Logo"
-                                            style="width: 160px; height: 28px;">
+                                            style="width: 160px; height: 28 px;">
                                     </td>
                                 </tr>
                                 <tr>
