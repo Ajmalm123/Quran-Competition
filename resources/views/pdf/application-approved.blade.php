@@ -5,10 +5,10 @@
     <title>ASLAM HOLY QUR’AN AWARD - Emailer</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+        /* @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); */
 
         body {
-            font-family: "Raleway", sans-serif;
+            font-family: DejaVu Sans;
             width: 210mm;
             height: 297mm;
             margin: 0;
