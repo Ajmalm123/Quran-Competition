@@ -34,6 +34,16 @@ class SendEmailJob implements ShouldQueue
         try {
             // Generate PDF
             $pdf = Pdf::loadView('pdf.application-approved', ['application' => $this->data['application']]);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'DejaVu Sans',
+                'isRemoteEnabled' => true,
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'isFontSubsettingEnabled' => true,
+                'debugCss' => true,
+            ]);
             // Create folder if it doesn't exist
             $folderPath = 'Application Approved Pdfs';
             Storage::disk('local')->makeDirectory($folderPath);
