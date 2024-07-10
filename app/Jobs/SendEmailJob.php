@@ -34,10 +34,13 @@ class SendEmailJob implements ShouldQueue
         try {
             // Generate PDF
             $pdf = Pdf::loadView('pdf.application-approved', ['application' => $this->data['application']]);
+            $pdf->getDomPDF()->set_option("fontDir", storage_path('fonts/'));
+            $pdf->getDomPDF()->set_option("font_cache", storage_path('fonts/'));
+            $pdf->getDomPDF()->set_option("temp_dir", storage_path('fonts/'));
             // $pdf->setPaper('A4', 'portrait');
             // $pdf->setOptions([
             //     'dpi' => 150,
-            //     'defaultFont' => 'DejaVu Sans',
+            //     'defaultFont' => 'DejaVu Sans',      
             //     'isRemoteEnabled' => true,
             //     'isHtml5ParserEnabled' => true,
             //     'isPhpEnabled' => true,

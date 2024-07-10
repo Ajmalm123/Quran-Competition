@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
     {{-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@100..900&display=swap" rel="stylesheet"> --}}
@@ -11,7 +13,7 @@
         /* @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@100..900&display=swap');
         body {
-            font-family: "Noto Sans Malayalam", sans-serif;
+            font-family: 'Noto Sans Malayalam', sans-serif;
             width: 210mm;
             height: 297mm;
             margin: 0;
