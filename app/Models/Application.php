@@ -105,7 +105,7 @@ class Application extends Model
 
         // If no ID exists, start from the initial value
         if (!$lastApplicationId) {
-            return 'APQ241000';
+            return 'APQ241001';
         }
 
         // Increment the last application ID
