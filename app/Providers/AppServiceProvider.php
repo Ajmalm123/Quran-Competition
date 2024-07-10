@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(BaseNotification::class,Notification::class);
+        // $this->app->bind(BaseNotification::class,Notification::class);
     }
 
     /**
