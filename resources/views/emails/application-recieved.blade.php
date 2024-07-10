@@ -57,7 +57,7 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 600;color:#000000;padding-top:50px;">
-                                        Dear {{ $mailData['application']->full_name }},</h5>
+                                        Dear <?= $mailData['application']->full_name ?? 'Applicant' ?>,
                                 </td>
                             </tr>
                             <tr>
@@ -79,7 +79,8 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Your Application ID is: <b>{{ $mailData['application']->application_id }}</b>
+                                        Your Application ID is:
+                                        <b><?= $mailData['application']->application_id ?? 'Not Available' ?></b>
                                     </h5>
                                 </td>
                             </tr>
