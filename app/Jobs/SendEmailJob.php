@@ -4,8 +4,10 @@ namespace App\Jobs;
 
 use App\Mail\Application;
 use Illuminate\Bus\Queueable;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,13 +32,27 @@ class SendEmailJob implements ShouldQueue
     public function handle(): void
     {
         try {
+            // Generate PDF
+            $pdf = Pdf::loadView('pdf.application-approved', ['application' => $this->data['application']]);
+            // Create folder if it doesn't exist
+            $folderPath = 'Application Approved Pdfs';
+            Storage::disk('local')->makeDirectory($folderPath);
+
+            $pdfFileName = 'application_' . $this->data['application']->application_id . '_approved.pdf';
+            $pdfFullPath = $folderPath . '/' . $pdfFileName;
+
+            // Save PDF to the specified folder
+            Storage::disk('local')->put($pdfFullPath, $pdf->output());
+
+            $pdfPath = Storage::disk('local')->path($pdfFullPath);
+
             Mail::to($this->data['application']->email)->send(new Application([
                 'page' => $this->data['page'],
                 'application' => $this->data['application'],
                 'subject' => $this->data['subject'],
                 'message' => $this->data['message'],
+                'pdfPath' => $pdfPath
             ]));
-
             // Log success
             \Illuminate\Support\Facades\Log::info("Email sent successfully to {$this->data['application']->email}");
         } catch (\Exception $e) {
