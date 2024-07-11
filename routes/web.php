@@ -22,5 +22,10 @@ Route::get('/approved', function () {
     return view('emails.application-approved');
 });
 
+Route::get('/application-status', function () {
+    return view('application-status');
+});
+
+
 
 Route::post('/apply/application', [ApplicationController::class, 'store'])->name('application.store');
