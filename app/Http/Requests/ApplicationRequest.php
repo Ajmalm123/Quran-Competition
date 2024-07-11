@@ -49,19 +49,15 @@ class ApplicationRequest extends FormRequest
             'qirath_with_ijazah' => 'nullable|string',
             'primary_competition_participation' => 'required|in:Native,Abroad',
             'zone' => 'required',
-            'passport_size_photo' => [
-                'required',
-                'mimes:jpg,jpeg',
-                'max:100', // Max file size in kilobytes
-                File::image()->dimensions(
-                    Rule::dimensions()
-                        ->minWidth(150)
-                        ->maxWidth(600)
-                        ->minHeight(200)
-                        ->maxHeight(800)
-                        ->ratio(3 / 2)
-                ),
-            ],
+            'passport_size_photo' => 'required|mimes:jpg,jpeg,max:100', // Max file size in kilobytes
+            // File::image()->dimensions(
+            //     Rule::dimensions()
+            //         ->minWidth(150)
+            //         ->maxWidth(600)
+            //         ->minHeight(200)
+            //         ->maxHeight(800)
+            //         ->ratio(3 / 2)
+            // ),
             'birth_certificate' => 'required|mimes:pdf,jpg,jpeg|max:2048',
             'letter_of_recommendation' => 'required|mimes:pdf,jpg,jpeg|max:2048',
         ];
