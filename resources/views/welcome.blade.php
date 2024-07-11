@@ -758,71 +758,71 @@
             document.getElementById('showimage').style.display = 'none';
             document.getElementById('passport').style.display = 'block';
             document.getElementById('imgInp').value = '';
-            clearError();
+            // clearError();
         }
 
-        function displayError(message) {
-            const errorSpan = document.querySelector('.error');
-            errorSpan.textContent = message;
-            errorSpan.style.display = 'block';
-        }
+        // function displayError(message) {
+        //     const errorSpan = document.querySelector('.error');
+        //     errorSpan.textContent = message;
+        //     errorSpan.style.display = 'block';
+        // }
 
-        function clearError() {
-            const errorSpan = document.querySelector('.error');
-            errorSpan.textContent = '';
-            errorSpan.style.display = 'none';
-        }
+        // function clearError() {
+        //     const errorSpan = document.querySelector('.error');
+        //     errorSpan.textContent = '';
+        //     errorSpan.style.display = 'none';
+        // }
         const imgInp = document.getElementById('imgInp');
 
 
-        imgInp.onchange = evt => {
-            // console.log('ds');;
+        // imgInp.onchange = evt => {
+        //     // console.log('ds');;
 
-            const [file] = imgInp.files;
-            if (file) {
-                console.log(file.size);
-                // Check file size
-                if (file.size > 100 * 1024) { // 100 KB in bytes
-                    displayError("File size must not exceed 100 KB.");
-                    imgInp.value = '';
-                    return;
-                }
+        //     const [file] = imgInp.files;
+        //     if (file) {
+        //         console.log(file.size);
+        //         // Check file size
+        //         if (file.size > 100 * 1024) { // 100 KB in bytes
+        //             displayError("File size must not exceed 100 KB.");
+        //             imgInp.value = '';
+        //             return;
+        //         }
 
-                // Check file type
-                if (!file.type.startsWith('image/')) {
-                    displayError("Please upload an image file.");
-                    imgInp.value = '';
-                    return;
-                }
+        //         // Check file type
+        //         if (!file.type.startsWith('image/')) {
+        //             displayError("Please upload an image file.");
+        //             imgInp.value = '';
+        //             return;
+        //         }
 
-                // Check image dimensions
-                const img = new Image();
-                img.onload = function() {
-                    if (this.width !== 300 || this.height !== 400) {
-                        displayError("Image dimensions must be 300px width by 400px height.");
-                        imgInp.value = '';
-                        return;
-                    }
+        //         // Check image dimensions
+        //         const img = new Image();
+        //         img.onload = function() {
+        //             if (this.width !== 300 || this.height !== 400) {
+        //                 displayError("Image dimensions must be 300px width by 400px height.");
+        //                 imgInp.value = '';
+        //                 return;
+        //             }
 
-                    // If all validations pass, show the image
-                    document.getElementById('showimage').style.display = 'block';
-                    document.getElementById('passport').style.display = 'none';
-                    blah.src = URL.createObjectURL(file);
-                    document.getElementById('filename').textContent = ` ${file.name}`;
-                    clearError();
-                };
-                img.onerror = function() {
-                    displayError("Invalid image file.");
-                    imgInp.value = '';
-                };
-                img.src = URL.createObjectURL(file);
-            } else {
-                // If no file is selected, hide the preview
-                document.getElementById('showimage').style.display = 'none';
-                document.getElementById('passport').style.display = 'block';
-                clearError();
-            }
-        };
+        //             // If all validations pass, show the image
+        //             document.getElementById('showimage').style.display = 'block';
+        //             document.getElementById('passport').style.display = 'none';
+        //             blah.src = URL.createObjectURL(file);
+        //             document.getElementById('filename').textContent = ` ${file.name}`;
+        //             clearError();
+        //         };
+        //         img.onerror = function() {
+        //             displayError("Invalid image file.");
+        //             imgInp.value = '';
+        //         };
+        //         img.src = URL.createObjectURL(file);
+        //     } else {
+        //         // If no file is selected, hide the preview
+        //         document.getElementById('showimage').style.display = 'none';
+        //         document.getElementById('passport').style.display = 'block';
+        //         clearError();
+        //     }
+        // };
 
         function showuploadbirth() {
             document.getElementById('showimage-birth').style.display = 'none';
@@ -841,19 +841,19 @@
             document.getElementById('hidenative').style.display = 'block';
         }
 
-        // imgInp.onchange = evt => {
-        //     const [file] = imgInp.files;
-        //     if (file) {
-        //         document.getElementById('showimage').style.display = 'block';
-        //         document.getElementById('passport').style.display = 'none';
-        //         blah.src = URL.createObjectURL(file);
-        //         document.getElementById('filename').textContent = ` ${file.name}`;
-        //     } else {
-        //         // If no file is selected, hide the preview
-        //         document.getElementById('showimage').style.display = 'none';
-        //         document.getElementById('passport').style.display = 'block';
-        //     }
-        // }
+        imgInp.onchange = evt => {
+            const [file] = imgInp.files;
+            if (file) {
+                document.getElementById('showimage').style.display = 'block';
+                document.getElementById('passport').style.display = 'none';
+                blah.src = URL.createObjectURL(file);
+                document.getElementById('filename').textContent = ` ${file.name}`;
+            } else {
+                // If no file is selected, hide the preview
+                document.getElementById('showimage').style.display = 'none';
+                document.getElementById('passport').style.display = 'block';
+            }
+        }
 
         imgInpbirth.onchange = evt => {
             const [file] = imgInpbirth.files
