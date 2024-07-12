@@ -16,9 +16,9 @@ use Tables\Filters\DateFilter;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Widgets\ZoneApplicationStats;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Widgets\ZoneApplicationStatsWidget;
 use App\Filament\Resources\ZoneAssignmentResource\Pages;
 use App\Filament\Resources\ZoneAssignmentResource\RelationManagers;
 
@@ -188,7 +188,7 @@ class ZoneAssignmentResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            ZoneApplicationStatsWidget::class,
+            ZoneApplicationStats::class,
         ];
     }
 }

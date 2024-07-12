@@ -7,7 +7,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\DB;
 
-class ZoneApplicationStatsWidget extends BaseWidget
+class ZoneApplicationStats extends BaseWidget
 {
     protected function getStats(): array
     {
