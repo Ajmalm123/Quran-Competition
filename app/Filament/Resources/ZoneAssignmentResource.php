@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Widgets\ZoneApplicationStatsWidget;
 use App\Filament\Resources\ZoneAssignmentResource\Pages;
 use App\Filament\Resources\ZoneAssignmentResource\RelationManagers;
 
@@ -71,7 +72,7 @@ class ZoneAssignmentResource extends Resource
                             ->required()
                             ->label('Center Name')
                             ->maxLength(255)
-                            ->disabled(fn(Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
+                            ->disabled(fn (Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
                             ->dehydrated(),
                         // ->rules([
                         //     function (Forms\Get $get) {
@@ -181,6 +182,13 @@ class ZoneAssignmentResource extends Resource
             'index' => Pages\ListZoneAssignments::route('/'),
             'create' => Pages\CreateZoneAssignment::route('/create'),
             'edit' => Pages\EditZoneAssignment::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            ZoneApplicationStatsWidget::class,
         ];
     }
 }

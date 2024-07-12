@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\ZoneAssignmentResource\Pages;
 
-use App\Filament\Resources\ZoneAssignmentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ZoneAssignmentResource;
+use App\Filament\Widgets\ZoneApplicationStatsWidget;
 
 class ListZoneAssignments extends ListRecords
 {
@@ -14,6 +15,12 @@ class ListZoneAssignments extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+    protected function getFooterWidgets(): array
+    {
+        return [
+            ZoneApplicationStatsWidget::class,
         ];
     }
 }
