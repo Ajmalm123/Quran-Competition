@@ -294,7 +294,7 @@ class ApplicationResource extends Resource
                         ];
                         SendEmailJob::dispatch($dispatchData);
                         Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
-                        ->send();
+                            ->send();
                     }),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
                 ExportPdfAction::make(),
