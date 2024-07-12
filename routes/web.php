@@ -25,6 +25,11 @@ Route::get('/approved', function () {
 Route::get('/application-status', function () {
     return view('application-status');
 });
+
+Route::get('/application-approved-pdf', function () {
+    return view('pdf.application-approved.blade');
+});
+
 Route::get('/application-profile-status', function () {
     return view('application-profile-status');
 });
