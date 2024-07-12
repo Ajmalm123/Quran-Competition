@@ -27,7 +27,7 @@ Route::get('/application-status', function () {
 });
 
 Route::get('/application-approved-pdf', function () {
-    return view('pdf.application-approved.blade');
+    return view('pdf.application-approved');
 });
 
 Route::get('/application-profile-status', function () {
