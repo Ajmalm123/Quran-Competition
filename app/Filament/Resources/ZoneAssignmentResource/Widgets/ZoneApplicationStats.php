@@ -21,7 +21,8 @@ class ZoneApplicationStats extends BaseWidget
         return collect($allZones)->map(function ($zone) use ($zoneCounts) {
             return Stat::make($zone, $zoneCounts[$zone] ?? 0)
                 ->description('Applications')
-                ->color('primary');
+                ->color('primary')
+                ->url(route('filament.admin.resources.applications.index', ['tableFilters[zone][value]' => $zone]));
         })->toArray();
     }
 }
