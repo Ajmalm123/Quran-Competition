@@ -3,12 +3,13 @@
 namespace App\Filament\Resources\ZoneAssignmentResource\Pages;
 
 use Closure;
+use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\Zone;
 use App\Models\ZoneAssignment;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\ZoneAssignmentResource;
-use Illuminate\Database\Eloquent\Model;
 
 class CreateZoneAssignment extends CreateRecord
 {
@@ -38,11 +39,37 @@ class CreateZoneAssignment extends CreateRecord
                                 Forms\Components\DatePicker::make('date')
                                     ->required()
                                     ->format('Y-m-d')
-                                    ->displayFormat('d F Y'),
+                                    ->displayFormat('d F Y')
+                                    ->minDate(Carbon::today())
+                                    ->afterOrEqual(now()->startOfDay())
+                                    ->reactive(),
+
                                 Forms\Components\TimePicker::make('time')
                                     ->required()
-                                    ->format('H:i'),
+                                    ->format('h:i A')
+                                    ->reactive()
+                                    ->afterOrEqual(function (callable $get) {
+                                        $date = $get('date');
+                                        if ($date && Carbon::parse($date)->isToday()) {
+                                            return now();
+                                        }
+                                        return '00:00';
+                                    })
+                                    ->rules([
+                                        function (callable $get) {
+                                            return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                                $date = Carbon::parse($get('date'));
+                                                $time = Carbon::parse($value);
+                                                $dateTime = $date->setTime($time->hour, $time->minute);
+
+                                                if ($dateTime->isPast()) {
+                                                    $fail("The selected date and time must be in the future.");
+                                                }
+                                            };
+                                        },
+                                    ]),
                             ])
+
                             ->columns([
                                 'sm' => 2,
                                 'lg' => 4,

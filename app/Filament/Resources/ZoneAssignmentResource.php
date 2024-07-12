@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use Closure;
+use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\Zone;
 use Filament\Tables;
@@ -23,6 +24,8 @@ use App\Filament\Resources\ZoneAssignmentResource\RelationManagers;
 class ZoneAssignmentResource extends Resource
 {
     protected static ?string $model = ZoneAssignment::class;
+    protected static ?string $navigationLabel = 'Zone';
+
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
 
@@ -70,27 +73,52 @@ class ZoneAssignmentResource extends Resource
                             ->maxLength(255)
                             ->disabled(fn(Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
                             ->dehydrated(),
-                            // ->rules([
-                            //     function (Forms\Get $get) {
-                            //         return function (string $attribute, $value, Closure $fail) use ($get) {
-                            //             $centerAssignment = ZoneAssignment::where('center_id', $value)
-                            //                 ->where('zone_id', '!=', $get('zone_id'))
-                            //                 ->where('id', '!=', $get('id'))
-                            //                 ->first();
+                        // ->rules([
+                        //     function (Forms\Get $get) {
+                        //         return function (string $attribute, $value, Closure $fail) use ($get) {
+                        //             $centerAssignment = ZoneAssignment::where('center_id', $value)
+                        //                 ->where('zone_id', '!=', $get('zone_id'))
+                        //                 ->where('id', '!=', $get('id'))
+                        //                 ->first();
 
-                            //             if ($centerAssignment) {
-                            //                 $fail("This center is already assigned to zone: {$centerAssignment->zone->name}. A center cannot be assigned to multiple zones.");
-                            //             }
-                            //         };
-                            //     },
-                            // ]),
+                        //             if ($centerAssignment) {
+                        //                 $fail("This center is already assigned to zone: {$centerAssignment->zone->name}. A center cannot be assigned to multiple zones.");
+                        //             }
+                        //         };
+                        //     },
+                        // ]),
                         Forms\Components\DatePicker::make('date')
                             ->required()
                             ->format('Y-m-d')
-                            ->displayFormat('d F Y'),
+                            ->displayFormat('d F Y')
+                            ->minDate(Carbon::today())
+                            ->afterOrEqual(now()->startOfDay())
+                            ->reactive(),
+
                         Forms\Components\TimePicker::make('time')
                             ->required()
-                            ->format('H:i'),
+                            ->format('h:i A')
+                            ->reactive()
+                            ->afterOrEqual(function (callable $get) {
+                                $date = $get('date');
+                                if ($date && Carbon::parse($date)->isToday()) {
+                                    return now();
+                                }
+                                return '00:00';
+                            })
+                            ->rules([
+                                function (callable $get) {
+                                    return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                        $date = Carbon::parse($get('date'));
+                                        $time = Carbon::parse($value);
+                                        $dateTime = $date->setTime($time->hour, $time->minute);
+
+                                        if ($dateTime->isPast()) {
+                                            $fail("The selected date and time must be in the future.");
+                                        }
+                                    };
+                                },
+                            ]),
                     ])
                     ->columns(2)
             ]);
