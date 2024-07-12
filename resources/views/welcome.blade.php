@@ -24,8 +24,8 @@
                             Successfully !</h5>
                         <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
                             purpose as a sign-up or sign-in form, toggled at the top.</p>
-                        <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal"
-                            aria-label="Close">Okay</button>
+                        <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal" aria-label="Close"
+                            id="okayButton">Okay</button>
                     </div>
                 </div>
             </div>
@@ -670,6 +670,9 @@
         </script>
     @endif
     <script>
+        document.getElementById('okayButton').addEventListener('click', function() {
+            location.reload();
+        });
         document.addEventListener('DOMContentLoaded', function() {
 
             const currentAddress = document.getElementById('current_address');
