@@ -297,7 +297,16 @@ class ApplicationResource extends Resource
                             ->send();
                     }),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
-                ExportPdfAction::make(),
+                Action::make('WhatsApp')
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
+                    ->color('success')
+                    ->url(
+                        fn (Application $record) =>
+                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)) .
+                            '?text=' . urlencode('Your pre-filled message here'),
+                        true // This opens the link in a new tab
+                    ),
+                // ExportPdfAction::make(),
 
             ])
             ->bulkActions([
