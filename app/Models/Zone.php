@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ZoneAssignment;
+use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,4 +32,9 @@ class Zone extends Authenticatable
         'Native' => 'Native',
         'Abroad' => 'Abroad',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return str_ends_with($this->email, '@test.com');
+    }
 }
