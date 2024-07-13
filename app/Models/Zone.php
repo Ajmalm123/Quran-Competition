@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\ZoneAssignment;
 use Filament\Panel;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\ZoneAssignment;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Zone extends Authenticatable
+class Zone extends Authenticatable implements FilamentUser
 {
     use HasFactory;
 
