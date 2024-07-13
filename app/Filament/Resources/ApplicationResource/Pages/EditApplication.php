@@ -4,7 +4,10 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 
 use Carbon\Carbon;
 use Filament\Forms;
+use App\Models\Zone;
 use Filament\Actions;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use App\Models\Application;
 use Filament\Actions\Action;
 use Filament\Actions\StaticAction;
@@ -49,9 +52,11 @@ class EditApplication extends EditRecord
                             ->disk('public')
                             ->directory('passport')
                             ->image()
-                            ->openable()
                             ->imagePreviewHeight('220')
-                            ->columnSpan(1),
+                            ->maxSize(100)
+                            ->acceptedFileTypes(['image/jpeg', 'image/jpg'])
+                            ->columnSpan(1)
+                            ->required(),
                         Forms\Components\Grid::make(1)->schema([
                             Forms\Components\TextInput::make('full_name')
                                 ->required()
@@ -71,13 +76,15 @@ class EditApplication extends EditRecord
                                 Forms\Components\Select::make('educational_qualification')
                                     ->required()
                                     ->options(Application::EDUCATION_QUALIFICATION),
-                                Forms\Components\TextInput::make('job'),
+                                Forms\Components\TextInput::make('job')
+                                    ->maxLength(100),
                                 Forms\Components\Select::make('mother_tongue')
                                     ->required()
                                     ->options(Application::MOTHERTONGUE),
                                 Forms\Components\TextInput::make('aadhar_number')
                                     ->required()
-                                    ->maxLength(12),
+                                    ->numeric()
+                                    ->length(12),
                             ]),
                         ])->columnSpan(2),
                     ]),
@@ -89,10 +96,10 @@ class EditApplication extends EditRecord
                         TextInput::make('contact_number')
                             ->required()
                             ->numeric()
-                            ->maxLength(15),
+                            ->regex('/^\d{10}$/'),
                         TextInput::make('whatsapp')
                             ->numeric()
-                            ->maxLength(15),
+                            ->regex('/^\d{10}$/'),
                         TextInput::make('email')
                             ->email()
                             ->required()
@@ -102,46 +109,53 @@ class EditApplication extends EditRecord
                         Textarea::make('c_address')
                             ->label('Current Address')
                             ->required(),
-                        // ->columnSpanFull(),
                         Textarea::make('pr_address')
-                            ->label('Permanant Address')
-
+                            ->label('Permanent Address')
                             ->required(),
-                        // ->columnSpanFull(),
                         TextInput::make('pincode')
                             ->numeric()
-                            ->maxLength(8),
+                            ->length(6),
                     ]),
                     Grid::make(3)->schema([
                         Select::make('district')
                             ->required()
                             ->options(Application::DISTRICT),
                     ])
-
                 ])->icon('heroicon-o-identification'),
             Forms\Components\Wizard\Step::make('Hifz and Participation Details')
                 ->schema([
                     Grid::make(3)->schema([
                         Textarea::make('institution_name'),
-                        // ->columnSpanFull(),
                         Select::make('is_completed_ijazah')
                             ->required()
                             ->options(Application::IS_COMPLETED_IJAZAH),
                         Textarea::make('qirath_with_ijazah'),
-                        // ->columnSpanFull(),
                     ]),
                     Grid::make(3)->schema([
                         Select::make('primary_competition_participation')
                             ->required()
-                            ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
-                        Select::make('zone')
+                            ->options(Application::PRIMARY_COMPETITION_PARTICIPATION)
+                            ->reactive()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('zone', null);
+                            }),
+                        Select::make('zone_id')
+                            ->label('Zone')
                             ->required()
-                            ->options(Application::ZONE),
+                            ->options(function (Get $get) {
+                                $participation = $get('primary_competition_participation');
+                                if (!$participation) {
+                                    return [];
+                                }
+                                $area = $participation === 'Native' ? 'Native' : 'Abroad';
+                                return Zone::where('area', $area)->pluck('name', 'id')->toArray();
+                            })
+                            ->disabled(fn(Get $get) => !$get('primary_competition_participation'))
+                            ->reactive(),
                         Select::make('status')
                             ->required()
                             ->options(Application::STATUS),
                     ]),
-
                 ])->icon('heroicon-o-academic-cap'),
             Forms\Components\Wizard\Step::make('Documents')
                 ->schema([
@@ -149,13 +163,16 @@ class EditApplication extends EditRecord
                         FileUpload::make('birth_certificate')
                             ->disk('public')
                             ->directory('birth-certificate')
-                            ->openable(),
+                            ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/jpg'])
+                            ->maxSize(2048)
+                            ->required(),
                         FileUpload::make('letter_of_recommendation')
                             ->disk('public')
                             ->directory('letter-of-recommendation')
-                            ->openable(),
+                            ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/jpg'])
+                            ->maxSize(2048)
+                            ->required(),
                     ]),
-
                 ])->icon('heroicon-o-document'),
         ];
     }

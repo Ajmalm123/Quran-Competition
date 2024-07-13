@@ -29,19 +29,33 @@ class CreateApplicationsTable extends Migration
             $table->text('c_address');
             $table->text('pr_address');
             $table->enum('district', [
-                'Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram', 'Palakkad', 'Thrissur', 'Ernakulam',
-                'Idukki', 'Kottayam', 'Alappuzha', 'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
+                'Kasaragod',
+                'Kannur',
+                'Wayanad',
+                'Kozhikode',
+                'Malappuram',
+                'Palakkad',
+                'Thrissur',
+                'Ernakulam',
+                'Idukki',
+                'Kottayam',
+                'Alappuzha',
+                'Pathanamthitta',
+                'Kollam',
+                'Thiruvananthapuram'
             ]);
             $table->string('pincode', 10)->nullable();
             $table->text('institution_name')->nullable();
             $table->enum('is_completed_ijazah', ['Yes', 'No']);
             $table->text('qirath_with_ijazah')->nullable();
             $table->enum('primary_competition_participation', ['Native', 'Abroad']);
-            $table->enum('zone', ['Kollam', 'Ernakulam', 'Malappuram', 'Kannur', 'Jeddah', 'Dubai', 'Doha', 'Bahrain', 'Muscat', 'Kuwait']);
+            $table->foreignId('zone_id')->constrained()->onDelete('cascade');
             $table->string('passport_size_photo')->nullable();
             $table->string('birth_certificate')->nullable();
             $table->string('letter_of_recommendation')->nullable();
             $table->enum('status', ['Created', 'withheld', 'Approved', 'Rejected']);
+            $table->enum('admit_status', ['Pending', 'Admitted', 'Declined','Absent'])->default('Pending');
+            $table->integer('participation_position')->nullable(); 
             $table->timestamps();
             $table->softDeletes();
         });

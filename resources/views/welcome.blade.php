@@ -31,6 +31,11 @@
             </div>
         </div>
     </div>
+    <!-- Loader -->
+    <div class="loader-container">
+        <div class="loader"></div>
+    </div>
+
     {{-- @endif --}}
     {{-- 
     @if (session()->has('error'))
@@ -400,22 +405,21 @@
                     <div class="col-md-4" id="nativeZoneSection"
                         style="{{ old('primary_competition_participation') == 'Native' ? '' : 'display:none;' }}">
                         <div class="form-area">
-                            <label for="native_zone" class="form-label">From which zone in
-                                native?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?</label>
-                            <select class="form-select" aria-label="Default select example" name="zone"
+                            <label for="native_zone" class="form-label">
+                                From which zone in native?<sup>*</sup><br>സ്വദേശത്ത് ഏത് മേഖലയിൽ നിന്ന് ?
+                            </label>
+                            <select class="form-select" aria-label="Default select example" name="native_zone"
                                 id="native_zone">
                                 <option value="">Please Select</option>
-                                <option value="Kollam" {{ old('native_zone') == 'Kollam' ? 'selected' : '' }}>Kollam
-                                </option>
-                                <option value="Ernakulam" {{ old('native_zone') == 'Ernakulam' ? 'selected' : '' }}>
-                                    Ernakulam</option>
-                                <option value="Malappuram" {{ old('native_zone') == 'Malappuram' ? 'selected' : '' }}>
-                                    Malappuram</option>
-                                <option value="Kannur" {{ old('native_zone') == 'Kannur' ? 'selected' : '' }}>Kannur
-                                </option>
+                                @foreach ($nativeZones as $zone)
+                                    <option value="{{ $zone->id }}"
+                                        {{ old('native_zone') == $zone->id ? 'selected' : '' }}>
+                                        {{ $zone->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             <span class="error" role="alert">
-                                @error('zone')
+                                @error('native_zone')
                                     {{ $message }}
                                 @enderror
                             </span>
@@ -424,26 +428,21 @@
                     <div class="col-md-4" id="abroadZoneSection"
                         style="{{ old('primary_competition_participation') == 'Abroad' ? '' : 'display:none;' }}">
                         <div class="form-area">
-                            <label for="abroad_zone" class="form-label">From which zone in
-                                abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ</label>
+                            <label for="abroad_zone" class="form-label">
+                                From which zone in abroad?<sup>*</sup><br>വിദേശത്ത് നിന്നാണെങ്കിൽ
+                            </label>
                             <select class="form-select" aria-label="Default select example" name="abroad_zone"
                                 id="abroad_zone">
                                 <option value="">Please Select</option>
-                                <option value="Jeddah" {{ old('abroad_zone') == 'Jeddah' ? 'selected' : '' }}>Jeddah
-                                </option>
-                                <option value="Dubai" {{ old('abroad_zone') == 'Dubai' ? 'selected' : '' }}>Dubai
-                                </option>
-                                <option value="Doha" {{ old('abroad_zone') == 'Doha' ? 'selected' : '' }}>Doha
-                                </option>
-                                <option value="Bahrain" {{ old('abroad_zone') == 'Bahrain' ? 'selected' : '' }}>
-                                    Bahrain</option>
-                                <option value="Muscat" {{ old('abroad_zone') == 'Muscat' ? 'selected' : '' }}>Muscat
-                                </option>
-                                <option value="Kuwait" {{ old('abroad_zone') == 'Kuwait' ? 'selected' : '' }}>Kuwait
-                                </option>
+                                @foreach ($abroadZones as $zone)
+                                    <option value="{{ $zone->id }}"
+                                        {{ old('abroad_zone') == $zone->name ? 'selected' : '' }}>
+                                        {{ $zone->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             <span class="error" role="alert">
-                                @error('zone')
+                                @error('abroad_zone')
                                     {{ $message }}
                                 @enderror
                             </span>
@@ -671,8 +670,13 @@
     @endif
     <script>
         document.getElementById('okayButton').addEventListener('click', function() {
-            location.reload();
+            // window.scrollTo(0, 0); // Scroll to the top of the page
+            // setTimeout(function() {
+            location.reload(); // Reload the page after a slight delay
+            // }, 50); // 50 milliseconds delay
         });
+
+
         document.addEventListener('DOMContentLoaded', function() {
 
             const currentAddress = document.getElementById('current_address');
@@ -931,9 +935,12 @@
             $('form').submit(function(event) {
                 event.preventDefault();
                 var formData = new FormData(this);
-
                 // Clear previous error messages
                 $('.error').empty();
+
+                // Show loader
+                $('.loader-container').css('display', 'flex');
+                $('#submitBtn').prop('disabled', true);
 
                 $.ajax({
                     url: "{{ route('application.store') }}",
@@ -942,6 +949,7 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
+                        console.log(response);
                         if (response.success) {
                             // Show the success modal
                             $('#successmodal').modal('show');
@@ -954,25 +962,37 @@
                             // Validation errors
                             var errors = jqXHR.responseJSON.errors;
                             console.log(errors);
+                            var firstErrorField = null;
                             $.each(errors, function(field, messages) {
-                                var errorSpan = $('[name="' + field + '"]')
-                                    .siblings(
-                                        '.error');
+                                var errorSpan = $('[name="' + field + '"]').siblings(
+                                    '.error');
                                 if (errorSpan.length === 0) {
                                     errorSpan = $('[name="' + field + '"]').closest(
                                         '.form-area').find('.error');
                                 }
                                 errorSpan.html(messages.join('<br>'));
+                                if (firstErrorField === null) {
+                                    firstErrorField = $('[name="' + field + '"]');
+                                }
                             });
+                            if (firstErrorField !== null) {
+                                firstErrorField.focus();
+                            }
                         } else {
                             alert(
-                                'An error occurred while processing your application. Please try again later.'
-                            );
+                                'An error occurred while processing your application. Please try again later.');
                         }
+                    },
+                    complete: function() {
+                        // Hide loader
+                        $('.loader-container').hide();
+                        $('#submitBtn').prop('disabled', false);
                     }
                 });
             });
         });
+
+
         document.getElementById('flexCheckDefault').addEventListener('change', function() {
             var myButton = document.getElementById('myButton');
             if (this.checked) {

@@ -23,8 +23,11 @@ class LatestApplications extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(ApplicationResource::getEloquentQuery())
-            ->defaultPaginationPageOption(5)
+            ->query(
+                ApplicationResource::getEloquentQuery()
+                    ->join('zones', 'applications.zone_id', '=', 'zones.id')
+                    ->select('applications.*', 'zones.name as zone_name')
+            )->defaultPaginationPageOption(5)
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('application_id')
@@ -36,7 +39,7 @@ class LatestApplications extends BaseWidget
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('district'),
-                Tables\Columns\TextColumn::make('zone'),
+                Tables\Columns\TextColumn::make('zone_name'),
                 Tables\Columns\TextColumn::make('age')
                     ->label('Age')
                     ->sortable()

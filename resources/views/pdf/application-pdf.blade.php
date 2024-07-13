@@ -149,7 +149,7 @@
             </div>
             <div class="grid-item">
                 <p><span class="label">Primary Competition Participation:</span> <span class="value">{{ $record->primary_competition_participation }}</span></p>
-                <p><span class="label">Zone:</span> <span class="value">{{ $record->zone }}</span></p>
+                <p><span class="label">Zone:</span> <span class="value">{{ $record->zone->name }}</span></p>
             </div>
         </div>
     </div>

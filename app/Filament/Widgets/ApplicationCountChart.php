@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Application;
+use App\Models\Zone;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
 
@@ -18,32 +19,21 @@ class ApplicationCountChart extends ChartWidget
         'maintainAspectRatio' => true,
     ];
 
-    const ZONE = [
-        'Kollam' => 'Kollam',
-        'Ernakulam' => 'Ernakulam',
-        'Malappuram' => 'Malappuram',
-        'Kannur' => 'Kannur',
-        'Jeddah' => 'Jeddah',
-        'Dubai' => 'Dubai',
-        'Doha' => 'Doha',
-        'Bahrain' => 'Bahrain',
-        'Muscat' => 'Muscat',
-        'Kuwait' => 'Kuwait'
-    ];
-
     protected function getData(): array
     {
-        $data = Application::select('zone', DB::raw('count(*) as count'))
-            ->whereIn('zone', array_keys(self::ZONE))
-            ->groupBy('zone')
+        $data = Application::select('zones.name as zone', DB::raw('count(*) as count'))
+            ->join('zones', 'applications.zone_id', '=', 'zones.id')
+            ->groupBy('zones.id', 'zones.name')
             ->get()
             ->pluck('count', 'zone')
             ->toArray();
 
+        $zones = Zone::pluck('name', 'id')->toArray();
+
         // Ensure all zones are represented, even if they have zero count
         $counts = array_map(function ($zone) use ($data) {
             return $data[$zone] ?? 0;
-        }, array_keys(self::ZONE));
+        }, $zones);
 
         return [
             'datasets' => [
@@ -52,7 +42,7 @@ class ApplicationCountChart extends ChartWidget
                     'data' => array_values($counts),
                 ],
             ],
-            'labels' => array_keys(self::ZONE),
+            'labels' => array_values($zones),
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Carbon\Carbon;
 use Filament\Forms;
+use App\Models\Zone;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Jobs\SendEmailJob;
@@ -26,8 +27,8 @@ use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Filters\SelectFilter;
 
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\ApplicationResource\Pages;
@@ -36,6 +37,8 @@ use App\Filament\Resources\ApplicationResource\Actions\ExportPdfAction;
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
+    protected static ?int $navigationSort = 2;
+
 
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -143,9 +146,10 @@ class ApplicationResource extends Resource
                             Select::make('primary_competition_participation')
                                 ->required()
                                 ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
-                            Select::make('zone')
+                                Select::make('zone_id')
+                                ->label('Zone')
                                 ->required()
-                                ->options(Application::ZONE),
+                                ->options(Zone::pluck('name', 'id')),
                         ]),
                 ])
                 ->columns(1),
@@ -193,7 +197,7 @@ class ApplicationResource extends Resource
                 TextColumn::make('district')
                     // ->colors(['primary'])
                     ->searchable(),
-                TextColumn::make('zone')
+                TextColumn::make('zone.name')
                     // ->colors(['secondary'])
                     ->searchable(),
                 TextColumn::make('age')

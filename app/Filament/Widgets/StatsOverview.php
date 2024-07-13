@@ -54,8 +54,9 @@ class StatsOverview extends BaseWidget
             ->groupBy('district')
             ->orderByDesc('total')
             ->first();
-        $topZone = Application::select('zone', DB::raw('count(*) as total'))
-            ->groupBy('zone')
+        $topZone = Application::select('zones.name as zone', DB::raw('count(*) as total'))
+            ->join('zones', 'applications.zone_id', '=', 'zones.id')
+            ->groupBy('zones.id', 'zones.name')
             ->orderByDesc('total')
             ->first();
 

@@ -20,9 +20,9 @@ class ApplicationRequest extends FormRequest
                 'date_of_birth' => date('Y-m-d', strtotime($this->date_of_birth))
             ]);
         }
-        if (isset($this->zone) || isset($this->abroad_zone)) {
+        if (isset($this->native_zone) || isset($this->abroad_zone)) {
             $this->merge([
-                'zone' => $this->primary_competition_participation == 'Native' ? $this->zone : $this->abroad_zone
+                'zone_id' => $this->primary_competition_participation == 'Native' ? $this->native_zone : $this->abroad_zone
             ]);
         }
     }
@@ -48,7 +48,7 @@ class ApplicationRequest extends FormRequest
             'is_completed_ijazah' => 'required|in:Yes,No',
             'qirath_with_ijazah' => 'nullable|string',
             'primary_competition_participation' => 'required|in:Native,Abroad',
-            'zone' => 'required',
+            'zone_id' => 'required',
             'passport_size_photo' => 'required|mimes:jpg,jpeg,max:100', // Max file size in kilobytes
             // File::image()->dimensions(
             //     Rule::dimensions()
@@ -105,7 +105,7 @@ class ApplicationRequest extends FormRequest
             'qirath_with_ijazah.string' => 'The Qirat with Ijazah must be a string.',
             'primary_competition_participation.required' => 'The primary competition participation is required.',
             'primary_competition_participation.in' => 'Invalid primary competition participation selected.',
-            'zone.required' => 'The zone is required.',
+            'zone_id.required' => 'The zone is required.',
             'passport_size_photo.required' => 'A passport size photo is required.',
             'passport_size_photo.mimes' => 'The photo must be a JPG or JPEG file.',
             'passport_size_photo.max' => 'The photo must not be larger than 100 kilobytes.',

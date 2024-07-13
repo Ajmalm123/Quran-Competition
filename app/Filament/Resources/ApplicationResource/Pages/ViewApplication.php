@@ -5,60 +5,48 @@ namespace App\Filament\Resources\ApplicationResource\Pages;
 use Filament\Actions;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
-use Filament\Actions\Action;
 use Filament\Actions\StaticAction;
-use Filament\Actions\MountableAction;
-use Filament\Infolists\Components\Grid;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\IconPosition;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\ApplicationResource;
+use Barryvdh\DomPDF\Facade\Pdf; // Use this import for the PDF facade
 
 class ViewApplication extends ViewRecord
 {
-
     protected static string $resource = ApplicationResource::class;
     protected ?string $maxContentWidth = 'full';
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('status')
-            ->label(function (Application $record) {
-                return ucfirst($record->status);
-            })
-            ->badge()
-            ->icon(function (Application $record) {
-                return match ($record->status) {
+            Actions\Action::make('status')
+                ->label(fn(Application $record) => ucfirst($record->status))
+                ->badge()
+                ->icon(fn(Application $record) => match ($record->status) {
                     Application::STATUS['Approved'] => 'heroicon-o-check-circle',
                     Application::STATUS['Rejected'] => 'heroicon-o-x-circle',
                     Application::STATUS['withheld'] => 'heroicon-o-clock',
                     Application::STATUS['Created'] => 'heroicon-o-document',
                     default => 'heroicon-o-question-mark-circle',
-                };
-            })
-            ->iconPosition(IconPosition::Before)
-            ->color(function (Application $record) {
-                return match ($record->status) {
+                })
+                ->iconPosition(IconPosition::Before)
+                ->color(fn(Application $record) => match ($record->status) {
                     Application::STATUS['Approved'] => 'success',
                     Application::STATUS['Rejected'] => 'danger',
                     Application::STATUS['withheld'] => 'warning',
                     Application::STATUS['Created'] => 'gray',
                     default => 'info',
-                };
-            })
-            ->extraAttributes([
-                'class' => 'font-medium text-sm px-3 py-1.5 rounded-full',
-            ])
-            ->disabled(),
+                })
+                ->extraAttributes([
+                    'class' => 'font-medium text-sm px-3 py-1.5 rounded-full',
+                ])
+                ->disabled(),
+
             Actions\Action::make('approve')
                 ->requiresConfirmation()
                 ->color('success')
-                ->action(function (Model $record) {
+                ->action(function (Application $record) {
                     $record->status = Application::STATUS['Approved'];
                     $record->save();
                     $dispatchData = [
@@ -67,18 +55,18 @@ class ViewApplication extends ViewRecord
                         'subject' => 'Application Approved',
                         'message' => 'We are pleased to inform you that your application has been approved.',
                     ];
-
-                    // Dispatch the job
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->success()->title('Application Approved')->send();
                 })
-                ->hidden(function (Application $application) {
-                    return $application->status == 'Approved' || $application->status == 'Rejected';
-                }),
+                ->hidden(
+                    fn(Application $application) =>
+                    $application->status == 'Approved' || $application->status == 'Rejected'
+                ),
+
             Actions\Action::make('reject')
                 ->requiresConfirmation()
                 ->color('danger')
-                ->action(function (Model $record) {
+                ->action(function (Application $record) {
                     $record->status = Application::STATUS['Rejected'];
                     $record->save();
                     $dispatchData = [
@@ -87,15 +75,28 @@ class ViewApplication extends ViewRecord
                         'subject' => 'Application Rejected',
                         'message' => 'We regret to inform you that your application has been rejected.',
                     ];
-                    // Dispatch the job
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->title('Application Rejected')->success()->send();
-                })->hidden(function (Application $application) {
-                    return $application->status == 'Rejected' || $application->status == 'Approved';
-                }),
+                })
+                ->hidden(
+                    fn(Application $application) =>
+                    $application->status == 'Rejected' || $application->status == 'Approved'
+                ),
+
             Actions\EditAction::make()->color('info'),
-            Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
-        ];
+
+            Actions\Action::make('Download PDF')
+                ->label('Download Pdf')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('warning')
+                ->action(function (Application $record) {
+                    $pdf = Pdf::loadView('pdf.application-pdf', ['record' => $record]);
+                    return response()->streamDownload(function () use ($pdf) {
+                        echo $pdf->output();
+                    }, "{$record->application_id}.pdf");
+                })->defaultView(StaticAction::LINK_VIEW),
+
+                Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),        ];
     }
 
     // public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist

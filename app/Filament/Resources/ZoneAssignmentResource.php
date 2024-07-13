@@ -25,10 +25,12 @@ use App\Filament\Resources\ZoneAssignmentResource\RelationManagers;
 class ZoneAssignmentResource extends Resource
 {
     protected static ?string $model = ZoneAssignment::class;
-    protected static ?string $navigationLabel = 'Zone';
+    protected static ?string $navigationLabel = 'Zone Assignment';
 
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
+    protected static ?int $navigationSort = 4;
+
 
 
     public static function form(Form $form): Form
@@ -72,7 +74,7 @@ class ZoneAssignmentResource extends Resource
                             ->required()
                             ->label('Center Name')
                             ->maxLength(255)
-                            ->disabled(fn (Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
+                            ->disabled(fn(Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
                             ->dehydrated(),
                         // ->rules([
                         //     function (Forms\Get $get) {
@@ -141,9 +143,10 @@ class ZoneAssignmentResource extends Resource
                     ->searchable()
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('date')
-                    ->date('M d, Y')
+                    ->formatStateUsing(function ($state) {
+                        return \Carbon\Carbon::parse($state)->format('M d, Y - l');
+                    })
                     ->sortable(),
-                // ->badge(),
                 Tables\Columns\TextColumn::make('time')
                     ->time('h:i A')
                     ->sortable()

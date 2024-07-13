@@ -2,20 +2,42 @@
 
 namespace App\Models;
 
+use App\Models\Zone;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Application extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'application_id', 'full_name', 'gender', 'date_of_birth', 'mother_tongue', 'educational_qualification',
-        'aadhar_number', 'job', 'contact_number', 'whatsapp', 'email', 'c_address', 'pr_address', 'district',
-        'pincode', 'institution_name', 'is_completed_ijazah', 'qirath_with_ijazah', 'primary_competition_participation',
-        'zone', 'passport_size_photo', 'birth_certificate', 'letter_of_recommendation', 'status'
+        'application_id',
+        'full_name',
+        'gender',
+        'date_of_birth',
+        'mother_tongue',
+        'educational_qualification',
+        'aadhar_number',
+        'job',
+        'contact_number',
+        'whatsapp',
+        'email',
+        'c_address',
+        'pr_address',
+        'district',
+        'pincode',
+        'institution_name',
+        'is_completed_ijazah',
+        'qirath_with_ijazah',
+        'primary_competition_participation',
+        'zone_id',
+        'passport_size_photo',
+        'birth_certificate',
+        'letter_of_recommendation',
+        'status',
+        'marks'
     ];
 
     const GENDER = [
@@ -81,6 +103,11 @@ class Application extends Model
         'withheld' => 'withheld',
     ];
 
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
     /**
      * The "booted" method of the model.
      *
@@ -139,11 +166,12 @@ class Application extends Model
         $numericPart = substr($applicationId, 5);
 
         // Increment the numeric part
-        $incrementedNumericPart = (int)$numericPart + 1;
+        $incrementedNumericPart = (int) $numericPart + 1;
 
         // Format the new ID with leading zeros
         $newApplicationId = 'APQ24' . str_pad($incrementedNumericPart, 4, '0', STR_PAD_LEFT);
 
         return $newApplicationId;
     }
+    
 }

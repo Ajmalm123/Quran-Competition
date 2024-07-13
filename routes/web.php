@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ApplicationController;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApplicationController;
 
 // Route::get('/', function () {
 //     return redirect('/apply');
@@ -12,7 +13,9 @@ Route::get('/', function () {
 });
 
 Route::get('/apply', function () {
-    return view('welcome');
+    $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
+    $nativeZones = Zone::where('area', 'Native')->select('id', 'name')->get();
+    return view('welcome',compact('abroadZones','nativeZones'));
 })->name('apply');
 
 Route::get('/application', function () {
