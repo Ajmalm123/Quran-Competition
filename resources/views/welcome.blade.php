@@ -217,7 +217,7 @@
                     <div class="col-md-4">
                         <div class="form-area">
                             <label for="exampleInputEmail1" class="form-label">Whatsapp - വാട്സ്ആപ് നമ്പർ
-                            </label>
+                                <sup>*</sup></label>
                             <input type="text" class="form-control" id="whatsappNumber" name="whatsapp"
                                 aria-describedby="nameHelp" value="{{ old('whatsapp') }}" maxlength="10">
                             <span class="error" role="alert">
@@ -322,7 +322,7 @@
                 <div class="col-md-8">
                     <div class="form-area">
                         <label for="institution_name" class="form-label">Name and place of the institution where hifz
-                            completed<br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും</label>
+                            completed<sup>*</sup><br>ഹിഫ്സ് പൂർത്തിയാക്കിയ സ്ഥാപനത്തിന്റെ പേരും സ്ഥലവും</label>
                         <input type="text" class="form-control" id="institution_name" aria-describedby="nameHelp"
                             name="institution_name" value="{{ old('institution_name') }}">
                         <span class="error" role="alert">

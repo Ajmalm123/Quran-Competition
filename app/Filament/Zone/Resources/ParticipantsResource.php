@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Jobs\SendEmailJob;
 use Filament\Tables\Table;
 use App\Models\Application;
 use App\Models\Participants;
@@ -16,8 +17,10 @@ use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Maatwebsite\Excel\Facades\Excel;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -120,8 +123,8 @@ class ParticipantsResource extends Resource
                 TextColumn::make('participation_position')
                     ->searchable()->label('Position')
             ])
-            ->defaultSort('created_at', 'desc')
-            ->filters([
+            ->defaultSort('participation_position', 'asc')
+                ->filters([
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -151,6 +154,24 @@ class ParticipantsResource extends Resource
             ])
             ->filtersFormColumns(1)
             ->actions([
+                Action::make('Send Mail')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->form([
+                        TextInput::make('Subject')->label('Subject')->required(),
+                        Textarea::make('message')->label('Message')->required()
+                    ])
+                    ->action(function (Application $application, array $data): void {
+                        $dispatchData = [
+                            'page' => 'emails.send-mail',
+                            'application' => $application,
+                            'subject' => $data['Subject'],
+                            'message' => $data['message'],
+                        ];
+                        SendEmailJob::dispatch($dispatchData);
+                        Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
+                            ->send();
+                    }),
                 Action::make('WhatsApp')
                     ->icon('heroicon-m-chat-bubble-left-ellipsis')
                     ->color('success')

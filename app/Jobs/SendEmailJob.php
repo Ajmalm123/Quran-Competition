@@ -32,39 +32,39 @@ class SendEmailJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            // Generate PDF
-            $pdf = Pdf::loadView('pdf.application-approved', ['application' => $this->data['application']]);
-            $pdf->getDomPDF()->set_option("fontDir", storage_path('fonts/'));
-            $pdf->getDomPDF()->set_option("font_cache", storage_path('fonts/'));
-            $pdf->getDomPDF()->set_option("temp_dir", storage_path('fonts/'));
-            // $pdf->setPaper('A4', 'portrait');
-            // $pdf->setOptions([
-            //     'dpi' => 150,
-            //     'defaultFont' => 'DejaVu Sans',      
-            //     'isRemoteEnabled' => true,
-            //     'isHtml5ParserEnabled' => true,
-            //     'isPhpEnabled' => true,
-            //     'isFontSubsettingEnabled' => true,
-            //     'debugCss' => true,
-            // ]);
-            // Create folder if it doesn't exist
-            $folderPath = 'Application Approved Pdfs';
-            Storage::disk('local')->makeDirectory($folderPath);
+            // // Generate PDF
+            // $pdf = Pdf::loadView('pdf.application-approved', ['application' => $this->data['application']]);
+            // $pdf->getDomPDF()->set_option("fontDir", storage_path('fonts/'));
+            // $pdf->getDomPDF()->set_option("font_cache", storage_path('fonts/'));
+            // $pdf->getDomPDF()->set_option("temp_dir", storage_path('fonts/'));
+            // // $pdf->setPaper('A4', 'portrait');
+            // // $pdf->setOptions([
+            // //     'dpi' => 150,
+            // //     'defaultFont' => 'DejaVu Sans',      
+            // //     'isRemoteEnabled' => true,
+            // //     'isHtml5ParserEnabled' => true,
+            // //     'isPhpEnabled' => true,
+            // //     'isFontSubsettingEnabled' => true,
+            // //     'debugCss' => true,
+            // // ]);
+            // // Create folder if it doesn't exist
+            // $folderPath = 'Application Approved Pdfs';
+            // Storage::disk('local')->makeDirectory($folderPath);
 
-            $pdfFileName = 'application_' . $this->data['application']->application_id . '_approved.pdf';
-            $pdfFullPath = $folderPath . '/' . $pdfFileName;
+            // $pdfFileName = 'application_' . $this->data['application']->application_id . '_approved.pdf';
+            // $pdfFullPath = $folderPath . '/' . $pdfFileName;
 
-            // Save PDF to the specified folder
-            Storage::disk('local')->put($pdfFullPath, $pdf->output());
+            // // Save PDF to the specified folder
+            // Storage::disk('local')->put($pdfFullPath, $pdf->output());
 
-            $pdfPath = Storage::disk('local')->path($pdfFullPath);
+            // $pdfPath = Storage::disk('local')->path($pdfFullPath);
 
             Mail::to($this->data['application']->email)->send(new Application([
                 'page' => $this->data['page'],
                 'application' => $this->data['application'],
                 'subject' => $this->data['subject'],
                 'message' => $this->data['message'],
-                'pdfPath' => $pdfPath
+                // 'pdfPath' => $pdfPath
             ]));
             // Log success
             \Illuminate\Support\Facades\Log::info("Email sent successfully to {$this->data['application']->email}");

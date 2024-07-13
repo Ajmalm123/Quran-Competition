@@ -56,6 +56,18 @@ class ParticipantsResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('zone.name')
+                    ->label('Zone')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('participation_position')
+                    ->label('Position')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('marks')
+                    ->label('Marks')
+                    ->sortable()
+                    ->searchable(),
                 ImageColumn::make('passport_size_photo')
                     ->label('Photo')
                     ->circular()
@@ -76,18 +88,8 @@ class ParticipantsResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->icon('heroicon-m-phone'),
-                TextColumn::make('zone.name')
-                    ->label('Zone')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('participation_position')
-                    ->label('Position')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('marks')
-                    ->label('Marks')
-                    ->sortable()
-                    ->searchable(),
+
+
 
             ])
             ->defaultSort('zone.name', 'asc')

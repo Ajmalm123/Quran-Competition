@@ -37,7 +37,7 @@ class ZonePanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Zone/Resources'), for: 'App\\Filament\\Zone\\Resources')
             ->discoverPages(in: app_path('Filament/Zone/Pages'), for: 'App\\Filament\\Zone\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                // Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Zone/Widgets'), for: 'App\\Filament\\Zone\\Widgets')
             ->widgets([

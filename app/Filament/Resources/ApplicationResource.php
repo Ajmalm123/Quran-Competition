@@ -300,7 +300,6 @@ class ApplicationResource extends Resource
                         Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
                             ->send();
                     }),
-                Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
                 Action::make('WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
@@ -310,6 +309,8 @@ class ApplicationResource extends Resource
                             '?text=' . urlencode('Your pre-filled message here'),
                         true // This opens the link in a new tab
                     ),
+                Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
+
                 // ExportPdfAction::make(),
 
             ])

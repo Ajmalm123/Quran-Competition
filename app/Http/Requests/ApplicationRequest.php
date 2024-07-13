@@ -38,18 +38,18 @@ class ApplicationRequest extends FormRequest
             'aadhar_number' => 'required|numeric|digits:12',
             'job' => 'nullable|string|max:100',
             'contact_number' => 'required|string|regex:/^\d{10}$/',
-            'whatsapp' => 'nullable|string|regex:/^\d{10}$/',
+            'whatsapp' => 'required|string|regex:/^\d{10}$/',
             'email' => 'required|string|email|max:255',
             'c_address' => 'required|string',
             'pr_address' => 'required|string',
             'district' => 'required|in:Kasaragod,Kannur,Wayanad,Kozhikode,Malappuram,Palakkad,Thrissur,Ernakulam,Idukki,Kottayam,Alappuzha,Pathanamthitta,Kollam,Thiruvananthapuram',
             'pincode' => 'nullable|string|size:6',
-            'institution_name' => 'nullable|string',
+            'institution_name' => 'required|string',
             'is_completed_ijazah' => 'required|in:Yes,No',
             'qirath_with_ijazah' => 'nullable|string',
             'primary_competition_participation' => 'required|in:Native,Abroad',
             'zone_id' => 'required',
-            'passport_size_photo' => 'required|mimes:jpg,jpeg,max:100', // Max file size in kilobytes
+            'passport_size_photo' => 'required|mimes:jpg,jpeg|max:100', 
             // File::image()->dimensions(
             //     Rule::dimensions()
             //         ->minWidth(150)

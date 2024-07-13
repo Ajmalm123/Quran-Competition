@@ -53,9 +53,9 @@ class Application extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath($this->mailData['pdfPath'])
-                ->as('application_approved.pdf')
-                ->withMime('application/pdf'),
+            // Attachment::fromPath($this->mailData['pdfPath'])
+            //     ->as('application_approved.pdf')
+            //     ->withMime('application/pdf'),
         ];
     }
 }
