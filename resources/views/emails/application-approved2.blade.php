@@ -1,4 +1,4 @@
-use Carbon\Carbon;
+<?php use Carbon\Carbon; ?>
 <!DOCTYPE html>
 <html lang="en">
 
