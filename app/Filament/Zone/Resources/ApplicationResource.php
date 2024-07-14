@@ -74,7 +74,7 @@ class ApplicationResource extends Resource
                         return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
                     })
                     ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
-                    BadgeColumn::make('admit_status')
+                BadgeColumn::make('admit_status')
                     ->colors([
                         'warning' => 'Pending',
                         'success' => 'Admitted',
@@ -160,9 +160,8 @@ class ApplicationResource extends Resource
                     ->color('success')
                     ->url(
                         fn(Application $record) =>
-                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)) .
-                        '?text=' . urlencode('Your pre-filled message here'),
-                        true
+                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)),
+                        true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 

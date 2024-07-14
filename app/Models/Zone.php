@@ -15,9 +15,9 @@ class Zone extends Authenticatable implements FilamentUser
 
     protected $fillable = ['name','email','password'];
 
-    public function assignments()
+    public function assignment()
     {
-        return $this->hasMany(ZoneAssignment::class);
+        return $this->hasOne(ZoneAssignment::class);
     }
     
     /**

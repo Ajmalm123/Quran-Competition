@@ -124,7 +124,7 @@ class ParticipantsResource extends Resource
                     ->searchable()->label('Position')
             ])
             ->defaultSort('participation_position', 'asc')
-                ->filters([
+            ->filters([
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -169,17 +169,16 @@ class ParticipantsResource extends Resource
                             'message' => $data['message'],
                         ];
                         SendEmailJob::dispatch($dispatchData);
-                        Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
+                        Notification::make()->title('Mail Sent Successfully')->success()
                             ->send();
                     }),
                 Action::make('WhatsApp')
-                    ->icon('heroicon-m-chat-bubble-left-ellipsis')
+                    ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
                     ->url(
                         fn(Application $record) =>
-                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)) .
-                        '?text=' . urlencode('Your pre-filled message here'),
-                        true
+                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)),
+                        true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-m-eye'),
             ])

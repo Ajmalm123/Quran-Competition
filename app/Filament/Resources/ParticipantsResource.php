@@ -154,8 +154,7 @@ class ParticipantsResource extends Resource
                     ->color('success')
                     ->url(
                         fn(Application $record) =>
-                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)) .
-                        '?text=' . urlencode('Your pre-filled message here'),
+                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)),
                         true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-m-eye'),

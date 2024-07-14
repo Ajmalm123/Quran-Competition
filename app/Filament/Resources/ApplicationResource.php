@@ -146,7 +146,7 @@ class ApplicationResource extends Resource
                             Select::make('primary_competition_participation')
                                 ->required()
                                 ->options(Application::PRIMARY_COMPETITION_PARTICIPATION),
-                                Select::make('zone_id')
+                            Select::make('zone_id')
                                 ->label('Zone')
                                 ->required()
                                 ->options(Zone::pluck('name', 'id')),
@@ -205,7 +205,7 @@ class ApplicationResource extends Resource
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
                     })
-                    ->getStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age),
+                    ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
                 // ->description(fn($record) => Carbon::parse($record->date_of_birth)->format('M d, Y')),                // ->icon('heroicon-o-cake'),
                 BadgeColumn::make('status')
                     ->colors([
@@ -262,11 +262,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -297,18 +297,62 @@ class ApplicationResource extends Resource
                             'message' => $data['message'],
                         ];
                         SendEmailJob::dispatch($dispatchData);
-                        Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
+                        Notification::make()->title('Mail Sent Successfully')->success()
                             ->send();
                     }),
                 Action::make('WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
-                    ->url(
-                        fn (Application $record) =>
-                        'https://wa.me/' . preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->contact_number)) .
-                            '?text=' . urlencode('Your pre-filled message here'),
-                        true // This opens the link in a new tab
-                    ),
+                    ->url(function (Application $record) {
+                        $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
+
+                        if ($record->status === 'Approved') {
+                            $message = <<<EOT
+                            *പ്രിയപ്പെട്ട {$record->full_name}*,
+                            
+                            السلام عليكم ورحمة الله
+                            
+                            *'എ.പി. അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2024'  ലേക്കുള്ള നിങ്ങളുടെ അപേക്ഷ അംഗീകരിച്ചിരിക്കുന്നു എന്ന് സന്തോഷപൂർവം അറിയിക്കുന്നു.*🎊
+                            താങ്കൾ പങ്കെടുക്കേണ്ട പ്രാഥമിക മത്സരത്തിൻ്റെ വിവരങ്ങൾ താഴെ കൊടുക്കുന്നു.🎊
+                            
+                            🗓️Date: *{$record?->zone?->assignment?->date}*
+                            
+                            🕐Reporting Time: *{$record?->zone?->assignment?->time}*
+                            
+                            📍Location: *{$record?->zone?->assignment?->center_id}*
+                            
+                            മത്സരത്തിന് മുന്നോടിയായി താഴെ പറയുന്ന കാര്യങ്ങൾ ശ്രദ്ധിക്കണമെന്ന് വിനീതമായി അഭ്യർത്ഥിക്കുന്നു. 
+                            
+                            1. നിർദ്ദേശിച്ച റിപ്പോർട്ടിങ് സമയത്ത് തന്നെ സ്ഥലത്തെത്തി രജിസ്റ്റർ ചെയ്യേണ്ടതാണ്. മത്സരം തുടങ്ങിയ ശേഷം എത്തുന്നവരെ മത്സരിക്കാൻ അനുവദിക്കുന്നതല്ല. 
+                            
+                            2. ഹിഫ്ള്,പാരായണ നിയമങ്ങൾ, മഖാരിജുൽ ഹുറൂഫ്, ആശയം (ആദ്യത്തെ അഞ്ച് ജുസ്ഉകളിലെയും അവസാനത്തെ അഞ്ചു ജുസ്ഉകളിലെയും)എന്നിവയുടെ അടിസ്ഥാനത്തിലായിരിക്കും മത്സരം നടക്കുക.ആ രംഗത്ത് സംഭവിക്കുന്ന ഓരോ പിഴവുകളും മത്സരാർത്ഥികളുടെ മാർക്ക് കുറയ്ക്കുന്നതാണ്.
+                            
+                            4. മത്സരാർത്ഥികളോടുള്ള ചോദ്യങ്ങൾ മലയാളത്തിലായിരിക്കും; ആയത്തുകളുടെ ആശയങ്ങളുമായി ബന്ധപ്പെട്ട ചോദ്യങ്ങൾക്ക് മറുപടി പറയേണ്ടതും മലയാളത്തിലാണ്.
+                            
+                            5. അപേക്ഷയോടൊപ്പം സമർപ്പിച്ച രേഖകളുടെ ഒറിജിനൽ കയ്യിൽ കരുതേണ്ടതാണ്.
+                            
+                            അല്ലാഹു അനുഗ്രഹിക്കട്ടെ, ആമീൻ. 
+                            
+                            മറ്റു വിവരങ്ങൾ തുടർന്ന് അറിയിക്കുന്നതാണ്.
+                            
+                            💬പ്രോഗ്രാമുമായി ബന്ധപ്പെട്ട വിവരങ്ങൾക്കും സംശയങ്ങൾക്കും ബന്ധപ്പെടുക.
+                            
+                            info@aslamquranaward.com
+                            
+                            കൺവീനർ
+                            എ.പി. അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2024
+                            EOT;
+
+                            // Convert message to UTF-8
+                            $message = mb_convert_encoding($message, 'UTF-8', 'UTF-8');
+                            // Encode message for URL
+                            $encodedMessage = urlencode($message);
+                            return "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
+                        } else {
+                            // If status is not 'Approved', return a WhatsApp link without a message
+                            return "https://wa.me/{$phoneNumber}";
+                        }
+                    }, true),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 
                 // ExportPdfAction::make(),
@@ -323,7 +367,7 @@ class ApplicationResource extends Resource
                     BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check')
-                        ->action(fn (Collection $records) => $records->each->update(['status' => 'Approved']))
+                        ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
