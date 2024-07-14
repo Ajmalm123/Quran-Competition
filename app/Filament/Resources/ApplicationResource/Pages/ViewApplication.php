@@ -50,7 +50,7 @@ class ViewApplication extends ViewRecord
                     $record->status = Application::STATUS['Approved'];
                     $record->save();
                     $dispatchData = [
-                        'page' => 'emails.application',
+                        'page' => 'emails.application-approved2',
                         'application' => $record,
                         'subject' => 'Application Approved',
                         'message' => 'We are pleased to inform you that your application has been approved.',
