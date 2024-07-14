@@ -188,6 +188,7 @@ class ParticipantsResource extends Resource
     {
         return [
             'index' => Pages\ListParticipants::route('/'),
+            'view' => Pages\ViewParticipants::route('/{record}/view'),
             'create' => Pages\CreateParticipants::route('/create'),
             'edit' => Pages\EditParticipants::route('/{record}/edit'),
         ];
