@@ -79,11 +79,14 @@
             ?>
             <tr>
                 <th>Date</th>
-                <td>{{ $date }}</td>
+                dfds
+                {{-- 202 --}}
+                {{-- <td>{{ $date }}</td> --}}
             </tr>
             <tr>
                 <th>Time</th>
-                <td>{{ $time }}</td>
+                sdfds
+                {{-- <td>{{ $time }}</td> --}}
             </tr>
             <tr>
                 <th>Location</th>
