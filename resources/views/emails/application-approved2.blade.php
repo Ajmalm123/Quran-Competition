@@ -1,4 +1,3 @@
-<?php use Carbon\Carbon; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,16 +74,16 @@
             $time = $mailData['application']?->zone?->assignment?->time;
             
             // Format the date and time using Carbon
-            $formattedDate = Carbon::parse($date)->translatedFormat('j F Y, l');
-            $formattedTime = Carbon::parse($time)->format('g:i A');
+            // $formattedDate = Carbon::parse($date)->translatedFormat('j F Y, l');
+            // $formattedTime = Carbon::parse($time)->format('g:i A');
             ?>
             <tr>
                 <th>Date</th>
-                <td>{{ $formattedDate }}</td>
+                <td>{{ $date }}</td>
             </tr>
             <tr>
                 <th>Time</th>
-                <td>{{ $formattedTime }}</td>
+                <td>{{ $time }}</td>
             </tr>
             <tr>
                 <th>Location</th>
