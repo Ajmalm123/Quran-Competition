@@ -670,10 +670,24 @@
     @endif
     <script>
         document.getElementById('okayButton').addEventListener('click', function() {
-            // window.scrollTo(0, 0); // Scroll to the top of the page
-            // setTimeout(function() {
-            location.reload(); // Reload the page after a slight delay
-            // }, 50); // 50 milliseconds delay
+            // Scroll to the top of the page
+            window.scrollTo(0, 0);
+
+            // Set a flag in sessionStorage
+            sessionStorage.setItem('scrollToTop', 'true');
+
+            // Reload the page
+            location.reload();
+        });
+
+        // Check for the flag when the page loads
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('scrollToTop') === 'true') {
+                // Scroll to top
+                window.scrollTo(0, 0);
+                // Remove the flag
+                sessionStorage.removeItem('scrollToTop');
+            }
         });
 
 
@@ -932,13 +946,174 @@
         });
 
         $(document).ready(function() {
+            var validators = {
+                full_name: function(value) {
+                    if (!value) return 'Full name is required';
+                    if (value.length > 255) return 'Full name must not exceed 255 characters';
+                    return null;
+                },
+                gender: function(value) {
+                    if (!value) return 'Gender is required';
+                    if (!['Male', 'Female'].includes(value)) return 'Invalid gender selection';
+                    return null;
+                },
+                date_of_birth: function(value) {
+                    if (!value) return 'Date of birth is required';
+                    // if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return 'Invalid date format';
+                    return null;
+                },
+                mother_tongue: function(value) {
+                    if (!value) return 'Mother tongue is required';
+                    if (!['Malayalam', 'Other'].includes(value)) return 'Invalid mother tongue selection';
+                    return null;
+                },
+                educational_qualification: function(value) {
+                    if (!value) return 'Educational qualification is required';
+                    if (!['SSLC', 'Plus Two', 'Degree', 'Above Degree'].includes(value))
+                        return 'Invalid educational qualification';
+                    return null;
+                },
+                aadhar_number: function(value) {
+                    if (!value) return 'Aadhar number is required';
+                    if (!/^\d{12}$/.test(value)) return 'Aadhar number must be 12 digits';
+                    return null;
+                },
+                job: function(value) {
+                    if (value && value.length > 100) return 'Job must not exceed 100 characters';
+                    return null;
+                },
+                contact_number: function(value) {
+                    if (!value) return 'Contact number is required';
+                    if (!/^\d{10}$/.test(value)) return 'Contact number must be 10 digits';
+                    return null;
+                },
+                whatsapp: function(value) {
+                    if (!value) return 'WhatsApp number is required';
+                    if (!/^\d{10}$/.test(value)) return 'WhatsApp number must be 10 digits';
+                    return null;
+                },
+                email: function(value) {
+                    if (!value) return 'Email is required';
+                    if (!/\S+@\S+\.\S+/.test(value)) return 'Invalid email format';
+                    if (value.length > 255) return 'Email must not exceed 255 characters';
+                    return null;
+                },
+                c_address: function(value) {
+                    if (!value) return 'Current address is required';
+                    return null;
+                },
+                pr_address: function(value) {
+                    if (!value) return 'Permanent address is required';
+                    return null;
+                },
+                district: function(value) {
+                    if (!value) return 'District is required';
+                    var validDistricts = ['Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram',
+                        'Palakkad', 'Thrissur', 'Ernakulam', 'Idukki', 'Kottayam', 'Alappuzha',
+                        'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
+                    ];
+                    if (!validDistricts.includes(value)) return 'Invalid district selection';
+                    return null;
+                },
+                pincode: function(value) {
+                    if (value && !/^\d{6}$/.test(value)) return 'Pincode must be 6 digits';
+                    return null;
+                },
+                institution_name: function(value) {
+                    if (!value) return 'Institution name is required';
+                    return null;
+                },
+                is_completed_ijazah: function(value) {
+                    if (!value) return 'This field is required';
+                    if (!['Yes', 'No'].includes(value)) return 'Invalid selection';
+                    return null;
+                },
+                primary_competition_participation: function(value) {
+                    if (!value) return 'This field is required';
+                    if (!['Native', 'Abroad'].includes(value)) return 'Invalid selection';
+                    return null;
+                },
+                native_zone: function(value) {
+                    var participationType = $('input[name="primary_competition_participation"]:checked')
+                        .val();
+                    if (participationType === 'Native' && !value) return 'Native zone is required';
+                    return null;
+                },
+                abroad_zone: function(value) {
+                    var participationType = $('input[name="primary_competition_participation"]:checked')
+                        .val();
+                    if (participationType === 'Abroad' && !value) return 'Abroad zone is required';
+                    return null;
+                },
+                passport_size_photo: function(value, element) {
+                    if (!element.files.length) return 'Passport size photo is required';
+                    var file = element.files[0];
+                    var allowedTypes = ['image/jpeg', 'image/jpg'];
+                    if (!allowedTypes.includes(file.type)) return 'Only JPG and JPEG files are allowed';
+                    if (file.size > 100 * 1024) return 'File size must not exceed 100 KB';
+                    return null;
+                },
+                birth_certificate: function(value, element) {
+                    if (!element.files.length) return 'Birth certificate is required';
+                    var file = element.files[0];
+                    var allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg'];
+                    if (!allowedTypes.includes(file.type))
+                        return 'Only PDF, JPG and JPEG files are allowed';
+                    if (file.size > 2 * 1024 * 1024) return 'File size must not exceed 2 MB';
+                    return null;
+                },
+                letter_of_recommendation: function(value, element) {
+                    if (!element.files.length) return 'Letter of recommendation is required';
+                    var file = element.files[0];
+                    var allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg'];
+                    if (!allowedTypes.includes(file.type))
+                        return 'Only PDF, JPG and JPEG files are allowed';
+                    if (file.size > 2 * 1024 * 1024) return 'File size must not exceed 2 MB';
+                    return null;
+                }
+            };
+
+            function validateField(field) {
+                var name = field.attr('name');
+                var value = field.val();
+                var errorSpan = field.siblings('.error');
+                if (errorSpan.length === 0) {
+                    errorSpan = field.closest('.form-area').find('.error');
+                }
+
+                if (validators[name]) {
+                    var error = validators[name](value, field[0]);
+                    if (error) {
+                        errorSpan.html(error);
+                        return false;
+                    } else {
+                        errorSpan.empty();
+                        return true;
+                    }
+                }
+                return true;
+            }
+
+            $('form input, form select, form textarea').on('input change', function() {
+                validateField($(this));
+            });
+
             $('form').submit(function(event) {
                 event.preventDefault();
                 var formData = new FormData(this);
-                // Clear previous error messages
                 $('.error').empty();
 
-                // Show loader
+                var isValid = true;
+                $('form input, form select, form textarea').each(function() {
+                    if (!validateField($(this))) {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    return;
+                }
+
                 $('.loader-container').css('display', 'flex');
                 $('#submitBtn').prop('disabled', true);
 
@@ -951,7 +1126,6 @@
                     success: function(response) {
                         console.log(response);
                         if (response.success) {
-                            // Show the success modal
                             $('#successmodal').modal('show');
                         } else {
                             alert('An error occurred. Please check the form for errors.');
@@ -959,7 +1133,6 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         if (jqXHR.status === 422) {
-                            // Validation errors
                             var errors = jqXHR.responseJSON.errors;
                             console.log(errors);
                             var firstErrorField = null;
@@ -980,11 +1153,11 @@
                             }
                         } else {
                             alert(
-                                'An error occurred while processing your application. Please try again later.');
+                                'An error occurred while processing your application. Please try again later.'
+                            );
                         }
                     },
                     complete: function() {
-                        // Hide loader
                         $('.loader-container').hide();
                         $('#submitBtn').prop('disabled', false);
                     }
