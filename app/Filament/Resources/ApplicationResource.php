@@ -305,6 +305,12 @@ class ApplicationResource extends Resource
                     ->color('success')
                     ->url(function (Application $record) {
                         $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
+                        $date = $record?->zone?->assignment?->date;
+                        $time = $record?->zone?->assignment?->time;
+
+                        // Format the date and time using Carbon
+                        $formattedDate = Carbon::parse($date)->translatedFormat('j F Y, l');
+                        $formattedTime = Carbon::parse($time)->format('g:i A');
 
                         if ($record->status === 'Approved') {
                             $message = <<<EOT
@@ -313,11 +319,12 @@ class ApplicationResource extends Resource
                             السلام عليكم ورحمة الله
                             
                             *'എ.പി. അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2024'  ലേക്കുള്ള നിങ്ങളുടെ അപേക്ഷ അംഗീകരിച്ചിരിക്കുന്നു എന്ന് സന്തോഷപൂർവം അറിയിക്കുന്നു.*🎊
+                            
                             താങ്കൾ പങ്കെടുക്കേണ്ട പ്രാഥമിക മത്സരത്തിൻ്റെ വിവരങ്ങൾ താഴെ കൊടുക്കുന്നു.🎊
                             
-                            🗓️Date: *{$record?->zone?->assignment?->date}*
+                            🗓️Date: *{$formattedDate}*
                             
-                            🕐Reporting Time: *{$record?->zone?->assignment?->time}*
+                            🕐Reporting Time: *{$formattedTime}*
                             
                             📍Location: *{$record?->zone?->assignment?->center_id}*
                             
