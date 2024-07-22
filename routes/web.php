@@ -9,13 +9,13 @@ use App\Http\Controllers\ApplicationController;
 // });
 
 Route::get('/', function () {
-    return view('blank');
+    return redirect('https://event.aslamquranaward.com/');
 });
 
 Route::get('/apply', function () {
     $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
     $nativeZones = Zone::where('area', 'Native')->select('id', 'name')->get();
-    return view('welcome',compact('abroadZones','nativeZones'));
+    return view('welcome', compact('abroadZones', 'nativeZones'));
 })->name('apply');
 
 Route::get('/application', function () {
