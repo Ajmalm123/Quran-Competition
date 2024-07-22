@@ -9,8 +9,12 @@ use App\Http\Controllers\ApplicationController;
 // });
 
 Route::get('/', function () {
-    return redirect('https://event.aslamquranaward.com/');
+    return view('blank');
 });
+
+// Route::get('/', function () {
+//     return redirect('https://event.aslamquranaward.com/');
+// });
 
 Route::get('/apply', function () {
     $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
