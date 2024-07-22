@@ -4,9 +4,9 @@ namespace App\Filament\Resources\ZoneAssignmentResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use App\Filament\Widgets\ZoneApplicationStats;
 use App\Filament\Resources\ZoneAssignmentResource;
 use App\Filament\Widgets\ZoneApplicationStatsWidget;
+use App\Filament\Resources\ZoneAssignmentResource\Widgets\ZoneApplicationStats;
 
 class ListZoneAssignments extends ListRecords
 {
