@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             // ->databaseNotifications()
+            ->unsavedChangesAlerts()
             ->authMiddleware([
                 Authenticate::class,
             ])->authGuard('admin');
