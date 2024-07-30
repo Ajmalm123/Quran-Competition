@@ -16,9 +16,12 @@ class ApplicationRequest extends FormRequest
     protected function prepareForValidation()
     {
         if (isset($this->date_of_birth)) {
-            $this->merge([
-                'date_of_birth' => date('Y-m-d', strtotime($this->date_of_birth))
-            ]);
+            $date = \DateTime::createFromFormat('d/m/Y', $this->date_of_birth);
+            if ($date) {
+                $this->merge([
+                    'date_of_birth' => $date->format('Y-m-d')
+                ]);
+            }
         }
         if (isset($this->native_zone) || isset($this->abroad_zone)) {
             $this->merge([
@@ -49,7 +52,7 @@ class ApplicationRequest extends FormRequest
             'qirath_with_ijazah' => 'nullable|string',
             'primary_competition_participation' => 'required|in:Native,Abroad',
             'zone_id' => 'required',
-            'passport_size_photo' => 'required|mimes:jpg,jpeg|max:100', 
+            'passport_size_photo' => 'required|mimes:jpg,jpeg|max:100',
             // File::image()->dimensions(
             //     Rule::dimensions()
             //         ->minWidth(150)
