@@ -144,6 +144,7 @@ class ParticipantsResource extends Resource
                             'application' => $application,
                             'subject' => $data['Subject'],
                             'message' => $data['message'],
+                            'mailer'=>'smtp'
                         ];
                         SendEmailJob::dispatch($dispatchData);
                         Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()

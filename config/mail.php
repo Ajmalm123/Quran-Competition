@@ -48,6 +48,20 @@ return [
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
+        'smtp2' => [
+            'transport' => 'smtp',
+            'url' => env('SMTP2_MAIL_URL'),
+            'host' => env('SMTP2_MAIL_HOST', '127.0.0.1'),
+            'port' => env('SMTP2_MAIL_PORT', 2525),
+            'encryption' => env('SMTP2_MAIL_ENCRYPTION', 'tls'),
+            'username' => env('SMTP2_MAIL_USERNAME'),
+            'password' => env('SMTP2_MAIL_PASSWORD'),
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
+
+
+
 
         'ses' => [
             'transport' => 'ses',

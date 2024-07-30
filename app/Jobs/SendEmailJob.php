@@ -59,7 +59,7 @@ class SendEmailJob implements ShouldQueue
 
             // $pdfPath = Storage::disk('local')->path($pdfFullPath);
 
-            Mail::to($this->data['application']->email)->send(new Application([
+            Mail::mailer($this->data['mailer'])->to($this->data['application']->email)->send(new Application([
                 'page' => $this->data['page'],
                 'application' => $this->data['application'],
                 'subject' => $this->data['subject'],

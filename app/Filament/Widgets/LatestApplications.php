@@ -86,6 +86,7 @@ class LatestApplications extends BaseWidget
                             'application' => $record,
                             'subject' => $data['Subject'],
                             'message' => $data['message'],
+                            'mailer'=>'smtp'
                         ];
                         // Dispatch the job
                         SendEmailJob::dispatch($dispatchData);

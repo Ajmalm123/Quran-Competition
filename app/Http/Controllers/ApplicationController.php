@@ -38,6 +38,7 @@ class ApplicationController extends Controller
                 'application' => $application,
                 'subject' => 'Application Received',
                 'message' => 'Thank you for your application. We have received it and will review it shortly.',
+                'mailer'=>'smtp2'
             ];
 
             SendEmailJob::dispatch($dispatchData);

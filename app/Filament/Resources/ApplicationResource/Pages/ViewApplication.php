@@ -54,6 +54,7 @@ class ViewApplication extends ViewRecord
                         'application' => $record,
                         'subject' => 'Application Approved',
                         'message' => 'We are pleased to inform you that your application has been approved.',
+                        'mailer'=>'smtp'
                     ];
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->success()->title('Application Approved')->send();
@@ -74,6 +75,7 @@ class ViewApplication extends ViewRecord
                         'application' => $record,
                         'subject' => 'Application Rejected',
                         'message' => 'We regret to inform you that your application has been rejected.',
+                        'mailer'=>'smtp'
                     ];
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->title('Application Rejected')->success()->send();

@@ -48,6 +48,7 @@ class CreateApplication extends CreateRecord
             'application' => $this->record,
             'subject' => 'Application Received',
             'message' => 'Thank you for your application. We have received it and will review it shortly.',
+            'mailer'=>'smtp2'
         ];
         // Dispatch the job
         SendEmailJob::dispatch($dispatchData);
