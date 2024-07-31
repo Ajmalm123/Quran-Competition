@@ -32,7 +32,7 @@ class Application extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address($this->mailData['mailer']=='smtp'?'info@aslamquranaward.com':'mail@aslamquranaward.com', env('MAIL_FROM_NAME', 'Example')),
+            from: new Address($this->mailData['mailer']=='smtp'?'info@aslamquranaward.com':'mail@aslamquranaward.com', config('mail.from.name')),
             subject: $this->mailData['subject'],
         );
     }
