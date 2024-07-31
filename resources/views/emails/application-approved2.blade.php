@@ -231,28 +231,41 @@
                                                         Application ID:</td>
                                                     <td
                                                         style="font-size: 15px; font-weight: 600; padding-right: 25px; color: #000000;">
-                                                        XXXXXXX</td>
+                                                        {{ $mailData['application']->application_id }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td
                                                         style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
                                                         Full Name:</td>
-                                                    <td style="font-size: 15px; font-weight: 600; color: #000000;">John
-                                                        Doe dasdasd sdas dasd</td>
+                                                    <td style="font-size: 15px; font-weight: 600; color: #000000;">
+                                                        {{ $mailData['application']->full_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td
                                                         style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
                                                         Center Name:</td>
                                                     <td style="font-size: 15px; font-weight: 600; color: #000000;">
-                                                        Center ABC</td>
+                                                        {{ $mailData['application']?->zone?->assignment?->center_id }}
                                                 </tr>
                                                 <tr>
                                                     <td
                                                         style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
                                                         Date:</td>
                                                     <td style="font-size: 15px; font-weight: 600; color: #000000;">
-                                                        YYYY-MM-DD</td>
+                                                        @php
+                                                            $date = $mailData['application']?->zone?->assignment?->date;
+                                                            $time = $mailData['application']?->zone?->assignment?->time;
+
+                                                            $formattedDateTime =
+                                                                $date && $time
+                                                                    ? date(
+                                                                        'l, F j, Y \a\t g:i A',
+                                                                        strtotime("$date $time"),
+                                                                    )
+                                                                    : null;
+                                                        @endphp
+                                                        {{ $formattedDateTime }}
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>
