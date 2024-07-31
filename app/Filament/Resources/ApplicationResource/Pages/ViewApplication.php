@@ -71,7 +71,7 @@ class ViewApplication extends ViewRecord
                     $record->status = Application::STATUS['Rejected'];
                     $record->save();
                     $dispatchData = [
-                        'page' => 'emails.application',
+                        'page' => 'emails.application-rejected',
                         'application' => $record,
                         'subject' => 'Application Rejected',
                         'message' => 'We regret to inform you that your application has been rejected.',

@@ -71,7 +71,8 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        {{ $mailData['message'] }}</h5>
+                                        We regret to inform you that your application for the AP Aslam Holy Qur'an Award
+                                        2024 has not been approved.</h5>
                                     {{-- <h5
                                         style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
                                         We are pleased to confirm that we have received your application for the primary
@@ -90,7 +91,7 @@
                                 <td style="padding:0px 20px;">
                                     <h5
                                         style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        If you have any questions, feel free to contact us.</h5>
+                                        If you have any questions or require further clarification, feel free to contact us..</h5>
                                 </td>
                             </tr>
                             <tr>
