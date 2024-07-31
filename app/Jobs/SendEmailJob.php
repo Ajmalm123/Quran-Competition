@@ -64,6 +64,7 @@ class SendEmailJob implements ShouldQueue
                 'application' => $this->data['application'],
                 'subject' => $this->data['subject'],
                 'message' => $this->data['message'],
+                'mailer'=>$this->data['mailer']
                 // 'pdfPath' => $pdfPath
             ]));
             // Log success
