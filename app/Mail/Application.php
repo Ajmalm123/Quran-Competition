@@ -8,6 +8,7 @@ use Illuminate\Mail\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class Application extends Mailable
@@ -31,6 +32,7 @@ class Application extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address($this->mailData['mailer']=='smtp'?'info@aslamquranaward.com':'mail@aslamquranaward.com', env('MAIL_FROM_NAME', 'Example')),
             subject: $this->mailData['subject'],
         );
     }
