@@ -27,29 +27,26 @@ class ListApplications extends ListRecords
 
     public function newApplicationsToday(): Actions\Action
     {
-        // Session key to store the count of modal displays
         $sessionKey = 'new_applications_modal_shown';
-        
-        // Get the count from the session, defaulting to 0
         $count = Session::get($sessionKey, 0);
-        
-        // Check if the modal has been shown less than 2 times today
-        if ($count < 2) {
-            // Increment the count
+
+        if ($count < 3) {
             Session::put($sessionKey, $count + 1);
-            
             $newApplicationsToday = Application::query()->whereDate('created_at', today())->count();
-            
+
             return Actions\Action::make('newApplicationsToday')
                 ->visible($newApplicationsToday > 0)
                 ->modalSubmitActionLabel('Got It!')
-                ->action(null)->color('success')
+                ->color('success')
                 ->modalCancelAction(false)
                 ->modalHeading('New Applications Today')
-                ->modalDescription(new HtmlString("Today so far got <strong>{$newApplicationsToday}</strong> new applications."));
+                ->modalDescription(new HtmlString("Today so far got <strong>{$newApplicationsToday}</strong> new applications."))
+                ->modalWidth('lg')
+                ->action(null);
         }
 
-        // Return an empty action if the modal has already been shown 2 times
         return Actions\Action::make('newApplicationsToday')->visible(false);
     }
+
+
 }
