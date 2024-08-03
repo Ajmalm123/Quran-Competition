@@ -41,7 +41,7 @@ Route::get('/application-profile-status', function () {
     return view('application-profile-status');
 });
 
-
+Route::post('/log-ajax-error', [ApplicationController::class, 'logAjaxError'])->name('log.ajax.error');
 
 
 Route::post('/apply/application', [ApplicationController::class, 'store'])->name('application.store');

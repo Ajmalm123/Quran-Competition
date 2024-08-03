@@ -38,7 +38,7 @@ class ApplicationController extends Controller
                 'application' => $application,
                 'subject' => 'Application Received',
                 'message' => 'Thank you for your application. We have received it and will review it shortly.',
-                'mailer'=>'smtp2'
+                'mailer' => 'smtp2'
             ];
 
             SendEmailJob::dispatch($dispatchData);
@@ -54,5 +54,23 @@ class ApplicationController extends Controller
                 'message' => 'An error occurred while processing your application. Please try again later.'
             ], 500);
         }
+    }
+
+    public function logAjaxError(Request $request)
+    {
+        $status = $request->input('status');
+        $responseText = $request->input('responseText');
+        $textStatus = $request->input('textStatus');
+        $errorThrown = $request->input('errorThrown');
+
+        Log::error('AJAX Error', [
+            'status' => $status,
+            'responseText' => $responseText,
+            'textStatus' => $textStatus,
+            'errorThrown' => $errorThrown,
+            'request' => $request->all()
+        ]);
+
+        return response()->json(['success' => true]);
     }
 }

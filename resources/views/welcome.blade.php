@@ -1155,6 +1155,7 @@
                             alert(
                                 'An error occurred while processing your application. Please try again later.'
                             );
+                            logErrorToServer(jqXHR, textStatus, errorThrown);
                         }
                     },
                     complete: function() {
@@ -1176,6 +1177,27 @@
                 myButton.classList.remove('enabled');
             }
         });
+
+
+        function logErrorToServer(jqXHR, textStatus, errorThrown) {
+            $.ajax({
+                url: "{{ route('log.ajax.error') }}",
+                type: 'POST',
+                data: {
+                    status: jqXHR.status,
+                    responseText: jqXHR.responseText,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    console.log('Error logged successfully');
+                },
+                error: function() {
+                    console.log('Failed to log error');
+                }
+            });
+        }
     </script>
 
 
