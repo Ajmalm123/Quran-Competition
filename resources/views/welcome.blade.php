@@ -322,7 +322,7 @@
 
             </div>
             <div class="spacer mt-0">
-                <h2>Contact Information</h2>
+                <h2>Hifz and Other Details</h2>
                 <div class="col-md-8">
                     <div class="form-area">
                         <label for="institution_name" class="form-label">Name and place of the institution where hifz
