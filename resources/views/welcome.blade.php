@@ -172,7 +172,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-area">
-                            <label for="exampleInputEmail1" class="form-label">Aadhar Number - ആധാർ നമ്പർ
+                            {{-- <label for="exampleInputEmail1" class="form-label">Aadhar Number - ആധാർ നമ്പർ
+                                <sup>*</sup></label> --}}
+                            <label for="exampleInputEmail1" class="form-label">Aadhar Number/passport Number
                                 <sup>*</sup></label>
                             <input type="text" class="form-control" id="aadharNumber" name="aadhar_number"
                                 value="{{ old('aadhar_number') }}" aria-describedby="nameHelp" maxlength="12">
@@ -975,7 +977,7 @@
                 },
                 aadhar_number: function(value) {
                     if (!value) return 'Aadhar number is required';
-                    if (!/^\d{12}$/.test(value)) return 'Aadhar number must be 12 digits';
+                    // if (!/^\d{12}$/.test(value)) return 'Aadhar number must be 12 digits';
                     return null;
                 },
                 job: function(value) {
