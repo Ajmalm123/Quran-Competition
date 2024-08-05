@@ -177,36 +177,40 @@ class ApplicationResource extends Resource
                 ImageColumn::make('passport_size_photo')
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.png'))
-                    ->label('Photo'),
+                    ->label('Photo')
+                    ->width('50px'),
                 TextColumn::make('application_id')
                     ->searchable()
-                    ->copyable(),
-                // ->icon('heroicon-o-identification'),
+                    ->copyable()
+                    ->wrap(),
                 TextColumn::make('full_name')
                     ->searchable()
                     ->weight('bold')
-                    ->sortable(),
+                    ->sortable()
+                    ->wrap(),
                 TextColumn::make('contact_number')
                     ->searchable()
                     ->copyable()
-                    ->icon('heroicon-o-phone'),
+                    ->icon('heroicon-o-phone')
+                    ->wrap(),
                 TextColumn::make('email')
                     ->searchable()
                     ->copyable()
-                    ->icon('heroicon-o-envelope'),
-                TextColumn::make('district')
-                    // ->colors(['primary'])
-                    ->searchable(),
+                    ->icon('heroicon-o-envelope')
+                    ->wrap(),
+                // TextColumn::make('district')
+                //     ->searchable()
+                //     ->wrap(),
                 TextColumn::make('zone.name')
-                    // ->colors(['secondary'])
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap(),
                 TextColumn::make('age')
                     ->label('Age')
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
                     })
-                    ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
-                // ->description(fn($record) => Carbon::parse($record->date_of_birth)->format('M d, Y')),                // ->icon('heroicon-o-cake'),
+                    ->getStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age)
+                    ->width('50px'),
                 BadgeColumn::make('status')
                     ->colors([
                         'gray' => 'Created',
@@ -248,7 +252,7 @@ class ApplicationResource extends Resource
                     ->label('District')
                     // ->multiple()
                     ->indicator('District'),
-                    SelectFilter::make('zone_id')
+                SelectFilter::make('zone_id')
                     ->options(function () {
                         return Zone::pluck('name', 'id');
                     })
@@ -263,11 +267,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -296,7 +300,7 @@ class ApplicationResource extends Resource
                             'application' => $application,
                             'subject' => $data['Subject'],
                             'message' => $data['message'],
-                            'mailer'=>'smtp'
+                            'mailer' => 'smtp'
                         ];
                         SendEmailJob::dispatch($dispatchData);
                         Notification::make()->title('Mail Sent Successfully')->success()
@@ -376,12 +380,16 @@ class ApplicationResource extends Resource
                     BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check')
-                        ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
+                        ->action(fn (Collection $records) => $records->each->update(['status' => 'Approved']))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
                 ])
-            ]);
+            ])
+            ->striped()
+            // ->columnSpanFull()
+            ->paginated([10, 25, 50, 100]);
+        // ->responsive();
     }
 
     public static function getRelations(): array
