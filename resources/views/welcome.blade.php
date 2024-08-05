@@ -976,7 +976,7 @@
                     return null;
                 },
                 aadhar_number: function(value) {
-                    if (!value) return 'Aadhar number is required';
+                    if (!value) return 'Aadhar number or Passport is required';
                     // if (!/^\d{12}$/.test(value)) return 'Aadhar number must be 12 digits';
                     return null;
                 },

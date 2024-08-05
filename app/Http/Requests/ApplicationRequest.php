@@ -39,7 +39,7 @@ class ApplicationRequest extends FormRequest
             'mother_tongue' => 'required|in:Malayalam,Other',
             'educational_qualification' => 'required|in:SSLC,Plus Two,Degree,Above Degree',
             // 'aadhar_number' => 'required|numeric|digits:12',
-            'aadhar_number' => 'required',
+            'aadhar_number' => 'required    ',
             'job' => 'nullable|string|max:100',
             'contact_number' => 'required|string|regex:/^\d{10}$/',
             'whatsapp' => 'required|string|regex:/^\d{10}$/',
