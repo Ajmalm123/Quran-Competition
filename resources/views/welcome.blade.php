@@ -162,6 +162,8 @@
                                 <option value="Above Degree"
                                     {{ old('educational_qualification') == 'Above Degree' ? 'selected' : '' }}>Above
                                     Degree</option>
+                                <option value="Other"
+                                    {{ old('educational_qualification') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                             <span class="error" role="alert">
                                 @error('educational_qualification')
@@ -971,7 +973,7 @@
                 },
                 educational_qualification: function(value) {
                     if (!value) return 'Educational qualification is required';
-                    if (!['SSLC', 'Plus Two', 'Degree', 'Above Degree'].includes(value))
+                    if (!['SSLC', 'Plus Two', 'Degree', 'Above Degree', 'Other'].includes(value))
                         return 'Invalid educational qualification';
                     return null;
                 },

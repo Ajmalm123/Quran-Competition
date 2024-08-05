@@ -37,7 +37,7 @@ class ApplicationRequest extends FormRequest
             'gender' => 'required|in:Male,Female',
             'date_of_birth' => 'required|date',
             'mother_tongue' => 'required|in:Malayalam,Other',
-            'educational_qualification' => 'required|in:SSLC,Plus Two,Degree,Above Degree',
+            'educational_qualification' => 'required|in:SSLC,Plus Two,Degree,Above Degree,Other',
             // 'aadhar_number' => 'required|numeric|digits:12',
             'aadhar_number' => 'required    ',
             'job' => 'nullable|string|max:100',
