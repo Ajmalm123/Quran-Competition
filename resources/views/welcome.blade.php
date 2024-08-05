@@ -53,9 +53,9 @@
         <div class="spacer">
             <div class="form-title">
                 <div class="title-head">
-                    <h1>Application For Competition</h1>
-                    <p class="pb-0">This form takes on a more boxy appearance, and works well as a modal. Also, note
-                        its dual purpose as a sign-up or sign-in form, toggled at the top.</p>
+                    <h1>Application For AP Aslam Holy Qur'an Award 2024</h1>
+                    <p class="pb-0">Apply Now for the AP Aslam Holy Qur'an Award 2024. Please fill in all fields with
+                        accurate information.</p>
                 </div>
                 <p class="pb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer;"><u>See
                         Guidelines</u></p>
@@ -176,7 +176,7 @@
                         <div class="form-area">
                             {{-- <label for="exampleInputEmail1" class="form-label">Aadhar Number - ആധാർ നമ്പർ
                                 <sup>*</sup></label> --}}
-                            <label for="exampleInputEmail1" class="form-label">Aadhar Number/passport Number
+                            <label for="exampleInputEmail1" class="form-label">Aadhar/passport Number
                                 <sup>*</sup></label>
                             <input type="text" class="form-control" id="aadharNumber" name="aadhar_number"
                                 value="{{ old('aadhar_number') }}" aria-describedby="nameHelp" maxlength="12">
@@ -389,14 +389,15 @@
                                         name="primary_competition_participation" id="participationAbroad"
                                         value="Abroad"
                                         {{ old('primary_competition_participation') == 'Abroad' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="participationAbroad">വിദേശത്ത് നിന്ന</label>
+                                    <label class="form-check-label" for="participationAbroad">വിദേശത്ത് നിന്ന്</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio"
                                         name="primary_competition_participation" id="participationNative"
                                         value="Native"
                                         {{ old('primary_competition_participation') == 'Native' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="participationNative">സ്വദേശത്ത് നിന്ന</label>
+                                    <label class="form-check-label" for="participationNative">സ്വദേശത്ത്
+                                        നിന്ന്</label>
                                 </div>
                             </div>
                             <span class="error" role="alert">
@@ -468,12 +469,9 @@
                     </svg>
                     <div class="points">
                         <ul class="mb-0">
-                            <li>Photo should be in JPG format, with dimensions of 300px width by 400px
-                                height, and must
-                                not exceed 100 KB in size.</li>
-                            <li>Birth certificate and Letter of recommendation should be submitted in either
-                                PDF or
-                                image format (JPG), and must be clear and legible.</li>
+                            <li>Photo should be in JPG format and must not exceed 100 KB in size.</li>
+                            <li>Birth certificate and Letter of recommendation should be submitted in either PDF or
+                                image format (JPG), and must be clear and legible. Try not to exceed 2MB in size.</li>
                             <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല്
                                 കമ്മറ്റിയുടെ/ഇസ്ലാഹി
                                 സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ്
@@ -626,18 +624,19 @@
                         <div class="modal-detail-area">
                             <h4>Hifz and Participation Details</h4>
                             <ul>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
+                                <li>2002 സെപ്റ്റംബർ ഒന്നിന് ശേഷം ജനിച്ച പുരുഷൻ മാത്രമേ അപേക്ഷിക്കാവൂ.
+                                    </l1>
+                                <li>അപേക്ഷയോടൊപ്പം അറ്റാച്ച് ചെയ്യേണ്ട ജനന സർട്ടിഫിക്കറ്റ്,ശുപാർശ കത്ത് (പഠിച്ച
+                                    സ്ഥാപനത്തിൽ നിന്നോ,മഹല്ല് കമ്മറ്റിയിൽ നിന്നോ ഏതെങ്കിലും ഇസ്ലാമിക സംഘടനയിൽ നിന്നോ)
+                                    എന്നിവയുടെ ഒറിജിനൽ തന്നെ അറ്റാച്ച് ചെയ്യുക.</l1>
+                                <li>അപേക്ഷ സബ്മിറ്റ് ചെയ്തു കഴിഞ്ഞാൽ ഇമെയിൽ സന്ദേശം വന്നിട്ടുണ്ടോ എന്ന് പരിശോധിക്കുക.
+                                    </l1>
+                                <li>സമർപ്പിച്ച അപേക്ഷ കുറ്റമറ്റതാണോ എന്ന് പരിശോധിച്ച ശേഷം അപേക്ഷകനെ ഇമെയിൽ മുഖേനെ
+                                    അറിയിക്കുന്നതാണ്.</l1>
+                                <li>അപേക്ഷ സമർപ്പിക്കുന്ന വേളയിൽ എന്തെങ്കിലും തടസ്സം നേരിട്ടാൽ ഓഫീസിൽ വിളിച്ച്
+                                    റിപ്പോർട്ട്‌ ചെയ്യേണ്ടതാണ്.</l1>
                             </ul>
-                            <h4>Hifz and Participation Details</h4>
+                            {{-- <h4>Hifz and Participation Details</h4>
                             <ul>
                                 <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
                                     must not exceed 100 KB in size.</l1>
@@ -649,7 +648,7 @@
                                     must not exceed 100 KB in size.</l1>
                                 <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
                                     must not exceed 100 KB in size.</l1>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                 </div>
