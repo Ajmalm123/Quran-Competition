@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources\ZoneAssignmentResource\Widgets;
-
 use App\Models\Application;
 use App\Models\Zone;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -16,14 +14,12 @@ class ZoneApplicationStats extends BaseWidget
             ->groupBy('zone_id')
             ->pluck('count', 'zone_id')
             ->toArray();
-
         $zones = Zone::all();
-
         return $zones->map(function ($zone) use ($zoneCounts) {
             return Stat::make($zone->name, $zoneCounts[$zone->id] ?? 0)
                 ->description('Applications')
                 ->color('primary')
-                ->url(route('filament.admin.resources.applications.index', ['tableFilters[zone][value]' => [$zone->id]]));
+                ->url(route('filament.admin.resources.applications.index', ['tableFilters[zone_id][values]' => [$zone->id]]));
         })->toArray();
     }
 }

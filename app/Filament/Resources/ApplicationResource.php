@@ -209,7 +209,7 @@ class ApplicationResource extends Resource
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('date_of_birth', $direction === 'desc' ? 'asc' : 'desc');
                     })
-                    ->getStateUsing(fn ($record) => Carbon::parse($record->date_of_birth)->age)
+                    ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age)
                     ->width('50px'),
                 BadgeColumn::make('status')
                     ->colors([
@@ -254,10 +254,17 @@ class ApplicationResource extends Resource
                     ->indicator('District'),
                 SelectFilter::make('zone_id')
                     ->options(function () {
-                        return Zone::pluck('name', 'id');
+                        return Zone::pluck('name', 'id')->toArray();
                     })
+                    ->multiple()
                     ->label('Zone')
-                    ->indicator('Zone'),
+                    ->indicator('Zone')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['values'],
+                            fn(Builder $query, $zoneIds): Builder => $query->whereIn('zone_id', $zoneIds),
+                        );
+                    }),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -267,11 +274,11 @@ class ApplicationResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -380,7 +387,7 @@ class ApplicationResource extends Resource
                     BulkAction::make('approve')
                         ->label('Approve Selected')
                         ->icon('heroicon-o-check')
-                        ->action(fn (Collection $records) => $records->each->update(['status' => 'Approved']))
+                        ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
