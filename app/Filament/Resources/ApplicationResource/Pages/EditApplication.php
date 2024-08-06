@@ -81,10 +81,20 @@ class EditApplication extends EditRecord
                                 Forms\Components\Select::make('mother_tongue')
                                     ->required()
                                     ->options(Application::MOTHERTONGUE),
+                                // Forms\Components\TextInput::make('aadhar_number')
+                                //     ->required()
+                                //     ->numeric()
+                                //     ->length(12),
                                 Forms\Components\TextInput::make('aadhar_number')
+                                    ->label('Aadhar/Passport Number')
                                     ->required()
-                                    ->numeric()
-                                    ->length(12),
+                                    ->string()
+                                    ->maxLength(12)
+                                    ->validationAttribute('Aadhar/Passport Number')
+                                    ->validateMessages([
+                                        'required' => 'Please enter your Aadhar/Passport Number.',
+                                        'max' => 'The Aadhar/Passport Number must not exceed 12 characters.',
+                                    ]),
                             ]),
                         ])->columnSpan(2),
                     ]),

@@ -54,6 +54,7 @@ class Application extends Model
         'Plus Two' => 'Plus Two',
         'Degree' => 'Degree',
         'Above Degree' => 'Above Degree',
+        'Other'=>'Other'
     ];
 
     const DISTRICT = [

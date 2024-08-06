@@ -48,7 +48,7 @@ class CreateApplication extends CreateRecord
             'application' => $this->record,
             'subject' => 'Application Received',
             'message' => 'Thank you for your application. We have received it and will review it shortly.',
-            'mailer'=>'smtp2'
+            'mailer' => 'smtp2'
         ];
         // Dispatch the job
         SendEmailJob::dispatch($dispatchData);
@@ -97,9 +97,16 @@ class CreateApplication extends CreateRecord
                                     ->required()
                                     ->options(Application::MOTHERTONGUE),
                                 Forms\Components\TextInput::make('aadhar_number')
+                                    ->label('Aadhar/Passport Number')
                                     ->required()
-                                    ->numeric()
-                                    ->length(12),
+                                    ->string()
+                                    ->maxLength(12)
+                                    ->validationAttribute('Aadhar/Passport Number')
+                                    ->validateMessages([
+                                        'required' => 'Please enter your Aadhar/Passport Number.',
+                                        'max' => 'The Aadhar/Passport Number must not exceed 12 characters.',
+                                    ]),
+                                // ->length(12),
                             ]),
                         ])->columnSpan(2),
                     ]),
