@@ -90,11 +90,10 @@ class EditApplication extends EditRecord
                                     ->required()
                                     ->string()
                                     ->maxLength(12)
-                                    ->validationAttribute('Aadhar/Passport Number')
-                                    ->validateMessages([
-                                        'required' => 'Please enter your Aadhar/Passport Number.',
-                                        'max' => 'The Aadhar/Passport Number must not exceed 12 characters.',
-                                    ]),
+                                    ->validationAttribute('Aadhar/Passport Number')->validationMessages([
+                                            'required' => 'Please enter your Aadhar/Passport Number.',
+                                            'max' => 'The Aadhar/Passport Number must not exceed 12 characters.',
+                                        ]),
                             ]),
                         ])->columnSpan(2),
                     ]),
