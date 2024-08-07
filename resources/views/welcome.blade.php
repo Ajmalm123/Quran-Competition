@@ -622,7 +622,7 @@
                     </div>
                     <div class="modal-body pb-0">
                         <div class="modal-detail-area">
-                            <h4>Hifz and Participation Details</h4>
+                            {{-- <h4>Hifz and Participation Details</h4> --}}
                             <ul>
                                 <li>2002 സെപ്റ്റംബർ ഒന്നിന് ശേഷം ജനിച്ച പുരുഷൻ മാത്രമേ അപേക്ഷിക്കാവൂ.
                                     </l1>
