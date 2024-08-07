@@ -176,7 +176,7 @@
                         <div class="form-area">
                             {{-- <label for="exampleInputEmail1" class="form-label">Aadhar Number - ആധാർ നമ്പർ
                                 <sup>*</sup></label> --}}
-                            <label for="exampleInputEmail1" class="form-label">Aadhar/passport Number
+                            <label for="exampleInputEmail1" class="form-label">Aadhar / Passport Number
                                 <sup>*</sup></label>
                             <input type="text" class="form-control" id="aadharNumber" name="aadhar_number"
                                 value="{{ old('aadhar_number') }}" aria-describedby="nameHelp" maxlength="12">
