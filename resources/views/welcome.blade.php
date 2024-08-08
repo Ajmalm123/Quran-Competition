@@ -472,10 +472,7 @@
                             <li>Photo should be in JPG format and must not exceed 100 KB in size.</li>
                             <li>Birth certificate and Letter of recommendation should be submitted in either PDF or
                                 image format (JPG), and must be clear and legible. Try not to exceed 2MB in size.</li>
-                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതിയോ ആയ സ്ഥാപനത്തിന്റെ /മഹല്ല്
-                                കമ്മറ്റിയുടെ/ഇസ്ലാഹി
-                                സെന്ററിന്റെ/മറ്റു ഇസ്ലാമിക സംഘടനകളുടെയോ റെക്കമെൻഡേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ്
-                                ചെയ്യേണ്ടത്
+                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതോ ആയ സ്ഥാപനത്തിൻ്റെ / മഹല്ല് കമ്മിറ്റിയുടെ / ഇസ്ലാമിക് സെൻ്ററുകളുടെ / മറ്റു ഇസ്ലാമിക സംഘടനകളുടേതോ റെക്കമൻ്റേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത്.
                             </li>
                         </ul>
                     </div>
