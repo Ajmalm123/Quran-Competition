@@ -119,7 +119,7 @@
                                         Website: www.aslamquranaward.com</h5>
                                     <h5
                                         style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Email: info@aslamquranaward.com | Phone: 9946429709, 8606151603</h5>
+                                        Email: info@aslamquranaward.com | Phone: 9846310383</h5>
                                 </td>
                             </tr>
                             <tr>
