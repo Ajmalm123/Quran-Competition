@@ -468,14 +468,25 @@
                             fill="#9B7858" />
                     </svg>
                     <div class="points">
-                        <ul class="mb-0">
-                            <li>Photo should be in JPG format and must not exceed 100 KB in size.</li>
-                            <li>Birth certificate and Letter of recommendation should be submitted in either PDF or
-                                image format (JPG), and must be clear and legible. Try not to exceed 2MB in size.</li>
-                            <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതോ ആയ സ്ഥാപനത്തിൻ്റെ / മഹല്ല് കമ്മിറ്റിയുടെ / ഇസ്ലാമിക് സെൻ്ററുകളുടെ / മറ്റു ഇസ്ലാമിക സംഘടനകളുടേതോ റെക്കമൻ്റേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത്.
-                            </li>
-                        </ul>
-                    </div>
+
+<ul class="mb-0">
+
+    <li>Photo should be in JPG format and must not exceed 100 KB in size.&nbsp<span class="pb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer;"><u>See
+
+Guidelines</u></span></li>
+
+    <li>Birth certificate and Letter of recommendation should be submitted in either PDF or
+
+        image format (JPG), and must be clear and legible. Try not to exceed 2MB in size.</li>
+
+    <li>പഠിക്കുന്നതോ പഠിച്ചിറങ്ങിയതോ ആയ സ്ഥാപനത്തിൻ്റെ / മഹല്ല് കമ്മിറ്റിയുടെ / ഇസ്ലാമിക് സെൻ്ററുകളുടെ / മറ്റു ഇസ്ലാമിക സംഘടനകളുടേതോ റെക്കമൻ്റേഷൻ ലെറ്റർ ആണ് അപ്‌ലോഡ് ചെയ്യേണ്ടത്.
+
+    </li>
+
+</ul>
+
+</div>
+
                 </div>
                 <div class="form-area">
                     <label for="exampleInputEmail1" class="form-label">Please attach the following
@@ -618,37 +629,36 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body pb-0">
-                        <div class="modal-detail-area">
+<div class="modal-detail-area">
                             {{-- <h4>Hifz and Participation Details</h4> --}}
-                            <ul>
-                                <li>2002 സെപ്റ്റംബർ ഒന്നിന് ശേഷം ജനിച്ച പുരുഷൻ മാത്രമേ അപേക്ഷിക്കാവൂ.
-                                    </l1>
-                                <li>അപേക്ഷയോടൊപ്പം അറ്റാച്ച് ചെയ്യേണ്ട ജനന സർട്ടിഫിക്കറ്റ്,ശുപാർശ കത്ത് (പഠിച്ച
+<ul>
+<li>2002 സെപ്റ്റംബർ ഒന്നിന് ശേഷം ജനിച്ച പുരുഷൻ മാത്രമേ അപേക്ഷിക്കാവൂ.
+</l1>
+<li>അപേക്ഷയോടൊപ്പം അറ്റാച്ച് ചെയ്യേണ്ട ജനന സർട്ടിഫിക്കറ്റ്,ശുപാർശ കത്ത് (പഠിച്ച
                                     സ്ഥാപനത്തിൽ നിന്നോ,മഹല്ല് കമ്മറ്റിയിൽ നിന്നോ ഏതെങ്കിലും ഇസ്ലാമിക സംഘടനയിൽ നിന്നോ)
                                     എന്നിവയുടെ ഒറിജിനൽ തന്നെ അറ്റാച്ച് ചെയ്യുക.</l1>
-                                <li>ഒരു സ്ഥാപനത്തിന്റെ ലെറ്റർ ഹെഡിൽ പരമാവധി രണ്ട് പേർക്ക് മാത്രമേ അപേക്ഷിക്കാൻ പറ്റൂ. രണ്ടിൽ കൂടുതൽ മത്സരാർത്ഥികൾ ഉണ്ടായാൽ മഹല്ല് കമ്മറ്റിയുടെയോ മറ്റോ ശുപാർശ കത്തിൽ അപേക്ഷിക്കാവുന്നതാണ്.</l1>
-                                <li>അപേക്ഷ സബ്മിറ്റ് ചെയ്തു കഴിഞ്ഞാൽ ഇമെയിൽ സന്ദേശം വന്നിട്ടുണ്ടോ എന്ന് പരിശോധിക്കുക.
-                                    </l1>
-                                <li>സമർപ്പിച്ച അപേക്ഷ കുറ്റമറ്റതാണോ എന്ന് പരിശോധിച്ച ശേഷം അപേക്ഷകനെ ഇമെയിൽ മുഖേനെ
+<li>ഒരു സ്ഥാപനത്തിന്റെ ലെറ്റർ ഹെഡിൽ പരമാവധി രണ്ട് പേർക്ക് മാത്രമേ അപേക്ഷിക്കാൻ പറ്റൂ. രണ്ടിൽ കൂടുതൽ മത്സരാർത്ഥികൾ ഉണ്ടായാൽ മഹല്ല് കമ്മറ്റിയുടെയോ മറ്റോ ശുപാർശ കത്തിൽ അപേക്ഷിക്കാവുന്നതാണ്.</l1>
+<li>അപേക്ഷ സബ്മിറ്റ് ചെയ്തു കഴിഞ്ഞാൽ ഇമെയിൽ സന്ദേശം വന്നിട്ടുണ്ടോ എന്ന് പരിശോധിക്കുക.
+</l1>
+<li>സമർപ്പിച്ച അപേക്ഷ കുറ്റമറ്റതാണോ എന്ന് പരിശോധിച്ച ശേഷം അപേക്ഷകനെ ഇമെയിൽ മുഖേനെ
                                     അറിയിക്കുന്നതാണ്.</l1>
-                                <li>അപേക്ഷ സമർപ്പിക്കുന്ന വേളയിൽ എന്തെങ്കിലും തടസ്സം നേരിട്ടാൽ ഓഫീസിൽ വിളിച്ച്
+<li>അപേക്ഷ സമർപ്പിക്കുന്ന വേളയിൽ എന്തെങ്കിലും തടസ്സം നേരിട്ടാൽ ഓഫീസിൽ വിളിച്ച്
                                     റിപ്പോർട്ട്‌ ചെയ്യേണ്ടതാണ്.</l1>
-                            </ul>
-                            {{-- <h4>Hifz and Participation Details</h4>
-                            <ul>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                                <li>Photo should be in JPG format, with dimensions of 300px width by 400px height, and
-                                    must not exceed 100 KB in size.</l1>
-                            </ul> --}}
-                        </div>
-                    </div>
+</ul>
+<h4>Passport Size Photo Guide</h4>
+<div class="col-md-12">
+<img class="img-fluid" src="{{ url('/images/passport-guide.jpg') }}" alt="Passport Size Photo Guide" ">
+<ul>
+<li>ഫോട്ടോ JPG ഫോർമാറ്റിൽ ആയിരിക്കണം, കൂടാതെ ഫയൽ സൈസ് 100 KB യിലധികം കവിയരുത്.
+</l1>
+<li>ഫോട്ടോ വ്യക്തമായതും, പാസ്പോർട്ട് വലിപ്പത്തിലുള്ളതും ആയിരിക്കണം.
+</l1>
+<li>മുകളിൽ നൽകിയ ഫോട്ടോ ഗൈഡ് പരിശോധിക്കുക.
+</l1>
+</ul>
+</div>
+</div>
+</div>
                 </div>
             </div>
         </div>
