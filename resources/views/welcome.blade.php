@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="icon" type="image/svg" href="{{asset('images/aqa_faviocn.svg')}}">
     <link href="{{ url('css/style.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
@@ -46,7 +47,7 @@
 
     <section class="header-area">
         <div class="spacer">
-            <img class="img-fluid" src="{{ url('/images/footer-mail-logo.png') }}" alt="logo">
+        <a href="https://event.aslamquranaward.com/"><img class="img-fluid" src="{{ url('/images/footer-mail-logo.png') }}" alt="logo"></a>
         </div>
     </section>
     <section class="form-area pb-0">
