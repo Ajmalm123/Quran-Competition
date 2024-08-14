@@ -23,8 +23,8 @@
                         <img class="img-fluid" src="{{ url('/images/success.gif') }}" alt="successgif">
                         <h5>Application Submitted
                             Successfully !</h5>
-                        <p>This form takes on a more boxy appearance, and works well as a modal. Also, note its dual
-                            purpose as a sign-up or sign-in form, toggled at the top.</p>
+                        <p>Thank you for your application to the AP Aslam Holy Qur'an Award! We have received your submission and will review it shortly. Please check your email for further updates and information.
+                        </p>
                         <button type="submit" class="btn btn-std-modal" data-bs-dismiss="modal" aria-label="Close"
                             id="okayButton">Okay</button>
                     </div>
