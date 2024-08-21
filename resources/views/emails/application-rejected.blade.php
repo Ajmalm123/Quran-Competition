@@ -121,7 +121,7 @@
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
-                                    <a href="https://shahn.ae/" target="_blank">
+                                    <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5
                                             style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
                                             Copyright © 2024 Aslam Quran Award, All rights reserved.</h5>

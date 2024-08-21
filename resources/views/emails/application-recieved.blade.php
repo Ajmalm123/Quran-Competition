@@ -129,7 +129,7 @@
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
-                                    <a href="https://shahn.ae/" target="_blank">
+                                    <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5
                                             style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
                                             Copyright © 2024 Aslam Quran Award, All rights reserved.</h5>
@@ -145,7 +145,9 @@
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px 30px 20px;text-align:center;">
-                                    <a style="text-decoration: none;" href="https://www.instagram.com/apaslamquranaward/?utm_source=qr&igsh=YjZ4OXNieTRocXdy" target="_blank">
+                                    <a style="text-decoration: none;"
+                                        href="https://www.instagram.com/apaslamquranaward/?utm_source=qr&igsh=YjZ4OXNieTRocXdy"
+                                        target="_blank">
                                         {{-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -157,7 +159,9 @@
                                         </svg> --}}
                                         <img src="{{ url('/images/insta 2.png') }}">
                                     </a>
-                                    <a style="text-decoration: none;" href="https://youtube.com/@apaslamquranaward?si=hrE99ldkB2tm7fqP" target="_blank">
+                                    <a style="text-decoration: none;"
+                                        href="https://youtube.com/@apaslamquranaward?si=hrE99ldkB2tm7fqP"
+                                        target="_blank">
                                         <img src="{{ url('/images/youtube 2.png') }}">
 
                                         {{-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -176,7 +180,8 @@
                                                 fill="white" />
                                         </svg> --}}
                                     </a>
-                                    <a style="text-decoration: none;" href="https://www.facebook.com/apaslamquranaward" target="_blank">
+                                    <a style="text-decoration: none;" href="https://www.facebook.com/apaslamquranaward"
+                                        target="_blank">
                                         {{-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -188,7 +193,8 @@
                                         </svg> --}}
                                         <img src="{{ url('/images/facebook 3.png') }}">
                                     </a>
-                                    <a style="text-decoration: none;" href="https://www.x.com/apaslamquranaward" target="_blank">
+                                    <a style="text-decoration: none;" href="https://www.x.com/apaslamquranaward"
+                                        target="_blank">
                                         {{-- <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
