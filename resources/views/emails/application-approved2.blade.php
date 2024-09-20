@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>ASLAM HOLY QUR’AN AWARD - Emailer</title>
+    <title>ASLAM HOLY QUR'AN AWARD - Emailer</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
@@ -129,7 +129,7 @@
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; font-weight: 600; color: #000000; padding-top: 20px;">
-                    Dear <?= $mailData['application']->full_name ?? 'Applicant' ?>,
+                    Dear Hafiz <?= $mailData['application']->full_name ?? 'Applicant' ?>,
                 </h5>
             </td>
         </tr>
@@ -137,7 +137,7 @@
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; font-weight: 400; color: #000000;">
-                    السلام عليكم ورحمة الله وبركات
+                    ‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,
                 </h5>
             </td>
         </tr>
@@ -145,51 +145,49 @@
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    എ.പി. അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024’ ന്േവണ്ടിയുള്ള പ്രാഥമിക മത്സരത്തിന്താങ്കെള
-                    െതരഞ്ഞെടുത്തതായി അറിയിക്കുന്നതിൽ സന്തോഷമുണ
+                    We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been successfully reviewed and approved. Congratulations!
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    ്. താങ്കൾ തന്നെ െതെരഞ്ഞെടുത്തത്പ്രകാരം
-                    <b><?= $mailData['application']->application_id ?? 'Not Available' ?></b>…ൽ െവച്ച്നടക്കുന്ന േമഖലാ തല
-                    മത്സരത്തിലാണ്താങ്കൾ പങ്കെ
-                    ്<b><?= $mailData['application']->application_id ?? 'Not Available' ?></b>തി)……ന്രാവിെല 9 മണി മുതൽ
-                    ൈവകുന്നേരം 4 മണി വെരയാണ്മത്സരം
-                    നടക്കുക. താെഴ പറയുന്ന കാര്യങ്ങൾ ശ്രദ്ധിക്കണെമന്ന്വിനീതമായ
+                    As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with significant rewards for the winners. We encourage you to continue preparing with dedication.
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    1) കൃത്യം ഒമ്പത്മണിക്ക്തന്നെ സ്ഥലത്തെത്തി രജിസ്റ്റർ െചയ്യേണ്ടതാണ്. മത്സരം തുടങ്ങിയ േശഷം
-                    എത്തുന്നവെര മത്സരിക്കാൻ അനുവദിക്കുന<br>നതല്ല.
-                    2) ഇതോടൊപ്പമുള്ള അഡ്മിഷൻ കാർഡ്പ്രിന്റ്എടുത്ത്കയ്യിൽ െവക്കേണ്ടതാണ്. അഡ്മിഷൻ കാർഡ്
-                    ൈകവശമുള്ളവർക്ക് മാത്രയിരിക്കും ഹാളിൽ മത്സരാർത്ഥികൾക്ക്േവണ്ടി നിശ്ചയിക്കപ്പെട്ട സ്ഥലത്തേക്ക്
-                    പ്രേവശനം ലഭിക്കുക.<br>
-                    3) ഹഫ്സ്ഖിറാഅത്തിൽ ഖുർആൻ പൂർണ്ണമായും മനഃപാഠമുണ്ടോ എന്നായിരിക്കും പ്രാഥമികമായി
-                    പരിശോധിക്കുക; മറ്റ്ഖിറാഅത്തുകൾ പരിഗണിക്കുന്ന<br>തല്ല.
-                    4) തജ്വീദ്നിയമങ്ങൾ ശരിയായ രീതിയിൽ പാലിച്ചുകൊണ്ടാണോ പാരായണം െചയ്യുന്നെതന്ന
-                    പരിശോധനയും അതോടൊപ്പം തന്നെ നടക്കും . ആ രംഗത്ത്സംഭവിക്കുന്ന ഓരോ പാളിച്ചകളും
-                    മത്സരാർത്ഥികളുെട മാർക്ക്കുറയ്ക്കുെമന്ന്ഓർക്കു<br>ക.
-                    5) ആദ്യത്തെ അഞ്ച്ജുസ്ഉകളിെലയും (ഫാതിഹ, ബഖറ, ആലുഇമ്രാൻ, നിസാഅ സൂറത്തുകൾ),
-                    അവസാനത്തെ അഞ്ചു ജുസ്ഉകളിെലയും (അഹ്ഖാഫ്മുതൽ നാസ്വെര സൂറത്തുകൾ) ആയത്തുകളിൽ
-                    പ്രതിപാദിക്കപ്പെട്ട കാര്യങ്ങൾ മത്സരാർത്ഥിക്ക്മനസ്സിലായിട്ടുണ്ടോ എന്ന പരിധോധനയാണ്പിന്നീട്
-                    നടക്കുക. േനർക്ക്േനെരയുള്ള അർത്ഥം അറിയുമോെയന്നല്ല, സാരം മനസ്സിലായിട്ടുണ്ടോ എന്നാണ്
-                    പരിശോധിക്കപ്പെടുക.<br>
-                    5) മത്സരാർത്ഥികളോടുള്ള ചോദ്യങ്ങൾ മലയാളത്തിലായിരിക്കും; ആയത്തുകളുെട ആശയങ്ങളുമായി
-                    ബന്ധപ്പെട്ട ചോദ്യങ്ങൾക്ക്മറുപടി പറേയണ്ടതും മലയാളത്തിലാണ്.
+                    The competition will cover Thajweed, Qirath, Hifz, and also comprehension of the first five and last five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
-                <h5 style="font-size: 14px; margin: 0; font-weight: 400; color: #000000;">
-                    കൃത്യസമയത്ത്തന്നെ മത്സരസ്ഥലത്ത്എത്തിച്ചേരണെമന്ന്ഒരിക്കൽ കൂടി അഭ്യർത്ഥിക്കുന്നു. അല്ലാഹു
-                    അനുഗ്രഹിക്കട്ടെ, ആമീൻ.
+                <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
+                    The area-wise competitions are scheduled to begin in the first week of November, and successful participants will move on to the final competition on December 24, 2024, in Malappuram.
+                </h5>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0px 80px;">
+                <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
+                    Further details about your competition center and exact dates will be communicated via email. Please keep an eye on your inbox for updates and instructions.
+                </h5>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0px 80px;">
+                <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
+                    We wish you the very best in your preparation. May Allah guide you in your efforts.
+                </h5>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0px 80px;">
+                <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
+                    If you have any questions, feel free to reach out.
                 </h5>
             </td>
         </tr>
@@ -198,7 +196,10 @@
             <td style="padding: 0px 80px;">
                 <h5
                     style="font-size: 14px; margin: 0; padding-top: 0; padding-bottom: 10px; font-weight: 400; color: #000000;">
-                    Convener, AP Aslam Holy Qur’an Award 2024
+                    Best regards,<br>
+                    Coordinator<br>
+                    AP Aslam Holy Qur'an Award Committee<br>
+                    9846 310 383 | info@aslamquranaward.com
                 </h5>
             </td>
         </tr>
