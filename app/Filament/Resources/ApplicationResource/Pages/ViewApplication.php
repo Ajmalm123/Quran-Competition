@@ -54,7 +54,7 @@ class ViewApplication extends ViewRecord
                         'application' => $record,
                         'subject' => 'Application Approved',
                         'message' => 'We are pleased to inform you that your application has been approved.',
-                        'mailer'=>'smtp'
+                        'mailer' => 'smtp2'
                     ];
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->success()->title('Application Approved')->send();
@@ -75,7 +75,7 @@ class ViewApplication extends ViewRecord
                         'application' => $record,
                         'subject' => 'Application Rejected',
                         'message' => 'We regret to inform you that your application has been rejected.',
-                        'mailer'=>'smtp'
+                        'mailer' => 'smtp2'
                     ];
                     SendEmailJob::dispatch($dispatchData);
                     Notification::make()->title('Application Rejected')->success()->send();
@@ -98,7 +98,8 @@ class ViewApplication extends ViewRecord
                     }, "{$record->application_id}.pdf");
                 })->defaultView(StaticAction::LINK_VIEW),
 
-                Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),        ];
+            Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
+        ];
     }
 
     // public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist

@@ -125,7 +125,6 @@
             </td>
         </tr>
 
-
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; font-weight: 600; color: #000000; padding-top: 20px;">
@@ -145,35 +144,40 @@
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been successfully reviewed and approved. Congratulations!
+                    We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been
+                    successfully reviewed and approved. Congratulations!
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with significant rewards for the winners. We encourage you to continue preparing with dedication.
+                    As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with
+                    significant rewards for the winners. We encourage you to continue preparing with dedication.
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    The competition will cover Thajweed, Qirath, Hifz, and also comprehension of the first five and last five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
+                    The competition will cover Thajweed, Qirath, Hifz, and also comprehension of the first five and last
+                    five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    The area-wise competitions are scheduled to begin in the first week of November, and successful participants will move on to the final competition on December 24, 2024, in Malappuram.
+                    The area-wise competitions are scheduled to begin in the first week of November, and successful
+                    participants will move on to the final competition on December 24, 2024, in Malappuram.
                 </h5>
             </td>
         </tr>
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    Further details about your competition center and exact dates will be communicated via email. Please keep an eye on your inbox for updates and instructions.
+                    Further details about your competition center and exact dates will be communicated via email. Please
+                    keep an eye on your inbox for updates and instructions.
                 </h5>
             </td>
         </tr>
@@ -203,7 +207,7 @@
                 </h5>
             </td>
         </tr>
-        <tr style= "padding:40px 40px">
+        <tr style="padding:40px 40px">
             <td>
                 <table class="admit-card" style="width: 100%; border: 1px solid #DDDDDD; margin-top: 20px;">
                     <tr>
@@ -215,61 +219,6 @@
                                         <h1 style="font-size: 16px; margin: 0;">ADMIT CARD</h1>
                                         <img src="{{ url('/images/logo_admitcard.png') }}" alt="Logo"
                                             style="width: 160px; height: 28px;">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 32px; display: flex; align-items: center;">
-                                        <div class="candidate-photo"
-                                            style="width: 98px; height: 126px; background-color: #ddd; margin-right: 32px;">
-                                            <img src="candidate-photo.jpg" alt="Candidate Photo"
-                                                style="width: 100%; height: 100%;">
-                                        </div>
-                                        <div class="candidate-info">
-                                            <table style="width: 100%; border-collapse: collapse;">
-                                                <tr>
-                                                    <td
-                                                        style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
-                                                        Application ID:</td>
-                                                    <td
-                                                        style="font-size: 15px; font-weight: 600; padding-right: 25px; color: #000000;">
-                                                        {{ $mailData['application']->application_id }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td
-                                                        style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
-                                                        Full Name:</td>
-                                                    <td style="font-size: 15px; font-weight: 600; color: #000000;">
-                                                        {{ $mailData['application']->full_name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td
-                                                        style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
-                                                        Center Name:</td>
-                                                    <td style="font-size: 15px; font-weight: 600; color: #000000;">
-                                                        {{ $mailData['application']?->zone?->assignment?->center_id }}
-                                                </tr>
-                                                <tr>
-                                                    <td
-                                                        style="font-size: 12px; font-weight: regular; color: #000000; padding-right: 10px;">
-                                                        Date:</td>
-                                                    <td style="font-size: 15px; font-weight: 600; color: #000000;">
-                                                        @php
-                                                            $date = $mailData['application']?->zone?->assignment?->date;
-                                                            $time = $mailData['application']?->zone?->assignment?->time;
-
-                                                            $formattedDateTime =
-                                                                $date && $time
-                                                                    ? date(
-                                                                        'l, F j, Y \a\t g:i A',
-                                                                        strtotime("$date $time"),
-                                                                    )
-                                                                    : null;
-                                                        @endphp
-                                                        {{ $formattedDateTime }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
                                     </td>
                                 </tr>
                             </table>
