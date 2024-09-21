@@ -320,42 +320,39 @@ class ApplicationResource extends Resource
                         $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
                         $date = $record?->zone?->assignment?->date;
                         $time = $record?->zone?->assignment?->time;
-
                         // Format the date and time using Carbon
                         $formattedDate = Carbon::parse($date)->translatedFormat('j F Y, l');
                         $formattedTime = Carbon::parse($time)->format('g:i A');
-
                         if ($record->status === 'Approved') {
                             $message = <<<EOT
-                        Dear Hafiz {$record->full_name},
-                        
-                        ‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,
-                        
-                        We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been successfully reviewed and approved. Congratulations! 🎉
-                        
-                        As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with significant rewards for the winners. We encourage you to continue preparing with dedication.
-                        
-                        The competition will cover Thajweed, Qirath, Hifz, and comprehension of the first five and last five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
-                        
-                        The area-wise competitions are scheduled to begin in the first week of November, and successful participants will move on to the final competition on December 24, 2024, in Malappuram.
-                        
-                        Further details about your competition center and exact dates will be communicated via email. Please keep an eye on your inbox for updates.
-                        
-                        We wish you the very best in your preparation. May Allah guide you in your efforts.
-                        
-                        If you have any questions, feel free to reach out.
-                        
-                        Best regards,
-                        Coordinator
-                        AP Aslam Holy Qur'an Award Committee
-                        📞 9846 310 383
-                        ✉️ info@aslamquranaward.com
-                        EOT;
-
+                Dear Hafiz {$record->full_name},
+                
+                ‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,
+                
+                We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been successfully reviewed and approved. Congratulations! 🎉
+                
+                As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with significant rewards for the winners. We encourage you to continue preparing with dedication.
+                
+                The competition will cover Thajweed, Qirath, Hifz, and comprehension of the first five and last five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
+                
+                The area-wise competitions are scheduled to begin in the first week of November, and successful participants will move on to the final competition on December 24, 2024, in Malappuram.
+                
+                Further details about your competition center and exact dates will be communicated via email. Please keep an eye on your inbox for updates.
+                
+                We wish you the very best in your preparation. May Allah guide you in your efforts.
+                
+                If you have any questions, feel free to reach out.
+                
+                Best regards,
+                Coordinator
+                AP Aslam Holy Qur'an Award Committee
+                📞 9846 310 383
+                ✉️ info@aslamquranaward.com
+                EOT;
                             // Convert message to UTF-8
                             $message = mb_convert_encoding($message, 'UTF-8', 'UTF-8');
-                            // Encode message for URL
-                            $encodedMessage = urlencode($message);
+                            // Encode message for URL, preserving emojis
+                            $encodedMessage = rawurlencode($message);
                             return "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
                         } else {
                             // If status is not 'Approved', return a WhatsApp link without a message

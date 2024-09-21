@@ -35,7 +35,7 @@
                             <tr>
                                 <td style="padding:0;">
                                     <table width="600" cellpadding="0" cellspacing="0" border="0"
-                                        background="{{ $message->embed(public_path('images/header-bg.png')) }}"
+                                        background="https://aslamquranaward.com/images/header-bg.png"
                                         style="background-color: #f2f2f2; background-repeat: no-repeat; background-size: cover; border-spacing: 0; margin:40px 18px 0 18px; padding:20px;">
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
@@ -58,8 +58,8 @@
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
-                                    <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        ‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,
+                                    <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 700;color:#000000;">
+                                        <strong>‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,</strong>
                                     </h5>
                                 </td>
                             </tr>
