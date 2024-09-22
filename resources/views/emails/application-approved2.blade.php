@@ -52,84 +52,84 @@
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 600;color:#000000;padding-top:50px;">
-                                        Dear Hafiz <?= $mailData['application']->full_name ?? 'Applicant' ?>,
+                                        السَّلامُ عَلَيْكُم ورَحْمَةُ اللهِ وَبَرَكاتُهُ
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 700;color:#000000;">
-                                        <strong>‏اَلسَلامُ عَلَيْكُم وَرَحْمَةُ اَللهِ وَبَرَكاتُهُ‎,</strong>
+                                        <strong>പ്രിയപ്പെട്ട Hafiz <?= $mailData['application']->full_name ?? 'Applicant' ?>,</strong>
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        We are pleased to inform you that your application for the AP Aslam Holy Qur'an Award 2024 has been successfully reviewed and approved. Congratulations!
+                                        'എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024' മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        As you know, the competition carries an impressive prize pool of over 20 lakhs rupees, with significant rewards for the winners. We encourage you to continue preparing with dedication.
+                                        താങ്കൾ മനസ്സിലാക്കിയത് പോലെ വിശുദ്ധ ഖുർആൻ പരിപൂർണ്ണമായ മനഃപാഠവും തജ് വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവും ആദ്യ അവസാന അഞ്ച് ജുസ്ഉകളിലെ വചനങ്ങളുടെ മലയാള ആശയവും മത്സരത്തിൽ പരിശോധനയ്ക്ക് വിധേയമാക്കപ്പെടും.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        The competition will cover Thajweed, Qirath, Hifz, and also comprehension of the first five and last five Juz of the Qur'an. Preparing across all these areas will help you perform your best.
+                                        നവംബർ ആദ്യവാരത്തിൽ നടക്കുന്ന മേഖലാതല മത്സരങ്ങളിൽ നിന്നും വിജയികളായി തിരഞ്ഞെടുക്കപ്പെടുന്നവർക്കായിരിക്കും 2024 ഡിസംബർ 24ന് മലപ്പുറം ജില്ലയിലെ വളവന്നൂരിൽ വച്ച് നടക്കുന്ന ഫൈനൽ മത്സരത്തിൽ പങ്കെടുക്കാനുള്ള അവസരം ലഭിക്കുക.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        The area-wise competitions are scheduled to begin in the first week of November, and successful participants will move on to the final competition on December 24, 2024, in Malappuram.
+                                        അവാർഡ് ജേതാക്കൾക്ക് 20 ലക്ഷം രൂപയുടെ സമ്മാനത്തുക നൽകുന്നതോടൊപ്പം പങ്കെടുക്കുന്നവർക്കെല്ലാം ആകർഷകമായ പ്രോത്സാഹന സമ്മാനം കൂടി നൽകുന്ന ഈ മൽസരത്തിൽ ഉന്നതസ്ഥാനം കരസ്ഥമാക്കുന്നതിന് വേണ്ടി ഉത്സാഹത്തോടെയുള്ള പരിശ്രമവും തയ്യാറെടുപ്പും തുടരണമെന്ന് അറിയിക്കുന്നു.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Further details about your competition center and exact dates will be communicated via email. Please keep an eye on your inbox for updates and instructions.
+                                        മേഖലാതല മത്സരങ്ങളുടെ കൃത്യമായ സ്ഥലവും തീയതിയും ഉടൻ തന്നെ ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് ലഭിക്കും. തുടർന്നുള്ള അറിയിപ്പുകൾക്കും നിർദ്ദേശങ്ങൾക്കും ഇമെയിൽ ശ്രദ്ധിക്കുമല്ലോ.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        We wish you the very best in your preparation. May Allah guide you in your efforts.
+                                        മത്സരത്തിൽ ഏറ്റവും നന്നായി തയ്യാറെടുക്കുകയും പങ്കെടുക്കുകയും ചെയ്യുന്നതിന് നാഥൻ താങ്കളെ സഹായിക്കട്ടെ,ആമീൻ.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        If you have any questions, feel free to reach out.
+                                        കൂടുതൽ വിവരങ്ങൾക്ക് ഞങ്ങളെ ബന്ധപ്പെടാവുന്നതാണ്
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="padding-bottom:8px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Best regards,
+                                        വിശ്വസ്ഥതയോടെ,
                                     </h5>
                                     <h5 style="font-size: 14px; margin-top: 0px;padding-top:0;padding-bottom:10px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Coordinator<br>
-                                        AP Aslam Holy Qur'an Award Committee
+                                        കോർഡിനേറ്റർ<br>
+                                        എപി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Website: www.aslamquranaward.com
+                                        9846310383
                                     </h5>
                                     <h5 style="font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Email: info@aslamquranaward.com | Phone: 9846310383
+                                        info@aslamquranaward.com
                                     </h5>
                                 </td>
                             </tr>
