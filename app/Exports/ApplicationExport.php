@@ -57,7 +57,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->completed_ijazah,
             $application->qirath_with_ijazah,
             $application->primary_competition_participation,
-            $application->zone,
+            $application->zone->name,
             $application->status,
             $application->created_at,
             $application->updated_at,
