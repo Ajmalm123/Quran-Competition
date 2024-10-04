@@ -332,7 +332,7 @@ class ApplicationResource extends Resource
 
                 പ്രിയപ്പെട്ട Hafiz {$record->full_name}
 
-                'എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024' മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
+                'എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024' മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്യതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
 
                 താങ്കൾ മനസ്സിലാക്കിയത് പോലെ വിശുദ്ധ ഖുർആൻ പരിപൂർണ്ണമായ മനഃപാഠവും തജ് വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവും ആദ്യ അവസാന അഞ്ച് ജുസ്ഉകളിലെ വചനങ്ങളുടെ മലയാള ആശയവും മത്സരത്തിൽ പരിശോധനയ്ക്ക് വിധേയമാക്കപ്പെടും.
 
@@ -340,7 +340,7 @@ class ApplicationResource extends Resource
 
                 അവാർഡ് ജേതാക്കൾക്ക് 20 ലക്ഷം രൂപയുടെ സമ്മാനത്തുക നൽകുന്നതോടൊപ്പം പങ്കെടുക്കുന്നവർക്കെല്ലാം ആകർഷകമായ പ്രോത്സാഹന സമ്മാനം കൂടി നൽകുന്ന ഈ മൽസരത്തിൽ ഉന്നതസ്ഥാനം കരസ്ഥമാക്കുന്നതിന് വേണ്ടി ഉത്സാഹത്തോടെയുള്ള പരിശ്രമവും തയ്യാറെടുപ്പും തുടരണമെന്ന് അറിയിക്കുന്നു.
 
-                മേഖലാതല മത്സരങ്ങളുടെ കൃത്യമായ സ്ഥലവും തീയതിയും ഉടൻ തന്നെ ഇമെയിൽ ��ന്ദേശ��ായി താങ്കൾക്ക് ലഭിക്കും. തുടർന്നുള്ള അറിയിപ്പുകൾക്കും നിർദ്ദേശങ്ങൾക്കും ഇമെയിൽ ശ്രദ്ധിക്കുമല്ലോ.
+                മേഖലാതല മത്സരങ്ങളുടെ കൃത്യമായ സ്ഥലവും തീയതിയും ഉടൻ തന്നെ ഇമെയിൽ ന്ദേശായി താങ്കൾക്ക് ലഭിക്കും. തുടർന്നുള്ള അറിയിപ്പുകൾക്കും നിർദ്ദേശങ്ങൾക്കും ഇമെയിൽ ശ്രദ്ധിക്കുമല്ലോ.
 
                 മത്സരത്തിൽ ഏറ്റവും നന്നായി തയ്യാറെടുക്കുകയും പങ്കെടുക്കുകയും ചെയ്യുന്നതിന് നാഥൻ താങ്കളെ 
                 സഹായിക്കട്ടെ,ആമീൻ.
@@ -382,6 +382,40 @@ class ApplicationResource extends Resource
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('sendMail')
+                        ->label('Send Mail')
+                        ->icon('heroicon-o-envelope')
+                        ->color('success')
+                        ->action(function (Collection $records) {
+                            foreach ($records as $application) {
+                                $mailData = [
+                                    'applicant_name' => $application->full_name,
+                                    'zone' => $application->zone->name ?? 'N/A',
+                                    'center_name' => $application->zone->assignment->center_name ?? 'N/A',
+                                    'center_code' => $application->zone->assignment->center_code ?? 'N/A',
+                                    'location' => $application->zone->assignment->location ?? 'N/A',
+                                    'date' => $application->zone->assignment->date ?? 'N/A',
+                                    'reporting_time' => $application->zone->assignment->time ?? 'N/A',
+                                ];
+
+                                Mail::to($application->email)->queue(new BulkMail($mailData));
+                            }
+
+                            Notification::make()
+                                ->title('Emails Queued Successfully')
+                                ->body('All selected emails have been queued for sending.')
+                                ->icon('heroicon-o-check-circle')
+                                ->iconColor('success')
+                                ->duration(5000)
+                                ->success()
+                                ->send();
+                        })
+                        ->requiresConfirmation()
+                        ->modalHeading('Confirm Email Send')
+                        ->modalDescription('Are you sure you want to send emails to all selected applications?')
+                        ->modalSubmitActionLabel('Yes, Send Emails')
+                        ->modalCancelActionLabel('Cancel')
+                        ->deselectRecordsAfterCompletion(),
                 ])
             ])
             ->striped()

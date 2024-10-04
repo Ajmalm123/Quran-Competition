@@ -27,46 +27,7 @@ class ListApplications extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('sendMail')
-                ->label('Send Mail')
-                ->icon('heroicon-o-envelope')
-                ->color('success')
-                ->tooltip('Send emails to selected or filtered applications')
-                ->button()
-                ->action(function (array $data, $livewire) {
-                    $selectedRecords = $livewire->getSelectedTableRecords();
-                    $filteredRecords = $livewire->getFilteredTableQuery()->get();
-                    
-                    $recipients = $selectedRecords->isNotEmpty() ? $selectedRecords : $filteredRecords;
-                    
-                    foreach ($recipients as $application) {
-                        $mailData = [
-                            'applicant_name' => $application->full_name,
-                            'zone' => $application->zone->name ?? 'N/A',
-                            'center_name' => $application->zone->assignment->center_name ?? 'N/A',
-                            'center_code' => $application->zone->assignment->center_code ?? 'N/A',
-                            'location' => $application->zone->assignment->location ?? 'N/A',
-                            'date' => $application->zone->assignment->date ?? 'N/A',
-                            'reporting_time' => $application->zone->assignment->time ?? 'N/A',
-                        ];
 
-                        Mail::to($application->email)->queue(new BulkMail($mailData));
-                    }
-
-                    Notification::make()
-                        ->title('Emails Queued Successfully')
-                        ->body('All selected emails have been queued for sending.')
-                        ->icon('heroicon-o-check-circle')
-                        ->iconColor('success')
-                        ->duration(5000)
-                        ->success()
-                        ->send();
-                })
-                ->requiresConfirmation()
-                ->modalHeading('Confirm Email Send')
-                ->modalDescription('Are you sure you want to send emails to all selected or filtered applications?')
-                ->modalSubmitActionLabel('Yes, Send Emails')
-                ->modalCancelActionLabel('Cancel'),
             Actions\CreateAction::make()
                 ->label('Create Application')
                 ->icon('heroicon-o-plus-circle'),
