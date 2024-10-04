@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Resources\ApplicationResource\Pages;
 use App\Filament\Resources\ApplicationResource\Actions\ExportPdfAction;
+use Filament\Actions\CreateAction;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BulkMail;
 
 class ApplicationResource extends Resource
 {
@@ -337,7 +340,7 @@ class ApplicationResource extends Resource
 
                 അവാർഡ് ജേതാക്കൾക്ക് 20 ലക്ഷം രൂപയുടെ സമ്മാനത്തുക നൽകുന്നതോടൊപ്പം പങ്കെടുക്കുന്നവർക്കെല്ലാം ആകർഷകമായ പ്രോത്സാഹന സമ്മാനം കൂടി നൽകുന്ന ഈ മൽസരത്തിൽ ഉന്നതസ്ഥാനം കരസ്ഥമാക്കുന്നതിന് വേണ്ടി ഉത്സാഹത്തോടെയുള്ള പരിശ്രമവും തയ്യാറെടുപ്പും തുടരണമെന്ന് അറിയിക്കുന്നു.
 
-                മേഖലാതല മത്സരങ്ങളുടെ കൃത്യമായ സ്ഥലവും തീയതിയും ഉടൻ തന്നെ ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് ലഭിക്കും. തുടർന്നുള്ള അറിയിപ്പുകൾക്കും നിർദ്ദേശങ്ങൾക്കും ഇമെയിൽ ശ്രദ്ധിക്കുമല്ലോ.
+                മേഖലാതല മത്സരങ്ങളുടെ കൃത്യമായ സ്ഥലവും തീയതിയും ഉടൻ തന്നെ ഇമെയിൽ ��ന്ദേശ��ായി താങ്കൾക്ക് ലഭിക്കും. തുടർന്നുള്ള അറിയിപ്പുകൾക്കും നിർദ്ദേശങ്ങൾക്കും ഇമെയിൽ ശ്രദ്ധിക്കുമല്ലോ.
 
                 മത്സരത്തിൽ ഏറ്റവും നന്നായി തയ്യാറെടുക്കുകയും പങ്കെടുക്കുകയും ചെയ്യുന്നതിന് നാഥൻ താങ്കളെ 
                 സഹായിക്കട്ടെ,ആമീൻ.
