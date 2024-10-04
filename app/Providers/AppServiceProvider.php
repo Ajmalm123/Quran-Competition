@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Filament\Notification;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Filament\Notifications\Notification as BaseNotification;
 
@@ -22,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Schema::defaultStringLength(191);
     }
 }

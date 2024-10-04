@@ -122,6 +122,9 @@ class ZoneAssignmentResource extends Resource
                                     };
                                 },
                             ]),
+                        Forms\Components\TextInput::make('location')
+                            ->required()
+                            ->maxLength(255),
                     ])
                     ->columns(2)
             ]);
@@ -151,6 +154,8 @@ class ZoneAssignmentResource extends Resource
                     ->time('h:i A')
                     ->sortable()
                     ->icon('heroicon-o-clock'),
+                Tables\Columns\TextColumn::make('location')
+                    ->searchable(),
             ])
             ->defaultSort('date', 'desc')
             ->filters([
