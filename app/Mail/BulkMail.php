@@ -23,7 +23,7 @@ class BulkMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'EP Aslam Holy Quran Award 2024 - Competition Details',
+            subject: 'AP Aslam Holy Quran Award 2024 - Competition Details',
         );
     }
 
