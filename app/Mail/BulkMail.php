@@ -22,8 +22,13 @@ class BulkMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $previewText = 'എപി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024 ന്റെ പ്രാഥമിക റൗണ്ട് മത്സരത്തിൽ താങ്കൾ തിരഞ്ഞെടുത്ത മേഖലയിലെ മത്സരത്തിന്റെ സമയക്രമം താഴെ കൊടുക്കുന്നു.';
+
         return new Envelope(
-            subject: 'AP Aslam Holy Quran Award 2024 - Competition Details',
+            subject: 'AP Aslam Holy Quran Award 2024 - Preliminary Round Competition Details',
+            metadata: [
+                'preview_text' => $previewText,
+            ],
         );
     }
 
