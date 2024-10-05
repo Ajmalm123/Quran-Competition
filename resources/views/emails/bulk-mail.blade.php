@@ -77,8 +77,8 @@
                                         {{-- സെന്റർ നെയിം: {{ $mailData['center_name'] }}<br>
                                         സെന്റർ കോഡ്: {{ $mailData['center_code'] }}<br> --}}
                                         സ്ഥലം: {{ $mailData['location'] }}<br>
-                                        തിയ്യതി: {{ \Carbon\Carbon::parse($mailData['date'])->format('F j, Y') }}<br>
-                                        റിപ്പോർട്ടിംഗ് ടൈം: {{ \Carbon\Carbon::parse($mailData['reporting_time'])->format('h:i A') }}
+                                        തിയ്യതി: {{ $mailData['date'] !== 'N/A' ? \Carbon\Carbon::parse($mailData['date'])->format('F j, Y') : 'N/A' }}<br>
+                                        റിപ്പോർട്ടിംഗ് ടൈം: {{ $mailData['reporting_time'] !== 'N/A' ? \Carbon\Carbon::parse($mailData['reporting_time'])->format('h:i A') : 'N/A' }}
                                     </h5>
                                 </td>
                             </tr>
