@@ -68,6 +68,9 @@ class CreateZoneAssignment extends CreateRecord
                                             };
                                         },
                                     ]),
+                                Forms\Components\TextInput::make('location')
+                                    ->required()
+                                    ->maxLength(255),
                             ])
 
                             ->columns([
