@@ -398,7 +398,7 @@ class ApplicationResource extends Resource
                                     'reporting_time' => $application->zone->assignment->time ?? 'N/A',
                                 ];
 
-                                Mail::to($application->email)->queue(new BulkMail($mailData));
+                                Mail::mailer('smtp2')->to($application->email)->queue(new BulkMail($mailData));
                             }
 
                             Notification::make()
