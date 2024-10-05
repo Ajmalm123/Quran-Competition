@@ -43,7 +43,6 @@ class CreateZoneAssignment extends CreateRecord
                                     ->minDate(Carbon::today())
                                     ->afterOrEqual(now()->startOfDay())
                                     ->reactive(),
-
                                 Forms\Components\TimePicker::make('time')
                                     ->required()
                                     ->format('h:i A')
@@ -72,10 +71,9 @@ class CreateZoneAssignment extends CreateRecord
                                     ->required()
                                     ->maxLength(255),
                             ])
-
                             ->columns([
                                 'sm' => 2,
-                                'lg' => 4,
+                                'lg' => 5,
                             ])
                             ->itemLabel(function (array $state): ?string {
                                 $zoneName = Zone::find($state['zone_id'])->name ?? 'Unknown Zone';
