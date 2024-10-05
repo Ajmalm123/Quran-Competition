@@ -74,8 +74,8 @@
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
                                         മേഖല: {{ $mailData['zone'] }}<br>
-                                        {{-- സെന്റർ നെയിം: {{ $mailData['center_name'] }}<br>
-                                        സെന്റർ കോഡ്: {{ $mailData['center_code'] }}<br> --}}
+                                         സെന്റർ നെയിം: {{ $mailData['center_name'] }}<br>
+                                        {{-- സെന്റർ കോഡ്: {{ $mailData['center_code'] }}<br>  --}}
                                         സ്ഥലം: {{ $mailData['location'] }}<br>
                                         തിയ്യതി: {{ $mailData['date'] !== 'N/A' ? \Carbon\Carbon::parse($mailData['date'])->format('F j, Y') : 'N/A' }}<br>
                                         റിപ്പോർട്ടിംഗ് ടൈം: {{ $mailData['reporting_time'] !== 'N/A' ? \Carbon\Carbon::parse($mailData['reporting_time'])->format('h:i A') : 'N/A' }}

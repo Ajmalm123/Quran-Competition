@@ -391,7 +391,7 @@ class ApplicationResource extends Resource
                                 $mailData = [
                                     'applicant_name' => $application->full_name,
                                     'zone' => $application->zone->name ?? 'N/A',
-                                    // 'center_name' => $application->zone->assignment->center_name ?? 'N/A',
+                                    'center_name' => $application->zone->assignment->center_id ?? 'N/A',
                                     // 'center_code' => $application->zone->assignment->center_code ?? 'N/A',
                                     'location' => $application->zone->assignment->location ?? 'N/A',
                                     'date' => $application->zone->assignment->date ?? 'N/A',
