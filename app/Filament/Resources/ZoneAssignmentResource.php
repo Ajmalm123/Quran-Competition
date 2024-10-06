@@ -74,7 +74,7 @@ class ZoneAssignmentResource extends Resource
                             ->required()
                             ->label('Center Name')
                             ->maxLength(255)
-                            ->disabled(fn (Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
+                            // ->disabled(fn (Forms\Get $get) => ZoneAssignment::where('zone_id', $get('zone_id'))->exists())
                             ->dehydrated(),
                         // ->rules([
                         //     function (Forms\Get $get) {
