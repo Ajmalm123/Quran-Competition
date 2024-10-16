@@ -322,6 +322,12 @@ class ApplicationResource extends Resource
                     ->url(function (Application $record) {
                         $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
                         if ($record->status === 'Approved') {
+                            $zoneName = $record->zone->name ?? 'N/A';
+                            $centerName = $record->zone->assignment->center_id ?? 'N/A';
+                            $location = $record->zone->assignment->location ?? 'N/A';
+                            $date = $record->zone->assignment->date ? \Carbon\Carbon::parse($record->zone->assignment->date)->format('F j, Y') : 'N/A';
+                            $time = $record->zone->assignment->time ? \Carbon\Carbon::parse($record->zone->assignment->time)->format('h:i A') : 'N/A';
+
                             $message = <<<EOT
 السلام عليكم ورحمة الله وبركاته
 
@@ -329,11 +335,11 @@ class ApplicationResource extends Resource
 
 എപി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024 ന്റെ പ്രാഥമിക റൗണ്ട് മത്സരത്തിൽ താങ്കൾ തിരഞ്ഞെടുത്ത മേഖലയിലെ മത്സരത്തിന്റെ സമയക്രമം താഴെ കൊടുക്കുന്നു.
 
-മേഖല: {$record->zone->name ?? 'N/A'}
-സെന്റർ നെയിം: {$record->zone->assignment->center_id ?? 'N/A'}
-സ്ഥലം: {$record->zone->assignment->location ?? 'N/A'}
-തിയ്യതി: {$record->zone->assignment->date ? \Carbon\Carbon::parse($record->zone->assignment->date)->format('F j, Y') : 'N/A'}
-റിപ്പോർട്ടിംഗ് ടൈം: {$record->zone->assignment->time ? \Carbon\Carbon::parse($record->zone->assignment->time)->format('h:i A') : 'N/A'}
+മേഖല: {$zoneName}
+സെന്റർ നെയിം: {$centerName}
+സ്ഥലം: {$location}
+തിയ്യതി: {$date}
+റിപ്പോർട്ടിംഗ് ടൈം: {$time}
 
 മത്സരവുമായി ബന്ധപ്പെട്ട നിർദ്ദേശങ്ങൾ
 
