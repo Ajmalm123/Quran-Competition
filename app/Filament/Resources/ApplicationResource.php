@@ -325,8 +325,8 @@ class ApplicationResource extends Resource
                             $zoneName = $record->zone->name ?? 'N/A';
                             $centerName = $record->zone->assignment->center_id ?? 'N/A';
                             $location = $record->zone->assignment->location ?? 'N/A';
-                            $date = $record->zone->assignment->date ? \Carbon\Carbon::parse($record->zone->assignment->date)->format('F j, Y') : 'N/A';
-                            $time = $record->zone->assignment->time ? \Carbon\Carbon::parse($record->zone->assignment->time)->format('h:i A') : 'N/A';
+                            $date = $record->zone->assignment ? \Carbon\Carbon::parse($record->zone->assignment->date)->format('F j, Y') : 'N/A';
+                            $time = $record->zone->assignment ? \Carbon\Carbon::parse($record->zone->assignment->time)->format('h:i A') : 'N/A';
 
                             $message = <<<EOT
 السلام عليكم ورحمة الله وبركاته
