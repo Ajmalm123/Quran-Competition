@@ -40,27 +40,13 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->application_id,
             '', // This cell will be used for the image
             $application->full_name,
-            $application->gender,
-            Carbon::parse($application->date_of_birth)->age,
-            $application->mother_tongue,
-            $application->educational_qualification,
-            $application->aadhar_number,
-            $application->job,
-            $application->contact_number,
-            $application->whatsapp,
-            $application->email,
-            $application->current_address,
-            $application->permanent_address,
+            $application->date_of_birth,
             $application->district,
-            $application->pincode,
-            $application->institution_name,
-            $application->completed_ijazah,
-            $application->qirath_with_ijazah,
-            $application->primary_competition_participation,
-            $application->zone->name,
-            $application->status,
-            $application->created_at,
-            $application->updated_at,
+            $application->zone?->name,
+            $application->zone?->assignment?->center_id ?? 'N/A',
+            $application->zone?->assignment?->location ?? 'N/A',
+            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('F j, Y') : 'N/A',
+            $application->zone?->assignment?->time ? \Carbon\Carbon::parse($application->zone?->assignment?->time)->format('h:i A') : 'N/A',
         ];
     }
 
@@ -68,38 +54,24 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         return [
             'Application ID',
-            'Profile Picture',
-            'Full Name',
-            'Gender',
-            'Age',
-            'Mother Tongue',
-            'Educational Qualification',
-            'Aadhar Number',
-            'Job',
-            'Contact Number',
-            'WhatsApp',
-            'Email',
-            'Current Address',
-            'Permanent Address',
+            'Photo',
+            'Name',
+            'Date of Birth',
             'District',
-            'Pincode',
-            'Institution Name',
-            'Completed Ijazah',
-            'Qirath with Ijazah',
-            'Primary Competition Participation',
             'Zone',
-            'Status',
-            'Created At',
-            'Updated At',
+            'Center Name',
+            'Center Location',
+            'Center Date',
+            'Center Time',
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'H' => NumberFormat::FORMAT_NUMBER,
-            'J' => NumberFormat::FORMAT_NUMBER,
-            'K' => NumberFormat::FORMAT_NUMBER,
+            'D' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'I' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'J' => NumberFormat::FORMAT_DATE_TIME3,
         ];
     }
 
@@ -135,10 +107,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
 
                 // Set column widths
                 $columnWidths = [
-                    'A' => 15, 'B' => 15, 'C' => 25, 'D' => 12, 'E' => 8, 'F' => 15,
-                    'G' => 25, 'H' => 20, 'I' => 20, 'J' => 18, 'K' => 18, 'L' => 30,
-                    'M' => 40, 'N' => 40, 'O' => 15, 'P' => 12, 'Q' => 25, 'R' => 15,
-                    'S' => 20, 'T' => 25, 'U' => 15, 'V' => 15, 'W' => 18, 'X' => 18
+                    'A' => 15, 'B' => 15, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
+                    'G' => 25, 'H' => 25, 'I' => 15, 'J' => 15
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -161,7 +131,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ]);
 
                 // Center-align specific columns
-                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'P', 'R', 'S', 'U', 'V'];
+                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'J'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
