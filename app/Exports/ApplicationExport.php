@@ -11,19 +11,15 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use Maatwebsite\Excel\Concerns\WithDrawings;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class ApplicationExport implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithDrawings, WithEvents
+class ApplicationExport implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithEvents
 {
     use Exportable;
-
-    protected $imageHeight = 80;
 
     public function __construct(public Collection $records)
     {
@@ -38,7 +34,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         return [
             $application->application_id,
-            '', // This cell will be used for the image
+            $application->passport_size_photo ? url('storage/' . $application->passport_size_photo) : 'N/A',
             $application->full_name,
             $application->date_of_birth,
             $application->district,
@@ -75,28 +71,6 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
         ];
     }
 
-    public function drawings()
-    {
-        $drawings = [];
-        foreach ($this->records as $index => $application) {
-            // $imagePath = storage_path("app/applications/{$application->application_id}.jpg");
-            $imagePath = public_path("storage/{$application->passport_size_photo}");
-            if (file_exists($imagePath)) {
-                $drawing = new Drawing();
-                $drawing->setName("Profile Picture");
-                $drawing->setDescription("Profile Picture");
-                $drawing->setPath($imagePath);
-                $drawing->setHeight($this->imageHeight);
-                $drawing->setWidth($this->imageHeight); // Make it square
-                $drawing->setOffsetX(5);
-                $drawing->setOffsetY(5);
-                $drawing->setCoordinates("B" . ($index + 2));
-                $drawings[] = $drawing;
-            }
-        }
-        return $drawings;
-    }
-
     public function registerEvents(): array
     {
         return [
@@ -107,7 +81,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
 
                 // Set column widths
                 $columnWidths = [
-                    'A' => 15, 'B' => 15, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
+                    'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
                     'G' => 25, 'H' => 25, 'I' => 15, 'J' => 15
                 ];
 
