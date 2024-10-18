@@ -4,20 +4,21 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\Application;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Database\Eloquent\Collection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
 class ApplicationExport implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithDrawings, WithEvents
 {
@@ -107,8 +108,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         $drawings = [];
         foreach ($this->records as $index => $application) {
-            // $imagePath = storage_path("app/applications/{$application->application_id}.jpg");
             $imagePath = public_path("storage/passport_photos/{$application->passport_size_photo}");
+            Log::info("Image path: {$imagePath}");
             if (file_exists($imagePath)) {
                 $drawing = new Drawing();
                 $drawing->setName("Profile Picture");
