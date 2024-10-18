@@ -114,8 +114,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 // Wrap text for all columns
                 $sheet->getStyle("A1:{$lastColumn}{$lastRow}")->getAlignment()->setWrapText(true);
 
-                // Set row height for all rows
-                $rowHeight = $this->imageHeight + 10; // Add some padding
+                // Set a fixed row height for all rows
+                $rowHeight = 30; // You can adjust this value as needed
                 foreach ($sheet->getRowIterator(2) as $row) {
                     $sheet->getRowDimension($row->getRowIndex())->setRowHeight($rowHeight);
                 }
