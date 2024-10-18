@@ -107,7 +107,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         $drawings = [];
         foreach ($this->records as $index => $application) {
-            $imagePath = storage_path("app/applications/{$application->application_id}.jpg");
+            // $imagePath = storage_path("app/applications/{$application->application_id}.jpg");
+            $imagePath = public_path("storage/passport_photos/{$application->passport_size_photo}");
             if (file_exists($imagePath)) {
                 $drawing = new Drawing();
                 $drawing->setName("Profile Picture");
