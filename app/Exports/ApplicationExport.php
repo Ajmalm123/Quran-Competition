@@ -36,12 +36,12 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->application_id,
             $application->passport_size_photo ? url('storage/' . $application->passport_size_photo) : 'N/A',
             $application->full_name,
-            $application->date_of_birth,
+            \Carbon\Carbon::parse($application->date_of_birth)->format('d-m-Y'),
             $application->district,
             $application->zone?->name,
             $application->zone?->assignment?->center_id ?? 'N/A',
             $application->zone?->assignment?->location ?? 'N/A',
-            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('d-m-Y') : 'N/A',
+            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('F j, Y') : 'N/A',
             $application->zone?->assignment?->time ? \Carbon\Carbon::parse($application->zone?->assignment?->time)->format('h:i A') : 'N/A',
         ];
     }
