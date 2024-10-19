@@ -41,7 +41,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->zone?->name,
             $application->zone?->assignment?->center_id ?? 'N/A',
             $application->zone?->assignment?->location ?? 'N/A',
-            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('F j, Y') : 'N/A',
+            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('d-m-Y') : 'N/A',
             $application->zone?->assignment?->time ? \Carbon\Carbon::parse($application->zone?->assignment?->time)->format('h:i A') : 'N/A',
         ];
     }
