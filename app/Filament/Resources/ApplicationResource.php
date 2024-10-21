@@ -386,7 +386,7 @@ EOT;
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('sendMail')
-                        ->label('Send Mail')
+                        ->label('Send Center Details Mail')
                         ->icon('heroicon-o-envelope')
                         ->color('success')
                         ->action(function (Collection $records) {
@@ -436,7 +436,7 @@ EOT;
                                     'location' => $application->zone->assignment->location ?? 'N/A',
                                     'date' => $application->zone->assignment->date ?? 'N/A',
                                     'reporting_time' => $application->zone->assignment->time ?? 'N/A',
-                                    'subject' => 'AP Aslam Holy Quran Award 2024 - Admit Card',
+                                    'subject' => 'Admit Card',
                                     'page' => 'emails.admit-card-bulk-mail',
                                     'pdfPath' => $pdfPath, 
                                 ];
