@@ -350,7 +350,7 @@ class ApplicationResource extends Resource
 • മത്സരത്തിന്റെ ആദ്യാവസാനം സദസ്സിൽ സാന്നിധ്യം ഉണ്ടായിരിക്കണം. മത്സരങ്ങൾക്ക് ശേഷമുള്ള സർട്ടിഫിക്കറ്റ് വിതരണം കഴിഞ്ഞതിനുശേഷം മാത്രമേ പിരിഞ്ഞു പോകാവൂ.
 • മത്സരാർത്ഥിക്കുള്ള അന്നേ ദിവസത്തെ ഭക്ഷണം ഉണ്ടായിരിക്കും.
 
-വിശ്വസ്ഥതയോടെ,
+വ��ശ്വസ്ഥതയോടെ,
 കോർഡിനേറ്റർ
 എപി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി
 
@@ -399,6 +399,8 @@ EOT;
                                     'location' => $application->zone->assignment->location ?? 'N/A',
                                     'date' => $application->zone->assignment->date ?? 'N/A',
                                     'reporting_time' => $application->zone->assignment->time ?? 'N/A',
+                                    'subject' => 'AP Aslam Holy Quran Award 2024 - Preliminary Round Competition Details',
+                                    'page' => 'emails.bulk-mail',
                                 ];
 
                                 Mail::mailer('smtp2')->to($application->email)->queue(new BulkMail($mailData));
@@ -419,11 +421,49 @@ EOT;
                         ->modalSubmitActionLabel('Yes, Send Emails')
                         ->modalCancelActionLabel('Cancel')
                         ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('sendAdmitCardMail')
+                        ->label('Send Admit Card Mail')
+                        ->icon('heroicon-o-envelope')
+                        ->color('success')
+                        ->action(function (Collection $records) {
+                            foreach ($records as $application) {
+                                $pdfPath = public_path("storage/admit_cards/{$application->application_id}.pdf");
+                                
+                                $mailData = [
+                                    'applicant_name' => $application->full_name,
+                                    'zone' => $application->zone->name ?? 'N/A',
+                                    'center_name' => $application->zone->assignment->center_id ?? 'N/A',
+                                    'location' => $application->zone->assignment->location ?? 'N/A',
+                                    'date' => $application->zone->assignment->date ?? 'N/A',
+                                    'reporting_time' => $application->zone->assignment->time ?? 'N/A',
+                                    'subject' => 'AP Aslam Holy Quran Award 2024 - Admit Card',
+                                    'page' => 'emails.admit-card-bulk-mail',
+                                    'pdfPath' => $pdfPath, 
+                                ];
+
+                                Mail::mailer('smtp2')->to($application->email)->queue(new BulkMail($mailData));
+                            }
+
+                            Notification::make()
+                                ->title('Emails Queued Successfully')
+                                ->body('All selected emails have been queued for sending.')
+                                ->icon('heroicon-o-check-circle')
+                                ->iconColor('success')
+                                ->duration(5000)
+                                ->success()
+                                ->send();
+                        })
+                        ->requiresConfirmation()
+                        ->modalHeading('Confirm Email Send')
+                        ->modalDescription('Are you sure you want to send emails with admit cards to all selected applications?')
+                        ->modalSubmitActionLabel('Yes, Send Emails')
+                        ->modalCancelActionLabel('Cancel')
+                        ->deselectRecordsAfterCompletion(),
                 ])
             ])
             ->striped()
             // ->columnSpanFull()
-            ->paginated([10, 25, 50, 100,'all']);
+            ->paginated([10, 25, 50, 100, 'all']);
         // ->responsive();
     }
 

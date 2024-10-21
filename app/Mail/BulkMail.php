@@ -3,11 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Attachment;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class BulkMail extends Mailable
 {
@@ -15,32 +17,50 @@ class BulkMail extends Mailable
 
     public $mailData;
 
+
+    /**
+     * Create a new message instance.
+     */
     public function __construct($mailData)
     {
         $this->mailData = $mailData;
     }
 
+    /**
+     * Get the message envelope.
+     */
     public function envelope(): Envelope
     {
-        $previewText = 'എപി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024 ന്റെ പ്രാഥമിക റൗണ്ട് മത്സരത്തിൽ താങ്കൾ തിരഞ്ഞെടുത്ത മേഖലയിലെ മത്സരത്തിന്റെ സമയക്രമം താഴെ കൊടുക്കുന്നു.';
-
         return new Envelope(
-            subject: 'AP Aslam Holy Quran Award 2024 - Preliminary Round Competition Details',
-            metadata: [
-                'preview_text' => $previewText,
-            ],
+            subject: $this->mailData['subject'],
         );
     }
 
+    /**
+     * Get the message content definition.
+     */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.bulk-mail',
+            view: $this->mailData['page'],
         );
     }
 
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
     public function attachments(): array
     {
+        if (isset($this->mailData['pdfPath']) && file_exists($this->mailData['pdfPath'])) {
+            return [
+                Attachment::fromPath($this->mailData['pdfPath'])
+                    ->as('admit_card.pdf')
+                    ->withMime('application/pdf'),
+            ];
+        }
+
         return [];
     }
 }
