@@ -37,7 +37,8 @@ class Application extends Model
         'birth_certificate',
         'letter_of_recommendation',
         'status',
-        'marks'
+        'marks',
+        'token_number'
     ];
 
     const GENDER = [

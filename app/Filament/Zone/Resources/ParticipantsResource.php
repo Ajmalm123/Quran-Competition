@@ -42,7 +42,6 @@ class ParticipantsResource extends Resource
 
     protected static ?string $pluralLabel = 'Participants';
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -95,19 +94,14 @@ class ParticipantsResource extends Resource
                     ->label('Marks')
                     ->updateStateUsing(function ($state, $record) {
                         DB::transaction(function () use ($state, $record) {
-                            // Update the marks
                             $record->marks = $state;
                             $record->save();
 
-                            // Get the zone ID of the current record
                             $zoneId = $record->zone_id;
-
-                            // Get all admitted applications for this zone, ordered by marks descending
                             $zoneApplications = Application::where('zone_id', $zoneId)
                                 ->where('admit_status', 'Admitted')
                                 ->orderByDesc('marks')
                                 ->get();
-                            // Update participation_position for all applications in this zone
                             foreach ($zoneApplications as $index => $application) {
                                 $position = $index + 1;
                                 $application->participation_position = $position;
@@ -120,6 +114,25 @@ class ParticipantsResource extends Resource
                             ->success()
                             ->send();
                     }),
+
+                TextInputColumn::make('token_number')
+                    ->type('text')
+                    ->rules(['string', 'max:255'])
+                    ->sortable()
+                    ->alignCenter()
+                    ->label('Token Number')
+                    ->updateStateUsing(function ($state, $record) {
+                        DB::transaction(function () use ($state, $record) {
+                            $record->token_number = $state;
+                            $record->save();
+                        });
+
+                        Notification::make()
+                            ->title('Token number updated successfully')
+                            ->success()
+                            ->send();
+                    }),
+
                 TextColumn::make('participation_position')
                     ->searchable()->label('Position')
             ])

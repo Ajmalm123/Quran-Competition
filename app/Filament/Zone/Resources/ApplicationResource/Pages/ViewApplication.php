@@ -5,7 +5,7 @@ namespace App\Filament\Zone\Resources\ApplicationResource\Pages;
 use Filament\Actions;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
-use Filament\Actions\StaticAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\IconPosition;
@@ -48,10 +48,16 @@ class ViewApplication extends ViewRecord
                 ->icon('heroicon-o-check')
                 ->color('success')
                 ->requiresConfirmation()
-                ->action(function (Application $record) {
+                ->form([
+                    TextInput::make('token_number')
+                        ->label('Token Number')
+                        ->placeholder('Enter token number'),
+                ])
+                ->action(function (array $data, Application $record) {
                     $record->admit_status = 'Admitted';
+                    $record->token_number = $data['token_number'];
                     $record->save();
-                    Notification::make()->success()->title('Application Admitted')->send();
+                    Notification::make()->success()->title('Application Admitted')->body("Token number: {$data['token_number']}")->send();
                 })
                 ->hidden(fn(Application $application) => $application->admit_status == 'Declined'|| $application->admit_status == 'Admitted'|| $application->admit_status =='Absent'),
 
