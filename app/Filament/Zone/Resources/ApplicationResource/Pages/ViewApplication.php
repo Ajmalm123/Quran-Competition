@@ -47,6 +47,7 @@ class ViewApplication extends ViewRecord
                 ->label('Admit')
                 ->icon('heroicon-o-check')
                 ->color('success')
+                ->requiresConfirmation()
                 ->action(function (Application $record) {
                     $record->admit_status = 'Admitted';
                     $record->save();
@@ -58,6 +59,7 @@ class ViewApplication extends ViewRecord
                 ->label('Decline')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
+                ->requiresConfirmation()
                 ->action(function (Application $record) {
                     $record->admit_status = 'Declined';
                     $record->save();
