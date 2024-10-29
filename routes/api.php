@@ -12,6 +12,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware([ValidateApiKey::class, 'throttle:60,1'])->group(function () {
     Route::get('/approved-applicants', [ApplicantController::class, 'index']);
-    // Update the endpoint to application/marks/update
+    Route::get('/applicant/{application_id}', [ApplicantController::class, 'show']);
     Route::post('/application/marks/update', [ApplicationController::class, 'updateMarks']);
 });

@@ -7,6 +7,7 @@ use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApplicantController extends Controller
 {
@@ -33,5 +34,24 @@ class ApplicantController extends Controller
         });
 
         return ApplicationResource::collection($applicants);
+    }
+
+    public function show($application_id)
+    {
+        $cacheKey = "applicant_details_{$application_id}";
+
+        $applicant = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($application_id) {
+            return Application::where('application_id', $application_id)
+                ->with('zone:id,name')
+                ->first();
+        });
+
+        if (!$applicant) {
+            return response()->json([
+                'message' => 'Applicant not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return new ApplicationResource($applicant);
     }
 }
