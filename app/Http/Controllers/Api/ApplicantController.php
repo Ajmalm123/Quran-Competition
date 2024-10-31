@@ -15,7 +15,7 @@ class ApplicantController extends Controller
     {
         $perPage = $request->input('per_page', 15);
         $zoneId = $request->input('zone_id');
-        $admitStatus = $request->input('admit_status', 'all');
+        $admitStatus = $request->input('admit_status');
 
         $query = Application::where('status', 'Approved')
             ->with('zone:id,name')
