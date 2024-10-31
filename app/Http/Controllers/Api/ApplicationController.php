@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ApplicationResource;
 
 class ApplicationController extends Controller
 {
@@ -37,5 +38,29 @@ class ApplicationController extends Controller
                 'marks' => $application->marks,
             ]
         ]);
+    }
+
+    public function markCompleted($application_id)
+    {
+        try {
+            $application = Application::findOrFail($application_id);
+
+            $application->update([
+                'admit_status' => 'Completed'
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Application marked as completed successfully',
+                'data' => new ApplicationResource($application)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to mark application as completed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

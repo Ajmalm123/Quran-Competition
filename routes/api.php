@@ -14,4 +14,5 @@ Route::middleware([ValidateApiKey::class, 'throttle:60,1'])->group(function () {
     Route::get('/approved-applicants', [ApplicantController::class, 'index']);
     Route::get('/applicant/{application_id}', [ApplicantController::class, 'show']);
     Route::post('/application/marks/update', [ApplicationController::class, 'updateMarks']);
+    Route::post('/application/{application_id}/mark-completed', [ApplicationController::class, 'markCompleted']);
 });
