@@ -38,7 +38,8 @@ class Application extends Model
         'letter_of_recommendation',
         'status',
         'marks',
-        'token_number'
+        'token_number',
+        'admit_status'
     ];
 
     const GENDER = [
