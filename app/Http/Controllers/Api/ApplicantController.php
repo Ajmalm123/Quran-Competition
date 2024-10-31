@@ -17,22 +17,27 @@ class ApplicantController extends Controller
         $zoneId = $request->input('zone_id');
         $admitStatus = $request->input('admit_status', 'all');
 
-        $cacheKey = "approved_applicants_page_{$request->input('page', 1)}_perPage_{$perPage}_zoneId_{$zoneId}_admitStatus_{$admitStatus}";
+        $query = Application::where('status', 'Approved')
+            ->with('zone:id,name')
+            ->whereHas('zone', function ($subQuery) use ($zoneId) {
+                $subQuery->where('id', $zoneId);
+            });
 
-        $applicants = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($perPage, $zoneId, $admitStatus) {
-            $query = Application::where('status', 'Approved')
-                ->with('zone:id,name')
-                ->whereHas('zone', function ($subQuery) use ($zoneId) {
-                    $subQuery->where('id', $zoneId);
-                });
+        switch ($admitStatus) {
+            case '1':
+                $query->whereIn('admit_status', ['Admitted', 'Completed']);
+                break;
+            case '2':
+                $query->where('admit_status', 'Admitted');
+                break;
+            case '3':
+                $query->where('admit_status', 'Completed');
+                break;
+            default:
+                $query->where('admit_status', 'Pending');
+        }
 
-            if ($admitStatus !== 'all') {
-                $query->where('admit_status', $admitStatus);
-            }
-
-            return $query->paginate($perPage);
-        });
-
+        $applicants = $query->paginate($perPage);
         return ApplicationResource::collection($applicants);
     }
 
