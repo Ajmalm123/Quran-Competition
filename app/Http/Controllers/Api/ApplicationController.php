@@ -43,7 +43,7 @@ class ApplicationController extends Controller
     public function markCompleted($application_id)
     {
         try {
-            $application = Application::findOrFail($application_id);
+            $application = Application::where('application_id', $application_id)->firstOrFail();
 
             $application->update([
                 'admit_status' => 'Completed'
