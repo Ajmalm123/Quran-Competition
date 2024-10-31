@@ -29,6 +29,8 @@ class ApplicationResource extends JsonResource
             'passport_size_photo' => $this->getFileUrl('passport_size_photo'),
             'birth_certificate' => $this->getFileUrl('birth_certificate'),
             'letter_of_recommendation' => $this->getFileUrl('letter_of_recommendation'),
+            'status' => $this->status,
+            'admit_status' => $this->admit_status,
         ];
     }
 
