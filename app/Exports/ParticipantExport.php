@@ -28,7 +28,7 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
 
     public function collection()
     {
-        return $this->records->sortBy('position');
+        return $this->records->sortBy('participation_position');
     }
 
     public function map($application): array
