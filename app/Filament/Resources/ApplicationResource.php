@@ -36,6 +36,7 @@ use App\Filament\Resources\ApplicationResource\Actions\ExportPdfAction;
 use Filament\Actions\CreateAction;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BulkMail;
+use Filament\Support\Enums\ActionSize;
 
 class ApplicationResource extends Resource
 {
@@ -345,12 +346,12 @@ class ApplicationResource extends Resource
 
 • മത്സരാർത്ഥി റിപ്പോർട്ടിംഗ് ടൈം കൃത്യമായി പാലിക്കേണ്ടതാണ്. റിപ്പോർട്ടിംഗ് കഴിഞ്ഞ് അരമണിക്കൂർ കൊണ്ട് മത്സരങ്ങൾ ആരംഭിക്കുന്നതായിരിക്കും.
 • അപേക്ഷയോടൊപ്പം നൽകിയ ശുപാർശ കത്തും (Recommendation Letter) ഏതെങ്കിലും ഒരു ഐഡി കാർഡും റിപ്പോർട്ടിങ് സമയത്ത് ഹാജരാക്കേണ്ടതാണ്.
-• Participant id card എന്ന പേരിൽ മത്സരത്തിൽ പങ്കെടുക്കുന്നതിന് ഹാജരാക്കേണ്ട admit card എത്രയും പെട്ടെന്ന് തന്നെ ഇ മെയിൽ വഴി അയച്ചു തരുന്നതായിരിക്കും. അതിന്റെ സോഫ്റ്റ്‌ കോപ്പിയോ ഹാർഡ് കോപ്പിയോ ഹാജരാക്കേണ്ടതാണ്.
+• Participant id card എന്ന പേരിൽ മത്സരത്തിൽ പങ്കെടുക്കുന്നതിന് ഹാജരാക്കേണ്ട admit card എത്രയും ��െട്ടെന്ന് തന്നെ ഇ മെയിൽ വഴി അയച്ചു തരുന്നതായിരിക്കും. അതിന്റെ സോഫ്റ്റ്‌ കോപ്പിയോ ഹാർഡ് കോപ്പിയോ ഹാജരാക്കേണ്ടതാണ്.
 • മത്സരത്തിന്റെ എല്ലാ ഘട്ടങ്ങളിലും വിധികർത്താക്കളുടെ തീരുമാനങ്ങൾ അന്തിമമായിരിക്കും.
 • മത്സരത്തിന്റെ ആദ്യാവസാനം സദസ്സിൽ സാന്നിധ്യം ഉണ്ടായിരിക്കണം. മത്സരങ്ങൾക്ക് ശേഷമുള്ള സർട്ടിഫിക്കറ്റ് വിതരണം കഴിഞ്ഞതിനുശേഷം മാത്രമേ പിരിഞ്ഞു പോകാവൂ.
 • മത്സരാർത്ഥിക്കുള്ള അന്നേ ദിവസത്തെ ഭക്ഷണം ഉണ്ടായിരിക്കും.
 
-വ��ശ്വസ്ഥതയോടെ,
+വശ്വസ്ഥതയോടെ,
 കോർഡിനേറ്റർ
 എപി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി
 
@@ -370,6 +371,39 @@ EOT;
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 
                 // ExportPdfAction::make(),
+
+                Action::make('transfer_zone')
+                    ->label('Transfer Zone')
+                    ->icon('heroicon-o-arrow-path-rounded-square')
+                    ->color('warning')
+                    ->size(ActionSize::Small)
+                    ->form([
+                        Select::make('zone_id')
+                            ->label('New Zone')
+                            ->options(Zone::pluck('name', 'id'))
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                    ])
+                    ->action(function (Application $record, array $data): void {
+                        $oldZone = $record->zone->name ?? 'None';
+                        $newZone = Zone::find($data['zone_id'])->name;
+                        
+                        $record->update([
+                            'zone_id' => $data['zone_id']
+                        ]);
+
+                        Notification::make()
+                            ->title('Zone Transfer Successful')
+                            ->body("Transferred {$record->full_name} from {$oldZone} to {$newZone}")
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Transfer Zone')
+                    ->modalDescription(fn (Application $record) => "Are you sure you want to transfer {$record->full_name} to a different zone?")
+                    ->modalSubmitActionLabel('Yes, transfer zone')
+                    ->modalCancelActionLabel('Cancel'),
 
             ])
             ->bulkActions([
