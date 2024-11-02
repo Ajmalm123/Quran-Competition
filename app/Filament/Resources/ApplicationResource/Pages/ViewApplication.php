@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\ApplicationResource\Pages;
 
+use App\Models\Zone;
 use Filament\Actions;
 use App\Jobs\SendEmailJob;
 use App\Models\Application;
 use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\IconPosition;
@@ -97,6 +99,40 @@ class ViewApplication extends ViewRecord
                         echo $pdf->output();
                     }, "{$record->application_id}.pdf");
                 })->defaultView(StaticAction::LINK_VIEW),
+            Actions\Action::make('transfer_zone')
+                ->label('Transfer Zone')
+                ->icon('heroicon-o-arrow-path-rounded-square')
+                ->color('warning')
+                ->form([
+                    Select::make('zone_id')
+                        ->label('New Zone')
+                        ->options(function (Application $record) {
+                            return Zone::where('id', '!=', $record->zone_id)
+                                ->pluck('name', 'id');
+                        })
+                        ->required()
+                        ->searchable()
+                        ->preload()
+                ])
+                ->action(function (Application $record, array $data): void {
+                    $oldZone = $record->zone->name ?? 'None';
+                    $newZone = Zone::find($data['zone_id'])->name;
+
+                    $record->update([
+                        'zone_id' => $data['zone_id']
+                    ]);
+
+                    Notification::make()
+                        ->title('Zone Transfer Successful')
+                        ->body("Transferred {$record->full_name} from {$oldZone} to {$newZone}")
+                        ->success()
+                        ->send();
+                })
+                ->requiresConfirmation()
+                ->modalHeading('Transfer Zone')
+                ->modalDescription(fn(Application $record) => "Are you sure you want to transfer {$record->full_name} to a different zone?")
+                ->modalSubmitActionLabel('Yes, transfer zone')
+                ->modalCancelActionLabel('Cancel'),
 
             Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
         ];
