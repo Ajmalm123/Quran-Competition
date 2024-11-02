@@ -34,7 +34,7 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
     public function map($application): array
     {
         return [
-            $application->position ?? 'N/A',
+            $application->participation_position ?? 'N/A',
             $application->application_id,
             $application->full_name,
             $application->token_number ?? 'N/A',
