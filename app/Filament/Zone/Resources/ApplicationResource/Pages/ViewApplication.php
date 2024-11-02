@@ -71,7 +71,7 @@ class ViewApplication extends ViewRecord
                     $record->save();
                     Notification::make()->success()->title('Application Declined')->send();
                 })
-                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status == 'Admitted'||$application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
+                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
 
             Actions\Action::make('absent')
                 ->label('Absent')
