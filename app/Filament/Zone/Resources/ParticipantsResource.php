@@ -219,7 +219,7 @@ class ParticipantsResource extends Resource
                         ->label('Export to Excel')
                         ->icon('heroicon-m-document-arrow-down')
                         ->action(function (Collection $records) {
-                            return Excel::download(new ParticipantExport($records), 'Applications.xlsx');
+                            return Excel::download(new ParticipantExport($records), 'Participants.xlsx');
                         })
                         ->deselectRecordsAfterCompletion(),
                 ])
