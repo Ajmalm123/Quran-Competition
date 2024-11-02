@@ -227,7 +227,7 @@ class ParticipantsResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
                     ->where('zone_id', auth()->id())
-                    ->where('admit_status', 'Admitted')
+                    ->whereIn('admit_status', values: ['Admitted', 'Completed'])
             );
     }
 

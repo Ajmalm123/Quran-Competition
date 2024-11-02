@@ -192,7 +192,7 @@ class ParticipantsResource extends Resource
             ->striped()
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
-                    ->where('admit_status', 'Admitted')
+                    ->whereIn('admit_status', values: ['Admitted', 'Completed'])
             );
     }
 
