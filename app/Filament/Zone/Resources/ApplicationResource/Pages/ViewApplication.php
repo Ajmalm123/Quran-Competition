@@ -82,7 +82,7 @@ class ViewApplication extends ViewRecord
                     $record->save();
                     Notification::make()->success()->title('Application Marked as Absent')->send();
                 })
-                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status == 'Admitted'||$application->admit_status =='Absent'),
+                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status == 'Admitted'||$application->admit_status =='Absent' || $application->admit_status == 'Completed'),
 
             Actions\EditAction::make()->color('info'),
         ];
