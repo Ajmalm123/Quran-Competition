@@ -31,6 +31,7 @@ class ApplicationResource extends JsonResource
             'letter_of_recommendation' => $this->getFileUrl('letter_of_recommendation'),
             'status' => $this->status,
             'admit_status' => $this->admit_status,
+            'token_number' => $this->token_number,
         ];
     }
 
