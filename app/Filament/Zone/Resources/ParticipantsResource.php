@@ -99,7 +99,7 @@ class ParticipantsResource extends Resource
 
                             $zoneId = $record->zone_id;
                             $zoneApplications = Application::where('zone_id', $zoneId)
-                                ->where('admit_status', 'Admitted')
+                                ->where('admit_status', 'Completed')
                                 ->orderByDesc('marks')
                                 ->get();
                             foreach ($zoneApplications as $index => $application) {
