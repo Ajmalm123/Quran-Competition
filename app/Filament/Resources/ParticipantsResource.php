@@ -14,6 +14,7 @@ use App\Models\Participants;
 use App\Filament\Notification;
 use Filament\Resources\Resource;
 use App\Exports\ApplicationExport;
+use App\Exports\ParticipantExport;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
@@ -184,7 +185,7 @@ class ParticipantsResource extends Resource
                         ->label('Export to Excel')
                         ->icon('heroicon-m-document-arrow-down')
                         ->action(function (Collection $records) {
-                            return Excel::download(new ApplicationExport($records), 'Applications.xlsx');
+                            return Excel::download(new ParticipantExport($records), 'Participants.xlsx');
                         })
                         ->deselectRecordsAfterCompletion(),
                 ])

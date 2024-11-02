@@ -58,8 +58,8 @@ class ViewApplication extends ViewRecord
                     $record->token_number = $data['token_number'];
                     $record->save();
                     Notification::make()->success()->title('Application Admitted')->body("Token number: {$data['token_number']}")->send();
-                })
-                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'|| $application->admit_status == 'Admitted'|| $application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
+                }),
+            // ->hidden(fn(Application $application) => $application->admit_status == 'Declined'|| $application->admit_status == 'Admitted'|| $application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
 
             Actions\Action::make('decline')
                 ->label('Decline')
@@ -70,8 +70,8 @@ class ViewApplication extends ViewRecord
                     $record->admit_status = 'Declined';
                     $record->save();
                     Notification::make()->success()->title('Application Declined')->send();
-                })
-                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
+                }),
+            // ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status =='Absent'|| $application->admit_status == 'Completed'),
 
             Actions\Action::make('absent')
                 ->label('Absent')
@@ -81,8 +81,17 @@ class ViewApplication extends ViewRecord
                     $record->admit_status = 'Absent';
                     $record->save();
                     Notification::make()->success()->title('Application Marked as Absent')->send();
-                })
-                ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status == 'Admitted'||$application->admit_status =='Absent' || $application->admit_status == 'Completed'),
+                }),
+            Actions\Action::make('pending')
+                ->label('Pending')
+                ->icon('heroicon-o-clock')
+                ->color('warning')
+                ->action(function (Application $record) {
+                    $record->admit_status = 'Pending';
+                    $record->save();
+                    Notification::make()->success()->title('Application Marked as Pending')->send();
+                }),
+            // ->hidden(fn(Application $application) => $application->admit_status == 'Declined'||$application->admit_status == 'Admitted'||$application->admit_status =='Absent' || $application->admit_status == 'Completed'),
 
             Actions\EditAction::make()->color('info'),
         ];
