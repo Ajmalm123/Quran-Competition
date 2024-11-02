@@ -88,7 +88,7 @@ class ParticipantsResource extends Resource
 
                 TextInputColumn::make('marks')
                     ->type('number')
-                    ->rules(['numeric', 'min:0', 'max:200'])
+                    ->rules(['numeric', 'min:0', 'max:700'])
                     ->sortable()
                     ->alignCenter()
                     ->label('Marks')
