@@ -134,7 +134,17 @@ class ParticipantsResource extends Resource
                     }),
 
                 TextColumn::make('participation_position')
-                    ->searchable()->label('Position')
+                    ->searchable()->label('Position'),
+                BadgeColumn::make('admit_status')
+                    ->colors([
+                        'info' => 'Admitted',
+                        'success' => 'Completed'
+                    ])
+                    ->icons([
+                        'heroicon-o-check-circle' => 'Admitted',
+                        'heroicon-o-check-badge' => 'Completed'
+                    ])
+                    ->sortable(),
             ])
             ->defaultSort('participation_position', 'asc')
             ->filters([
@@ -164,6 +174,12 @@ class ParticipantsResource extends Resource
                         }
                         return $indicators;
                     }),
+                SelectFilter::make('admit_status')
+                    ->options([
+                        'Admitted' => 'Admitted',
+                        'Completed' => 'Completed',
+                    ])
+                    ->indicator('Admit Status'),
             ])
             ->filtersFormColumns(1)
             ->actions([
@@ -180,7 +196,7 @@ class ParticipantsResource extends Resource
                             'application' => $application,
                             'subject' => $data['Subject'],
                             'message' => $data['message'],
-                            'mailer'=>'smtp'
+                            'mailer' => 'smtp'
                         ];
                         SendEmailJob::dispatch($dispatchData);
                         Notification::make()->title('Mail Sent Successfully')->success()

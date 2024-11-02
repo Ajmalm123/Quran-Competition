@@ -79,13 +79,15 @@ class ApplicationResource extends Resource
                         'warning' => 'Pending',
                         'success' => 'Admitted',
                         'danger' => 'Declined',
-                        'gray' => 'Absent'
+                        'gray' => 'Absent',
+                        'info' => 'Completed'
                     ])
                     ->icons([
                         'heroicon-o-clock' => 'Pending',
                         'heroicon-o-check-circle' => 'Admitted',
                         'heroicon-o-x-circle' => 'Declined',
-                        'heroicon-o-x-mark' => 'Absent'
+                        'heroicon-o-x-mark' => 'Absent',
+                        'heroicon-o-check-badge' => 'Completed'
                     ])
                     ->sortable(),
                 // TextColumn::make('whatsapp')
@@ -105,6 +107,7 @@ class ApplicationResource extends Resource
                         'Pending' => 'Pending',
                         'Admitted' => 'Admitted',
                         'Declined' => 'Declined',
+                        'Completed' => 'Completed',
                         'Absent' => 'Absent'
                     ])
                     ->indicator('Admit Status'),

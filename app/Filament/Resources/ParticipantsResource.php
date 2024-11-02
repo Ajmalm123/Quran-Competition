@@ -23,8 +23,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Columns\TextInputColumn;
 use Illuminate\Database\Eloquent\Collection;
@@ -88,6 +90,16 @@ class ParticipantsResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->icon('heroicon-m-phone'),
+                BadgeColumn::make('admit_status')
+                    ->colors([
+                        'info' => 'Admitted',
+                        'success' => 'Completed'
+                    ])
+                    ->icons([
+                        'heroicon-o-check-circle' => 'Admitted',
+                        'heroicon-o-check-badge' => 'Completed'
+                    ])
+                    ->sortable(),
 
 
 
@@ -127,7 +139,13 @@ class ParticipantsResource extends Resource
                                 $data['created_until'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
-                    })
+                    }),
+                SelectFilter::make('admit_status')
+                    ->options([
+                        'Admitted' => 'Admitted',
+                        'Completed' => 'Completed',
+                    ])
+                    ->indicator('Admit Status'),
             ])
             ->filtersFormColumns(2)
             ->actions([
@@ -144,7 +162,7 @@ class ParticipantsResource extends Resource
                             'application' => $application,
                             'subject' => $data['Subject'],
                             'message' => $data['message'],
-                            'mailer'=>'smtp'
+                            'mailer' => 'smtp'
                         ];
                         SendEmailJob::dispatch($dispatchData);
                         Notification::make()->title('Mail Sent Successfully')->success()->withoutDashboardAction()
