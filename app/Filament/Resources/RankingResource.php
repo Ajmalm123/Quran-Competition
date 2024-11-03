@@ -19,7 +19,7 @@ class RankingResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static ?string $navigationLabel = 'Participants Ranking';
     // protected static ?string $pluralLabel = 'Rankings';
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
