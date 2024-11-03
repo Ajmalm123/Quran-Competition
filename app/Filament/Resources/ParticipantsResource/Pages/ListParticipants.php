@@ -9,6 +9,8 @@ use Filament\Resources\Pages\ListRecords;
 class ListParticipants extends ListRecords
 {
     protected static string $resource = ParticipantsResource::class;
+    protected ?string $maxContentWidth = 'full';
+
 
     protected function getHeaderActions(): array
     {
