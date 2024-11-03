@@ -26,6 +26,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Filament\Zone\Resources\ApplicationResource\Pages;
+use App\Exports\AttendanceSheetExport;
 
 class ApplicationResource extends Resource
 {
@@ -198,6 +199,16 @@ class ApplicationResource extends Resource
                         ->color('warning')
                         ->action(fn(Collection $records) => $records->each->update(['admit_status' => 'Absent']))
                         ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('download_attendance')
+                        ->label('Download Attendance Sheet')
+                        ->icon('heroicon-o-clipboard-document-list')
+                        ->action(function (Collection $records) {
+                            return Excel::download(
+                                new AttendanceSheetExport($records), 
+                                'Attendance_Sheet.xlsx'
+                            );
+                        })
                         ->deselectRecordsAfterCompletion(),
                 ])
             ])
