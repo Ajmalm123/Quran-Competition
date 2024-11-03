@@ -197,15 +197,17 @@ class ParticipantsResource extends Resource
                     ->whereIn('id', function ($subquery) {
                         $subquery->select('a.id')
                             ->from('applications as a')
-                            ->join('applications as b', function ($join) {
-                                $join->on('a.zone_id', '=', 'b.zone_id')
-                                    ->on('a.participation_position', '>=', 'b.participation_position');
-                            })
-                            ->groupBy('a.id')
-                            ->havingRaw('COUNT(*) <= 5')
+                            ->whereRaw('(
+                                SELECT COUNT(*)
+                                FROM applications b
+                                WHERE b.zone_id = a.zone_id
+                                AND b.participation_position <= a.participation_position
+                            ) <= 5')
                             ->orderBy('a.zone_id')
-                            ->orderBy('a.participation_position');
+                            ->orderBy('a.participation_position', 'asc');
                     })
+                    ->orderBy('zone_id')
+                    ->orderBy('participation_position', 'asc')
             );
     }
 
