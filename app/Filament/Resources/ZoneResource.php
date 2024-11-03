@@ -38,18 +38,14 @@ class ZoneResource extends Resource
 
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
-                    ->password()
-                    ->required(fn ($context) => $context === 'create')
+                    ->required()
                     ->minLength(8)
                     ->maxLength(255)
-                    ->dehydrateStateUsing(function ($state) {
-                        if (empty($state)) {
-                            return null;
-                        }
-                        return Hash::make($state);
-                    })
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->visible(fn ($context) => $context === 'create' || $context === 'edit'),
+                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                    ->dehydrated(fn($state) => filled($state))
+                    ->afterStateHydrated(function (Forms\Components\TextInput $component, $state) {
+                        $component->state('');
+                    }),
             ]);
     }
 
