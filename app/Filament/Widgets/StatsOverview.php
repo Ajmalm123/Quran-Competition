@@ -92,13 +92,11 @@ class StatsOverview extends BaseWidget
                     'tableFilters[status][value]' => 'Withheld'
                 ])),
 
-            Stat::make('Pending Review', $createdCount)
-                ->description($createdCount > 0 ? number_format(($createdCount / $totalCount) * 100, 1) . '% of total' : 'No pending applications')
-                ->descriptionIcon('heroicon-m-clock')
-                ->color('gray')
-                ->url(route('filament.admin.resources.applications.index', [
-                    'tableFilters[status][value]' => 'Created'
-                ])),
+            Stat::make('Participants Ranking', Application::whereNotNull('marks')->count())
+                ->description('View overall ranking')
+                ->descriptionIcon('heroicon-m-trophy')
+                ->color('success')
+                ->url(route('filament.admin.resources.rankings.index')),
 
             Stat::make('Latest Application', $latestApplication ? $latestApplication->full_name : 'N/A')
                 ->description($latestApplication ? 'Submitted on ' . $latestApplication->created_at->format('M d, Y') : 'No applications yet')
