@@ -19,10 +19,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
-use App\Filament\Resources\ZoneResource;
-use App\Filament\Resources\RankingResource;
-use App\Filament\Resources\ApplicationResource;
-use App\Filament\Resources\ParticipantsResource;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -70,12 +66,6 @@ class AdminPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->authMiddleware([
                 Authenticate::class,
-            ])->authGuard('admin')
-            ->resources([
-                ApplicationResource::class,
-                ZoneResource::class,
-                ParticipantsResource::class,
-                RankingResource::class,
-            ]);
+            ])->authGuard('admin');
     }
 }

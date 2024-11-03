@@ -8,7 +8,10 @@ use Filament\Pages\Concerns\ExposesTableToWidgets;
 
 class ListRankings extends ListRecords
 {
+
     use ExposesTableToWidgets;
+    protected ?string $maxContentWidth = 'full';
+
 
     protected static string $resource = RankingResource::class;
-} 
+}
