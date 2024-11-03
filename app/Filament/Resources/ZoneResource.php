@@ -36,16 +36,20 @@ class ZoneResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
 
-                    Forms\Components\TextInput::make('password')
+                Forms\Components\TextInput::make('password')
                     ->label('Password')
-                    ->required()
+                    ->password()
+                    ->required(fn ($context) => $context === 'create')
                     ->minLength(8)
                     ->maxLength(255)
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->dehydrateStateUsing(function ($state) {
+                        if (empty($state)) {
+                            return null;
+                        }
+                        return Hash::make($state);
+                    })
                     ->dehydrated(fn ($state) => filled($state))
-                    ->afterStateHydrated(function (Forms\Components\TextInput $component, $state) {
-                        $component->state('');
-                    }),
+                    ->visible(fn ($context) => $context === 'create' || $context === 'edit'),
             ]);
     }
 
