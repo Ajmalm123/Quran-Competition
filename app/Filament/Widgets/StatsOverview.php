@@ -38,7 +38,7 @@ class StatsOverview extends BaseWidget
 
     protected function getTablePage(): string
     {
-        return ListApplications::class;
+        // return ListApplications::class;
     }
 
     protected function getStats(): array
