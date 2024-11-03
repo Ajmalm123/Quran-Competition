@@ -193,10 +193,11 @@ class ParticipantsResource extends Resource
             ->striped()
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
-                    ->whereIn('admit_status', values: ['Admitted', 'Completed'])
+                    ->whereIn('admit_status', ['Admitted', 'Completed'])
                     ->whereIn('id', function ($subquery) {
                         $subquery->select('a.id')
                             ->from('applications as a')
+                            ->whereNotNull('a.participation_position')
                             ->whereRaw('(
                                 SELECT COUNT(*)
                                 FROM applications b
