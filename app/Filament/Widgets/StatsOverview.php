@@ -2,13 +2,12 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\ApplicationResource\Pages\ListApplications;
 use App\Models\Application;
-use Illuminate\Support\Facades\DB;
-use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use App\Filament\Resources\RankingResource\Pages\ListRankings;
-use App\Filament\Resources\ApplicationResource\Pages\ListApplications;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\DB;
 
 class StatsOverview extends BaseWidget
 {
@@ -39,9 +38,7 @@ class StatsOverview extends BaseWidget
 
     protected function getTablePage(): string
     {
-        // return ListApplications::class;
-        return ListRankings::class;
-
+        return ListApplications::class;
     }
 
     protected function getStats(): array
