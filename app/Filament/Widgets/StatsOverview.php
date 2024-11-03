@@ -96,7 +96,7 @@ class StatsOverview extends BaseWidget
                 ->description('View overall ranking')
                 ->descriptionIcon('heroicon-m-trophy')
                 ->color('success')
-                ->url(route('filament.admin.resources.rankings.index')),
+                ->url(route('filament.admin.resources.ranking.index')),
 
             Stat::make('Latest Application', $latestApplication ? $latestApplication->full_name : 'N/A')
                 ->description($latestApplication ? 'Submitted on ' . $latestApplication->created_at->format('M d, Y') : 'No applications yet')
