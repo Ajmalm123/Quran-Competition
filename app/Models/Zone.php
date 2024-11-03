@@ -36,6 +36,7 @@ class Zone extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@apaslam.com');
+        // Allow all zone users to access the panel
+        return true;
     }
 }
