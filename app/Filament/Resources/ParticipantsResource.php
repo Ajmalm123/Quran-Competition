@@ -194,6 +194,18 @@ class ParticipantsResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
                     ->whereIn('admit_status', values: ['Admitted', 'Completed'])
+                    ->whereIn('id', function ($subquery) {
+                        $subquery->select('a.id')
+                            ->from('applications as a')
+                            ->join('applications as b', function ($join) {
+                                $join->on('a.zone_id', '=', 'b.zone_id')
+                                    ->on('a.participation_position', '>=', 'b.participation_position');
+                            })
+                            ->groupBy('a.id')
+                            ->havingRaw('COUNT(*) <= 5')
+                            ->orderBy('a.zone_id')
+                            ->orderBy('a.participation_position');
+                    })
             );
     }
 
