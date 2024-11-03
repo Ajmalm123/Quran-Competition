@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use App\Models\Application;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\RankingResource\Pages;
@@ -17,8 +18,17 @@ class RankingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static ?string $navigationLabel = 'Participants Ranking';
-    protected static ?string $pluralLabel = 'Rankings';
+    // protected static ?string $pluralLabel = 'Rankings';
     protected static ?int $navigationSort = 6;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                //
+            ]);
+    }
+
 
     public static function table(Table $table): Table
     {
@@ -38,31 +48,31 @@ class RankingResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->copyMessage('Application ID copied')
-                    ->copyMessageDuration(1500)
-                    ->icon('heroicon-m-identification')
+                    // ->copyMessageDuration(1500)
+                    // ->icon('heroicon-m-identification')
                     ->alignCenter(),
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable()
                     ->sortable()
                     ->wrap()
-                    ->weight('bold')
-                    ->icon('heroicon-m-user'),
+                    ->weight('bold'),
+                    // ->icon('heroicon-m-user'),
                 TextColumn::make('zone.name')
                     ->label('Zone')
                     ->sortable()
                     ->searchable()
                     ->badge()
-                    ->color('warning')
-                    ->icon('heroicon-m-map-pin'),
+                    ->color('warning'),
+                    // ->icon('heroicon-m-map-pin'),
                 TextColumn::make('marks')
                     ->label('Total Marks')
                     ->sortable()
                     ->searchable()
-                    ->badge()
+                    // ->badge()
                     ->alignCenter()
-                    ->size('lg')
-                    ->icon('heroicon-m-academic-cap'),
+                    ->size('lg'),
+                    // ->icon('heroicon-m-academic-cap'),
             ])
             ->defaultSort('marks', 'desc')
             ->striped()
