@@ -47,6 +47,7 @@ return [
         'zone' => [
             'driver' => 'session',
             'provider' => 'zones',
+            'session_name' => 'zone_session'
         ],
     ],
 

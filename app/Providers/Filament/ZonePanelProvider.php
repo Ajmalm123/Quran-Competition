@@ -19,6 +19,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Zone\Resources\ApplicationResource;
 use App\Filament\Zone\Resources\ParticipantsResource;
+use App\Http\Middleware\ZoneSession;
 
 
 class ZonePanelProvider extends PanelProvider
@@ -47,7 +48,7 @@ class ZonePanelProvider extends PanelProvider
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
-                StartSession::class,
+                ZoneSession::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
@@ -57,7 +58,8 @@ class ZonePanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->authGuard('zone')
+            ])
+            ->authGuard('zone')
         ;
     }
 }
