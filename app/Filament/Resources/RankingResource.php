@@ -29,34 +29,51 @@ class RankingResource extends Resource
                     ->state(static function ($record, $rowLoop): string {
                         return $rowLoop->iteration;
                     })
+                    ->badge()
+                    ->color('success')
+                    ->alignCenter()
                     ->sortable(),
                 TextColumn::make('application_id')
                     ->label('Application ID')
                     ->searchable()
-                    ->copyable(),
+                    ->copyable()
+                    ->copyMessage('Application ID copied')
+                    ->copyMessageDuration(1500)
+                    ->icon('heroicon-m-identification')
+                    ->alignCenter(),
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable()
                     ->sortable()
-                    ->wrap(),
+                    ->wrap()
+                    ->weight('bold')
+                    ->icon('heroicon-m-user'),
                 TextColumn::make('zone.name')
                     ->label('Zone')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->color('warning')
+                    ->icon('heroicon-m-map-pin'),
                 TextColumn::make('marks')
                     ->label('Total Marks')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->alignCenter()
+                    ->size('lg')
+                    ->icon('heroicon-m-academic-cap'),
             ])
             ->defaultSort('marks', 'desc')
             ->striped()
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereNotNull('marks'));
+            ->hover()
+            ->modifyQueryUsing(fn(Builder $query) => $query->whereNotNull('marks'));
     }
 
     public static function getPages(): array
     {
         return [
-             'index' => Pages\ListRankings::route('/'),
+            'index' => Pages\ListRankings::route('/'),
         ];
     }
-} 
+}
