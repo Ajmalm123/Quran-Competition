@@ -8,6 +8,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\RankingResource\Pages;
+
 
 class RankingResource extends Resource
 {
@@ -54,7 +56,7 @@ class RankingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRankings::route('/'),
+             'index' => Pages\ListRankings::route('/'),
         ];
     }
 } 
