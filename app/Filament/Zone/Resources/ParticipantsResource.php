@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Zone\Resources\ParticipantsResource\Pages;
 use App\Filament\Zone\Resources\ParticipantsResource\RelationManagers;
+use App\Exports\RankListExport;
 
 class ParticipantsResource extends Resource
 {
@@ -221,6 +222,13 @@ class ParticipantsResource extends Resource
                         ->icon('heroicon-m-document-arrow-down')
                         ->action(function (Collection $records) {
                             return Excel::download(new ParticipantExport($records), 'Participants.xlsx');
+                        })
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('export_rank_list')
+                        ->label('Export Rank List')
+                        ->icon('heroicon-m-trophy')
+                        ->action(function (Collection $records) {
+                            return Excel::download(new RankListExport($records), 'RankList.xlsx');
                         })
                         ->deselectRecordsAfterCompletion(),
                 ])
