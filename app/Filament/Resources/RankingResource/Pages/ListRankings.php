@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\RankingResource\Pages;
 
-use App\Filament\Resources\RankingResource;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\RankingResource;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 
 class ListRankings extends ListRecords
 {
+    use ExposesTableToWidgets;
+
     protected static string $resource = RankingResource::class;
 } 
