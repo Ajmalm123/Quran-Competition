@@ -93,6 +93,7 @@ class ParticipantsResource extends Resource
                     ->sortable()
                     ->alignCenter()
                     ->label('Marks')
+                    ->width('150px')
                     ->updateStateUsing(function ($state, $record) {
                         DB::transaction(function () use ($state, $record) {
                             $record->marks = $state;
