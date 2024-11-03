@@ -17,6 +17,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings, WithEvents
 {
@@ -69,20 +70,39 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
         return [
             AfterSheet::class => function(AfterSheet $event) {
                 $sheet = $event->sheet;
-                $lastColumn = 'I'; // Column I for Token
+                $lastColumn = 'I';
                 $lastRow = $sheet->getHighestRow();
 
-                // Set column widths
+                // Set page setup for A4 portrait
+                $sheet->getPageSetup()
+                    ->setPaperSize(PageSetup::PAPERSIZE_A4)
+                    ->setOrientation(PageSetup::ORIENTATION_PORTRAIT)
+                    ->setFitToWidth(1)
+                    ->setFitToHeight(0)
+                    ->setHorizontalCentered(true)
+                    ->setPrintArea("A1:{$lastColumn}{$lastRow}")
+                    ->setRowsToRepeatAtTopByStartAndEnd(1, 1); // Repeat header row on each page
+
+                // Set margins (in inches)
+                $sheet->getPageMargins()
+                    ->setTop(0.5)
+                    ->setRight(0.5)
+                    ->setBottom(0.5)
+                    ->setLeft(0.5)
+                    ->setHeader(0.3)
+                    ->setFooter(0.3);
+
+                // Optimize column widths for A4 portrait (in points)
                 $columnWidths = [
-                    'A' => 8,  // Sl No
-                    'B' => 15, // Application ID
-                    'C' => 30, // Full Name
-                    'D' => 15, // Date of Birth
-                    'E' => 15, // Phone
-                    'F' => 15, // Place
-                    'G' => 12, // Rep.Time
-                    'H' => 15, // Signature
-                    'I' => 12, // Token
+                    'A' => 6,  // Sl No
+                    'B' => 13, // Application ID
+                    'C' => 25, // Full Name
+                    'D' => 12, // Date of Birth
+                    'E' => 12, // Phone
+                    'F' => 12, // Place
+                    'G' => 10, // Rep.Time
+                    'H' => 12, // Signature
+                    'I' => 10, // Token
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -91,17 +111,40 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
 
                 // Style the header row
                 $sheet->getStyle("A1:{$lastColumn}1")->applyFromArray([
-                    'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-                    'fill' => ['fillType' => Fill::FILL_SOLID, 'color' => ['rgb' => '4472C4']],
-                    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-                    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
+                    'font' => [
+                        'bold' => true, 
+                        'color' => ['rgb' => 'FFFFFF'],
+                        'size' => 11
+                    ],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID, 
+                        'color' => ['rgb' => '4472C4']
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN
+                        ]
+                    ],
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER, 
+                        'vertical' => Alignment::VERTICAL_CENTER
+                    ],
                 ]);
 
                 // Style the data rows
                 $dataRange = "A2:{$lastColumn}{$lastRow}";
                 $sheet->getStyle($dataRange)->applyFromArray([
-                    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-                    'alignment' => ['vertical' => Alignment::VERTICAL_CENTER],
+                    'font' => [
+                        'size' => 10
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN
+                        ]
+                    ],
+                    'alignment' => [
+                        'vertical' => Alignment::VERTICAL_CENTER
+                    ],
                 ]);
 
                 // Center-align specific columns
@@ -111,11 +154,15 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 }
 
-                // Set row height
-                $sheet->getRowDimension(1)->setRowHeight(30);
+                // Optimize row heights
+                $sheet->getRowDimension(1)->setRowHeight(20);
                 foreach ($sheet->getRowIterator(2) as $row) {
-                    $sheet->getRowDimension($row->getRowIndex())->setRowHeight(25);
+                    $sheet->getRowDimension($row->getRowIndex())->setRowHeight(18);
                 }
+
+                // Add print gridlines
+                $sheet->setShowGridlines(true);
+                $sheet->setPrintGridlines(true);
             },
         ];
     }
