@@ -66,7 +66,6 @@ class RankingResource extends Resource
             ])
             ->defaultSort('marks', 'desc')
             ->striped()
-            ->hover()
             ->modifyQueryUsing(fn(Builder $query) => $query->whereNotNull('marks'));
     }
 
