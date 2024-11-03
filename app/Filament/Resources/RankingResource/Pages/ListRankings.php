@@ -2,25 +2,14 @@
 
 namespace App\Filament\Resources\RankingResource\Pages;
 
-use App\Filament\Resources\RankingResource;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Actions;
+use App\Filament\Resources\RankingResource;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
 
 class ListRankings extends ListRecords
 {
+
+    protected ?string $maxContentWidth = 'full';
+
     protected static string $resource = RankingResource::class;
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            // You can add actions here if needed
-        ];
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            // You can add widgets here if needed
-        ];
-    }
 }
