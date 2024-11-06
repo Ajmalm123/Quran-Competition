@@ -146,7 +146,8 @@ class ParticipantsResource extends Resource
                             $data['zone_id'],
                             fn(Builder $query, $zoneId): Builder => $query->where('zone_id', $zoneId)
                         );
-                    }),
+                    })
+                    ->persistent(),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -162,13 +163,15 @@ class ParticipantsResource extends Resource
                                 $data['created_until'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
-                    }),
+                    })
+                    ->persistent(),
                 SelectFilter::make('admit_status')
                     ->options([
                         'Admitted' => 'Admitted',
                         'Completed' => 'Completed',
                     ])
-                    ->indicator('Admit Status'),
+                    ->indicator('Admit Status')
+                    ->persistent(),
             ])
             ->filtersFormColumns(2)
             ->actions([
@@ -216,30 +219,10 @@ class ParticipantsResource extends Resource
             ->paginationPageOptions([3, 5, 10, 25, 50]) // Pagination options for "View More"
             ->poll('10s') // Auto refresh every 10 seconds
             ->striped()
-            ->persistFilters()
             ->persistSortInSession()
             ->emptyStateHeading('No Participants Found')
             ->emptyStateDescription('Once participants are admitted and completed, they will appear here.')
-            ->emptyStateIcon('heroicon-o-users')
-            ->modifyQueryUsing(
-                fn(Builder $query) => $query
-                    ->whereIn('admit_status', ['Admitted', 'Completed'])
-                    ->whereIn('id', function ($subquery) {
-                        $subquery->select('a.id')
-                            ->from('applications as a')
-                            ->whereNotNull('a.participation_position')
-                            ->whereRaw('(
-                                SELECT COUNT(*)
-                                FROM applications b
-                                WHERE b.zone_id = a.zone_id
-                                AND b.participation_position <= a.participation_position
-                            ) <= 5')
-                            ->orderBy('a.zone_id')
-                            ->orderBy('a.participation_position', 'asc');
-                    })
-                    ->orderBy('zone_id')
-                    ->orderBy('participation_position', 'asc')
-            );
+            ->emptyStateIcon('heroicon-o-users');
     }
 
     public static function getRelations(): array
