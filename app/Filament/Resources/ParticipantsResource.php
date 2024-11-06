@@ -146,8 +146,7 @@ class ParticipantsResource extends Resource
                             $data['zone_id'],
                             fn(Builder $query, $zoneId): Builder => $query->where('zone_id', $zoneId)
                         );
-                    })
-                    ->persistent(),
+                    }),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -163,15 +162,13 @@ class ParticipantsResource extends Resource
                                 $data['created_until'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
-                    })
-                    ->persistent(),
+                    }),
                 SelectFilter::make('admit_status')
                     ->options([
                         'Admitted' => 'Admitted',
                         'Completed' => 'Completed',
                     ])
-                    ->indicator('Admit Status')
-                    ->persistent(),
+                    ->indicator('Admit Status'),
             ])
             ->filtersFormColumns(2)
             ->actions([
@@ -220,6 +217,7 @@ class ParticipantsResource extends Resource
             ->poll('10s') // Auto refresh every 10 seconds
             ->striped()
             ->persistSortInSession()
+            ->persistFiltersInSession()
             ->emptyStateHeading('No Participants Found')
             ->emptyStateDescription('Once participants are admitted and completed, they will appear here.')
             ->emptyStateIcon('heroicon-o-users');
