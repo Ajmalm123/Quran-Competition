@@ -62,35 +62,59 @@ class ParticipantsResource extends Resource
                 TextColumn::make('zone.name')
                     ->label('Zone')
                     ->sortable()
-                    ->searchable(),
-                TextColumn::make('participation_position')
+                    ->searchable()
+                    ->description(fn ($record) => "Position {$record->participation_position}")
+                    ->color('primary'),
+                    
+                BadgeColumn::make('participation_position')
                     ->label('Position')
-                    ->sortable()
-                    ->searchable(),
+                    ->color(fn (string $state): string => match ($state) {
+                        '1' => 'success',
+                        '2' => 'info', 
+                        '3' => 'warning',
+                        default => 'gray',
+                    })
+                    ->icon(fn (string $state): string => match ($state) {
+                        '1' => 'heroicon-o-trophy',
+                        '2' => 'heroicon-o-star',
+                        '3' => 'heroicon-o-hand-thumb-up',
+                        default => 'heroicon-o-user',
+                    }),
+
                 TextColumn::make('marks')
                     ->label('Marks')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->alignCenter(),
+
                 ImageColumn::make('passport_size_photo')
                     ->label('Photo')
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.png'))
                     ->width(40)
                     ->height(40),
+
                 TextColumn::make('application_id')
                     ->label('Application ID')
                     ->searchable()
-                    ->copyable(),
+                    ->copyable()
+                    ->copyMessage('Application ID copied')
+                    ->copyMessageDuration(1500),
+
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable()
                     ->sortable()
-                    ->wrap(),
+                    ->wrap()
+                    ->weight('bold'),
+
                 TextColumn::make('contact_number')
                     ->label('Contact Number')
                     ->searchable()
                     ->copyable()
                     ->icon('heroicon-m-phone'),
+
                 BadgeColumn::make('admit_status')
                     ->colors([
                         'info' => 'Admitted',
@@ -101,15 +125,13 @@ class ParticipantsResource extends Resource
                         'heroicon-o-check-badge' => 'Completed'
                     ])
                     ->sortable(),
-
-
-
             ])
             ->defaultSort('zone.name', 'asc')
             ->groups([
                 Group::make('zone.name')
                     ->label('Zone')
                     ->collapsible()
+                    ->titlePrefixedWithLabel(false)
             ])
             ->filters([
                 Filter::make('zone')
@@ -190,7 +212,15 @@ class ParticipantsResource extends Resource
                         ->deselectRecordsAfterCompletion(),
                 ])
             ])
+            ->defaultPaginationPageOption(3) // Show first 3 by default
+            ->paginationPageOptions([3, 5, 10, 25, 50]) // Pagination options for "View More"
+            ->poll('10s') // Auto refresh every 10 seconds
             ->striped()
+            ->persistFilters()
+            ->persistSortInSession()
+            ->emptyStateHeading('No Participants Found')
+            ->emptyStateDescription('Once participants are admitted and completed, they will appear here.')
+            ->emptyStateIcon('heroicon-o-users')
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
                     ->whereIn('admit_status', ['Admitted', 'Completed'])
