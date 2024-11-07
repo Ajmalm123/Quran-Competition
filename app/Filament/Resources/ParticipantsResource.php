@@ -203,7 +203,7 @@ class ParticipantsResource extends Resource
                                 FROM applications b
                                 WHERE b.zone_id = a.zone_id
                                 AND b.participation_position <= a.participation_position
-                            ) <= 5')
+                            ) <= 3')
                             ->orderBy('a.zone_id')
                             ->orderBy('a.participation_position', 'asc');
                     })
