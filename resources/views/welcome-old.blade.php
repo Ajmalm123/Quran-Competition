@@ -81,6 +81,25 @@
                         </span>
                     </div>
                 </div>
+                <div class="col-md-8">
+                    <div class="form-area">
+                        <label for="category" class="form-label">Category - വിഭാഗം <sup>*</sup></label>
+                        <select class="form-select" id="category" name="category_id" required>
+                            <option value="">Please Select Category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}
+                                    data-gender-restriction="{{ $category->gender_restriction }}">
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <span class="error" role="alert">
+                            @error('category_id')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-area">
@@ -88,12 +107,12 @@
                             <div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="inlineRadio19"
-                                        value="Male">
+                                        value="Male" {{ old('gender') == 'Male' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="inlineRadio1">Male</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="inlineRadio29"
-                                        value="Female" {{ old('gender') == 'Female' ? 'checked' : '' }} disabled>
+                                        value="Female" {{ old('gender') == 'Female' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="inlineRadio2">Female</label>
                                 </div>
 
@@ -957,8 +976,41 @@ Guidelines</u></span></li>
             changeYear: true
         });
 
+        // Category-based gender control
+        document.getElementById('category').addEventListener('change', function() {
+            const categorySelect = this;
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const genderRestriction = selectedOption.getAttribute('data-gender-restriction');
+            
+            const maleRadio = document.getElementById('inlineRadio19');
+            const femaleRadio = document.getElementById('inlineRadio29');
+            const maleLabel = maleRadio.nextElementSibling;
+            const femaleLabel = femaleRadio.nextElementSibling;
+            
+            // Reset both radio buttons
+            maleRadio.checked = false;
+            femaleRadio.checked = false;
+            maleRadio.disabled = false;
+            femaleRadio.disabled = false;
+            maleLabel.style.opacity = '1';
+            femaleLabel.style.opacity = '1';
+            
+            if (genderRestriction === 'Male') {
+                femaleRadio.disabled = true;
+                femaleLabel.style.opacity = '0.5';
+            } else if (genderRestriction === 'Female') {
+                maleRadio.disabled = true;
+                maleLabel.style.opacity = '0.5';
+            }
+            // If 'Both', both options remain enabled
+        });
+
         $(document).ready(function() {
             var validators = {
+                category_id: function(value) {
+                    if (!value) return 'Category is required';
+                    return null;
+                },
                 full_name: function(value) {
                     if (!value) return 'Full name is required';
                     if (value.length > 255) return 'Full name must not exceed 255 characters';

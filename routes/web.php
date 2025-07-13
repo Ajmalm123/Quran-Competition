@@ -19,7 +19,8 @@ Route::get('/', function () {
 Route::get('/apply', function () {
     $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
     $nativeZones = Zone::where('area', 'Native')->select('id', 'name')->get();
-    return view('welcome', compact('abroadZones', 'nativeZones'));
+    $categories = \App\Models\Category::where('is_active', true)->get();
+    return view('welcome-old', compact('abroadZones', 'nativeZones', 'categories'));
 })->name('apply');
 
 Route::get('/application', function () {
@@ -45,3 +46,8 @@ Route::post('/log-ajax-error', [ApplicationController::class, 'logAjaxError'])->
 
 
 Route::post('/apply/application', [ApplicationController::class, 'store'])->name('application.store');
+
+Route::get('/api/categories/{id}', function ($id) {
+    $category = \App\Models\Category::find($id);
+    return response()->json($category);
+})->name('api.categories.show');

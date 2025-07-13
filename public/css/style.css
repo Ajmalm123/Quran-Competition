@@ -370,3 +370,26 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Category selection styling */
+.category-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.category-section label {
+    color: #9B7858;
+    font-weight: 600;
+}
+
+.form-check-input:disabled + .form-check-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-check-input:disabled {
+    cursor: not-allowed;
+}
