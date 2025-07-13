@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\Zone;
+use App\Models\Category;
 use Filament\Tables;
 use Filament\Forms\Form;
 use App\Jobs\SendEmailJob;
@@ -41,11 +42,12 @@ use Filament\Support\Enums\ActionSize;
 class ApplicationResource extends Resource
 {
     protected static ?string $model = Application::class;
+    protected static ?string $navigationGroup = 'Applications';
     protected static ?int $navigationSort = 2;
 
 
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
 
     public static function form(Form $form): Form
@@ -92,6 +94,13 @@ class ApplicationResource extends Resource
                             TextInput::make('aadhar_number')
                                 ->required()
                                 ->maxLength(12),
+                        ]),
+                        Grid::make(1)->schema([
+                            Select::make('category_id')
+                                ->label('Category')
+                                ->options(Category::where('is_active', true)->pluck('name', 'id'))
+                                ->required()
+                                ->searchable(),
                         ]),
                     ])->columnSpan(2),
                 ]),
@@ -208,6 +217,10 @@ class ApplicationResource extends Resource
                 TextColumn::make('zone.name')
                     ->searchable()
                     ->wrap(),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->searchable()
+                    ->wrap(),
                 TextColumn::make('age')
                     ->label('Age')
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -269,6 +282,19 @@ class ApplicationResource extends Resource
                             fn(Builder $query, $zoneIds): Builder => $query->whereIn('zone_id', $zoneIds),
                         );
                     }),
+                SelectFilter::make('category_id')
+                    ->options(function () {
+                        return Category::where('is_active', true)->pluck('name', 'id')->toArray();
+                    })
+                    ->multiple()
+                    ->label('Category')
+                    ->indicator('Category')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['values'],
+                            fn(Builder $query, $categoryIds): Builder => $query->whereIn('category_id', $categoryIds),
+                        );
+                    }),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -292,6 +318,33 @@ class ApplicationResource extends Resource
                         }
                         if ($data['created_until'] ?? null) {
                             $indicators['created_until'] = 'Created until ' . Carbon::parse($data['created_until'])->toFormattedDateString();
+                        }
+                        return $indicators;
+                    }),
+                Filter::make('year')
+                    ->form([
+                        Select::make('year')
+                            ->options(function () {
+                                $years = [];
+                                $currentYear = now()->year;
+                                for ($i = $currentYear; $i >= $currentYear - 1; $i--) {
+                                    $years[$i] = $i;
+                                }
+                                return $years;
+                            })
+                            ->placeholder('Select Year')
+                            ->label('Year'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['year'],
+                            fn(Builder $query, $year): Builder => $query->whereYear('created_at', $year),
+                        );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['year'] ?? null) {
+                            $indicators['year'] = 'Year: ' . $data['year'];
                         }
                         return $indicators;
                     }),

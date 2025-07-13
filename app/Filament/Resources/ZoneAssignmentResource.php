@@ -26,10 +26,9 @@ class ZoneAssignmentResource extends Resource
 {
     protected static ?string $model = ZoneAssignment::class;
     protected static ?string $navigationLabel = 'Zone Assignment';
-
-
+    protected static ?string $navigationGroup = 'Configuration';
     protected static ?string $navigationIcon = 'heroicon-o-map';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
 
 

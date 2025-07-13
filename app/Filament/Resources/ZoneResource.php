@@ -14,8 +14,9 @@ use App\Filament\Resources\ZoneResource\Pages;
 class ZoneResource extends Resource
 {
     protected static ?string $model = Zone::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 3;
+    protected static ?string $navigationIcon = 'heroicon-o-map';
+    protected static ?string $navigationGroup = 'Configuration';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

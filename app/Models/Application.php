@@ -33,6 +33,7 @@ class Application extends Model
         'qirath_with_ijazah',
         'primary_competition_participation',
         'zone_id',
+        'category_id',
         'passport_size_photo',
         'birth_certificate',
         'letter_of_recommendation',
@@ -109,6 +110,11 @@ class Application extends Model
     public function zone()
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**

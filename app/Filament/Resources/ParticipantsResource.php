@@ -39,8 +39,9 @@ class ParticipantsResource extends Resource
 {
     protected static ?string $model = Application::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Final Participants';
+    protected static ?string $navigationGroup = 'Applications';
 
     protected static ?string $pluralLabel = 'Final Participants';
     protected static ?int $navigationSort = 5;

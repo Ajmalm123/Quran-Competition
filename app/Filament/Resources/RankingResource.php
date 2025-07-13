@@ -18,6 +18,7 @@ class RankingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-trophy';
     protected static ?string $navigationLabel = 'Participants Ranking';
+    protected static ?string $navigationGroup = 'Applications';
     // protected static ?string $pluralLabel = 'Rankings';
     protected static ?int $navigationSort = 7;
 

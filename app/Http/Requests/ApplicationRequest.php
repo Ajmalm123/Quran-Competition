@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rule;
+use App\Models\Category;
 
 class ApplicationRequest extends FormRequest
 {
@@ -34,6 +35,7 @@ class ApplicationRequest extends FormRequest
     {
         return [
             'full_name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'gender' => 'required|in:Male,Female',
             'date_of_birth' => 'required|date',
             'mother_tongue' => 'required|in:Malayalam,Other',
@@ -73,6 +75,8 @@ class ApplicationRequest extends FormRequest
             'full_name.required' => 'The full name is required.',
             'full_name.string' => 'The full name must be a string.',
             'full_name.max' => 'The full name may not be greater than 255 characters.',
+            'category_id.required' => 'The category is required.',
+            'category_id.exists' => 'The selected category is invalid.',
             'gender.required' => 'The gender is required.',
             'gender.in' => 'Invalid gender selected.',
             'date_of_birth.required' => 'The date of birth is required.',
@@ -122,6 +126,18 @@ class ApplicationRequest extends FormRequest
             'letter_of_recommendation.mimes' => 'The letter of recommendation must be a PDF, JPG, JPEG, or PNG file.',
             'letter_of_recommendation.max' => 'The letter of recommendation must not be larger than 2 MB.',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->category_id && $this->gender) {
+                $category = Category::find($this->category_id);
+                if ($category && !$category->isGenderAllowed($this->gender)) {
+                    $validator->errors()->add('gender', 'The selected gender is not allowed for this category.');
+                }
+            }
+        });
     }
 
     // public function afterValidation()
