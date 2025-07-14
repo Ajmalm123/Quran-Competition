@@ -327,24 +327,30 @@ class ApplicationResource extends Resource
                             ->options(function () {
                                 $years = [];
                                 $currentYear = now()->year;
-                                for ($i = $currentYear; $i >= $currentYear - 1; $i--) {
+                                // Allow more years for historical data (current year back to 2000)
+                                for ($i = $currentYear; $i >= 2024; $i--) {
                                     $years[$i] = $i;
                                 }
                                 return $years;
                             })
-                            ->placeholder('Select Year')
-                            ->label('Year'),
+                            ->placeholder('Current Year (Default)')
+                            ->label('Filter by Year')
+                            ->default(now()->year),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
                             $data['year'],
-                            fn(Builder $query, $year): Builder => $query->whereYear('created_at', $year),
+                            function (Builder $query, $year): Builder {
+                                $start = Carbon::create($year, 1, 1)->startOfDay();
+                                $end = Carbon::create($year, 12, 31)->endOfDay();
+                                return $query->whereBetween('created_at', [$start, $end]);
+                            },
                         );
                     })
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
                         if ($data['year'] ?? null) {
-                            $indicators['year'] = 'Year: ' . $data['year'];
+                            $indicators['year'] = 'Year: ' . $data['year'] . ' (Jan 1 - Dec 31)';
                         }
                         return $indicators;
                     }),
@@ -387,7 +393,7 @@ class ApplicationResource extends Resource
 
 പ്രിയപ്പെട്ട ഹാഫിസ് {$record->full_name},
 
-എപി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024 ന്റെ പ്രാഥമിക റൗണ്ട് മത്സരത്തിൽ താങ്കൾ തിരഞ്ഞെടുത്ത മേഖലയിലെ മത്സരത്തിന്റെ സമയക്രമം താഴെ കൊടുക്കുന്നു.
+എപി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് " . date('Y') . " ന്റെ പ്രാഥമിക റൗണ്ട് മത്സരത്തിൽ താങ്കൾ തിരഞ്ഞെടുത്ത മേഖലയിലെ മത്സരത്തിന്റെ സമയക്രമം താഴെ കൊടുക്കുന്നു.
 
 മേഖല: {$zoneName}
 സെന്റർ നെയിം: {$centerName}
@@ -399,7 +405,7 @@ class ApplicationResource extends Resource
 
 • മത്സരാർത്ഥി റിപ്പോർട്ടിംഗ് ടൈം കൃത്യമായി പാലിക്കേണ്ടതാണ്. റിപ്പോർട്ടിംഗ് കഴിഞ്ഞ് അരമണിക്കൂർ കൊണ്ട് മത്സരങ്ങൾ ആരംഭിക്കുന്നതായിരിക്കും.
 • അപേക്ഷയോടൊപ്പം നൽകിയ ശുപാർശ കത്തും (Recommendation Letter) ഏതെങ്കിലും ഒരു ഐഡി കാർഡും റിപ്പോർട്ടിങ് സമയത്ത് ഹാജരാക്കേണ്ടതാണ്.
-• Participant id card എന്ന പേരിൽ മത്സരത്തിൽ പങ്കെടുക്കുന്നതിന് ഹാജരാക്കേണ്ട admit card എത്രയും ��െട്ടെന്ന് തന്നെ ഇ മെയിൽ വഴി അയച്ചു തരുന്നതായിരിക്കും. അതിന്റെ സോഫ്റ്റ്‌ കോപ്പിയോ ഹാർഡ് കോപ്പിയോ ഹാജരാക്കേണ്ടതാണ്.
+• Participant id card എന്ന പേരിൽ മത്സരത്തിൽ പങ്കെടുക്കുന്നതിന് ഹാജരാക്കേണ്ട admit card എത്രയും കെട്ടെന്ന് തന്നെ ഇ മെയിൽ വഴി അയച്ചു തരുന്നതായിരിക്കും. അതിന്റെ സോഫ്റ്റ്‌ കോപ്പിയോ ഹാർഡ് കോപ്പിയോ ഹാജരാക്കേണ്ടതാണ്.
 • മത്സരത്തിന്റെ എല്ലാ ഘട്ടങ്ങളിലും വിധികർത്താക്കളുടെ തീരുമാനങ്ങൾ അന്തിമമായിരിക്കും.
 • മത്സരത്തിന്റെ ആദ്യാവസാനം സദസ്സിൽ സാന്നിധ്യം ഉണ്ടായിരിക്കണം. മത്സരങ്ങൾക്ക് ശേഷമുള്ള സർട്ടിഫിക്കറ്റ് വിതരണം കഴിഞ്ഞതിനുശേഷം മാത്രമേ പിരിഞ്ഞു പോകാവൂ.
 • മത്സരാർത്ഥിക്കുള്ള അന്നേ ദിവസത്തെ ഭക്ഷണം ഉണ്ടായിരിക്കും.
@@ -453,7 +459,7 @@ EOT;
                                     'location' => $application->zone->assignment->location ?? 'N/A',
                                     'date' => $application->zone->assignment->date ?? 'N/A',
                                     'reporting_time' => $application->zone->assignment->time ?? 'N/A',
-                                    'subject' => 'AP Aslam Holy Quran Award 2024 - Preliminary Round Competition Details',
+                                    'subject' => 'AP Aslam Holy Quran Award ' . date('Y') . ' - Preliminary Round Competition Details',
                                     'page' => 'emails.bulk-mail',
                                 ];
 
@@ -517,7 +523,10 @@ EOT;
             ])
             ->striped()
             // ->columnSpanFull()
-            ->paginated([10, 25, 50, 100, 'all']);
+            ->paginated([10, 25, 50, 100, 'all'])
+            ->modifyQueryUsing(function (Builder $query): Builder {
+                return $query;
+            });
         // ->responsive();
     }
 

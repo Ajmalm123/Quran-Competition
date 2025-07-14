@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Zone\Resources\ParticipantsResource\Pages;
 use App\Filament\Zone\Resources\ParticipantsResource\RelationManagers;
 use App\Exports\RankListExport;
+use Filament\Forms\Components\Select;
 
 class ParticipantsResource extends Resource
 {
@@ -151,6 +152,19 @@ class ParticipantsResource extends Resource
             ])
             ->defaultSort('participation_position', 'asc')
             ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('category_id')
+                    ->options(function () {
+                        return \App\Models\Category::where('is_active', true)->pluck('name', 'id')->toArray();
+                    })
+                    ->multiple()
+                    ->label('Category')
+                    ->indicator('Category')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['values'],
+                            fn(Builder $query, $categoryIds): Builder => $query->whereIn('category_id', $categoryIds),
+                        );
+                    }),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from'),
@@ -174,6 +188,39 @@ class ParticipantsResource extends Resource
                         }
                         if ($data['created_until'] ?? null) {
                             $indicators['created_until'] = 'Created until ' . Carbon::parse($data['created_until'])->toFormattedDateString();
+                        }
+                        return $indicators;
+                    }),
+                Filter::make('year')
+                    ->form([
+                        Select::make('year')
+                            ->options(function () {
+                                $years = [];
+                                $currentYear = now()->year;
+                                // Allow more years for historical data (current year back to 2000)
+                                for ($i = $currentYear; $i >= 2000; $i--) {
+                                    $years[$i] = $i;
+                                }
+                                return $years;
+                            })
+                            ->placeholder('Current Year (Default)')
+                            ->label('Filter by Year')
+                            ->default(now()->year),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['year'],
+                            function (Builder $query, $year): Builder {
+                                $start = Carbon::create($year, 1, 1)->startOfDay();
+                                $end = Carbon::create($year, 12, 31)->endOfDay();
+                                return $query->whereBetween('created_at', [$start, $end]);
+                            },
+                        );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['year'] ?? null) {
+                            $indicators['year'] = 'Year: ' . $data['year'] . ' (Jan 1 - Dec 31)';
                         }
                         return $indicators;
                     }),
