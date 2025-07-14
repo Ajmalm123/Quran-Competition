@@ -12,6 +12,7 @@ use App\Filament\Resources\RankingResource;
 class ListRankings extends ListRecords
 {
     protected static string $resource = RankingResource::class;
+    protected ?string $maxContentWidth = 'full';
 
     protected function getHeaderActions(): array
     {

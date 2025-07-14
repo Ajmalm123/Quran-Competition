@@ -12,6 +12,8 @@ use App\Filament\Zone\Resources\ParticipantsResource;
 class ListParticipants extends ListRecords
 {
     protected static string $resource = ParticipantsResource::class;
+    protected ?string $maxContentWidth = 'full';
+
 
     protected function getHeaderActions(): array
     {
