@@ -115,6 +115,7 @@
                 <p><span class="label">Gender:</span> <span class="value">{{ $record->gender }}</span></p>
             </div>
             <div class="grid-item">
+                <p><span class="label">Category:</span> <span class="value">{{ $record->category?->name ?? 'N/A' }}</span></p>
                 <p><span class="label">Educational Qualification:</span> <span class="value">{{ $record->educational_qualification }}</span></p>
                 <p><span class="label">Job:</span> <span class="value">{{ $record->job }}</span></p>
                 <p><span class="label">Mother Tongue:</span> <span class="value">{{ $record->mother_tongue }}</span></p>

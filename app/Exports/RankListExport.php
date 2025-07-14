@@ -38,6 +38,7 @@ class RankListExport implements FromCollection, WithMapping, WithHeadings, WithC
             $application->token_number ?? 'N/A',
             $application->application_id,
             $application->full_name,
+            $application->category?->name ?? 'N/A',
             $application->institution_name ?? 'N/A',
             $application->marks ?? 'N/A',
         ];
@@ -50,6 +51,7 @@ class RankListExport implements FromCollection, WithMapping, WithHeadings, WithC
             'Token Number',
             'Application ID',
             'Full Name',
+            'Category',
             'Institution',
             'Mark',
         ];
@@ -76,8 +78,9 @@ class RankListExport implements FromCollection, WithMapping, WithHeadings, WithC
                     'B' => 15,  // Token Number
                     'C' => 15,  // Application ID
                     'D' => 30,  // Full Name
-                    'E' => 35,  // Institution
-                    'F' => 10,  // Mark
+                    'E' => 15,  // Category
+                    'F' => 35,  // Institution
+                    'G' => 10,  // Mark
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -100,7 +103,7 @@ class RankListExport implements FromCollection, WithMapping, WithHeadings, WithC
                 ]);
 
                 // Center-align specific columns
-                $centerAlignColumns = ['A', 'B', 'C', 'F'];
+                $centerAlignColumns = ['A', 'B', 'C', 'E', 'G'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);

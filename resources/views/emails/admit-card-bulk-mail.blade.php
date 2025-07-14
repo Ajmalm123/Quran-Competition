@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>EP Aslam Holy Quran Award {{date('Y')}} - Admit Card</title>
+    <title>EP Aslam Holy Quran Award <?= date('Y') ?>- Admit Card</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
@@ -40,7 +40,7 @@
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
                                                 <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy Qur'an</h1>
-                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award {{date('Y')}}</h1>
+                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award <?= date('Y') ?></h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
                                                 <img style="width:15em" src="{{ $message->embed(public_path('images/logo-email.png')) }}">

@@ -41,6 +41,7 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
             $slNo,
             $application->application_id,
             $application->full_name,
+            $application->category?->name ?? 'N/A',
             Carbon::parse($application->date_of_birth)->format('d/m/Y'),
             $application->contact_number,
             '', // Place
@@ -56,6 +57,7 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
             'Sl No',
             'Application ID',
             'Full Name',
+            'Category',
             'Date of Birth',
             'Phone',
             'Place',
@@ -97,12 +99,13 @@ class AttendanceSheetExport implements FromCollection, WithMapping, WithHeadings
                     'A' => 6,  // Sl No
                     'B' => 13, // Application ID
                     'C' => 25, // Full Name
-                    'D' => 12, // Date of Birth
-                    'E' => 12, // Phone
-                    'F' => 12, // Place
-                    'G' => 10, // Rep.Time
-                    'H' => 12, // Signature
-                    'I' => 10, // Token
+                    'D' => 12, // Category
+                    'E' => 12, // Date of Birth
+                    'F' => 12, // Phone
+                    'G' => 12, // Place
+                    'H' => 10, // Rep.Time
+                    'I' => 12, // Signature
+                    'J' => 10, // Token
                 ];
 
                 foreach ($columnWidths as $column => $width) {

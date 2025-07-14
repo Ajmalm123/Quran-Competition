@@ -38,6 +38,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->full_name,
             \Carbon\Carbon::parse($application->date_of_birth)->format('d-m-Y'),
             $application->district,
+            $application->category?->name ?? 'N/A',
             $application->zone?->name,
             $application->zone?->assignment?->center_id ?? 'N/A',
             $application->zone?->assignment?->location ?? 'N/A',
@@ -54,6 +55,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             'Name',
             'Date of Birth',
             'District',
+            'Category',
             'Zone',
             'Center Name',
             'Center Location',
@@ -82,7 +84,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 // Set column widths
                 $columnWidths = [
                     'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
-                    'G' => 25, 'H' => 25, 'I' => 15, 'J' => 15
+                    'G' => 15, 'H' => 25, 'I' => 25, 'J' => 15, 'K' => 15
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -105,7 +107,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ]);
 
                 // Center-align specific columns
-                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'J'];
+                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);

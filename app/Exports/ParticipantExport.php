@@ -37,6 +37,7 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->participation_position ?? 'N/A',
             $application->application_id,
             $application->full_name,
+            $application->category?->name ?? 'N/A',
             $application->token_number ?? 'N/A',
             $application->marks ?? 'N/A',
         ];
@@ -48,6 +49,7 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
             'Position',
             'Application ID',
             'Full Name',
+            'Category',
             'Token Number',
             'Mark',
         ];
@@ -73,8 +75,9 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
                     'A' => 10, // Position
                     'B' => 15, // Application ID
                     'C' => 30, // Full Name
-                    'D' => 15, // Token Number
-                    'E' => 10, // Mark
+                    'D' => 15, // Category
+                    'E' => 15, // Token Number
+                    'F' => 10, // Mark
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -97,7 +100,7 @@ class ParticipantExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ]);
 
                 // Center-align all columns except Full Name
-                $centerAlignColumns = ['A', 'B', 'D', 'E'];
+                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
