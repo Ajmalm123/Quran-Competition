@@ -13,20 +13,27 @@ use Filament\Notifications\Notification;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\ApplicationResource;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class LatestApplications extends BaseWidget
 {
+    use InteractsWithPageFilters;
     protected static ?int $sort = 4;
     protected int|string|array $columnSpan = 'full';
 
 
     public function table(Table $table): Table
     {
+        $year = (int) ($this->filters['year'] ?? now()->year);
+        $start = now()->setYear($year)->startOfYear();
+        $end = now()->setYear($year)->endOfYear();
+
         return $table
             ->query(
                 ApplicationResource::getEloquentQuery()
                     ->join('zones', 'applications.zone_id', '=', 'zones.id')
                     ->select('applications.*', 'zones.name as zone_name')
+                    ->whereBetween('applications.created_at', [$start, $end])
             )->defaultPaginationPageOption(5)
             ->defaultSort('created_at', 'desc')
             ->columns([

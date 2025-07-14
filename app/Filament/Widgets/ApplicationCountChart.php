@@ -5,10 +5,13 @@ namespace App\Filament\Widgets;
 use App\Models\Application;
 use App\Models\Zone;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Support\Facades\DB;
 
 class ApplicationCountChart extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?string $heading = 'Application Count by Zone';
     protected static string $color = 'info';
     protected int|string|array $columnSpan = 1;
@@ -21,8 +24,13 @@ class ApplicationCountChart extends ChartWidget
 
     protected function getData(): array
     {
+        $year = (int) ($this->filters['year'] ?? now()->year);
+        $start = now()->setYear($year)->startOfYear();
+        $end = now()->setYear($year)->endOfYear();
+
         $data = Application::select('zones.name as zone', DB::raw('count(*) as count'))
             ->join('zones', 'applications.zone_id', '=', 'zones.id')
+            ->whereBetween('applications.created_at', [$start, $end])
             ->groupBy('zones.id', 'zones.name')
             ->get()
             ->pluck('count', 'zone')
