@@ -67,20 +67,7 @@
         <form method="POST" action="{{ route('application.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="spacer mt-0">
-                <h2>Personal Details</h2>
-                <div class="col-md-8">
-                    <div class="form-area">
-                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര്
-                            <sup>*</sup></label>
-                        <input type="text" class="form-control" id="name" name="full_name"
-                            aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
-                        <span class="error" role="alert">
-                            @error('full_name')
-                                {{ $message }}</span>
-                        @enderror
-                        </span>
-                    </div>
-                </div>
+                <h2>Category Selection</h2>
                 <div class="col-md-8">
                     <div class="form-area">
                         <label for="category" class="form-label">Category - വിഭാഗം <sup>*</sup></label>
@@ -97,6 +84,22 @@
                             @error('category_id')
                                 {{ $message }}
                             @enderror
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer mt-0">
+                <h2>Personal Details</h2>
+                <div class="col-md-8">
+                    <div class="form-area">
+                        <label for="exampleInputEmail1" class="form-label">Full Name - പേര്
+                            <sup>*</sup></label>
+                        <input type="text" class="form-control" id="name" name="full_name"
+                            aria-describedby="contactNumberHelp" required value="{{ old('full_name') }}">
+                        <span class="error" role="alert">
+                            @error('full_name')
+                                {{ $message }}</span>
+                        @enderror
                         </span>
                     </div>
                 </div>
