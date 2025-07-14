@@ -150,7 +150,7 @@
         <tr>
             <td style="padding: 0px 80px;">
                 <h5 style="font-size: 14px; margin: 0; line-height: 22px; font-weight: 400; color: #000000;">
-                    എ.പി. അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024’ ന്േവണ്ടിയുള്ള പ്രാഥമിക മത്സരത്തിന്താങ്കെള
+                    എ.പി. അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് <?= date('Y') ?>’ ന്േവണ്ടിയുള്ള പ്രാഥമിക മത്സരത്തിന്താങ്കെള
                     െതരഞ്ഞെടുത്തതായി അറിയിക്കുന്നതിൽ സന്തോഷമുണ
                 </h5>
             </td>
@@ -203,7 +203,7 @@
             <td style="padding: 0px 80px;">
                 <h5
                     style="font-size: 14px; margin: 0; padding-top: 0; padding-bottom: 10px; font-weight: 400; color: #000000;">
-                    Convener, AP Aslam Holy Qur’an Award 2024
+                    Convener, AP Aslam Holy Qur’an Award <?= date('Y') ?>
                 </h5>
             </td>
         </tr>

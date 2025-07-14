@@ -40,7 +40,7 @@
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
                                                 <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy Qur'an</h1>
-                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2024</h1>
+                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award <?= date('Y') ?></h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
                                                 <img style="width:15em" src="{{ $message->embed(public_path('images/logo-email.png')) }}">
@@ -105,7 +105,7 @@
                                         Muhammed Musthafa</h5> --}}
                                     <h5
                                         style="font-size: 14px; margin-top: 0px;padding-top:0;padding-bottom:10px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        Convener, AP Aslam Holy Qur'an Award 2024</h5>
+                                        Convener, AP Aslam Holy Qur'an Award <?= date('Y') ?></h5>
                                 </td>
                             </tr>
                             <tr>
@@ -128,7 +128,7 @@
                                     <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5
                                             style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
-                                            Copyright © 2024 Aslam Quran Award, All rights reserved.</h5>
+                                            Copyright © <?= date('Y') ?> Aslam Quran Award, All rights reserved.</h5>
                                     </a>
                                 </td>
                             </tr>

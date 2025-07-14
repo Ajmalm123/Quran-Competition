@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>EP Aslam Holy Quran Award 2024 - Admit Card</title>
+    <title>EP Aslam Holy Quran Award {{date('Y')}} - Admit Card</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
@@ -40,7 +40,7 @@
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
                                                 <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy Qur'an</h1>
-                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2024</h1>
+                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award {{date('Y')}}</h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
                                                 <img style="width:15em" src="{{ $message->embed(public_path('images/logo-email.png')) }}">
@@ -100,7 +100,7 @@
                                 <td style="padding:0px 20px;">
                                     <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5 style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
-                                            Copyright © 2024 Aslam Quran Award, All rights reserved.
+                                            Copyright © {{ date('Y') }} Aslam Quran Award, All rights reserved.
                                         </h5>
                                     </a>
                                 </td>

@@ -40,7 +40,7 @@
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
                                                 <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy Qur'an</h1>
-                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2024</h1>
+                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award <?= date('Y') ?></h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
                                                 <img style="width:15em" src="{{ $message->embed(public_path('images/logo-email.png')) }}">
@@ -66,7 +66,7 @@
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        'എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2024' മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
+                                        'എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് <?= date('Y') ?>' മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
                                     </h5>
                                 </td>
                             </tr>
@@ -80,7 +80,7 @@
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        നവംബർ ആദ്യവാരത്തിൽ നടക്കുന്ന മേഖലാതല മത്സരങ്ങളിൽ നിന്നും വിജയികളായി തിരഞ്ഞെടുക്കപ്പെടുന്നവർക്കായിരിക്കും 2024 ഡിസംബർ 24ന് മലപ്പുറം ജില്ലയിലെ വളവന്നൂരിൽ വച്ച് നടക്കുന്ന ഫൈനൽ മത്സരത്തിൽ പങ്കെടുക്കാനുള്ള അവസരം ലഭിക്കുക.
+                                        നവംബർ ആദ്യവാരത്തിൽ നടക്കുന്ന മേഖലാതല മത്സരങ്ങളിൽ നിന്നും വിജയികളായി തിരഞ്ഞെടുക്കപ്പെടുന്നവർക്കായിരിക്കും <?= date('Y') ?> ഡിസംബർ 24ന് മലപ്പുറം ജില്ലയിലെ വളവന്നൂരിൽ വച്ച് നടക്കുന്ന ഫൈനൽ മത്സരത്തിൽ പങ്കെടുക്കാനുള്ള അവസരം ലഭിക്കുക.
                                     </h5>
                                 </td>
                             </tr>
@@ -142,7 +142,7 @@
                                 <td style="padding:0px 20px;">
                                     <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5 style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
-                                            Copyright © 2024 Aslam Quran Award, All rights reserved.
+                                            Copyright © <?= date('Y') ?> Aslam Quran Award, All rights reserved.
                                         </h5>
                                     </a>
                                 </td>
