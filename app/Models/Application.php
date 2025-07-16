@@ -124,63 +124,37 @@ class Application extends Model
      */
     protected static function booted()
     {
-        static::creating(function ($recitation) {
-            $recitation->application_id = self::generateUniqueApplicationId();
+        static::creating(function ($application) {
+            $application->application_id = self::generateUniqueApplicationId($application->category_id);
         });
     }
 
     /**
-     * Generate a unique application ID.
+     * Generate a unique application ID in the format APQ + last two digits of year + category number + 4-digit serial.
      *
+     * @param int $categoryId
      * @return string
      */
-    protected static function generateUniqueApplicationId()
+    protected static function generateUniqueApplicationId($categoryId)
     {
-        // Fetch the last used application ID from the database
-        $lastApplicationId = self::getLastApplicationId();
+        $year = date('y'); // last two digits of current year
+        $category = str_pad($categoryId, 1, '0', STR_PAD_LEFT); // category number, can pad if needed
 
-        // If no ID exists, start from the initial value
-        if (!$lastApplicationId) {
-            return 'APQ241001';
+        // Find the last application for this year and category
+        $lastApplication = self::whereRaw('SUBSTRING(application_id, 4, 2) = ?', [$year])
+            ->whereRaw('SUBSTRING(application_id, 6, 1) = ?', [$categoryId])
+            ->orderBy('application_id', 'desc')
+            ->first();
+
+        if ($lastApplication) {
+            $lastSerial = (int)substr($lastApplication->application_id, 7, 4);
+            $newSerial = $lastSerial + 1;
+        } else {
+            $newSerial = 1;
         }
 
-        // Increment the last application ID
-        $newApplicationId = self::incrementApplicationId($lastApplicationId);
-
-        // Return the new unique application ID
-        return $newApplicationId;
-    }
-
-    /**
-     * Get the last used application ID from the database.
-     *
-     * @return string|null
-     */
-    protected static function getLastApplicationId()
-    {
-        // Adjust this query according to your database setup
-        $lastRecord = self::orderBy('application_id', 'desc')->first();
-        return $lastRecord ? $lastRecord->application_id : null;
-    }
-
-    /**
-     * Increment the application ID.
-     *
-     * @param string $applicationId
-     * @return string
-     */
-    protected static function incrementApplicationId($applicationId)
-    {
-        // Extract the numeric part of the ID
-        $numericPart = substr($applicationId, 5);
-
-        // Increment the numeric part
-        $incrementedNumericPart = (int) $numericPart + 1;
-
-        // Format the new ID with leading zeros
-        $newApplicationId = 'APQ24' . str_pad($incrementedNumericPart, 4, '0', STR_PAD_LEFT);
-
-        return $newApplicationId;
+        $serial = str_pad($newSerial, 4, '0', STR_PAD_LEFT);
+        return 'APQ' . $year . $category . $serial;
     }
     
 }
