@@ -387,12 +387,12 @@ class ApplicationResource extends Resource
                             // Shorter message for WhatsApp URL
                             $shortMessage = "لسَّلامُ عَلَيْكُم ورَحْمَةُ اللهِ وَبَرَكاتُهُ\n\nപ്രിയപ്പെട്ട {$genderTitle} {$record->full_name},\n\nഎ പി അസ്‌ലം ഹോളി അവാർഡ് 2025 മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!\n\nനവംബർ അവസാനവാരത്തിൽ നടക്കുന്ന സ്ക്രീനിങ് മത്സരങ്ങളുടെ സ്ഥലവും തീയതിയും സമയവും ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് പിന്നീട് ലഭിക്കുന്നതായിരിക്കും.\n\nവിശ്വസ്തതയോടെ,\nകോ ഓർഡിനേറ്റർ\nഎ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി";
                             
-                            // Encode message for URL
-                            $encodedMessage = urlencode($shortMessage);
-                            return "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
+                            // Encode message for URL - use rawurlencode for better compatibility
+                            $encodedMessage = rawurlencode($shortMessage);
+                            return "https://api.whatsapp.com/send/?phone={$phoneNumber}&text={$encodedMessage}";
                         } else {
                             // If status is not 'Approved', return a WhatsApp link without a message
-                            return "https://wa.me/{$phoneNumber}";
+                            return "https://api.whatsapp.com/send/?phone={$phoneNumber}";
                         }
                     }, true),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
