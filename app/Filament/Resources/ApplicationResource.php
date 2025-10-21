@@ -379,7 +379,7 @@ class ApplicationResource extends Resource
                 Action::make('WhatsApp')
                     ->icon('heroicon-o-chat-bubble-left-ellipsis')
                     ->color('success')
-                    ->url(function (Application $record) {
+                    ->action(function (Application $record) {
                         $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
                         if ($record->status === 'Approved') {
                             $genderTitle = $record->gender === 'male' ? 'ഹാഫിസ്' : 'ഹാഫിസ';
@@ -388,12 +388,28 @@ class ApplicationResource extends Resource
                             
                             // Encode message for URL
                             $encodedMessage = urlencode($message);
-                            return "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
+                            $whatsappUrl = "https://wa.me/{$phoneNumber}?text={$encodedMessage}";
+                            
+                            // Open WhatsApp in new tab
+                            echo "<script>window.open('{$whatsappUrl}', '_blank');</script>";
+                            
+                            Notification::make()
+                                ->title('WhatsApp Opened')
+                                ->body('WhatsApp has been opened with the message. If message is not visible, it may be too long for WhatsApp URL parameters.')
+                                ->success()
+                                ->send();
                         } else {
                             // If status is not 'Approved', return a WhatsApp link without a message
-                            return "https://wa.me/{$phoneNumber}";
+                            $whatsappUrl = "https://wa.me/{$phoneNumber}";
+                            echo "<script>window.open('{$whatsappUrl}', '_blank');</script>";
+                            
+                            Notification::make()
+                                ->title('WhatsApp Opened')
+                                ->body('WhatsApp has been opened without a message.')
+                                ->info()
+                                ->send();
                         }
-                    }, true),
+                    }),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 
                 // ExportPdfAction::make(),
