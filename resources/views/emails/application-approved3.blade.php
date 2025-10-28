@@ -43,7 +43,7 @@
                                                 <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2025</h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
-                                                <img style="width:15em" src="{{ $message->embed(public_path('images/logo-email.png')) }}">
+                                                <img style="width:15em" src="https://aslamquranaward.com/images/logo-email.png">
                                             </td>
                                         </tr>
                                     </table>
@@ -143,16 +143,16 @@
                             <tr>
                                 <td style="padding:0px 20px 30px 20px;text-align:center;">
                                     <a style="text-decoration: none;" href="https://www.instagram.com/apaslamquranaward/?utm_source=qr&igsh=YjZ4OXNieTRocXdy" target="_blank">
-                                        <img src="{{ $message->embed(public_path('images/insta 2.png')) }}">
+                                        <img src="https://aslamquranaward.com/images/insta%202.png">
                                     </a>
                                     <a style="text-decoration: none;" href="https://youtube.com/@apaslamquranaward?si=hrE99ldkB2tm7fqP" target="_blank">
-                                        <img src="{{ $message->embed(public_path('images/youtube 2.png')) }}">
+                                        <img src="https://aslamquranaward.com/images/youtube%202.png">
                                     </a>
                                     <a style="text-decoration: none;" href="https://www.facebook.com/apaslamquranaward" target="_blank">
-                                        <img src="{{ $message->embed(public_path('images/facebook 3.png')) }}">
+                                        <img src="https://aslamquranaward.com/images/facebook%203.png">
                                     </a>
                                     <a style="text-decoration: none;" href="https://www.x.com/apaslamquranaward" target="_blank">
-                                        <img src="{{ $message->embed(public_path('images/twitter 3.png')) }}">
+                                        <img src="https://aslamquranaward.com/images/twitter%203.png">
                                     </a>
                                 </td>
                             </tr>
