@@ -333,6 +333,9 @@
                                 <option value="Thiruvananthapuram"
                                     {{ old('district') == 'Thiruvananthapuram' ? 'selected' : '' }}>Thiruvananthapuram
                                 </option>
+                                <option value="Mangaluru"
+                                {{ old('district') == 'Mangaluru' ? 'selected' : '' }}>Mangaluru
+                            </option>
                             </select>
                             <span class="error" role="alert">
                                 @error('district')
