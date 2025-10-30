@@ -1089,7 +1089,7 @@ Guidelines</u></span></li>
                     if (!value) return 'District is required';
                     var validDistricts = ['Kasaragod', 'Kannur', 'Wayanad', 'Kozhikode', 'Malappuram',
                         'Palakkad', 'Thrissur', 'Ernakulam', 'Idukki', 'Kottayam', 'Alappuzha',
-                        'Pathanamthitta', 'Kollam', 'Thiruvananthapuram'
+                        'Pathanamthitta', 'Kollam', 'Thiruvananthapuram','Mangaluru'
                     ];
                     if (!validDistricts.includes(value)) return 'Invalid district selection';
                     return null;
