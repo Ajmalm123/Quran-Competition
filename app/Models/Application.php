@@ -74,7 +74,8 @@ class Application extends Model
         'Alappuzha' => 'Alappuzha',
         'Pathanamthitta' => 'Pathanamthitta',
         'Kollam' => 'Kollam',
-        'Thiruvananthapuram' => 'Thiruvananthapuram'
+        'Thiruvananthapuram' => 'Thiruvananthapuram',
+        'Mangaluru' => 'Mangaluru'
     ];
 
     const IS_COMPLETED_IJAZAH = [

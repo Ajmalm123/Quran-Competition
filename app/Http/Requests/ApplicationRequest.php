@@ -48,7 +48,7 @@ class ApplicationRequest extends FormRequest
             'email' => 'required|string|email|max:255',
             'c_address' => 'required|string',
             'pr_address' => 'required|string',
-            'district' => 'required|in:Kasaragod,Kannur,Wayanad,Kozhikode,Malappuram,Palakkad,Thrissur,Ernakulam,Idukki,Kottayam,Alappuzha,Pathanamthitta,Kollam,Thiruvananthapuram',
+            'district' => 'required|in:Kasaragod,Kannur,Wayanad,Kozhikode,Malappuram,Palakkad,Thrissur,Ernakulam,Idukki,Kottayam,Alappuzha,Pathanamthitta,Kollam,Thiruvananthapuram,Mangaluru',
             'pincode' => 'nullable|string|size:6',
             'institution_name' => 'required|string',
             'is_completed_ijazah' => 'required|in:Yes,No',
