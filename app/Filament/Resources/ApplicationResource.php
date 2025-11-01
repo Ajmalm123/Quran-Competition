@@ -191,8 +191,7 @@ class ApplicationResource extends Resource
                     ->circular()
                     ->defaultImageUrl(url('/images/default-avatar.png'))
                     ->label('Photo')
-                    ->width('50px')
-                    ->lazy(),
+                    ->width('50px'),
                 TextColumn::make('application_id')
                     ->searchable()
                     ->copyable()
