@@ -382,7 +382,7 @@ class ApplicationResource extends Resource
                     ->url(function (Application $record) {
                         $phoneNumber = preg_replace('/^0+/', '', preg_replace('/\D/', '', $record->whatsapp));
                         if ($record->status === 'Approved') {
-                            $genderTitle = strtolower($record->gender) === 'male' ? 'ഹാഫിസ്' : 'ഹാഫിസ';
+                            $genderTitle = $record->gender === 'Male' ? 'ഹാഫിസ്' : 'ഹാഫിസ';
 
                             // Shorter message for WhatsApp URL
                             $shortMessage = "السَّلامُ عَلَيْكُم ورَحْمَةُ اللهِ وَبَرَكاتُهُ\n\nപ്രിയപ്പെട്ട {$genderTitle} {$record->full_name},\n\nഎ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2025 മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!\n\nതാങ്കൾ മനസ്സിലാക്കിയത് പോലെ വിശുദ്ധ ഖുർആൻ പരിപൂർണ്ണമായ മനഃപാഠവും തജ് വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവുമായിരിക്കും മത്സരത്തിന്റെ ഭാഗമായി പരിശോധിക്കുക. അതോടൊപ്പം 22 വയസ്സിന് താഴെയുള്ള ആൺകുട്ടികളുടെ വിഭാഗത്തിൽ ആദ്യ അവസാന അഞ്ചു ജുസ്ഉകൾ ഒഴികെയുള്ള 20 ജുസ്ഇന്റെയും, 22 വയസ്സിന് താഴെയുള്ള പെൺകുട്ടികളുടെ വിഭാഗം മത്സരങ്ങളിൽ ഖുർആനിലെ ആദ്യ അവസാന അഞ്ചു വീതം ജുസ്ഉകളുടെയും ആശയസംബന്ധമായ പരിശോധനയും ഉണ്ടായിരിക്കും. 13 വയസ്സിന് താഴെയുള്ള കുട്ടികളുടെ വിഭാഗത്തിൽ ഖുർആൻ പൂർണ്ണമായും മനഃപാഠമാക്കിയിട്ടുണ്ടോ എന്ന് മാത്രമായിരിക്കും പരിശോധിക്കുക.\n\nനവംബർ അവസാനവാരത്തിൽ നടക്കുന്ന സ്ക്രീനിങ് മത്സരങ്ങളുടെ സ്ഥലവും തീയതിയും സമയവും ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് പിന്നീട് ലഭിക്കുന്നതായിരിക്കും.\n\nമത്സരത്തിനു വേണ്ടി നന്നായി തയ്യാറെടുക്കുകയും പരിശ്രമിക്കുകയും ചെയ്യണമെന്ന് അറിയിക്കുന്നു.\n\nകൂടുതൽ വിവരങ്ങൾക്ക് ഞങ്ങളെ ബന്ധപ്പെടാവുന്നതാണ്.\n\nവിശ്വസ്തതയോടെ,\nകോ ഓർഡിനേറ്റർ\nഎ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി\n\n9846310383\ninfo@aslamquranaward.com";
@@ -456,7 +456,7 @@ class ApplicationResource extends Resource
                         ->action(function (Collection $records) {
                             foreach ($records as $application) {
                                 $pdfPath = public_path("storage/admit_cards/{$application->application_id}.pdf");
-                                
+
                                 $mailData = [
                                     'applicant_name' => $application->full_name,
                                     'zone' => $application->zone->name ?? 'N/A',
@@ -466,7 +466,7 @@ class ApplicationResource extends Resource
                                     'reporting_time' => $application->zone->assignment->time ?? 'N/A',
                                     'subject' => 'Admit Card',
                                     'page' => 'emails.admit-card-bulk-mail',
-                                    'pdfPath' => $pdfPath, 
+                                    'pdfPath' => $pdfPath,
                                 ];
 
                                 Mail::mailer('smtp2')->to($application->email)->queue(new BulkMail($mailData));
@@ -491,11 +491,9 @@ class ApplicationResource extends Resource
             ])
             ->striped()
             // ->columnSpanFull()
-            ->paginated([10, 25, 50, 100, 500])
-            ->defaultPaginationPageOption(25)
-            ->deferLoading()
+            ->paginated([10, 25, 50, 100, 'all'])
             ->modifyQueryUsing(function (Builder $query): Builder {
-                return $query->with(['zone:id,name', 'category:id,name']);
+                return $query;
             });
         // ->responsive();
     }
