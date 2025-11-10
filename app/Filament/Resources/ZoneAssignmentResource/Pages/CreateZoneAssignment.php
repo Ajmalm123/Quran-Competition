@@ -70,6 +70,12 @@ class CreateZoneAssignment extends CreateRecord
                                 Forms\Components\TextInput::make('location')
                                     ->required()
                                     ->maxLength(255),
+                                Forms\Components\TextInput::make('timezone')
+                                    ->label('Timezone')
+                                    ->required()
+                                    ->default('IST')
+                                    ->maxLength(64)
+                                    ->dehydrateStateUsing(fn ($state) => $state ? strtoupper($state) : null),
                             ])
                             ->columns([
                                 'sm' => 2,

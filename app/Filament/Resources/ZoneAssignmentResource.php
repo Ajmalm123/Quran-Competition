@@ -130,7 +130,6 @@ class ZoneAssignmentResource extends Resource
                             ->default('IST')
                             ->maxLength(64)
                             ->dehydrateStateUsing(fn ($state) => $state ? strtoupper($state) : null)
-                            ->helperText('Specify the timezone abbreviation, e.g. IST.'),
                     ])
                     ->columns(2)
             ]);
