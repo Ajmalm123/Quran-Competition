@@ -37,6 +37,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->passport_size_photo ? url('storage/' . $application->passport_size_photo) : 'N/A',
             $application->full_name,
             Carbon::parse($application->date_of_birth)->format('d-m-Y'),
+            $application->contact_number ?? 'N/A',
+            $application->email ?? 'N/A',
             $application->district,
             $application->category?->name ?? 'N/A',
             $application->zone?->name,
@@ -56,6 +58,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             'Photo',
             'Name',
             'Date of Birth',
+            'Mobile',
+            'Email',
             'District',
             'Category',
             'Zone',
@@ -70,7 +74,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         return [
             'D' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'J' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'L' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 
@@ -100,8 +104,8 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
 
                 // Set column widths
                 $columnWidths = [
-                    'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
-                    'G' => 15, 'H' => 25, 'I' => 25, 'J' => 15, 'K' => 20
+                    'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 30,
+                    'G' => 15, 'H' => 15, 'I' => 15, 'J' => 25, 'K' => 25, 'L' => 15, 'M' => 20
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -124,7 +128,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ]);
 
                 // Center-align specific columns
-                $centerAlignColumns = ['A', 'B', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+                $centerAlignColumns = ['A', 'B', 'D', 'E', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
