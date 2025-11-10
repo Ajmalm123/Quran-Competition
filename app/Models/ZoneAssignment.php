@@ -10,7 +10,7 @@ class ZoneAssignment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['zone_id', 'center_id', 'date', 'time','location'];
+    protected $fillable = ['zone_id', 'center_id', 'date', 'time', 'location', 'timezone'];
 
     protected $casts = [
         'date' => 'date',

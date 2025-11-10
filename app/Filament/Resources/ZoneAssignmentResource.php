@@ -124,6 +124,13 @@ class ZoneAssignmentResource extends Resource
                         Forms\Components\TextInput::make('location')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('timezone')
+                            ->label('Timezone')
+                            ->required()
+                            ->default('IST')
+                            ->maxLength(64)
+                            ->dehydrateStateUsing(fn ($state) => $state ? strtoupper($state) : null)
+                            ->helperText('Specify the timezone abbreviation, e.g. IST.'),
                     ])
                     ->columns(2)
             ]);
@@ -146,11 +153,22 @@ class ZoneAssignmentResource extends Resource
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('date')
                     ->formatStateUsing(function ($state) {
-                        return \Carbon\Carbon::parse($state)->format('M d, Y - l');
+                        return Carbon::parse($state)->format('M d, Y - l');
                     })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('time')
-                    ->time('h:i A')
+                    ->label('Time')
+                    ->formatStateUsing(function ($state, ZoneAssignment $record) {
+                        if (! $state) {
+                            return 'N/A';
+                        }
+
+                        $formattedTime = Carbon::parse($state)->format('h:i A');
+
+                        return $record->timezone
+                            ? $formattedTime . ' ' . strtoupper($record->timezone)
+                            : $formattedTime;
+                    })
                     ->sortable()
                     ->icon('heroicon-o-clock'),
                 Tables\Columns\TextColumn::make('location')

@@ -36,14 +36,16 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             $application->application_id,
             $application->passport_size_photo ? url('storage/' . $application->passport_size_photo) : 'N/A',
             $application->full_name,
-            \Carbon\Carbon::parse($application->date_of_birth)->format('d-m-Y'),
+            Carbon::parse($application->date_of_birth)->format('d-m-Y'),
             $application->district,
             $application->category?->name ?? 'N/A',
             $application->zone?->name,
             $application->zone?->assignment?->center_id ?? 'N/A',
             $application->zone?->assignment?->location ?? 'N/A',
-            $application->zone?->assignment?->date ? \Carbon\Carbon::parse($application->zone?->assignment?->date)->format('F j, Y') : 'N/A',
-            $application->zone?->assignment?->time ? \Carbon\Carbon::parse($application->zone?->assignment?->time)->format('h:i A') : 'N/A',
+            $application->zone?->assignment?->date
+                ? Carbon::parse($application->zone?->assignment?->date)->format('F j, Y')
+                : 'N/A',
+            $this->formatAssignmentTimeWithTimezone($application),
         ];
     }
 
@@ -60,7 +62,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             'Center Name',
             'Center Location',
             'Center Date',
-            'Center Time',
+            'Center Time (Timezone)',
         ];
     }
 
@@ -68,9 +70,24 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
     {
         return [
             'D' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'I' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'J' => NumberFormat::FORMAT_DATE_TIME3,
+            'J' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
+    }
+
+    protected function formatAssignmentTimeWithTimezone(Application $application): string
+    {
+        $time = $application->zone?->assignment?->time;
+
+        if (! $time) {
+            return 'N/A';
+        }
+
+        $formattedTime = Carbon::parse($time)->format('h:i A');
+        $timezone = $application->zone?->assignment?->timezone;
+
+        return $timezone
+            ? "{$formattedTime} " . strtoupper($timezone)
+            : $formattedTime;
     }
 
     public function registerEvents(): array
@@ -84,7 +101,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 // Set column widths
                 $columnWidths = [
                     'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 15,
-                    'G' => 15, 'H' => 25, 'I' => 25, 'J' => 15, 'K' => 15
+                    'G' => 15, 'H' => 25, 'I' => 25, 'J' => 15, 'K' => 20
                 ];
 
                 foreach ($columnWidths as $column => $width) {
