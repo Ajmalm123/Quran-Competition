@@ -101,7 +101,7 @@ class ZoneAssignmentResource extends Resource
                             ->label('Time (Legacy)')
                             ->format('h:i A')
                             ->reactive()
-                            ->visible(fn ($record) => {
+                            ->visible(function ($record) {
                                 if (!$record) {
                                     return false;
                                 }
