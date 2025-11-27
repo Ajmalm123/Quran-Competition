@@ -97,6 +97,22 @@ class ZoneAssignmentResource extends Resource
                             ->afterOrEqual(now()->startOfDay())
                             ->reactive(),
 
+                        Forms\Components\TimePicker::make('time')
+                            ->label('Time (Legacy)')
+                            ->format('h:i A')
+                            ->reactive()
+                            ->visible(fn ($record) => $record && $record->time && !$record->time_slots)
+                            ->dehydrated(false),
+                        Forms\Components\TextInput::make('location')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('timezone')
+                            ->label('Timezone')
+                            ->required()
+                            ->default('IST')
+                            ->maxLength(64)
+                            ->dehydrateStateUsing(fn ($state) => $state ? strtoupper($state) : null),
+
                         Forms\Components\Repeater::make('time_slots')
                             ->label('Time Slots')
                             ->schema([
@@ -145,23 +161,7 @@ class ZoneAssignmentResource extends Resource
                             ->collapsed()
                             ->reorderable()
                             ->reorderableWithButtons()
-                            ->columnSpanFull(),
-
-                        Forms\Components\TimePicker::make('time')
-                            ->label('Time (Legacy)')
-                            ->format('h:i A')
-                            ->reactive()
-                            ->visible(fn ($record) => $record && $record->time && !$record->time_slots)
-                            ->dehydrated(false),
-                        Forms\Components\TextInput::make('location')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('timezone')
-                            ->label('Timezone')
-                            ->required()
-                            ->default('IST')
-                            ->maxLength(64)
-                            ->dehydrateStateUsing(fn ($state) => $state ? strtoupper($state) : null)
+                            ->columnSpanFull()
                     ])
                     ->columns(2)
             ]);
