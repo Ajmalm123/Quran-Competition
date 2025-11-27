@@ -38,6 +38,10 @@ use Filament\Actions\CreateAction;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BulkMail;
 use Filament\Support\Enums\ActionSize;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Section as InfolistSection;
 
 class ApplicationResource extends Resource
 {
@@ -496,6 +500,163 @@ class ApplicationResource extends Resource
                 return $query;
             });
         // ->responsive();
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfolistSection::make('Application Details')
+                    ->schema([
+                        Forms\Components\Grid::make(3)->schema([
+                            ImageEntry::make('passport_size_photo')
+                                ->label('Photo')
+                                ->circular()
+                                ->defaultImageUrl(url('/images/default-avatar.png')),
+                            TextEntry::make('application_id')
+                                ->label('Application ID')
+                                ->copyable(),
+                            TextEntry::make('full_name')
+                                ->label('Full Name')
+                                ->weight('bold'),
+                        ]),
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('date_of_birth')
+                                ->label('Date of Birth')
+                                ->date('d F Y'),
+                            TextEntry::make('age')
+                                ->label('Age')
+                                ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
+                            TextEntry::make('gender')
+                                ->label('Gender'),
+                        ]),
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('educational_qualification')
+                                ->label('Educational Qualification'),
+                            TextEntry::make('aadhar_number')
+                                ->label('Aadhar Number')
+                                ->copyable(),
+                            TextEntry::make('mother_tongue')
+                                ->label('Mother Tongue'),
+                        ]),
+                    ])
+                    ->columns(1),
+                InfolistSection::make('Contact Information')
+                    ->schema([
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('contact_number')
+                                ->label('Contact Number')
+                                ->copyable()
+                                ->icon('heroicon-o-phone'),
+                            TextEntry::make('whatsapp')
+                                ->label('WhatsApp')
+                                ->copyable()
+                                ->icon('heroicon-o-chat-bubble-left-ellipsis'),
+                            TextEntry::make('email')
+                                ->label('Email')
+                                ->copyable()
+                                ->icon('heroicon-o-envelope'),
+                        ]),
+                        Forms\Components\Grid::make(2)->schema([
+                            TextEntry::make('c_address')
+                                ->label('Current Address')
+                                ->columnSpan(1),
+                            TextEntry::make('pr_address')
+                                ->label('Permanent Address')
+                                ->columnSpan(1),
+                        ]),
+                        Forms\Components\Grid::make(2)->schema([
+                            TextEntry::make('district')
+                                ->label('District'),
+                            TextEntry::make('pincode')
+                                ->label('Pincode'),
+                        ]),
+                    ])
+                    ->columns(1),
+                InfolistSection::make('Hifz and Participation Details')
+                    ->schema([
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('institution_name')
+                                ->label('Institution Name'),
+                            TextEntry::make('is_completed_ijazah')
+                                ->label('Completed Ijazah'),
+                            TextEntry::make('qirath_with_ijazah')
+                                ->label('Qirath with Ijazah'),
+                        ]),
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('primary_competition_participation')
+                                ->label('Primary Competition Participation'),
+                            TextEntry::make('zone.name')
+                                ->label('Zone'),
+                            TextEntry::make('category.name')
+                                ->label('Category'),
+                        ]),
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('status')
+                                ->label('Status')
+                                ->badge()
+                                ->color(fn(string $state): string => match ($state) {
+                                    'Created' => 'gray',
+                                    'withheld' => 'warning',
+                                    'Approved' => 'success',
+                                    'Rejected' => 'danger',
+                                    default => 'info',
+                                }),
+                            TextEntry::make('admit_status')
+                                ->label('Admit Status')
+                                ->badge()
+                                ->color(fn(?string $state): string => match ($state) {
+                                    'Admitted' => 'success',
+                                    'Declined' => 'danger',
+                                    'Absent' => 'gray',
+                                    'Pending' => 'warning',
+                                    'Completed' => 'info',
+                                    default => 'gray',
+                                }),
+                            TextEntry::make('token_number')
+                                ->label('Token Number')
+                                ->placeholder('N/A'),
+                        ]),
+                    ])
+                    ->columns(1),
+                InfolistSection::make('Competition Details')
+                    ->schema([
+                        Forms\Components\Grid::make(3)->schema([
+                            TextEntry::make('zone.assignment.center_id')
+                                ->label('Center Name')
+                                ->placeholder('N/A'),
+                            TextEntry::make('zone.assignment.location')
+                                ->label('Location')
+                                ->placeholder('N/A'),
+                            TextEntry::make('zone.assignment.date')
+                                ->label('Date')
+                                ->date('d F Y')
+                                ->placeholder('N/A'),
+                        ]),
+                        Forms\Components\Grid::make(2)->schema([
+                            TextEntry::make('zone.assignment.time')
+                                ->label('Center Time')
+                                ->formatStateUsing(function ($state, $record) {
+                                    if (!$state) {
+                                        return 'N/A';
+                                    }
+                                    $formattedTime = Carbon::parse($state)->format('h:i A');
+                                    $timezone = $record->zone?->assignment?->timezone;
+                                    return $timezone
+                                        ? "{$formattedTime} " . strtoupper($timezone)
+                                        : $formattedTime;
+                                })
+                                ->placeholder('N/A'),
+                            TextEntry::make('time_slot')
+                                ->label('Assigned Time Slot')
+                                ->icon('heroicon-o-clock')
+                                ->badge()
+                                ->color('info')
+                                ->placeholder('Not Assigned'),
+                        ]),
+                    ])
+                    ->columns(1),
+            ]);
     }
 
     public static function getRelations(): array

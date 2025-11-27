@@ -40,7 +40,8 @@ class Application extends Model
         'status',
         'marks',
         'token_number',
-        'admit_status'
+        'admit_status',
+        'time_slot'
     ];
 
     const GENDER = [

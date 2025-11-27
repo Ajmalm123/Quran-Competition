@@ -97,30 +97,63 @@ class ZoneAssignmentResource extends Resource
                             ->afterOrEqual(now()->startOfDay())
                             ->reactive(),
 
+                        Forms\Components\Repeater::make('time_slots')
+                            ->label('Time Slots')
+                            ->description('Add multiple time slots. These will be distributed equally among approved applicants.')
+                            ->schema([
+                                Forms\Components\TimePicker::make('time')
+                                    ->label('Time')
+                                    ->required()
+                                    ->format('h:i A')
+                                    ->reactive()
+                                    ->afterOrEqual(function (callable $get) {
+                                        $date = $get('../../date');
+                                        if ($date && Carbon::parse($date)->isToday()) {
+                                            return now();
+                                        }
+                                        return '00:00';
+                                    })
+                                    ->rules([
+                                        function (callable $get) {
+                                            return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                                $date = $get('../../date');
+                                                if ($date && $value) {
+                                                    $dateTime = Carbon::parse($date)->setTime(
+                                                        Carbon::parse($value)->hour,
+                                                        Carbon::parse($value)->minute
+                                                    );
+
+                                                    if ($dateTime->isPast()) {
+                                                        $fail("The selected date and time must be in the future.");
+                                                    }
+                                                }
+                                            };
+                                        },
+                                    ]),
+                            ])
+                            ->defaultItems(1)
+                            ->minItems(1)
+                            ->itemLabel(fn (array $state): ?string => 
+                                $state['time'] 
+                                    ? 'Time Slot: ' . Carbon::parse($state['time'])->format('h:i A')
+                                    : 'New Time Slot'
+                            )
+                            ->addActionLabel('Add Time Slot')
+                            ->deleteAction(
+                                fn ($action) => $action->label('Remove Time Slot')
+                            )
+                            ->collapsible()
+                            ->collapsed()
+                            ->reorderable()
+                            ->reorderableWithButtons()
+                            ->columnSpanFull(),
+
                         Forms\Components\TimePicker::make('time')
-                            ->required()
+                            ->label('Time (Legacy)')
                             ->format('h:i A')
                             ->reactive()
-                            ->afterOrEqual(function (callable $get) {
-                                $date = $get('date');
-                                if ($date && Carbon::parse($date)->isToday()) {
-                                    return now();
-                                }
-                                return '00:00';
-                            })
-                            ->rules([
-                                function (callable $get) {
-                                    return function (string $attribute, $value, \Closure $fail) use ($get) {
-                                        $date = Carbon::parse($get('date'));
-                                        $time = Carbon::parse($value);
-                                        $dateTime = $date->setTime($time->hour, $time->minute);
-
-                                        if ($dateTime->isPast()) {
-                                            $fail("The selected date and time must be in the future.");
-                                        }
-                                    };
-                                },
-                            ]),
+                            ->visible(fn ($record) => $record && $record->time && !$record->time_slots)
+                            ->dehydrated(false),
                         Forms\Components\TextInput::make('location')
                             ->required()
                             ->maxLength(255),
@@ -155,21 +188,36 @@ class ZoneAssignmentResource extends Resource
                         return Carbon::parse($state)->format('M d, Y - l');
                     })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('time')
-                    ->label('Time')
+                Tables\Columns\TextColumn::make('time_slots')
+                    ->label('Time Slots')
                     ->formatStateUsing(function ($state, ZoneAssignment $record) {
-                        if (! $state) {
-                            return 'N/A';
+                        if (!empty($state) && is_array($state)) {
+                            $timeSlots = array_map(function ($slot) use ($record) {
+                                $time = $slot['time'] ?? null;
+                                if ($time) {
+                                    $formattedTime = Carbon::parse($time)->format('h:i A');
+                                    return $record->timezone
+                                        ? $formattedTime . ' ' . strtoupper($record->timezone)
+                                        : $formattedTime;
+                                }
+                                return null;
+                            }, $state);
+                            return implode(', ', array_filter($timeSlots));
                         }
-
-                        $formattedTime = Carbon::parse($state)->format('h:i A');
-
-                        return $record->timezone
-                            ? $formattedTime . ' ' . strtoupper($record->timezone)
-                            : $formattedTime;
+                        
+                        // Fallback to legacy time field
+                        if ($record->time) {
+                            $formattedTime = Carbon::parse($record->time)->format('h:i A');
+                            return $record->timezone
+                                ? $formattedTime . ' ' . strtoupper($record->timezone)
+                                : $formattedTime;
+                        }
+                        
+                        return 'N/A';
                     })
                     ->sortable()
-                    ->icon('heroicon-o-clock'),
+                    ->icon('heroicon-o-clock')
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('location')
                     ->searchable(),
             ])

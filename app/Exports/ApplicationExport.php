@@ -48,6 +48,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ? Carbon::parse($application->zone?->assignment?->date)->format('F j, Y')
                 : 'N/A',
             $this->formatAssignmentTimeWithTimezone($application),
+            $application->time_slot ?? 'N/A',
         ];
     }
 
@@ -67,6 +68,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
             'Center Location',
             'Center Date',
             'Center Time (Timezone)',
+            'Time Slot',
         ];
     }
 
@@ -105,7 +107,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 // Set column widths
                 $columnWidths = [
                     'A' => 15, 'B' => 50, 'C' => 25, 'D' => 15, 'E' => 15, 'F' => 30,
-                    'G' => 15, 'H' => 15, 'I' => 15, 'J' => 25, 'K' => 25, 'L' => 15, 'M' => 20
+                    'G' => 15, 'H' => 15, 'I' => 15, 'J' => 25, 'K' => 25, 'L' => 15, 'M' => 20, 'N' => 15
                 ];
 
                 foreach ($columnWidths as $column => $width) {
@@ -128,7 +130,7 @@ class ApplicationExport implements FromCollection, WithMapping, WithHeadings, Wi
                 ]);
 
                 // Center-align specific columns
-                $centerAlignColumns = ['A', 'B', 'D', 'E', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+                $centerAlignColumns = ['A', 'B', 'D', 'E', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'];
                 foreach ($centerAlignColumns as $col) {
                     $sheet->getStyle("{$col}2:{$col}{$lastRow}")
                         ->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
