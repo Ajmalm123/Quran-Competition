@@ -44,6 +44,7 @@ class EditZoneAssignment extends EditRecord
         // Get approved applicants for this zone
         $approvedApplicants = Application::where('zone_id', $zoneAssignment->zone_id)
             ->where('status', 'Approved')
+            ->orderBy('id')
             ->get();
 
         if ($approvedApplicants->isEmpty()) {
@@ -62,20 +63,29 @@ class EditZoneAssignment extends EditRecord
             return;
         }
 
-        // Distribute applicants equally across time slots using round-robin
+        // Calculate distribution: split applicants equally across time slots
         $totalApplicants = $approvedApplicants->count();
         $totalTimeSlots = count($timeSlotValues);
-        $timeSlotIndex = 0;
         
-        foreach ($approvedApplicants as $index => $applicant) {
-            // Use round-robin to assign time slots
-            $assignedTimeSlot = $timeSlotValues[$timeSlotIndex % $totalTimeSlots];
+        // Calculate how many applicants per slot (rounded up for first slots if needed)
+        $baseApplicantsPerSlot = (int) floor($totalApplicants / $totalTimeSlots);
+        $extraApplicants = $totalApplicants % $totalTimeSlots;
+        
+        // Distribute applicants evenly across time slots
+        $applicantIndex = 0;
+        
+        foreach ($timeSlotValues as $slotIndex => $timeSlot) {
+            // Calculate how many applicants should be in this slot
+            // First few slots get one extra applicant if there's a remainder
+            $applicantsInThisSlot = $baseApplicantsPerSlot + ($slotIndex < $extraApplicants ? 1 : 0);
             
-            // Assign time slot to applicant
-            $applicant->time_slot = $assignedTimeSlot;
-            $applicant->save();
-            
-            $timeSlotIndex++;
+            // Assign this time slot to the calculated number of applicants
+            for ($i = 0; $i < $applicantsInThisSlot && $applicantIndex < $totalApplicants; $i++) {
+                $applicant = $approvedApplicants[$applicantIndex];
+                $applicant->time_slot = $timeSlot;
+                $applicant->save();
+                $applicantIndex++;
+            }
         }
     }
 }
