@@ -34,10 +34,25 @@ class EditZoneAssignment extends EditRecord
         // Ensure time_slots is properly formatted as an array for the repeater
         if (isset($data['time_slots'])) {
             if (is_string($data['time_slots'])) {
-                $data['time_slots'] = json_decode($data['time_slots'], true) ?? [];
-            }
-            if (!is_array($data['time_slots'])) {
+                $decoded = json_decode($data['time_slots'], true);
+                $data['time_slots'] = is_array($decoded) ? $decoded : [];
+            } elseif (!is_array($data['time_slots'])) {
                 $data['time_slots'] = [];
+            }
+            
+            // Ensure each slot has the correct structure
+            if (is_array($data['time_slots'])) {
+                $data['time_slots'] = array_map(function ($slot) {
+                    if (is_array($slot)) {
+                        return $slot;
+                    }
+                    // If slot is not an array, try to convert it
+                    if (is_string($slot)) {
+                        $decoded = json_decode($slot, true);
+                        return is_array($decoded) ? $decoded : ['time' => $slot];
+                    }
+                    return ['time' => null];
+                }, $data['time_slots']);
             }
         } else {
             $data['time_slots'] = [];
@@ -49,11 +64,18 @@ class EditZoneAssignment extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         // Ensure time_slots is properly formatted before saving
-        if (isset($data['time_slots']) && is_array($data['time_slots'])) {
-            // Filter out any empty slots
-            $data['time_slots'] = array_values(array_filter($data['time_slots'], function ($slot) {
-                return !empty($slot['time']);
-            }));
+        if (isset($data['time_slots'])) {
+            if (is_array($data['time_slots'])) {
+                // Filter out any empty slots and ensure proper structure
+                $data['time_slots'] = array_values(array_filter($data['time_slots'], function ($slot) {
+                    if (!is_array($slot)) {
+                        return false;
+                    }
+                    return !empty($slot['time']) && is_string($slot['time']);
+                }));
+            } else {
+                $data['time_slots'] = [];
+            }
         } else {
             $data['time_slots'] = [];
         }

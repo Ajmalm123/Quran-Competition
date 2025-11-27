@@ -155,11 +155,17 @@ class ZoneAssignmentResource extends Resource
                             ])
                             ->defaultItems(1)
                             ->minItems(1)
-                            ->itemLabel(fn (array $state): ?string => 
-                                $state['time'] 
-                                    ? 'Time Slot: ' . Carbon::parse($state['time'])->format('h:i A')
-                                    : 'New Time Slot'
-                            )
+                            ->itemLabel(function (array $state): ?string {
+                                if (empty($state['time'])) {
+                                    return 'New Time Slot';
+                                }
+                                try {
+                                    $time = is_string($state['time']) ? $state['time'] : (string)$state['time'];
+                                    return 'Time Slot: ' . Carbon::parse($time)->format('h:i A');
+                                } catch (\Exception $e) {
+                                    return 'New Time Slot';
+                                }
+                            })
                             ->addActionLabel('Add Time Slot')
                             ->deleteAction(
                                 fn ($action) => $action->label('Remove Time Slot')
