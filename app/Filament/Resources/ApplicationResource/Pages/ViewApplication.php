@@ -139,7 +139,7 @@ class ViewApplication extends ViewRecord
                 ->label('Edit Time Slot')
                 ->icon('heroicon-o-clock')
                 ->color('primary')
-                ->visible(fn (Application $record) => $this->hasAvailableTimeSlots($record))
+                ->visible(fn (Application $record) => $record->status === Application::STATUS['Approved'])
                 ->form(fn (Application $record) => [
                     Select::make('time_slot')
                         ->label('Available Time Slots')
