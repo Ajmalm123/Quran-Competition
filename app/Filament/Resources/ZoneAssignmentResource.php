@@ -203,26 +203,50 @@ class ZoneAssignmentResource extends Resource
                 Tables\Columns\TextColumn::make('time_slots')
                     ->label('Time Slots')
                     ->formatStateUsing(function ($state, ZoneAssignment $record) {
+                        // Handle if state is a string (JSON) - decode it
+                        if (is_string($state)) {
+                            $decoded = json_decode($state, true);
+                            $state = is_array($decoded) ? $decoded : null;
+                        }
+                        
+                        // Process array of time slots
                         if (!empty($state) && is_array($state)) {
-                            $timeSlots = array_map(function ($slot) use ($record) {
-                                $time = $slot['time'] ?? null;
-                                if ($time) {
-                                    $formattedTime = Carbon::parse($time)->format('h:i A');
-                                    return $record->timezone
-                                        ? $formattedTime . ' ' . strtoupper($record->timezone)
-                                        : $formattedTime;
+                            $timeSlots = [];
+                            foreach ($state as $slot) {
+                                // Ensure slot is an array
+                                if (!is_array($slot)) {
+                                    continue;
                                 }
-                                return null;
-                            }, $state);
-                            return implode(', ', array_filter($timeSlots));
+                                
+                                $time = $slot['time'] ?? null;
+                                if ($time && is_string($time)) {
+                                    try {
+                                        $formattedTime = Carbon::parse($time)->format('h:i A');
+                                        $timeSlots[] = $record->timezone
+                                            ? $formattedTime . ' ' . strtoupper($record->timezone)
+                                            : $formattedTime;
+                                    } catch (\Exception $e) {
+                                        // Skip invalid time formats
+                                        continue;
+                                    }
+                                }
+                            }
+                            
+                            if (!empty($timeSlots)) {
+                                return implode(', ', $timeSlots);
+                            }
                         }
                         
                         // Fallback to legacy time field
                         if ($record->time) {
-                            $formattedTime = Carbon::parse($record->time)->format('h:i A');
-                            return $record->timezone
-                                ? $formattedTime . ' ' . strtoupper($record->timezone)
-                                : $formattedTime;
+                            try {
+                                $formattedTime = Carbon::parse($record->time)->format('h:i A');
+                                return $record->timezone
+                                    ? $formattedTime . ' ' . strtoupper($record->timezone)
+                                    : $formattedTime;
+                            } catch (\Exception $e) {
+                                return 'N/A';
+                            }
                         }
                         
                         return 'N/A';
