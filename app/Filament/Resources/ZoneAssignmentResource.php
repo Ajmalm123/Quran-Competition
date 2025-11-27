@@ -99,7 +99,6 @@ class ZoneAssignmentResource extends Resource
 
                         Forms\Components\Repeater::make('time_slots')
                             ->label('Time Slots')
-                            ->description('Add multiple time slots. These will be distributed equally among approved applicants.')
                             ->schema([
                                 Forms\Components\TimePicker::make('time')
                                     ->label('Time')
