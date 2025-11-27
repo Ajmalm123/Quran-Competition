@@ -13,6 +13,7 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\IconPosition;
 use App\Filament\Resources\ApplicationResource;
 use Barryvdh\DomPDF\Facade\Pdf; // Use this import for the PDF facade
+use Carbon\Carbon;
 
 class ViewApplication extends ViewRecord
 {
@@ -134,8 +135,76 @@ class ViewApplication extends ViewRecord
                 ->modalSubmitActionLabel('Yes, transfer zone')
                 ->modalCancelActionLabel('Cancel'),
 
+            Actions\Action::make('edit_time_slot')
+                ->label('Edit Time Slot')
+                ->icon('heroicon-o-clock')
+                ->color('primary')
+                ->visible(fn (Application $record) => $this->hasAvailableTimeSlots($record))
+                ->form(fn (Application $record) => [
+                    Select::make('time_slot')
+                        ->label('Available Time Slots')
+                        ->options($this->getTimeSlotOptions($record))
+                        ->default($record->time_slot)
+                        ->required()
+                        ->preload()
+                        ->searchable()
+                        ->helperText('Select from the time slots configured for this applicant\'s zone.'),
+                ])
+                ->action(function (array $data, Application $record): void {
+                    $record->time_slot = $data['time_slot'];
+                    $record->save();
+
+                    Notification::make()
+                        ->title('Time slot updated')
+                        ->body("Assigned time slot set to {$record->time_slot}.")
+                        ->success()
+                        ->send();
+                }),
+
             Actions\DeleteAction::make()->icon('heroicon-o-trash')->defaultView(StaticAction::LINK_VIEW),
         ];
+    }
+
+    protected function getTimeSlotOptions(?Application $record): array
+    {
+        if (! $record || ! $record->zone || ! $record->zone->assignment) {
+            return [];
+        }
+
+        $assignment = $record->zone->assignment;
+        $timeSlots = $assignment->time_slots;
+
+        if (is_string($timeSlots)) {
+            $decoded = json_decode($timeSlots, true);
+            $timeSlots = is_array($decoded) ? $decoded : [];
+        }
+
+        if (! is_array($timeSlots) || empty($timeSlots)) {
+            return [];
+        }
+
+        $timezoneSuffix = $assignment->timezone ? ' ' . strtoupper($assignment->timezone) : '';
+        $options = [];
+
+        foreach ($timeSlots as $slot) {
+            if (! is_array($slot) || empty($slot['time'])) {
+                continue;
+            }
+
+            try {
+                $value = Carbon::parse($slot['time'])->format('h:i A');
+                $options[$value] = $value . $timezoneSuffix;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return $options;
+    }
+
+    protected function hasAvailableTimeSlots(?Application $record): bool
+    {
+        return ! empty($this->getTimeSlotOptions($record));
     }
 
     // public function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
