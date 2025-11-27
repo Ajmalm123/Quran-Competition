@@ -101,7 +101,14 @@ class ZoneAssignmentResource extends Resource
                             ->label('Time (Legacy)')
                             ->format('h:i A')
                             ->reactive()
-                            ->visible(fn ($record) => $record && $record->time && !$record->time_slots)
+                            ->visible(fn ($record) => {
+                                if (!$record) {
+                                    return false;
+                                }
+                                $hasTime = !empty($record->time);
+                                $hasTimeSlots = !empty($record->time_slots) && is_array($record->time_slots) && count($record->time_slots) > 0;
+                                return $hasTime && !$hasTimeSlots;
+                            })
                             ->dehydrated(false),
                         Forms\Components\TextInput::make('location')
                             ->required()

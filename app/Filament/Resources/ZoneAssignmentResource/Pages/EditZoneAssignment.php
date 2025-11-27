@@ -29,6 +29,38 @@ class EditZoneAssignment extends EditRecord
         return ZoneAssignmentResource::getUrl('index');
     }
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        // Ensure time_slots is properly formatted as an array for the repeater
+        if (isset($data['time_slots'])) {
+            if (is_string($data['time_slots'])) {
+                $data['time_slots'] = json_decode($data['time_slots'], true) ?? [];
+            }
+            if (!is_array($data['time_slots'])) {
+                $data['time_slots'] = [];
+            }
+        } else {
+            $data['time_slots'] = [];
+        }
+        
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Ensure time_slots is properly formatted before saving
+        if (isset($data['time_slots']) && is_array($data['time_slots'])) {
+            // Filter out any empty slots
+            $data['time_slots'] = array_values(array_filter($data['time_slots'], function ($slot) {
+                return !empty($slot['time']);
+            }));
+        } else {
+            $data['time_slots'] = [];
+        }
+        
+        return $data;
+    }
+
     protected function afterSave(): void
     {
         $zoneAssignment = $this->record;
