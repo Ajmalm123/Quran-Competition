@@ -202,27 +202,32 @@ class ZoneAssignmentResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('time_slots')
                     ->label('Time Slots')
-                    ->formatStateUsing(function ($state, ZoneAssignment $record) {
-                        // Handle if state is a string (JSON) - decode it
-                        if (is_string($state)) {
-                            $decoded = json_decode($state, true);
-                            $state = is_array($decoded) ? $decoded : null;
+                    ->getStateUsing(function (ZoneAssignment $record): string {
+                        // Get time_slots from the model (cast will be applied)
+                        $timeSlots = $record->time_slots;
+                        
+                        // Ensure it's an array
+                        if (is_string($timeSlots)) {
+                            $decoded = json_decode($timeSlots, true);
+                            $timeSlots = is_array($decoded) ? $decoded : null;
                         }
                         
                         // Process array of time slots
-                        if (!empty($state) && is_array($state)) {
-                            $timeSlots = [];
-                            foreach ($state as $slot) {
+                        if (!empty($timeSlots) && is_array($timeSlots)) {
+                            $formattedSlots = [];
+                            foreach ($timeSlots as $slot) {
                                 // Ensure slot is an array
                                 if (!is_array($slot)) {
                                     continue;
                                 }
                                 
                                 $time = $slot['time'] ?? null;
-                                if ($time && is_string($time)) {
+                                if ($time) {
                                     try {
-                                        $formattedTime = Carbon::parse($time)->format('h:i A');
-                                        $timeSlots[] = $record->timezone
+                                        // Handle both string and datetime objects
+                                        $timeValue = is_string($time) ? $time : (string)$time;
+                                        $formattedTime = Carbon::parse($timeValue)->format('h:i A');
+                                        $formattedSlots[] = $record->timezone
                                             ? $formattedTime . ' ' . strtoupper($record->timezone)
                                             : $formattedTime;
                                     } catch (\Exception $e) {
@@ -232,8 +237,8 @@ class ZoneAssignmentResource extends Resource
                                 }
                             }
                             
-                            if (!empty($timeSlots)) {
-                                return implode(', ', $timeSlots);
+                            if (!empty($formattedSlots)) {
+                                return implode(', ', $formattedSlots);
                             }
                         }
                         
@@ -251,7 +256,7 @@ class ZoneAssignmentResource extends Resource
                         
                         return 'N/A';
                     })
-                    ->sortable()
+                    ->sortable(false)
                     ->icon('heroicon-o-clock')
                     ->wrap(),
                 Tables\Columns\TextColumn::make('location')
