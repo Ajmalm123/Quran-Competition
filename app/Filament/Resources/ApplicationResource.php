@@ -163,6 +163,11 @@ class ApplicationResource extends Resource
                                 ->label('Zone')
                                 ->required()
                                 ->options(Zone::pluck('name', 'id')),
+                            TextInput::make('time_slot')
+                                ->label('Time Slot')
+                                ->disabled()
+                                ->dehydrated(false)
+                                ->placeholder('Not assigned'),
                         ]),
                 ])
                 ->columns(1),
@@ -215,11 +220,6 @@ class ApplicationResource extends Resource
                 TextColumn::make('zone.name')
                     ->searchable()
                     ->wrap(),
-                TextColumn::make('time_slot')
-                    ->label('Time Slot')
-                    ->searchable()
-                    ->wrap()
-                    ->placeholder('Not assigned'),
                 TextColumn::make('category.name')
                     ->label('Category')
                     ->searchable()
