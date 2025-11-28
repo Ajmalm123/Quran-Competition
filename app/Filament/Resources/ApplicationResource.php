@@ -38,10 +38,6 @@ use Filament\Actions\CreateAction;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BulkMail;
 use Filament\Support\Enums\ActionSize;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\Section as InfolistSection;
 
 class ApplicationResource extends Resource
 {
@@ -185,8 +181,6 @@ class ApplicationResource extends Resource
                 ->columns(2),
         ]);
     }
-
-
     public static function table(Table $table): Table
     {
         return $table
@@ -221,6 +215,11 @@ class ApplicationResource extends Resource
                 TextColumn::make('zone.name')
                     ->searchable()
                     ->wrap(),
+                TextColumn::make('time_slot')
+                    ->label('Time Slot')
+                    ->searchable()
+                    ->wrap()
+                    ->placeholder('Not assigned'),
                 TextColumn::make('category.name')
                     ->label('Category')
                     ->searchable()
@@ -390,7 +389,7 @@ class ApplicationResource extends Resource
 
                             // Shorter message for WhatsApp URL
                             $shortMessage = "السَّلامُ عَلَيْكُم ورَحْمَةُ اللهِ وَبَرَكاتُهُ\n\nപ്രിയപ്പെട്ട {$genderTitle} {$record->full_name},\n\nഎ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2025 മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!\n\nതാങ്കൾ മനസ്സിലാക്കിയത് പോലെ വിശുദ്ധ ഖുർആൻ പരിപൂർണ്ണമായ മനഃപാഠവും തജ് വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവുമായിരിക്കും മത്സരത്തിന്റെ ഭാഗമായി പരിശോധിക്കുക. അതോടൊപ്പം 22 വയസ്സിന് താഴെയുള്ള ആൺകുട്ടികളുടെ വിഭാഗത്തിൽ ആദ്യ അവസാന അഞ്ചു ജുസ്ഉകൾ ഒഴികെയുള്ള 20 ജുസ്ഇന്റെയും, 22 വയസ്സിന് താഴെയുള്ള പെൺകുട്ടികളുടെ വിഭാഗം മത്സരങ്ങളിൽ ഖുർആനിലെ ആദ്യ അവസാന അഞ്ചു വീതം ജുസ്ഉകളുടെയും ആശയസംബന്ധമായ പരിശോധനയും ഉണ്ടായിരിക്കും. 13 വയസ്സിന് താഴെയുള്ള കുട്ടികളുടെ വിഭാഗത്തിൽ ഖുർആൻ പൂർണ്ണമായും മനഃപാഠമാക്കിയിട്ടുണ്ടോ എന്ന് മാത്രമായിരിക്കും പരിശോധിക്കുക.\n\nനവംബർ അവസാനവാരത്തിൽ നടക്കുന്ന സ്ക്രീനിങ് മത്സരങ്ങളുടെ സ്ഥലവും തീയതിയും സമയവും ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് പിന്നീട് ലഭിക്കുന്നതായിരിക്കും.\n\nമത്സരത്തിനു വേണ്ടി നന്നായി തയ്യാറെടുക്കുകയും പരിശ്രമിക്കുകയും ചെയ്യണമെന്ന് അറിയിക്കുന്നു.\n\nകൂടുതൽ വിവരങ്ങൾക്ക് ഞങ്ങളെ ബന്ധപ്പെടാവുന്നതാണ്.\n\nവിശ്വസ്തതയോടെ,\nകോ ഓർഡിനേറ്റർ\nഎ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി\n\n9846310383\ninfo@aslamquranaward.com";
-                            
+
                             // Encode message for URL - use rawurlencode for better compatibility
                             $encodedMessage = rawurlencode($shortMessage);
                             return "https://api.whatsapp.com/send/?phone={$phoneNumber}&text={$encodedMessage}";
@@ -402,7 +401,6 @@ class ApplicationResource extends Resource
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 
                 // ExportPdfAction::make(),
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -460,7 +458,6 @@ class ApplicationResource extends Resource
                         ->action(function (Collection $records) {
                             foreach ($records as $application) {
                                 $pdfPath = public_path("storage/admit_cards/{$application->application_id}.pdf");
-
                                 $mailData = [
                                     'applicant_name' => $application->full_name,
                                     'zone' => $application->zone->name ?? 'N/A',
@@ -500,139 +497,6 @@ class ApplicationResource extends Resource
                 return $query;
             });
         // ->responsive();
-    }
-
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                InfolistSection::make('Application Details')
-                    ->schema([
-                        ImageEntry::make('passport_size_photo')
-                            ->label('Photo')
-                            ->circular()
-                            ->defaultImageUrl(url('/images/default-avatar.png')),
-                        TextEntry::make('application_id')
-                            ->label('Application ID')
-                            ->copyable(),
-                        TextEntry::make('full_name')
-                            ->label('Full Name')
-                            ->weight('bold'),
-                        TextEntry::make('date_of_birth')
-                            ->label('Date of Birth')
-                            ->date('d F Y'),
-                        TextEntry::make('age')
-                            ->label('Age')
-                            ->getStateUsing(fn($record) => Carbon::parse($record->date_of_birth)->age),
-                        TextEntry::make('gender')
-                            ->label('Gender'),
-                        TextEntry::make('educational_qualification')
-                            ->label('Educational Qualification'),
-                        TextEntry::make('aadhar_number')
-                            ->label('Aadhar Number')
-                            ->copyable(),
-                        TextEntry::make('mother_tongue')
-                            ->label('Mother Tongue'),
-                    ])
-                    ->columns(3),
-                InfolistSection::make('Contact Information')
-                    ->schema([
-                        TextEntry::make('contact_number')
-                            ->label('Contact Number')
-                            ->copyable()
-                            ->icon('heroicon-o-phone'),
-                        TextEntry::make('whatsapp')
-                            ->label('WhatsApp')
-                            ->copyable()
-                            ->icon('heroicon-o-chat-bubble-left-ellipsis'),
-                        TextEntry::make('email')
-                            ->label('Email')
-                            ->copyable()
-                            ->icon('heroicon-o-envelope'),
-                        TextEntry::make('c_address')
-                            ->label('Current Address'),
-                        TextEntry::make('pr_address')
-                            ->label('Permanent Address'),
-                        TextEntry::make('district')
-                            ->label('District'),
-                        TextEntry::make('pincode')
-                            ->label('Pincode'),
-                    ])
-                    ->columns(3),
-                InfolistSection::make('Hifz and Participation Details')
-                    ->schema([
-                        TextEntry::make('institution_name')
-                            ->label('Institution Name'),
-                        TextEntry::make('is_completed_ijazah')
-                            ->label('Completed Ijazah'),
-                        TextEntry::make('qirath_with_ijazah')
-                            ->label('Qirath with Ijazah'),
-                        TextEntry::make('primary_competition_participation')
-                            ->label('Primary Competition Participation'),
-                        TextEntry::make('zone.name')
-                            ->label('Zone'),
-                        TextEntry::make('category.name')
-                            ->label('Category'),
-                        TextEntry::make('status')
-                            ->label('Status')
-                            ->badge()
-                            ->color(fn(string $state): string => match ($state) {
-                                'Created' => 'gray',
-                                'withheld' => 'warning',
-                                'Approved' => 'success',
-                                'Rejected' => 'danger',
-                                default => 'info',
-                            }),
-                        TextEntry::make('admit_status')
-                            ->label('Admit Status')
-                            ->badge()
-                            ->color(fn(?string $state): string => match ($state) {
-                                'Admitted' => 'success',
-                                'Declined' => 'danger',
-                                'Absent' => 'gray',
-                                'Pending' => 'warning',
-                                'Completed' => 'info',
-                                default => 'gray',
-                            }),
-                        TextEntry::make('token_number')
-                            ->label('Token Number')
-                            ->placeholder('N/A'),
-                    ])
-                    ->columns(3),
-                InfolistSection::make('Competition Details')
-                    ->schema([
-                        TextEntry::make('zone.assignment.center_id')
-                            ->label('Center Name')
-                            ->placeholder('N/A'),
-                        TextEntry::make('zone.assignment.location')
-                            ->label('Location')
-                            ->placeholder('N/A'),
-                        TextEntry::make('zone.assignment.date')
-                            ->label('Date')
-                            ->date('d F Y')
-                            ->placeholder('N/A'),
-                        TextEntry::make('zone.assignment.time')
-                            ->label('Center Time')
-                            ->formatStateUsing(function ($state, $record) {
-                                if (!$state) {
-                                    return 'N/A';
-                                }
-                                $formattedTime = Carbon::parse($state)->format('h:i A');
-                                $timezone = $record->zone?->assignment?->timezone;
-                                return $timezone
-                                    ? "{$formattedTime} " . strtoupper($timezone)
-                                    : $formattedTime;
-                            })
-                            ->placeholder('N/A'),
-                        TextEntry::make('time_slot')
-                            ->label('Assigned Time Slot')
-                            ->icon('heroicon-o-clock')
-                            ->badge()
-                            ->color('info')
-                            ->placeholder('Not Assigned'),
-                    ])
-                    ->columns(3),
-            ]);
     }
 
     public static function getRelations(): array
