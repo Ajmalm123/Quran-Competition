@@ -95,9 +95,14 @@ class EditZoneAssignment extends EditRecord
             return;
         }
 
-        // Get approved applicants for this zone
+        // Get approved applicants for this zone created in the current year
+        $currentYear = Carbon::now()->year;
+        $startOfYear = Carbon::create($currentYear, 1, 1)->startOfDay();
+        $endOfYear = Carbon::create($currentYear, 12, 31)->endOfDay();
+        
         $approvedApplicants = Application::where('zone_id', $zoneAssignment->zone_id)
             ->where('status', 'Approved')
+            ->whereBetween('created_at', [$startOfYear, $endOfYear])
             ->orderBy('id')
             ->get();
 

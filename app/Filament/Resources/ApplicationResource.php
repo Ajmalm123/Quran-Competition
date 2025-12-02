@@ -398,6 +398,35 @@ class ApplicationResource extends Resource
                             return "https://api.whatsapp.com/send/?phone={$phoneNumber}";
                         }
                     }, true),
+                Action::make('update_time_slot')
+                    ->label('Update Time Slot')
+                    ->icon('heroicon-o-clock')
+                    ->color('primary')
+                    ->visible(fn (Application $record) => $record->status === 'Approved')
+                    ->form(fn (Application $record) => [
+                        Select::make('time_slot')
+                            ->label('Available Time Slots')
+                            ->options(self::getTimeSlotOptions($record))
+                            ->default($record->time_slot)
+                            ->required()
+                            ->preload()
+                            ->searchable()
+                            ->helperText('Select from the time slots configured for this applicant\'s zone.'),
+                    ])
+                    ->action(function (Application $record, array $data): void {
+                        $record->time_slot = $data['time_slot'];
+                        $record->save();
+
+                        Notification::make()
+                            ->title('Time slot updated successfully')
+                            ->body("Time slot set to {$record->time_slot} for {$record->full_name}.")
+                            ->success()
+                            ->send();
+                    })
+                    ->modalHeading('Update Time Slot')
+                    ->modalDescription('Select a time slot for this approved applicant.')
+                    ->modalSubmitActionLabel('Update Time Slot')
+                    ->modalCancelActionLabel('Cancel'),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
 
                 // ExportPdfAction::make(),
@@ -497,6 +526,43 @@ class ApplicationResource extends Resource
                 return $query;
             });
         // ->responsive();
+    }
+
+    protected static function getTimeSlotOptions(?Application $record): array
+    {
+        if (! $record || ! $record->zone || ! $record->zone->assignment) {
+            return [];
+        }
+
+        $assignment = $record->zone->assignment;
+        $timeSlots = $assignment->time_slots;
+
+        if (is_string($timeSlots)) {
+            $decoded = json_decode($timeSlots, true);
+            $timeSlots = is_array($decoded) ? $decoded : [];
+        }
+
+        if (! is_array($timeSlots) || empty($timeSlots)) {
+            return [];
+        }
+
+        $timezoneSuffix = $assignment->timezone ? ' ' . strtoupper($assignment->timezone) : '';
+        $options = [];
+
+        foreach ($timeSlots as $slot) {
+            if (! is_array($slot) || empty($slot['time'])) {
+                continue;
+            }
+
+            try {
+                $value = Carbon::parse($slot['time'])->format('h:i A');
+                $options[$value] = $value . $timezoneSuffix;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return $options;
     }
 
     public static function getRelations(): array
