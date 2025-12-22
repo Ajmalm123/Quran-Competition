@@ -8,6 +8,8 @@ use Filament\Actions\Action;
 use Illuminate\Support\Facades\Session;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\ParticipantsResource;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\FinalParticipantsExport;
 
 class ListParticipants extends ListRecords
 {
@@ -22,6 +24,13 @@ class ListParticipants extends ListRecords
         
         $actions = [];
         
+        // Add Export Action
+        $actions[] = Action::make('export_final_participants')
+            ->label('Export Final Participants')
+            ->icon('heroicon-o-arrow-down-tray')
+            ->color('success')
+            ->action(fn() => \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FinalParticipantsExport, 'Final_Participants.xlsx'));
+
         // Add "All Categories" action
         $actions[] = Action::make('allCategories')
             ->label('All Categories')

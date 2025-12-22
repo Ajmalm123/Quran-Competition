@@ -215,6 +215,21 @@ class ApplicationResource extends Resource
                         true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-o-eye'),
+                Action::make('moveToFinalParticipants')
+                    ->label('Move to Final Participants')
+                    ->icon('heroicon-o-arrow-right-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->visible(fn (Application $record) => $record->status === 'Approved' && !in_array($record->admit_status, ['Admitted', 'Completed']))
+                    ->action(function (Application $record) {
+                        $record->admit_status = 'Admitted';
+                        $record->save();
+                        
+                        Notification::make()
+                            ->title('Moved to Final Participants')
+                            ->success()
+                            ->send();
+                    }),
 
             ])
             ->bulkActions([
@@ -232,6 +247,13 @@ class ApplicationResource extends Resource
                         ->icon('heroicon-o-check')
                         ->action(fn(Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
                         ->requiresConfirmation()
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('moveToFinalParticipants')
+                        ->label('Move to Final Participants')
+                        ->icon('heroicon-o-arrow-right-circle')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('decline')
                         ->label('Decline Selected')

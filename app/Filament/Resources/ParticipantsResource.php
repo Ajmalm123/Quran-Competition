@@ -68,10 +68,9 @@ class ParticipantsResource extends Resource
                     ->label('Position')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('marks')
+                TextInputColumn::make('marks')
                     ->label('Marks')
-                    ->sortable()
-                    ->searchable(),
+                    ->sortable(),
                 ImageColumn::make('passport_size_photo')
                     ->label('Photo')
                     ->circular()
@@ -241,19 +240,6 @@ class ParticipantsResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
                     ->whereIn('admit_status', ['Admitted', 'Completed'])
-                    ->whereIn('id', function ($subquery) {
-                        $subquery->select('a.id')
-                            ->from('applications as a')
-                            ->whereNotNull('a.participation_position')
-                            ->whereRaw('(
-                                SELECT COUNT(*)
-                                FROM applications b
-                                WHERE b.zone_id = a.zone_id
-                                AND b.participation_position <= a.participation_position
-                            ) <= 3')
-                            ->orderBy('a.zone_id')
-                            ->orderBy('a.participation_position', 'asc');
-                    })
                     ->orderBy('zone_id')
                     ->orderBy('participation_position', 'asc')
             );
