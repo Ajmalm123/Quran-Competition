@@ -140,6 +140,10 @@ class ParticipantsResource extends Resource
                 TextColumn::make('participation_position')
                     ->searchable()->label('Position'),
                 BadgeColumn::make('admit_status')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'Move to Final' => 'Final Participant',
+                        default => $state,
+                    })
                     ->colors([
                         'info' => 'Admitted',
                         'success' => 'Completed',
@@ -230,7 +234,7 @@ class ParticipantsResource extends Resource
                     ->options([
                         'Admitted' => 'Admitted',
                         'Completed' => 'Completed',
-                        'Move to Final' => 'Move to Final',
+                        'Move to Final' => 'Final Participant',
                     ])
                     ->indicator('Admit Status'),
             ])
