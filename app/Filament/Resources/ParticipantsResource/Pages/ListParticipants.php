@@ -26,7 +26,7 @@ class ListParticipants extends ListRecords
         
         // Add Export Action
         $actions[] = Action::make('export_final_participants')
-            ->label('Export Final Participants')
+            ->label('Export Rank List')
             ->icon('heroicon-o-arrow-down-tray')
             ->color('success')
             ->action(fn() => \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\FinalParticipantsExport, 'Final_Participants.xlsx'));

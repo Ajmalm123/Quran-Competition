@@ -443,6 +443,21 @@ class ApplicationResource extends Resource
                             ->success()
                             ->send();
                     }),
+                Action::make('moveToFinalParticipants')
+                    ->label('Move to Final Participants')
+                    ->icon('heroicon-o-arrow-right-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->visible(fn (Application $record) => $record->status === 'Approved')
+                    ->action(function (Application $record) {
+                        $record->admit_status = 'Move to Final';
+                        $record->save();
+                        
+                        Notification::make()
+                            ->title('Moved to Final Participants')
+                            ->success()
+                            ->send();
+                    }),
                 // ExportPdfAction::make(),
             ])
             ->bulkActions([
@@ -458,11 +473,18 @@ class ApplicationResource extends Resource
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('moveToFinalParticipants')
-                        ->label('Move to Final Participants')
+                        ->label('Move to Zone Participants')
                         ->icon('heroicon-o-arrow-right-circle')
                         ->color('success')
                         ->requiresConfirmation()
                         ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('promoteToFinal')
+                        ->label('Move to Final Participants')
+                        ->icon('heroicon-o-star')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Move to Final']))
                         ->deselectRecordsAfterCompletion(),
                     // Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('sendMail')

@@ -142,11 +142,13 @@ class ParticipantsResource extends Resource
                 BadgeColumn::make('admit_status')
                     ->colors([
                         'info' => 'Admitted',
-                        'success' => 'Completed'
+                        'success' => 'Completed',
+                        'warning' => 'Move to Final',
                     ])
                     ->icons([
                         'heroicon-o-check-circle' => 'Admitted',
-                        'heroicon-o-check-badge' => 'Completed'
+                        'heroicon-o-check-badge' => 'Completed',
+                        'heroicon-o-star' => 'Move to Final',
                     ])
                     ->sortable(),
             ])
@@ -228,6 +230,7 @@ class ParticipantsResource extends Resource
                     ->options([
                         'Admitted' => 'Admitted',
                         'Completed' => 'Completed',
+                        'Move to Final' => 'Move to Final',
                     ])
                     ->indicator('Admit Status'),
             ])
@@ -261,6 +264,21 @@ class ParticipantsResource extends Resource
                         true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-m-eye'),
+                Action::make('promoteToFinal')
+                    ->label('Move to Final Participants')
+                    ->icon('heroicon-o-star')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->visible(fn (Application $record) => $record->admit_status === 'Admitted')
+                    ->action(function (Application $record) {
+                        $record->admit_status = 'Move to Final';
+                        $record->save();
+                        
+                        Notification::make()
+                            ->title('Moved to Final Participants')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -284,7 +302,7 @@ class ParticipantsResource extends Resource
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
                     ->where('zone_id', auth()->id())
-                    ->whereIn('admit_status', values: ['Admitted', 'Completed'])
+                    ->whereIn('admit_status', values: ['Admitted', 'Move to Final', 'Completed'])
             );
     }
 

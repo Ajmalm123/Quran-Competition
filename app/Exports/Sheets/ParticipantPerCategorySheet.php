@@ -21,9 +21,9 @@ class ParticipantPerCategorySheet implements FromQuery, WithTitle, WithHeadings,
     public function query()
     {
         return Application::query()
-            ->whereIn('admit_status', ['Admitted', 'Completed'])
+            ->whereIn('admit_status', ['Move to Final', 'Completed'])
             ->where('category_id', $this->category->id)
-            ->orderBy('participation_position', 'asc');
+            ->orderBy('marks', 'desc');
     }
 
     public function title(): string
@@ -34,10 +34,11 @@ class ParticipantPerCategorySheet implements FromQuery, WithTitle, WithHeadings,
     public function headings(): array
     {
         return [
-            'Serial No',
+            'Rank',
             'Application ID',
             'Name',
             'District',
+            'Marks',
         ];
     }
 
@@ -49,6 +50,7 @@ class ParticipantPerCategorySheet implements FromQuery, WithTitle, WithHeadings,
             $participant->application_id,
             $participant->full_name,
             $participant->district,
+            $participant->marks,
         ];
     }
 }

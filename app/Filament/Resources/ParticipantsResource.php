@@ -94,11 +94,13 @@ class ParticipantsResource extends Resource
                 BadgeColumn::make('admit_status')
                     ->colors([
                         'info' => 'Admitted',
-                        'success' => 'Completed'
+                        'success' => 'Completed',
+                        'warning' => 'Move to Final',
                     ])
                     ->icons([
                         'heroicon-o-check-circle' => 'Admitted',
-                        'heroicon-o-check-badge' => 'Completed'
+                        'heroicon-o-check-badge' => 'Completed',
+                        'heroicon-o-star' => 'Move to Final',
                     ])
                     ->sortable(),
 
@@ -191,6 +193,7 @@ class ParticipantsResource extends Resource
                     ->options([
                         'Admitted' => 'Admitted',
                         'Completed' => 'Completed',
+                        'Move to Final' => 'Move to Final',
                     ])
                     ->indicator('Admit Status'),
             ])
@@ -239,7 +242,7 @@ class ParticipantsResource extends Resource
             ->striped()
             ->modifyQueryUsing(
                 fn(Builder $query) => $query
-                    ->whereIn('admit_status', ['Admitted', 'Completed'])
+                    ->whereIn('admit_status', ['Move to Final', 'Completed'])
                     ->orderBy('zone_id')
                     ->orderBy('participation_position', 'asc')
             );
