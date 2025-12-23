@@ -256,6 +256,13 @@ class ParticipantsResource extends Resource
                             return Excel::download(new ParticipantExport($records), 'Participants.xlsx');
                         })
                         ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('removeFinalParticipants')
+                        ->label('Remove from Final Participants')
+                        ->icon('heroicon-o-arrow-left-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
+                        ->deselectRecordsAfterCompletion(),
                 ])
             ])
             ->striped()
