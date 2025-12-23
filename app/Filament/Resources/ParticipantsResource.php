@@ -227,6 +227,21 @@ class ParticipantsResource extends Resource
                         true // This opens the link in a new tab
                     ),
                 Tables\Actions\ViewAction::make()->icon('heroicon-m-eye'),
+                Action::make('revertToZone')
+                    ->label('Remove from Final Participants')
+                    ->icon('heroicon-o-arrow-left-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->visible(fn (Application $record) => in_array($record->admit_status, ['Move to Final', 'Completed']))
+                    ->action(function (Application $record) {
+                        $record->admit_status = 'Admitted';
+                        $record->save();
+                        
+                        Notification::make()
+                            ->title('Removed from Final Participants')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
