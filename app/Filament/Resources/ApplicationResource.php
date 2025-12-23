@@ -457,13 +457,13 @@ class ApplicationResource extends Resource
                         ->action(fn(Collection $records) => $records->each->update(['status' => 'Approved']))
                         ->requiresConfirmation()
                         ->deselectRecordsAfterCompletion(),
-                    BulkAction::make('moveToFinalParticipants')
-                        ->label('Move to Zone Participants')
-                        ->icon('heroicon-o-arrow-right-circle')
-                        ->color('success')
-                        ->requiresConfirmation()
-                        ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
-                        ->deselectRecordsAfterCompletion(),
+                    // BulkAction::make('moveToFinalParticipants')
+                    //     ->label('Move to Zone Participants')
+                    //     ->icon('heroicon-o-arrow-right-circle')
+                    //     ->color('success')
+                    //     ->requiresConfirmation()
+                    //     ->action(fn (Collection $records) => $records->each->update(['admit_status' => 'Admitted']))
+                    //     ->deselectRecordsAfterCompletion(),
                     BulkAction::make('promoteToFinal')
                         ->label('Move to Final Participants')
                         ->icon('heroicon-o-star')
