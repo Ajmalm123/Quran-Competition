@@ -42,6 +42,19 @@ Route::get('/application-profile-status', function () {
     return view('application-profile-status');
 });
 
+Route::get('/results', function () {
+    return view('result-check');
+});
+
+Route::post('/results', function () {
+    return response()->json([]);
+})->name('screening.result.check');
+
+Route::get('/resultsshow', function () {
+    return view('result-show');
+});
+
+
 Route::post('/log-ajax-error', [ApplicationController::class, 'logAjaxError'])->name('log.ajax.error');
 
 
