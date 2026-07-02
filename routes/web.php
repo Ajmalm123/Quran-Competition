@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::get('/apply', function () {
     $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
     $nativeZones = Zone::where('area', 'Native')->select('id', 'name')->get();
-    $categories = \App\Models\Category::where('is_active', true)->get();
+    $categories = \App\Models\Category::where('is_active', true)->orderBy('id', 'desc')->get();
     return view('welcome-old', compact('abroadZones', 'nativeZones', 'categories'));
 })->name('apply');
 
