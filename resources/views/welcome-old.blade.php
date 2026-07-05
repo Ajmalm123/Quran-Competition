@@ -55,7 +55,7 @@
             <div class="form-title">
                 <div class="title-head">
                     <h1>Application For AP Aslam Holy Qur'an Award 2026</h1>
-                    <p class="pb-0">Apply Now for the AP Aslam Holy Qur'an Award 2025. Please fill in all fields with
+                    <p class="pb-0">Apply Now for the AP Aslam Holy Qur'an Award 2026. Please fill in all fields with
                         accurate information.</p>
                 </div>
                 <p class="pb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="cursor:pointer;"><u>See
