@@ -443,12 +443,28 @@
                                 id="native_zone">
                                 <option value="">Please Select</option>
                                 @foreach ($nativeZones as $zone)
+                                    @php
+                                        $displayName = $zone->name;
+                                        $subtext = '';
+                                        if ($zone->name === 'Malappuram 1' || $zone->name === 'Malappuram N') {
+                                            $displayName = 'Malappuram N ( Malappuram, Manjeri, Nilambur etc.. )';
+                                            $subtext = '( Malappuram, Manjeri, Nilambur etc.. )';
+                                        } elseif ($zone->name === 'Malappuram 2' || $zone->name === 'Malappuram S') {
+                                            $displayName = 'Malappuram S ( Tirur, Ponnani, Tirurangadi etc.. )';
+                                            $subtext = '( Tirur, Ponnani, Tirurangadi etc.. )';
+                                        } elseif ($zone->name === 'Online') {
+                                            $displayName = 'Online ( For Out of Kerala )';
+                                            $subtext = 'For Out of Kerala';
+                                        }
+                                    @endphp
                                     <option value="{{ $zone->id }}"
+                                        data-subtext="{{ $subtext }}"
                                         {{ old('native_zone') == $zone->id ? 'selected' : '' }}>
-                                        {{ $zone->name }}
+                                        {{ $displayName }}
                                     </option>
                                 @endforeach
                             </select>
+                            <small id="native_zone_subtext" class="text-muted d-block mt-1" style="font-size: 13px;"></small>
                             <span class="error" role="alert">
                                 @error('native_zone')
                                     {{ $message }}
@@ -768,15 +784,27 @@ Guidelines</u></span></li>
                 }
             }
 
+            function updateNativeZoneSubtext() {
+                if (!nativeZoneSelect) return;
+                const selectedOption = nativeZoneSelect.options[nativeZoneSelect.selectedIndex];
+                const subtext = selectedOption ? (selectedOption.getAttribute('data-subtext') || '') : '';
+                const subtextElement = document.getElementById('native_zone_subtext');
+                if (subtextElement) {
+                    subtextElement.textContent = subtext;
+                }
+            }
+
             function toggleZones() {
                 if (this.value === 'Native') {
                     nativeZoneSection.style.display = '';
                     abroadZoneSection.style.display = 'none';
                     abroadZoneSelect.value = '';
+                    updateNativeZoneSubtext();
                 } else if (this.value === 'Abroad') {
                     nativeZoneSection.style.display = 'none';
                     abroadZoneSection.style.display = '';
                     nativeZoneSelect.value = '';
+                    updateNativeZoneSubtext();
                 }
             }
 
@@ -787,6 +815,10 @@ Guidelines</u></span></li>
             participationRadios.forEach(radio => {
                 radio.addEventListener('change', toggleZones);
             });
+
+            if (nativeZoneSelect) {
+                nativeZoneSelect.addEventListener('change', updateNativeZoneSubtext);
+            }
 
             // Initialize on page load
             const selectedIjazah = document.querySelector('input[name="is_completed_ijazah"]:checked');
@@ -799,6 +831,7 @@ Guidelines</u></span></li>
             if (selectedParticipation) {
                 toggleZones.call(selectedParticipation);
             }
+            updateNativeZoneSubtext();
         });
         // function showDiv() {
         //     document.getElementById('displaythis').style.display = 'block';
