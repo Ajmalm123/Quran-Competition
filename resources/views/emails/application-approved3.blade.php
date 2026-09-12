@@ -40,7 +40,7 @@
                                         <tr>
                                             <td width="300" style="padding-left:16px;">
                                                 <h1 style="font-size:14px;color:#fff;margin-bottom:0;">AP Aslam Holy Qur'an</h1>
-                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2025</h1>
+                                                <h1 style="font-size:14px;color:#fff;margin-top:5px;">Award 2026</h1>
                                             </td>
                                             <td width="300" style="padding-left:20px;text-align:right;">
                                                 <img style="width:15em" src="https://aslamquranaward.com/images/logo-email.png">
@@ -66,46 +66,40 @@
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        എ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2025 മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്. അഭിനന്ദനങ്ങൾ!
+                                        എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് 2026 മത്സരത്തിൽ പങ്കെടുക്കുന്നതിനായി താങ്കൾ സമർപ്പിച്ച അപേക്ഷ പരിശോധിക്കുകയും അംഗീകരിക്കുകയും ചെയ്തതായി അറിയിക്കുന്നതിൽ ഞങ്ങൾക്ക് സന്തോഷമുണ്ട്.  അഭിനന്ദനങ്ങൾ...
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        താങ്കൾ മനസ്സിലാക്കിയത് പോലെ വിശുദ്ധ ഖുർആൻ പരിപൂർണ്ണമായ മനഃപാഠവും തജ് വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവുമായിരിക്കും മത്സരത്തിന്റെ ഭാഗമായി പരിശോധിക്കുക. അതോടൊപ്പം 22 വയസ്സിന് താഴെയുള്ള ആൺകുട്ടികളുടെ വിഭാഗത്തിൽ ആദ്യ അവസാന അഞ്ചു ജുസ്ഉകൾ ഒഴികെയുള്ള 20 ജുസ്ഇന്റെയും, 22 വയസ്സിന് താഴെയുള്ള പെൺകുട്ടികളുടെ വിഭാഗം മത്സരങ്ങളിൽ ഖുർആനിലെ ആദ്യ അവസാന അഞ്ചു വീതം ജുസ്ഉകളുടെയും ആശയസംബന്ധമായ പരിശോധനയും ഉണ്ടായിരിക്കും. 13 വയസ്സിന് താഴെയുള്ള കുട്ടികളുടെ വിഭാഗത്തിൽ ഖുർആൻ പൂർണ്ണമായും മനഃപാഠമാക്കിയിട്ടുണ്ടോ എന്ന് മാത്രമായിരിക്കും പരിശോധിക്കുക.
+                                        താങ്കൾ മനസ്സിലാക്കിയത് പോലെ 20 വയസ്സ് വരെയുള്ള ആൺകുട്ടികളുടെ  ഒന്നാമത്തെ വിഭാഗത്തിൽ വിശുദ്ധ ഖുർആൻ പൂർണമായ മനഃപാഠവും തജ്വീദ് നിയമങ്ങൾ അനുസരിച്ചുള്ള പാരായണവും 30 ജുസ്ഉകളുടെയും ആശയവും ആയിരിക്കും സ്ക്രീനിംഗിൽ പരിശോധിക്കുക.<br><br>
+                                        20 വയസ്സു വരെയുള്ള പെൺകുട്ടികളുടെ രണ്ടാമത്തെ വിഭാഗം മത്സരത്തിൽ ഖുർആൻ പരിപൂർണ്ണമായ ഹിഫ്ളും, തജ്വീദ് അനുസരിച്ചുള്ള പാരായണവും സൂറ മാഇദ മുതൽ സൂറ ജാഥിയ ഉൾപ്പെടെയുള്ള 20 ജുസ് ഉകളുടെ ആശയവും പരിശോധിക്കും. 12 വയസ്സുവരെയുള്ള കുട്ടികളുടെ മൂന്നാമത്തെ വിഭാഗം മത്സരത്തിൽ ഖുർആൻ പരിപൂർണ്ണമായ ഹിഫ്ളും തജ്വീദ് അനുസരിച്ചുള്ള പാരായണവും മാത്രമായിരിക്കും പരിശോധിക്കുക.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        നവംബർ അവസാനവാരത്തിൽ നടക്കുന്ന സ്ക്രീനിങ് മത്സരങ്ങളുടെ സ്ഥലവും തീയതിയും സമയവും ഇമെയിൽ സന്ദേശമായി താങ്കൾക്ക് പിന്നീട് ലഭിക്കുന്നതായിരിക്കും.
+                                        നവംബർ മാസം നടക്കുന്ന സ്ക്രീനിങ് മത്സരങ്ങളുടെ സ്ഥലവും തീയതിയും സമയവും ഇ മെയിൽ സന്ദേശമായി താങ്കൾക്ക് പിന്നീട് ലഭിക്കുന്നതായിരിക്കും.
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        മത്സരത്തിനു വേണ്ടി നന്നായി തയ്യാറെടുക്കുകയും പരിശ്രമിക്കുകയും ചെയ്യണമെന്ന് അറിയിക്കുന്നു.
-                                    </h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0px 20px;">
-                                    <h5 style="line-height:22px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        കൂടുതൽ വിവരങ്ങൾക്ക് ഞങ്ങളെ ബന്ധപ്പെടാവുന്നതാണ്.
+                                        കൂടുതൽ വിവരങ്ങൾക്ക് ഞങ്ങളെ ബന്ധപ്പെടാവുന്നതാണ്
                                     </h5>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding:0px 20px;">
                                     <h5 style="padding-bottom:8px;font-size: 14px; margin-top: 0px;margin-bottom: 0px;font-weight: 400;color:#000000;">
-                                        വിശ്വസ്തതയോടെ,
+                                        വിശ്വസ്തതയോടെ
                                     </h5>
                                     <h5 style="font-size: 14px; margin-top: 0px;padding-top:0;padding-bottom:10px;margin-bottom: 0px;font-weight: 400;color:#000000;">
                                         കോ ഓർഡിനേറ്റർ<br>
-                                        എ പി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി
+                                        എ പി അസ്ലം ഹോളി ഖുർആൻ അവാർഡ് കമ്മിറ്റി
                                     </h5>
                                 </td>
                             </tr>
@@ -128,7 +122,7 @@
                                 <td style="padding:0px 20px;">
                                     <a href="https://aslamquranaward.com/" target="_blank">
                                         <h5 style="color:#000000;font-size: 8px;text-align:center; margin-top: 10px;margin-bottom: 0px;font-weight: 400;padding-bottom:0; background-color: transparent;">
-                                            Copyright © 2025 Aslam Quran Award, All rights reserved.
+                                            Copyright © 2026 Aslam Quran Award, All rights reserved.
                                         </h5>
                                     </a>
                                 </td>
