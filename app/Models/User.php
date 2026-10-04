@@ -22,6 +22,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'age',
+        'locality',
+        'territory',
+        'country_code',
+        'whatsapp_number',
+        'whatsapp_verified',
+        'status',
     ];
 
     /**
@@ -44,8 +51,33 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'whatsapp_verified' => 'boolean',
+            'age' => 'integer',
         ];
     }
 
+    public function quizAttempts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(QuizAttempt::class, 'user_id');
+    }
 
+    public function weeklyScores(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WeeklyScore::class, 'user_id');
+    }
+
+    public function luckyDrawWins(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LuckyDraw::class, 'winner_user_id');
+    }
+
+    public function getTotalPointsAttribute(): int
+    {
+        return (int) $this->weeklyScores()->sum('score');
+    }
+
+    public function isAccountActive(): bool
+    {
+        return $this->status === 'active';
+    }
 }

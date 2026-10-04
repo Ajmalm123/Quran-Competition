@@ -13,7 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // $middleware->append(ValidateApiKey::class);
+        $middleware->validateCsrfTokens(except: [
+            'quiz/api/*',
+            'auth/*',
+            'quiz/start',
+            'quiz/submit',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

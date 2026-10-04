@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Filament\Notifications\Notification as BaseNotification;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**

@@ -32,6 +32,12 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->favicon(asset('images/aqa_faviocn.svg'))
             ->topNavigation()
+            ->navigationGroups([
+                'Admin',
+                'Applications',
+                'Weekly Online Quiz',
+                'Configuration',
+            ])
             ->colors([
                 'info' => Color::Blue,
             ])
