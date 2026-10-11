@@ -74,15 +74,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: clamp(20px, 5vw, 56px) 16px 24px;
+      padding: clamp(16px, 2.5vw, 32px) 16px 20px;
     }
 
     .card {
       width: 100%;
-      max-width: 780px;
+      max-width: 680px;
       text-align: center;
-      padding: clamp(28px, 6vw, 60px) clamp(18px, 5vw, 56px);
-      background: rgba(255, 252, 245, .78);
+      padding: clamp(22px, 3.2vw, 36px) clamp(18px, 4vw, 44px);
+      background: rgba(255, 252, 245, .82);
       -webkit-backdrop-filter: blur(8px);
               backdrop-filter: blur(8px);
       border: 1px solid rgba(173, 72, 38, .18);
@@ -100,8 +100,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto clamp(14px, 3.2vw, 24px);
-      max-width: clamp(210px, 48vw, 300px);
+      margin: 0 auto clamp(8px, 1.6vw, 16px);
+      max-width: clamp(170px, 22vw, 220px);
       width: 100%;
     }
     .award-logo {
@@ -121,8 +121,8 @@
     /* ---------- Brand SVG Header (Fully Responsive) ---------- */
     .brand-hero {
       width: 100%;
-      max-width: 480px;
-      margin: 0 auto clamp(10px, 2.5vw, 20px);
+      max-width: clamp(260px, 34vw, 340px);
+      margin: 0 auto clamp(6px, 1.4vw, 14px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -133,12 +133,12 @@
       height: auto;
       aspect-ratio: 778 / 479;
       display: block;
-      filter: drop-shadow(0 10px 26px rgba(85, 36, 15, .12));
+      filter: drop-shadow(0 8px 22px rgba(85, 36, 15, .12));
       transition: transform .35s var(--ease), filter .35s var(--ease);
     }
     .brand-svg:hover {
       transform: translateY(-2px) scale(1.01);
-      filter: drop-shadow(0 16px 32px rgba(85, 36, 15, .18));
+      filter: drop-shadow(0 14px 28px rgba(85, 36, 15, .16));
     }
     .sr-only {
       position: absolute;
@@ -153,9 +153,9 @@
     }
 
     .tagline {
-      margin: 10px auto 0;
+      margin: 6px auto 0;
       font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(1.25rem, 3.6vw, 1.65rem);
+      font-size: clamp(1.1rem, 2.4vw, 1.35rem);
       font-weight: 600;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -166,14 +166,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      margin: clamp(22px, 4vw, 34px) auto;
+      gap: 12px;
+      margin: clamp(12px, 2vw, 20px) auto;
       color: var(--terracotta);
     }
     .divider::before, .divider::after {
       content: "";
       height: 1px;
-      width: min(120px, 22vw);
+      width: min(100px, 18vw);
       background: linear-gradient(90deg, transparent, rgba(173, 72, 38, .6));
     }
     .divider::after { transform: scaleX(-1); }
@@ -182,19 +182,19 @@
     .countdown {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: clamp(8px, 2vw, 18px);
-      max-width: 560px;
+      gap: clamp(8px, 1.8vw, 14px);
+      max-width: 500px;
       margin: 0 auto;
       padding: 0;
       list-style: none;
     }
     .tile {
       position: relative;
-      padding: clamp(14px, 3.4vw, 26px) 4px clamp(10px, 2.4vw, 18px);
+      padding: clamp(10px, 2vw, 18px) 4px clamp(8px, 1.6vw, 14px);
       border-radius: var(--radius-md);
       background: linear-gradient(160deg, var(--chocolate), #3d1909);
       color: var(--sand);
-      box-shadow: 0 14px 26px -14px rgba(85, 36, 15, .7);
+      box-shadow: 0 12px 24px -12px rgba(85, 36, 15, .7);
       overflow: hidden;
       transition: transform .35s var(--ease), box-shadow .35s var(--ease);
     }
@@ -210,7 +210,7 @@
       display: block;
       font-family: "Cormorant Garamond", Georgia, serif;
       font-weight: 700;
-      font-size: clamp(1.9rem, 8vw, 3.4rem);
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
       line-height: 1;
       font-variant-numeric: tabular-nums;
     }
@@ -221,16 +221,16 @@
     }
     .unit {
       display: block;
-      margin-top: 8px;
-      font-size: clamp(.6rem, 2vw, .75rem);
-      letter-spacing: .16em;
+      margin-top: 6px;
+      font-size: clamp(.6rem, 1.4vw, .72rem);
+      letter-spacing: .14em;
       text-transform: uppercase;
       color: rgba(238, 207, 156, .78);
     }
 
     .launch-note {
-      margin: 18px 0 0;
-      font-size: .92rem;
+      margin: 12px 0 0;
+      font-size: .88rem;
       color: var(--muted);
     }
     .launch-note strong { color: var(--chocolate); font-weight: 600; }
@@ -244,17 +244,17 @@
       font-weight: 600;
       letter-spacing: .02em;
       border-radius: 999px;
-      padding: 15px 30px;
-      min-height: 48px;
+      padding: 13px 28px;
+      min-height: 44px;
       transition: transform .25s var(--ease), box-shadow .25s var(--ease), background-color .25s, opacity .25s;
     }
     .btn:focus-visible { outline: 3px solid var(--burnt); outline-offset: 3px; }
     .btn:disabled { opacity: .45; cursor: not-allowed; }
 
     .btn-gold {
-      margin-top: clamp(26px, 5vw, 38px);
-      font-size: clamp(1rem, 2.8vw, 1.15rem);
-      padding: 18px clamp(26px, 6vw, 44px);
+      margin-top: clamp(16px, 2.4vw, 24px);
+      font-size: clamp(.95rem, 2vw, 1.05rem);
+      padding: 14px clamp(24px, 4vw, 38px);
       color: var(--chocolate);
       background: linear-gradient(180deg, #F4DBAE, var(--sand));
       box-shadow: 0 12px 26px -10px rgba(185, 83, 37, .65), inset 0 0 0 1.5px rgba(85, 36, 15, .18);
@@ -282,8 +282,8 @@
     footer {
       position: relative;
       z-index: 1;
-      margin-top: 26px;
-      font-size: .8rem;
+      margin-top: 14px;
+      font-size: .78rem;
       color: var(--muted);
       text-align: center;
     }
@@ -506,6 +506,23 @@
       .modal { padding: 18px 10px; }
       .q-title { margin-right: 32px; font-size: 1.05rem; }
       .option .face { padding: 10px 10px; font-size: 0.9rem; }
+    }
+
+    /* ---------- Laptop & Short Viewports (avoids vertical cut-off) ---------- */
+    @media (min-width: 600px) and (max-height: 850px) {
+      main { padding: 10px 16px; }
+      .card { padding: 18px 30px; }
+      .award-badge { max-width: 165px; margin-bottom: 8px; }
+      .brand-hero { max-width: 290px; margin-bottom: 6px; }
+      .tagline { margin-top: 4px; font-size: 1.15rem; }
+      .divider { margin: 10px auto; }
+      .countdown { gap: 10px; max-width: 440px; }
+      .tile { padding: 8px 4px 6px; }
+      .num { font-size: 1.95rem; }
+      .unit { margin-top: 4px; font-size: .65rem; }
+      .launch-note { margin-top: 8px; font-size: 0.82rem; }
+      .btn-gold { margin-top: 14px; padding: 11px 26px; font-size: 0.95rem; min-height: 40px; }
+      footer { margin-top: 8px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
