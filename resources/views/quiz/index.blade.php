@@ -331,10 +331,24 @@ const Err = ({code, retry}) => html`<div className="alert al-bad" role="alert">$
 const Skel = () => html`<div><div className="sk"/><div className="sk"/><div className="sk"/></div>`;
 
 /* ============ SECTIONS ============ */
-function Hero({weeks, onStart, now}) {
+function Hero({weeks, onStart, now, user, onSchedule}) {
   const live = weeks.find(w => wkStatus(w, now) === "live");
   const next = weeks.find(w => wkStatus(w, now) === "upcoming");
   const state = live ? "live" : next ? "upcoming" : "completed";
+
+  const btnLabel = live 
+    ? "Start quiz" 
+    : user 
+      ? "✓ Registered · View schedule" 
+      : "Register / Start quiz";
+
+  const handleBtnClick = () => {
+    if (!live && user) {
+      onSchedule ? onSchedule() : onStart();
+    } else {
+      onStart();
+    }
+  };
 
   return html`<div className="hero"><div className="wrap">
     <div className="status">${live ? html`<span className="dot"/>` : null}${live ? "Quiz is live" : state === "upcoming" ? "Quiz upcoming" : "Season completed"}</div>
@@ -343,7 +357,7 @@ function Hero({weeks, onStart, now}) {
     ${live && html`<div className="cd"><small>Week ${live.id} · closes in</small><b>${hms(live.end - now)}</b></div>`}
     ${!live && next && html`<div className="cd"><small>Next quiz · ${fmt(next.start, {weekday:"long", hour:"numeric", minute:"2-digit"})}</small><b>Starts in ${hms(next.start - now)}</b></div>`}
     <div className="row">
-      <button className="btn" onClick=${onStart} disabled=${state === "completed"}>${live ? "Start quiz" : "Register / Start quiz"}</button>
+      <button className="btn" onClick=${handleBtnClick} disabled=${state === "completed"}>${btnLabel}</button>
       <a href="#rules"><button className="btn ghost">Quiz rules</button></a>
     </div>
   </div></div>`;
@@ -408,9 +422,15 @@ const RULES = [
 const Rules = () => html`<section id="rules"><div className="wrap"><h2>Quiz rules</h2><p className="sub">Short and simple.</p><ol className="rules">${RULES.map((r, i) => html`<li key=${i}>${r}</li>`)}</ol></div></section>`;
 
 /* ============ AUTH & PASSWORD RESET ============ */
-function Auth({onDone, onCancel, resetInfo}) {
+function Auth({onDone, onCancel, resetInfo, onClearReset}) {
   const [mode, setMode] = useState("register");
   const [step, setStep] = useState(resetInfo?.token ? "reset" : "form");
+
+  useEffect(() => {
+    if (!resetInfo?.token && step === "reset") {
+      setStep("form");
+    }
+  }, [resetInfo]);
   const [f, setF] = useState({
     name: "",
     age: "",
@@ -564,6 +584,7 @@ function Auth({onDone, onCancel, resetInfo}) {
       if (window.history.replaceState) {
         window.history.replaceState({}, '', window.location.pathname);
       }
+      if (onClearReset) onClearReset();
       onDone(u);
     } catch (e) {
       setErr(e.message || ERR[e.code] || "NETWORK");
@@ -662,9 +683,10 @@ function Auth({onDone, onCancel, resetInfo}) {
       ${fld("confirmPassword", "Confirm New Password", { type: "password", placeholder: "••••••••" })}
       ${err && html`<${Err} code=${err}/>`}
       <button className="btn full" style=${{marginTop:12}} onClick=${submitReset} disabled=${busy}>${busy ? "Saving password…" : "Save Password & Log in"}</button>
+      <button className="btn line full" style=${{marginTop:10}} onClick=${() => { setStep("form"); onClearReset && onClearReset(); }}>Back to log in</button>
     ` : null}
 
-    <button className="btn line full" style=${{marginTop:10}} onClick=${onCancel}>Back to home</button>
+    <button className="btn line full" style=${{marginTop:10}} onClick=${() => { onClearReset && onClearReset(); onCancel(); }}>Back to home</button>
   </div></div>`;
 }
 
@@ -734,6 +756,7 @@ function App() {
   const [tick, setTick] = useState(0);
   const [menu, setMenu] = useState(false);
   const [resetInfo, setResetInfo] = useState(null);
+  const [notice, setNotice] = useState("");
   const now = useNow();
 
   useEffect(() => {
@@ -748,6 +771,13 @@ function App() {
 
   const sch = useLoad(() => api.schedule(), [tick]);
 
+  const clearResetParams = () => {
+    setResetInfo(null);
+    if (window.history.replaceState) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  };
+
   const go = (id) => {
     setView("home");
     setMenu(false);
@@ -758,13 +788,40 @@ function App() {
   };
 
   const start = () => {
-    setView(user ? "quiz" : "auth");
+    const isLive = sch.data && Array.isArray(sch.data) && sch.data.some(w => wkStatus(w, Date.now()) === "live");
+    if (!user) {
+      clearResetParams();
+      setView("auth");
+    } else if (isLive) {
+      setView("quiz");
+    } else {
+      go("schedule");
+    }
+  };
+
+  const handleCancelAuth = () => {
+    clearResetParams();
+    setView("home");
+  };
+
+  const handleAuthDone = (u) => {
+    clearResetParams();
+    setUser(u);
+    setTick(t => t + 1);
+    const isLive = sch.data && Array.isArray(sch.data) && sch.data.some(w => wkStatus(w, Date.now()) === "live");
+    if (isLive) {
+      setView("quiz");
+    } else {
+      setNotice("Welcome, " + (u.name ? u.name.split(" ")[0] : "Contestant") + "! You are registered. Next quiz starts Friday 8 PM.");
+      setView("home");
+    }
   };
 
   const handleLogout = async () => {
     setMenu(false);
     await api.logout();
     setUser(null);
+    setNotice("");
     setTick(t => t + 1);
     setView("home");
   };
@@ -786,12 +843,13 @@ function App() {
     </div></header>
 
     <main id="top">
-      ${view === "auth" && html`<${Auth} onCancel=${() => setView("home")} resetInfo=${resetInfo} onDone=${u => { setUser(u); setView("quiz"); }}/>`}
+      ${notice && view === "home" && html`<div className="wrap" style=${{paddingTop:16}}><div className="alert al-ok" style=${{display:"flex",justifyContent:"space-between",alignItems:"center"}}><span>✓ ${notice}</span><button className="link-btn" onClick=${() => setNotice("")} style=${{marginLeft:12}}>✕</button></div></div>`}
+      ${view === "auth" && html`<${Auth} onCancel=${handleCancelAuth} resetInfo=${resetInfo} onClearReset=${clearResetParams} onDone=${handleAuthDone}/>`}
       ${view === "quiz" && html`<${Quiz} user=${user} onExit=${() => setView("home")} onFinish=${r => { setRes(r); setTick(t => t + 1); setView("result"); }}/>`}
       ${view === "result" && html`<${Result} r=${res} onHome=${() => go("points")}/>`}
       ${view === "home" && html`<div>
         ${sch.loading ? html`<div className="hero"><div className="wrap"><${Skel}/></div></div>` : sch.err ? html`<div className="wrap" style=${{paddingTop:24}}><${Err} code=${sch.err} retry=${sch.retry}/></div>` : html`<div>
-          <${Hero} weeks=${sch.data} now=${now} onStart=${start}/>
+          <${Hero} weeks=${sch.data} now=${now} onStart=${start} user=${user} onSchedule=${() => go("schedule")}/>
           <${Winner} weeks=${sch.data}/>
           <${Schedule} weeks=${sch.data} now=${now}/>
         </div>`}
