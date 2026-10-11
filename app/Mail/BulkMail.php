@@ -32,6 +32,7 @@ class BulkMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address(config('mail.mailers.smtp2.username', 'mail@aslamquranaward.com'), config('mail.from.name')),
             subject: $this->mailData['subject'],
         );
     }
