@@ -115,3 +115,10 @@ Route::prefix('quiz')->group(function () {
 
 Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard']);
 
+Route::get('/tibyan', function () {
+    return view('tibyan');
+})->name('tibyan');
+
+Route::get('/tibiyan', function () {
+    return redirect()->route('tibyan');
+});
