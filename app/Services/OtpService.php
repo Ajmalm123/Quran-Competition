@@ -29,6 +29,21 @@ class OtpService
     }
 
     /**
+     * Get the default OTP code if configured.
+     * Returns null if default OTP is disabled (e.g. once SMS gateway is integrated).
+     */
+    public function getDefaultOtp(): ?string
+    {
+        $default = config('services.otp.default_code', env('DEFAULT_OTP', '123456'));
+
+        if ($default === null || $default === false || $default === '' || in_array(strtolower((string) $default), ['false', 'null', 'none', 'off', 'disabled'], true)) {
+            return null;
+        }
+
+        return (string) $default;
+    }
+
+    /**
      * Send OTP to a WhatsApp number.
      *
      * @param string $phone 10-digit phone number
@@ -70,9 +85,9 @@ class OtpService
         }
 
         // Generate 6-digit OTP
-        // In local/testing environments, 123456 can be used or random
-        $isLocalOrTest = app()->environment('local', 'testing');
-        $code = $isLocalOrTest ? '123456' : str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+        // Uses default OTP if configured (e.g. until SMS gateway integration), or random 6-digit code
+        $defaultOtp = $this->getDefaultOtp();
+        $code = $defaultOtp ?: str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 
         $otpKey = "quiz_otp_{$normalized}";
         $attemptsKey = "quiz_otp_attempts_{$normalized}";
@@ -87,11 +102,17 @@ class OtpService
         // Note: If a third-party WhatsApp gateway (Wati/Interakt/Twilio/UltraMsg) credentials
         // are configured in .env, dispatch the HTTP request here.
 
-        return [
+        $result = [
             'success' => true,
             'message' => 'OTP sent successfully to your WhatsApp number.',
             'cooldown' => self::RESEND_COOLDOWN_SECONDS,
         ];
+
+        if ($defaultOtp) {
+            $result['demo_code'] = $defaultOtp;
+        }
+
+        return $result;
     }
 
     /**
@@ -115,16 +136,20 @@ class OtpService
         }
 
         $storedCode = Cache::get($otpKey);
+        $defaultOtp = $this->getDefaultOtp();
 
-        // Allow demo code 123456 in local/testing
-        $isLocalOrTest = app()->environment('local', 'testing');
-        $validCode = $storedCode ?? ($isLocalOrTest ? '123456' : null);
+        // Valid code can be the stored code from cache, or fallback to default OTP if configured
+        $validCode = $storedCode ?? $defaultOtp;
 
         if (!$validCode) {
             throw new Exception("EXPIRED", 422);
         }
 
-        if (trim($code) !== trim($validCode)) {
+        $submittedCode = trim($code);
+        $isValid = ($submittedCode === trim((string) $validCode))
+            || ($defaultOtp !== null && $submittedCode === trim((string) $defaultOtp));
+
+        if (!$isValid) {
             Cache::put($attemptsKey, $attempts + 1, now()->addMinutes(self::OTP_EXPIRY_MINUTES));
             throw new Exception("INVALID", 422);
         }

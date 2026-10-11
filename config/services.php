@@ -35,4 +35,15 @@ return [
         ],
     ],
 
+    'otp' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Default OTP (until SMS gateway is integrated)
+        |--------------------------------------------------------------------------
+        | Works across all environments (including production).
+        | To disable once SMS gateway is integrated, set DEFAULT_OTP= in .env.
+        */
+        'default_code' => env('DEFAULT_OTP', '123456'),
+    ],
+
 ];

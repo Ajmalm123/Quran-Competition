@@ -461,7 +461,7 @@ function Auth({onDone, onCancel, resetInfo}) {
       await api.sendOtp(f.phone.trim(), mode === "register");
       setStep("otp");
       setWait(30);
-      setCode("");
+      setCode(demoCode || "");
     } catch (e) {
       setErr(e.message || ERR[e.code] || "NETWORK");
     }
@@ -627,7 +627,7 @@ function Auth({onDone, onCancel, resetInfo}) {
         </div>
       `}
 
-      ${isIndia && demoCode ? html`<div className="alert al-info">Demo: Verification code is <b>${demoCode}</b>.</div>` : null}
+      ${isIndia && demoCode ? html`<div className="alert al-info">Default verification code: <b>${demoCode}</b></div>` : null}
       ${err && html`<${Err} code=${err}/>`}
       ${info && html`<div className="alert al-ok">${info}</div>`}
 
@@ -640,7 +640,8 @@ function Auth({onDone, onCancel, resetInfo}) {
       `}
     ` : step === "otp" ? html`
       <h2>Enter your code</h2>
-      <p className="sub">We sent a 6-digit code to WhatsApp +91 ${f.phone}.${demoCode ? " Demo code: " + demoCode : ""}</p>
+      <p className="sub">We sent a 6-digit code to WhatsApp +91 ${f.phone}.</p>
+      ${demoCode ? html`<div className="alert al-info" style=${{marginBottom:12}}>Verification code: <b>${demoCode}</b></div>` : null}
       <input className="otp" inputMode="numeric" maxLength="6" value=${code} onChange=${e => setCode(e.target.value.replace(/\D/g, ""))} aria-label="6-digit code"/>
       ${err && html`<${Err} code=${err}/>`}
       <button className="btn full" style=${{marginTop:12}} onClick=${verify} disabled=${busy || code.length !== 6}>${busy ? "Verifying…" : "Verify and continue"}</button>

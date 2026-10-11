@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\QuizAttempt;
 use App\Models\QuizWeek;
 use App\Models\User;
+use App\Services\OtpService;
 use App\Services\QuizService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -14,8 +15,10 @@ use Illuminate\View\View;
 
 class WeeklyQuizController extends Controller
 {
-    public function __construct(protected QuizService $quizService)
-    {
+    public function __construct(
+        protected QuizService $quizService,
+        protected OtpService $otpService
+    ) {
     }
 
     /**
@@ -45,7 +48,7 @@ class WeeklyQuizController extends Controller
             'leaderboard' => $leaderboard,
             'currentUser' => $currentUser,
             'csrfToken' => csrf_token(),
-            'demoCode' => app()->environment('local', 'testing') ? '123456' : '',
+            'demoCode' => $this->otpService->getDefaultOtp() ?? '',
         ]);
     }
 
