@@ -103,7 +103,8 @@ const api = {
       return window.INITIAL_DATA.weeks;
     }
     const res = await fetch('/quiz/api/schedule', {
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
     });
     if (!res.ok) throw { code: 'NETWORK' };
     return await res.json();
@@ -115,7 +116,8 @@ const api = {
       return window.INITIAL_DATA.leaderboard;
     }
     const res = await fetch('/quiz/api/leaderboard', {
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
     });
     if (!res.ok) throw { code: 'NETWORK' };
     return await res.json();
@@ -130,6 +132,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ phone, register: reg ? 1 : 0 })
     });
     const data = await res.json();
@@ -156,6 +159,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify(body)
     });
     const data = await res.json();
@@ -164,7 +168,9 @@ const api = {
       id: data.id,
       name: data.name,
       territory: data.territory || data.locality,
+      locality: data.locality,
       phone: data.phone,
+      email: data.email,
     };
   },
 
@@ -176,6 +182,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify(payload)
     });
     const data = await res.json();
@@ -191,6 +198,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ identifier, password, country_code: countryCode })
     });
     const data = await res.json();
@@ -206,6 +214,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ identifier })
     });
     const data = await res.json();
@@ -221,11 +230,26 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ email, token, password })
     });
     const data = await res.json();
     if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
     return data;
+  },
+
+  async me() {
+    try {
+      const res = await fetch('/quiz/api/auth/me', {
+        headers: { 'Accept': 'application/json' },
+        credentials: 'same-origin'
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.user || null;
+    } catch(e) {
+      return null;
+    }
   },
 
   async startQuiz(uid) {
@@ -235,7 +259,8 @@ const api = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
-      }
+      },
+      credentials: 'same-origin'
     });
     const data = await res.json();
     if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
@@ -250,6 +275,7 @@ const api = {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': CSRF_TOKEN,
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ answers })
     });
     const data = await res.json();
@@ -264,7 +290,8 @@ const api = {
         headers: {
           'Accept': 'application/json',
           'X-CSRF-TOKEN': CSRF_TOKEN,
-        }
+        },
+        credentials: 'same-origin'
       });
     } catch(e) {}
   }
@@ -751,13 +778,38 @@ function Result({r, onHome}) {
 /* ============ MAIN APP ============ */
 function App() {
   const [view, setView] = useState("home");
-  const [user, setUser] = useState(window.INITIAL_DATA?.user || null);
+  const [user, setUser] = useState(() => {
+    if (window.INITIAL_DATA?.user) {
+      try { localStorage.setItem('fnq_user', JSON.stringify(window.INITIAL_DATA.user)); } catch(e){}
+      return window.INITIAL_DATA.user;
+    }
+    try {
+      const cached = localStorage.getItem('fnq_user');
+      return cached ? JSON.parse(cached) : null;
+    } catch (e) {
+      return null;
+    }
+  });
   const [res, setRes] = useState(null);
   const [tick, setTick] = useState(0);
   const [menu, setMenu] = useState(false);
   const [resetInfo, setResetInfo] = useState(null);
   const [notice, setNotice] = useState("");
   const now = useNow();
+
+  // Validate and sync session with server in background
+  useEffect(() => {
+    api.me().then(serverUser => {
+      if (serverUser) {
+        setUser(serverUser);
+        try { localStorage.setItem('fnq_user', JSON.stringify(serverUser)); } catch(e){}
+      } else if (!window.INITIAL_DATA?.user) {
+        // If server confirms no session and initial data had no session, clear cache
+        try { localStorage.removeItem('fnq_user'); } catch(e){}
+        setUser(null);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -806,6 +858,7 @@ function App() {
 
   const handleAuthDone = (u) => {
     clearResetParams();
+    try { localStorage.setItem('fnq_user', JSON.stringify(u)); } catch(e){}
     setUser(u);
     setTick(t => t + 1);
     const isLive = sch.data && Array.isArray(sch.data) && sch.data.some(w => wkStatus(w, Date.now()) === "live");
@@ -819,6 +872,7 @@ function App() {
 
   const handleLogout = async () => {
     setMenu(false);
+    try { localStorage.removeItem('fnq_user'); } catch(e){}
     await api.logout();
     setUser(null);
     setNotice("");

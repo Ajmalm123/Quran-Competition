@@ -133,6 +133,7 @@ class QuizAuthController extends Controller
             'territory' => $user->territory ?? $user->locality ?? 'Contestant',
             'locality' => $user->locality,
             'phone' => $user->whatsapp_number,
+            'email' => $user->email,
         ]);
     }
 

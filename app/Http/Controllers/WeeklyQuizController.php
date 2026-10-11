@@ -34,12 +34,18 @@ class WeeklyQuizController extends Controller
 
         $currentUser = null;
         if ($user) {
+            if (empty($user->remember_token)) {
+                $user->setRememberToken(\Illuminate\Support\Str::random(60));
+                $user->saveQuietly();
+            }
+
             $currentUser = [
                 'id' => (int) $user->id,
                 'name' => $user->name,
                 'territory' => $user->territory ?? $user->locality ?? 'Contestant',
                 'locality' => $user->locality,
                 'phone' => $user->whatsapp_number,
+                'email' => $user->email,
             ];
         }
 

@@ -192,6 +192,27 @@ class WeeklyQuizTest extends TestCase
 
     public function test_full_quiz_participation_api_flow(): void
     {
+        $quizWeek = QuizWeek::create([
+            'week_number' => (QuizWeek::max('week_number') ?? 0) + 1,
+            'quiz_date' => Carbon::today(),
+            'start_at' => Carbon::now()->subMinutes(10),
+            'end_at' => Carbon::now()->addMinutes(50),
+            'status' => QuizWeek::STATUS_LIVE,
+        ]);
+
+        for ($i = 1; $i <= 6; $i++) {
+            Question::create([
+                'quiz_week_id' => $quizWeek->id,
+                'question_text' => "Question {$i}?",
+                'option_a' => 'Option 1',
+                'option_b' => 'Option 2',
+                'option_c' => 'Option 3',
+                'option_d' => 'Option 4',
+                'correct_option' => 'A',
+                'sort_order' => $i,
+            ]);
+        }
+
         $user = User::factory()->create([
             'name' => 'API Participant',
             'whatsapp_number' => '9988776655',
@@ -361,6 +382,52 @@ class WeeklyQuizTest extends TestCase
         $this->assertNotFalse($appIndex, 'Applications group not found in navigation: ' . json_encode($groupLabels));
         $this->assertNotFalse($quizIndex, 'Weekly Online Quiz group not found in navigation: ' . json_encode($groupLabels));
         $this->assertGreaterThan($appIndex, $quizIndex, 'Weekly Online Quiz should come after Applications: ' . json_encode($groupLabels));
+    }
+
+    public function test_participant_session_persists_with_remember_cookie_and_api_me(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Session Participant',
+            'whatsapp_number' => '+919988112233',
+            'locality' => 'Kozhikode',
+            'territory' => 'Malappuram',
+            'whatsapp_verified' => true,
+        ]);
+
+        // Login via OTP
+        $this->postJson('/quiz/api/auth/send-otp', [
+            'phone' => '9988112233',
+            'register' => 0,
+        ]);
+
+        $verifyResp = $this->postJson('/quiz/api/auth/verify-otp', [
+            'phone' => '9988112233',
+            'code' => '123456',
+            'register' => 0,
+        ]);
+
+        $verifyResp->assertStatus(200);
+        $this->assertAuthenticated('web');
+
+        // Check remember_token was generated and saved
+        $user->refresh();
+        $this->assertNotEmpty($user->remember_token);
+
+        // Check /quiz/api/auth/me returns current user
+        $meResp = $this->getJson('/quiz/api/auth/me');
+        $meResp->assertStatus(200);
+        $meResp->assertJsonPath('user.id', $user->id);
+        $meResp->assertJsonPath('user.name', 'Session Participant');
+
+        // Check manual logout clears session
+        $logoutResp = $this->postJson('/quiz/api/auth/logout');
+        $logoutResp->assertStatus(200);
+        $this->assertGuest('web');
+
+        // Check /quiz/api/auth/me returns null after logout
+        $meAfterLogout = $this->getJson('/quiz/api/auth/me');
+        $meAfterLogout->assertStatus(200);
+        $meAfterLogout->assertJsonPath('user', null);
     }
 }
 
