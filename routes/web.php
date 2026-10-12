@@ -117,10 +117,16 @@ Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard']);
 
 use App\Http\Controllers\TibyanController;
 
-Route::get('/   ', [TibyanController::class, 'index'])->name('thibyan');
+Route::get('/thibyan', [TibyanController::class, 'index'])->name('thibyan');
+Route::get('/tibyan', function () {
+    return redirect('/thibyan');
+})->name('tibyan');
+Route::get('/tibiyan', function () {
+    return redirect('/thibyan');
+});
+
 Route::post('/tibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('tibyan.demo.attempt');
 Route::get('/tibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('tibyan.demo.stats');
+Route::post('/thibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('thibyan.demo.attempt');
+Route::get('/thibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('thibyan.demo.stats');
 
-// Route::get('/thibyan', function () {
-//     return redirect()->route('thibyan');
-// });
