@@ -116,7 +116,7 @@ class WeeklyQuizController extends Controller
             ], 400);
         }
 
-        // Return the 3 assigned questions (NEVER send correct answers to frontend!)
+        // Return the 5 assigned questions (NEVER send correct answers to frontend!)
         $questions = $attempt->attemptQuestions()
             ->with('question')
             ->orderBy('display_order')

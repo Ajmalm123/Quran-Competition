@@ -16,7 +16,7 @@ use Tests\TestCase;
 class WeeklyQuizTest extends TestCase
 {
     use DatabaseTransactions;
-    public function test_can_create_weekly_quiz_and_requires_six_questions_to_publish(): void
+    public function test_can_create_weekly_quiz_and_requires_valid_questions_to_publish(): void
     {
         $weekNum = (QuizWeek::max('week_number') ?? 0) + 10;
         $quizWeek = QuizWeek::create([
@@ -29,8 +29,8 @@ class WeeklyQuizTest extends TestCase
 
         $this->assertFalse($quizWeek->canPublish());
 
-        // Add 6 questions
-        for ($i = 1; $i <= 6; $i++) {
+        // Add 8 questions
+        for ($i = 1; $i <= 8; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question number {$i}?",
@@ -46,7 +46,7 @@ class WeeklyQuizTest extends TestCase
         $this->assertTrue($quizWeek->fresh()->canPublish());
     }
 
-    public function test_participant_gets_three_random_questions_and_fixed_attempt(): void
+    public function test_participant_gets_five_random_questions_and_fixed_attempt(): void
     {
         $weekNum = (QuizWeek::max('week_number') ?? 0) + 11;
         $quizWeek = QuizWeek::create([
@@ -57,7 +57,7 @@ class WeeklyQuizTest extends TestCase
             'status' => QuizWeek::STATUS_LIVE,
         ]);
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 8; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question {$i}?",
@@ -80,7 +80,7 @@ class WeeklyQuizTest extends TestCase
         $service = app(QuizService::class);
         $attempt = $service->startAttempt($user, $quizWeek);
 
-        $this->assertEquals(3, $attempt->questions()->count());
+        $this->assertEquals(5, $attempt->questions()->count());
 
         // Test one attempt per week rule
         $this->expectException(\Exception::class);
@@ -99,7 +99,7 @@ class WeeklyQuizTest extends TestCase
             'status' => QuizWeek::STATUS_LIVE,
         ]);
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 8; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question {$i}?",
@@ -122,15 +122,15 @@ class WeeklyQuizTest extends TestCase
         $service = app(QuizService::class);
         $attempt1 = $service->startAttempt($user1, $quizWeek);
 
-        // Submit all 3 correct answers
+        // Submit all 5 correct answers
         $answers1 = [];
         foreach ($attempt1->questions as $q) {
             $answers1[$q->id] = 'B';
         }
 
         $completedAttempt1 = $service->submitAttempt($attempt1, $answers1);
-        $this->assertEquals(30, $completedAttempt1->weekly_score);
-        $this->assertEquals(30, $user1->fresh()->total_points);
+        $this->assertEquals(50, $completedAttempt1->weekly_score);
+        $this->assertEquals(50, $user1->fresh()->total_points);
 
         // Eligible participants check
         $eligible = $service->getEligibleLuckyDrawParticipants($quizWeek);
@@ -200,7 +200,7 @@ class WeeklyQuizTest extends TestCase
             'status' => QuizWeek::STATUS_LIVE,
         ]);
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 8; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question {$i}?",
@@ -234,7 +234,7 @@ class WeeklyQuizTest extends TestCase
         ]);
 
         $questions = $startResp->json('questions');
-        $this->assertCount(3, $questions);
+        $this->assertCount(5, $questions);
 
         // Verify correct_option is NOT exposed
         foreach ($questions as $q) {
@@ -244,7 +244,7 @@ class WeeklyQuizTest extends TestCase
 
         // 2. Submit answers
         $submitResp = $this->postJson('/quiz/api/submit', [
-            'answers' => [0, 1, 2],
+            'answers' => [0, 1, 2, 0, 1],
         ]);
         $submitResp->assertStatus(200);
         $submitResp->assertJsonStructure([

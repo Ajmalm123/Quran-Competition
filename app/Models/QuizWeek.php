@@ -88,11 +88,12 @@ class QuizWeek extends Model
     }
 
     /**
-     * Check if exactly 6 valid questions are configured
+     * Check if valid questions are configured (between 5 and 8 questions required)
      */
     public function canPublish(): bool
     {
-        if ($this->questions()->count() !== 6) {
+        $count = $this->questions()->count();
+        if ($count < 5 || $count > 8) {
             return false;
         }
 

@@ -1,11 +1,11 @@
 <div class="space-y-4">
     <div class="text-sm text-gray-500 dark:text-gray-400">
-        Total of <strong class="text-primary-600 dark:text-primary-400">{{ $users->count() }}</strong> participants achieved a perfect score of 30/30 in this week's quiz.
+        Total of <strong class="text-primary-600 dark:text-primary-400">{{ $users->count() }}</strong> participants achieved a perfect score of 50/50 in this week's quiz.
     </div>
 
     @if($users->isEmpty())
         <div class="p-4 text-center text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            No participants scored 30/30 for this week.
+            No participants scored 50/50 for this week.
         </div>
     @else
         <div class="overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">

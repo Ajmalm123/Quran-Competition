@@ -83,10 +83,12 @@ class QuizResultResource extends Resource
                         Infolists\Components\TextEntry::make('weekly_score')
                             ->label('Final Score')
                             ->badge()
-                            ->formatStateUsing(fn ($state) => "{$state} / 30 Points")
+                            ->formatStateUsing(fn ($state) => "{$state} / 50 Points")
                             ->color(fn ($state) => match ($state) {
-                                30 => 'success',
-                                20 => 'warning',
+                                50 => 'success',
+                                40 => 'success',
+                                30 => 'warning',
+                                20 => 'info',
                                 10 => 'info',
                                 default => 'gray',
                             }),
@@ -198,10 +200,10 @@ class QuizResultResource extends Resource
                 Tables\Columns\TextColumn::make('weekly_score')
                     ->label('Score')
                     ->badge()
-                    ->formatStateUsing(fn ($state) => "{$state} / 30")
+                    ->formatStateUsing(fn ($state) => "{$state} / 50")
                     ->colors([
-                        'success' => 30,
-                        'warning' => 20,
+                        'success' => 50,
+                        'warning' => 30,
                         'info' => 10,
                         'gray' => 0,
                     ])
@@ -209,9 +211,9 @@ class QuizResultResource extends Resource
                     ->alignCenter(),
 
                 Tables\Columns\IconColumn::make('is_perfect')
-                    ->label('Perfect 30/30')
+                    ->label('Perfect 50/50')
                     ->boolean()
-                    ->state(fn (QuizAttempt $record) => $record->weekly_score === 30)
+                    ->state(fn (QuizAttempt $record) => $record->weekly_score === 50)
                     ->trueIcon('heroicon-s-star')
                     ->trueColor('warning')
                     ->falseIcon('heroicon-o-minus')
@@ -242,16 +244,18 @@ class QuizResultResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (QuizWeek $record) => "Week {$record->week_number} ({$record->quiz_date->format('d M Y')})"),
 
                 Tables\Filters\TernaryFilter::make('perfect_score')
-                    ->label('Perfect Score (30/30)')
+                    ->label('Perfect Score (50/50)')
                     ->queries(
-                        true: fn (Builder $query) => $query->where('weekly_score', 30),
-                        false: fn (Builder $query) => $query->where('weekly_score', '<', 30),
+                        true: fn (Builder $query) => $query->where('weekly_score', 50),
+                        false: fn (Builder $query) => $query->where('weekly_score', '<', 50),
                     ),
 
                 Tables\Filters\SelectFilter::make('weekly_score')
                     ->label('Exact Score')
                     ->options([
-                        '30' => '30 Points (Perfect)',
+                        '50' => '50 Points (Perfect)',
+                        '40' => '40 Points',
+                        '30' => '30 Points',
                         '20' => '20 Points',
                         '10' => '10 Points',
                         '0' => '0 Points',

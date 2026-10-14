@@ -379,8 +379,8 @@ function Hero({weeks, onStart, now, user, onSchedule}) {
 
   return html`<div className="hero"><div className="wrap">
     <div className="status">${live ? html`<span className="dot"/>` : null}${live ? "Quiz is live" : state === "upcoming" ? "Quiz upcoming" : "Season completed"}</div>
-    <h1>Answer three. Climb the table.</h1>
-    <p>One quiz every week. Get all three questions right to enter the lucky draw, and keep your points for the season leaderboard.</p>
+    <h1>Answer five. Climb the table.</h1>
+    <p>One quiz every week. Get all five questions right to enter the lucky draw, and keep your points for the season leaderboard.</p>
     ${live && html`<div className="cd"><small>Week ${live.id} · closes in</small><b>${hms(live.end - now)}</b></div>`}
     ${!live && next && html`<div className="cd"><small>Next quiz · ${fmt(next.start, {weekday:"long", hour:"numeric", minute:"2-digit"})}</small><b>Starts in ${hms(next.start - now)}</b></div>`}
     <div className="row">
@@ -394,7 +394,7 @@ function Winner({weeks}) {
   const w = [...weeks].reverse().find(w => w.winner);
   return html`<section style=${{paddingBottom:0}}><div className="wrap"><div className="card win">
     <div className="tr" aria-hidden="true">🏆</div>
-    <div>${w ? html`<div className="sub" style=${{margin:0}}>This week's winner · Week ${w.id}</div><h3>${w.winner.name}</h3><div>${w.winner.territory} · Lucky draw, 30/30</div>`
+    <div>${w ? html`<div className="sub" style=${{margin:0}}>This week's winner · Week ${w.id}</div><h3>${w.winner.name}</h3><div>${w.winner.territory} · Lucky draw, 50/50</div>`
       : html`<h3>No winner yet</h3><div className="sub" style=${{margin:0}}>The first lucky draw winner will appear here.</div>`}</div>
   </div></div></section>`;
 }
@@ -433,14 +433,14 @@ function Points({user, tick}) {
 
 const RULES = [
   "The quiz is held once every week.",
-  "Each weekly quiz has 6 questions in the pool.",
-  "Each participant gets 3 randomly selected questions.",
+  "Each weekly quiz has up to 8 questions in the pool.",
+  "Each participant gets 5 randomly selected questions.",
   "Each correct answer is worth 10 points.",
-  "You can earn up to 30 points in a week.",
+  "You can earn up to 50 points in a week.",
   "Weekly points are added to your total score.",
   "You can play once per week.",
   "Indian participants verify via WhatsApp OTP; international participants use password.",
-  "Score 30 out of 30 to enter the weekly lucky draw.",
+  "Score 50 out of 50 to enter the weekly lucky draw.",
   "The lucky draw winner is picked by the organiser's system.",
   "The leaderboard ranks total points from completed quizzes.",
   "The organiser may change schedules or rules when needed."
@@ -767,9 +767,9 @@ function Quiz({user, onFinish, onExit}) {
 function Result({r, onHome}) {
   return html`<div className="wrap"><div className="pane card center">
     <small className="sub">Your score this week</small>
-    <div className="score">${r.score}<small style=${{fontSize:24, color:"var(--mute)"}}>/30</small></div>
-    <p>${r.correct.filter(Boolean).length} of 3 correct. Your total is now <b>${r.total}</b> points.</p>
-    ${r.eligible ? html`<div className="alert al-ok">Perfect score. You are in this week's lucky draw.</div>` : html`<div className="alert al-info">Only a perfect 30 enters the lucky draw. Try again next week.</div>`}
+    <div className="score">${r.score}<small style=${{fontSize:24, color:"var(--mute)"}}>/50</small></div>
+    <p>${r.correct.filter(Boolean).length} of ${r.correct.length} correct. Your total is now <b>${r.total}</b> points.</p>
+    ${r.eligible ? html`<div className="alert al-ok">Perfect score. You are in this week's lucky draw.</div>` : html`<div className="alert al-info">Only a perfect 50 enters the lucky draw. Try again next week.</div>`}
     <div className="row" style=${{justifyContent:"center"}}>${r.correct.map((c, k) => html`<span key=${k} className=${"badge " + (c ? "b-done" : "b-up")}>Q${k + 1} ${c ? "correct" : "wrong"}</span>`)}</div>
     <button className="btn full" style=${{marginTop:18}} onClick=${onHome}>See leaderboard</button>
   </div></div>`;

@@ -104,10 +104,10 @@ class QuizLeaderboardResource extends Resource
                     ->alignCenter(),
 
                 Tables\Columns\TextColumn::make('perfect_scores')
-                    ->label('Perfect 30s')
+                    ->label('Perfect 50s')
                     ->state(function (User $record): string {
                         $count = QuizAttempt::where('user_id', $record->id)
-                            ->where('weekly_score', 30)
+                            ->where('weekly_score', 50)
                             ->where('status', QuizAttempt::STATUS_COMPLETED)
                             ->count();
                         return "{$count}";
@@ -127,7 +127,7 @@ class QuizLeaderboardResource extends Resource
                         \Filament\Forms\Components\TextInput::make('min_points')
                             ->label('Minimum Points')
                             ->numeric()
-                            ->placeholder('e.g. 30'),
+                            ->placeholder('e.g. 50'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(

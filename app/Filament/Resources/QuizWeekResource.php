@@ -164,7 +164,7 @@ class QuizWeekResource extends Resource
                                 Notification::make()
                                     ->danger()
                                     ->title('Cannot Publish Quiz')
-                                    ->body('A weekly quiz must have exactly 6 complete questions with 4 options and valid correct answer before publishing.')
+                                    ->body('A weekly quiz must have between 5 and 8 complete questions with 4 options and valid correct answer before publishing.')
                                     ->send();
                                 return;
                             }

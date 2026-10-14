@@ -18,7 +18,7 @@ class QuizService
 {
     /**
      * Start a quiz attempt for a user on a given week.
-     * Enforces one attempt per week and randomly selects 3 questions from the 6-question pool.
+     * Enforces one attempt per week and randomly selects 5 questions from the pool (up to 8 questions).
      */
     public function startAttempt(User $user, QuizWeek $quizWeek): QuizAttempt
     {
@@ -36,10 +36,10 @@ class QuizService
             throw new Exception("The quiz for Week {$quizWeek->week_number} is not currently live.");
         }
 
-        // Verify that 6 questions exist
+        // Verify that minimum 5 questions exist in the pool
         $allQuestions = $quizWeek->questions()->get();
-        if ($allQuestions->count() < 6) {
-            throw new Exception("The weekly quiz question pool is not fully configured (6 questions required).");
+        if ($allQuestions->count() < 5) {
+            throw new Exception("The weekly quiz question pool is not fully configured (minimum 5 questions required).");
         }
 
         return DB::transaction(function () use ($user, $quizWeek, $allQuestions) {
@@ -51,8 +51,8 @@ class QuizService
                 'weekly_score' => 0,
             ]);
 
-            // Randomly select 3 questions from the 6
-            $randomQuestions = $allQuestions->random(3);
+            // Randomly select 5 questions from the pool
+            $randomQuestions = $allQuestions->random(5);
 
             $order = 1;
             foreach ($randomQuestions as $question) {
@@ -108,8 +108,8 @@ class QuizService
                 );
             }
 
-            // Cap at 30
-            $totalScore = min(30, max(0, $totalScore));
+            // Cap at 50
+            $totalScore = min(50, max(0, $totalScore));
 
             $attempt->update([
                 'status' => QuizAttempt::STATUS_COMPLETED,
@@ -136,26 +136,26 @@ class QuizService
 
     /**
      * Get all eligible users for the lucky draw of a quiz week.
-     * Rule: weekly_score = 30 AND status = completed.
+     * Rule: weekly_score = 50 AND status = completed.
      */
     public function getEligibleLuckyDrawParticipants(QuizWeek $quizWeek)
     {
         return User::whereHas('quizAttempts', function ($q) use ($quizWeek) {
             $q->where('quiz_week_id', $quizWeek->id)
                 ->where('status', QuizAttempt::STATUS_COMPLETED)
-                ->where('weekly_score', 30);
+                ->where('weekly_score', 50);
         })->get();
     }
 
     /**
-     * Execute Lucky Draw for a quiz week: randomly selects one winner from 30/30 participants.
+     * Execute Lucky Draw for a quiz week: randomly selects one winner from 50/50 participants.
      */
     public function executeLuckyDraw(QuizWeek $quizWeek, ?string $notes = null): LuckyDraw
     {
         $eligibleUsers = $this->getEligibleLuckyDrawParticipants($quizWeek);
 
         if ($eligibleUsers->isEmpty()) {
-            throw new Exception("No participants achieved a perfect score of 30/30 for Week {$quizWeek->week_number}.");
+            throw new Exception("No participants achieved a perfect score of 50/50 for Week {$quizWeek->week_number}.");
         }
 
         $winner = $eligibleUsers->random();
@@ -249,7 +249,7 @@ class QuizService
             'score' => (int) $attempt->weekly_score,
             'correct' => $correct,
             'total' => $totalPoints,
-            'eligible' => (bool) ($attempt->weekly_score === 30 && $attempt->status === QuizAttempt::STATUS_COMPLETED),
+            'eligible' => (bool) ($attempt->weekly_score === 50 && $attempt->status === QuizAttempt::STATUS_COMPLETED),
         ];
     }
 

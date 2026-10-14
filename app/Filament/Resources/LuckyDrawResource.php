@@ -36,7 +36,7 @@ class LuckyDrawResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Weekly Lucky Draw Details')
-                    ->description('Lucky draw for participants achieving 30/30 perfect score.')
+                    ->description('Lucky draw for participants achieving 50/50 perfect score.')
                     ->schema([
                         Forms\Components\Grid::make(3)->schema([
                             Forms\Components\Select::make('quiz_week_id')
@@ -105,13 +105,13 @@ class LuckyDrawResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('eligible_count')
-                    ->label('30/30 Participants')
+                    ->label('50/50 Participants')
                     ->badge()
                     ->color('info')
                     ->state(function (LuckyDraw $record): string {
                         $count = QuizAttempt::where('quiz_week_id', $record->quiz_week_id)
                             ->where('status', QuizAttempt::STATUS_COMPLETED)
-                            ->where('weekly_score', 30)
+                            ->where('weekly_score', 50)
                             ->count();
                         return "{$count} Eligible";
                     })
@@ -188,7 +188,7 @@ class LuckyDrawResource extends Resource
                         ->color('warning')
                         ->requiresConfirmation()
                         ->modalHeading('Execute Weekly Lucky Draw')
-                        ->modalDescription('The backend will randomly select one winner from all participants who achieved a perfect score of 30/30 in this week.')
+                        ->modalDescription('The backend will randomly select one winner from all participants who achieved a perfect score of 50/50 in this week.')
                         ->visible(fn (LuckyDraw $record) => $record->status === LuckyDraw::STATUS_PENDING)
                         ->action(function (LuckyDraw $record) {
                             try {
@@ -279,10 +279,10 @@ class LuckyDrawResource extends Resource
                         }),
 
                     Tables\Actions\Action::make('viewEligible')
-                        ->label('View 30/30 Participants')
+                        ->label('View 50/50 Participants')
                         ->icon('heroicon-o-user-group')
                         ->color('gray')
-                        ->modalHeading(fn (LuckyDraw $record) => "Eligible 30/30 Participants - Week {$record->quizWeek->week_number}")
+                        ->modalHeading(fn (LuckyDraw $record) => "Eligible 50/50 Participants - Week {$record->quizWeek->week_number}")
                         ->modalContent(function (LuckyDraw $record) {
                             $users = app(QuizService::class)->getEligibleLuckyDrawParticipants($record->quizWeek);
                             return view('filament.modals.eligible-participants', ['users' => $users]);

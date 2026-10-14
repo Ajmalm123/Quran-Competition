@@ -119,6 +119,24 @@ class WeeklyQuizSeeder extends Seeder
                 'correct_option' => 'B',
                 'sort_order' => 6,
             ],
+            [
+                'question_text' => 'Which prophet is mentioned most frequently by name in the Holy Quran?',
+                'option_a' => 'Prophet Ibrahim (AS)',
+                'option_b' => 'Prophet Musa (AS)',
+                'option_c' => 'Prophet Isa (AS)',
+                'option_d' => 'Prophet Nuh (AS)',
+                'correct_option' => 'B',
+                'sort_order' => 7,
+            ],
+            [
+                'question_text' => 'In which Islamic month was the Holy Quran first revealed?',
+                'option_a' => 'Rajab',
+                'option_b' => 'Sha\'ban',
+                'option_c' => 'Ramadan',
+                'option_d' => 'Muharram',
+                'correct_option' => 'C',
+                'sort_order' => 8,
+            ],
         ];
 
         foreach ($questionsData as $qData) {
@@ -133,14 +151,14 @@ class WeeklyQuizSeeder extends Seeder
 
         // 4. Create sample participants for rich leaderboard
         $participants = [
-            ['name' => 'Fathima Beevi', 'whatsapp_number' => '9000000001', 'locality' => 'Palayam', 'territory' => 'Kozhikode', 'age' => 22, 'score' => 30],
-            ['name' => 'Rayan Abdullah', 'whatsapp_number' => '9000000002', 'locality' => 'Kaloor', 'territory' => 'Kochi', 'age' => 24, 'score' => 30],
-            ['name' => 'Amina Zahra', 'whatsapp_number' => '9000000003', 'locality' => 'Round North', 'territory' => 'Thrissur', 'age' => 21, 'score' => 30],
-            ['name' => 'Mohammed Zayan', 'whatsapp_number' => '9000000004', 'locality' => 'Manjeri', 'territory' => 'Malappuram', 'age' => 26, 'score' => 20],
-            ['name' => 'Aisha Maryam', 'whatsapp_number' => '9000000005', 'locality' => 'Thalassery', 'territory' => 'Kannur', 'age' => 19, 'score' => 20],
-            ['name' => 'Bilal Ahmed', 'whatsapp_number' => '9000000006', 'locality' => 'Chinnakada', 'territory' => 'Kollam', 'age' => 25, 'score' => 20],
-            ['name' => 'Maryam Haneef', 'whatsapp_number' => '9000000007', 'locality' => 'Fort', 'territory' => 'Palakkad', 'age' => 23, 'score' => 10],
-            ['name' => 'Faisal Rahman', 'whatsapp_number' => '9000000008', 'locality' => 'Feroke', 'territory' => 'Kozhikode', 'age' => 27, 'score' => 10],
+            ['name' => 'Fathima Beevi', 'whatsapp_number' => '9000000001', 'locality' => 'Palayam', 'territory' => 'Kozhikode', 'age' => 22, 'score' => 50],
+            ['name' => 'Rayan Abdullah', 'whatsapp_number' => '9000000002', 'locality' => 'Kaloor', 'territory' => 'Kochi', 'age' => 24, 'score' => 50],
+            ['name' => 'Amina Zahra', 'whatsapp_number' => '9000000003', 'locality' => 'Round North', 'territory' => 'Thrissur', 'age' => 21, 'score' => 50],
+            ['name' => 'Mohammed Zayan', 'whatsapp_number' => '9000000004', 'locality' => 'Manjeri', 'territory' => 'Malappuram', 'age' => 26, 'score' => 40],
+            ['name' => 'Aisha Maryam', 'whatsapp_number' => '9000000005', 'locality' => 'Thalassery', 'territory' => 'Kannur', 'age' => 19, 'score' => 30],
+            ['name' => 'Bilal Ahmed', 'whatsapp_number' => '9000000006', 'locality' => 'Chinnakada', 'territory' => 'Kollam', 'age' => 25, 'score' => 30],
+            ['name' => 'Maryam Haneef', 'whatsapp_number' => '9000000007', 'locality' => 'Fort', 'territory' => 'Palakkad', 'age' => 23, 'score' => 20],
+            ['name' => 'Faisal Rahman', 'whatsapp_number' => '9000000008', 'locality' => 'Feroke', 'territory' => 'Kozhikode', 'age' => 27, 'score' => 20],
             ['name' => 'Sana Basheer', 'whatsapp_number' => '9000000009', 'locality' => 'Aluva', 'territory' => 'Kochi', 'age' => 20, 'score' => 10],
             ['name' => 'Umar Farooq', 'whatsapp_number' => '9000000010', 'locality' => 'Guruvayur', 'territory' => 'Thrissur', 'age' => 28, 'score' => 10],
             // Demo test account
