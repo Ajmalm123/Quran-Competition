@@ -5,6 +5,9 @@ use App\Models\ZoneAssignment;
 use Carbon\Carbon;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -108,3 +111,83 @@ Artisan::command('redistribute-time-slots', function () {
     $this->info("Total zones processed: {$totalZonesProcessed}");
     $this->info("Total applicants assigned: {$totalApplicantsAssigned}");
 })->purpose('Redistribute existing time slots to approved applications created in the current year');
+
+Artisan::command('quiz:clean-dummy-data {--include-questions : Also delete questions and quiz weeks} {--force : Skip confirmation prompt}', function () {
+    $includeQuestions = $this->option('include-questions');
+    $force = $this->option('force');
+
+    if (!$force && !$this->confirm('This will delete all quiz participants, attempts, scores, lucky draws, and demo attempts. Do you wish to continue?')) {
+        $this->warn('Operation cancelled.');
+        return;
+    }
+
+    $this->info('Starting quiz dummy data cleanup...');
+
+    Schema::disableForeignKeyConstraints();
+
+    $luckyDraws = Schema::hasTable('lucky_draws') ? DB::table('lucky_draws')->count() : 0;
+    if (Schema::hasTable('lucky_draws')) {
+        DB::table('lucky_draws')->truncate();
+    }
+
+    $attemptQuestions = Schema::hasTable('attempt_questions') ? DB::table('attempt_questions')->count() : 0;
+    if (Schema::hasTable('attempt_questions')) {
+        DB::table('attempt_questions')->truncate();
+    }
+
+    $quizAttempts = Schema::hasTable('quiz_attempts') ? DB::table('quiz_attempts')->count() : 0;
+    if (Schema::hasTable('quiz_attempts')) {
+        DB::table('quiz_attempts')->truncate();
+    }
+
+    $weeklyScores = Schema::hasTable('weekly_scores') ? DB::table('weekly_scores')->count() : 0;
+    if (Schema::hasTable('weekly_scores')) {
+        DB::table('weekly_scores')->truncate();
+    }
+
+    $demoAttempts = Schema::hasTable('tibyan_demo_quiz_attempts') ? DB::table('tibyan_demo_quiz_attempts')->count() : 0;
+    if (Schema::hasTable('tibyan_demo_quiz_attempts')) {
+        DB::table('tibyan_demo_quiz_attempts')->truncate();
+    }
+
+    $users = Schema::hasTable('users') ? DB::table('users')->count() : 0;
+    if (Schema::hasTable('users')) {
+        DB::table('users')->truncate();
+    }
+
+    if ($includeQuestions) {
+        $answers = Schema::hasTable('answers') ? DB::table('answers')->count() : 0;
+        if (Schema::hasTable('answers')) {
+            DB::table('answers')->truncate();
+        }
+
+        $questions = Schema::hasTable('questions') ? DB::table('questions')->count() : 0;
+        if (Schema::hasTable('questions')) {
+            DB::table('questions')->truncate();
+        }
+
+        $quizWeeks = Schema::hasTable('quiz_weeks') ? DB::table('quiz_weeks')->count() : 0;
+        if (Schema::hasTable('quiz_weeks')) {
+            DB::table('quiz_weeks')->truncate();
+        }
+
+        $this->line("✓ Cleared {$questions} questions and {$quizWeeks} quiz weeks.");
+    }
+
+    Schema::enableForeignKeyConstraints();
+
+    Cache::forget('quiz_leaderboard_top10');
+    Cache::forget('quiz_public_schedule');
+    Cache::flush();
+
+    $this->info("✓ Cleared {$users} quiz participants.");
+    $this->info("✓ Cleared {$quizAttempts} quiz attempts & {$attemptQuestions} attempt responses.");
+    $this->info("✓ Cleared {$weeklyScores} scores & {$luckyDraws} lucky draws.");
+    if ($demoAttempts > 0) {
+        $this->info("✓ Cleared {$demoAttempts} demo attempts.");
+    }
+    $this->info('✓ Cleared quiz caches.');
+    $this->newLine();
+    $this->info('Quiz dummy data cleanup completed successfully!');
+})->purpose('Remove all quiz dummy data (participants, attempts, scores, lucky draws, demo attempts, and cache)');
+

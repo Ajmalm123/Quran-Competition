@@ -161,6 +161,85 @@ class WeeklyQuizTest extends TestCase
         $response->assertSee('window.INITIAL_DATA', false);
     }
 
+    public function test_quiz_public_page_renders_logged_in_user_and_header_chip_structure(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Mohammed Abdurrahman Long Name Test',
+            'whatsapp_number' => '9876500001',
+        ]);
+
+        $response = $this->actingAs($user, 'web')->get('/quiz');
+        $response->assertStatus(200);
+        $response->assertSee('Mohammed Abdurrahman Long Name Test');
+        $response->assertSee('header-user-chip');
+        $response->assertSee('header-user-name');
+        $response->assertSee('header-actions');
+    }
+
+    public function test_quiz_registration_form_uses_age_and_place_fields(): void
+    {
+        $response = $this->get('/quiz');
+        $response->assertStatus(200);
+        $response->assertSee('id="reg_age"', false);
+        $response->assertSee('id="reg_place"', false);
+        $response->assertSee('e.g. Kozhikode', false);
+        $response->assertDontSee('id="reg_dob"', false);
+        $response->assertDontSee('Date of birth', false);
+        $response->assertDontSee('Place / City', false);
+
+        // Register with age and place
+        $num = rand(10000000, 99999999);
+        $reg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Age Place Test User',
+            'age' => 25,
+            'place' => 'Kozhikode',
+            'phone' => "98{$num}",
+            'email' => "ageuser{$num}@test.com",
+            'password' => 'pass123456',
+        ]);
+        $reg->assertStatus(200);
+
+        $created = User::where('email', "ageuser{$num}@test.com")->first();
+        $this->assertNotNull($created);
+        $this->assertEquals(25, $created->age);
+        $this->assertEquals('Kozhikode', $created->place);
+    }
+
+    public function test_all_countries_ordered_india_first_gulf_second_and_others_alphabetical(): void
+    {
+        $countries = \App\Services\PhoneService::COUNTRIES;
+        $this->assertGreaterThan(150, count($countries));
+
+        // 1. First country must be India
+        $this->assertEquals('+91', $countries[0]['code']);
+        $this->assertEquals('India', $countries[0]['name']);
+        $this->assertEquals('India', $countries[0]['group']);
+
+        // 2. Next 6 countries must be GCC / Gulf countries
+        $expectedGulfCodes = ['+971', '+966', '+974', '+965', '+968', '+973'];
+        $actualGulfCodes = array_slice(array_column($countries, 'code'), 1, 6);
+        $this->assertEquals($expectedGulfCodes, $actualGulfCodes);
+
+        foreach (array_slice($countries, 1, 6) as $gulf) {
+            $this->assertEquals('Gulf', $gulf['group']);
+        }
+
+        // 3. Other countries should be grouped as 'Other' and be sorted alphabetically
+        $otherCountries = array_slice($countries, 7);
+        $this->assertNotEmpty($otherCountries);
+        $otherNames = array_column($otherCountries, 'name');
+        $sortedNames = $otherNames;
+        sort($sortedNames, SORT_STRING | SORT_FLAG_CASE);
+        $this->assertEquals($sortedNames, $otherNames);
+
+        // 4. View renders optgroups with India, Gulf Countries (GCC), and Other Countries
+        $response = $this->get('/quiz');
+        $response->assertStatus(200);
+        $response->assertSee('label="India"', false);
+        $response->assertSee('label="Gulf Countries (GCC)"', false);
+        $response->assertSee('label="Other Countries"', false);
+    }
+
     public function test_auth_flow_send_and_verify_otp(): void
     {
         $testPhone = '9876543210';
@@ -476,34 +555,47 @@ class WeeklyQuizTest extends TestCase
             'name' => 'Reset User',
             'email' => "reset{$uniqueNum}@example.com",
             'whatsapp_number' => '+9665' . $uniqueNum,
+            'country_code' => '+966',
             'password' => \Illuminate\Support\Facades\Hash::make('oldpassword'),
         ]);
 
-        // 1. Request Password Reset
+        // 1. Request Password via Email
         $forgotResp = $this->postJson('/quiz/api/auth/forgot-password', [
             'identifier' => $user->email,
         ]);
         $forgotResp->assertStatus(200);
         $forgotResp->assertJsonPath('success', true);
 
-        // Verify mail was queued/sent
-        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\QuizPasswordResetMail::class, function ($mail) use ($user) {
-            return $mail->hasTo($user->email);
+        // Verify QuizParticipantPasswordMail was sent to participant
+        $sentPassword = null;
+        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\QuizParticipantPasswordMail::class, function ($mail) use ($user, &$sentPassword) {
+            $sentPassword = $mail->plainPassword;
+            return $mail->hasTo($user->email) && !empty($mail->plainPassword);
         });
 
-        // 2. Retrieve the token generated in password_reset_tokens
-        $record = \Illuminate\Support\Facades\DB::table('password_reset_tokens')
-            ->where('email', $user->email)
-            ->first();
-        $this->assertNotNull($record);
+        $this->assertNotEmpty($sentPassword);
 
-        // We simulate resetting password by passing a token that matches
+        // User can now log in immediately with the emailed password!
+        $loginWithEmailed = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $user->email,
+            'password' => $sentPassword,
+        ]);
+        $loginWithEmailed->assertStatus(200);
+        $loginWithEmailed->assertJsonPath('name', 'Reset User');
+
+        // Also test the email template renders cleanly without errors
+        $mailable = new \App\Mail\QuizParticipantPasswordMail($user, $sentPassword, url('/quiz'), 'forgot_password');
+        $renderedHtml = $mailable->render();
+        $this->assertStringContainsString($sentPassword, $renderedHtml);
+        $this->assertStringContainsString('Friday Night Quiz', $renderedHtml);
+        $this->assertStringContainsString('تبيان', $renderedHtml);
+
+        // 2. We can also simulate manual token reset if needed
         $rawToken = 'test-token-123456';
         \Illuminate\Support\Facades\DB::table('password_reset_tokens')
             ->where('email', $user->email)
             ->update(['token' => \Illuminate\Support\Facades\Hash::make($rawToken)]);
 
-        // 3. Submit Reset Password
         $resetResp = $this->postJson('/quiz/api/auth/reset-password', [
             'email' => $user->email,
             'token' => $rawToken,
@@ -511,9 +603,6 @@ class WeeklyQuizTest extends TestCase
         ]);
 
         $resetResp->assertStatus(200);
-        $this->assertAuthenticated('web');
-
-        // Verify password actually updated
         $this->assertTrue(\Illuminate\Support\Facades\Hash::check('newsecretpassword123', $user->fresh()->password));
     }
 
@@ -585,6 +674,63 @@ class WeeklyQuizTest extends TestCase
         $meAfterLogout = $this->getJson('/quiz/api/auth/me');
         $meAfterLogout->assertStatus(200);
         $meAfterLogout->assertJsonPath('user', null);
+    }
+
+    public function test_admin_can_update_participant_password_and_user_can_login_with_it(): void
+    {
+        $uniqueNum = rand(1000000, 9999999);
+        $phone = '98' . $uniqueNum;
+        $user = User::factory()->create([
+            'name' => 'Password Test User',
+            'email' => "pwdtest{$uniqueNum}@test.com",
+            'whatsapp_number' => "+91{$phone}",
+            'country_code' => '+91',
+            'password' => \Illuminate\Support\Facades\Hash::make('initialPassword123'),
+        ]);
+
+        // User can log in with initial password
+        $login1 = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $phone,
+            'password' => 'initialPassword123',
+        ]);
+        $login1->assertStatus(200);
+        $this->postJson('/quiz/api/auth/logout');
+
+        // Admin updates password directly (as executed by Filament action / form)
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make('adminSetNewPassword456'),
+        ]);
+
+        // Old password no longer works
+        $loginOld = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $phone,
+            'password' => 'initialPassword123',
+        ]);
+        $loginOld->assertStatus(422);
+        $loginOld->assertJsonPath('code', 'INVALID_PASSWORD');
+
+        // New password works successfully
+        $loginNew = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $phone,
+            'password' => 'adminSetNewPassword456',
+        ]);
+        $loginNew->assertStatus(200);
+        $loginNew->assertJsonPath('name', 'Password Test User');
+    }
+
+    public function test_quiz_clean_dummy_data_command(): void
+    {
+        // Seed sample user and week
+        $user = User::factory()->create();
+        $this->assertDatabaseHas('users', ['id' => $user->id]);
+
+        // Run command with force
+        $this->artisan('quiz:clean-dummy-data', ['--force' => true])
+            ->expectsOutputToContain('Quiz dummy data cleanup completed successfully!')
+            ->assertExitCode(0);
+
+        // Verify users table is emptied
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 }
 

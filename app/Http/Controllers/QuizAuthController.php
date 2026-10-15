@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuizParticipantPasswordMail;
 use App\Mail\QuizPasswordResetMail;
 use App\Models\User;
 use App\Services\OtpService;
@@ -440,7 +441,13 @@ class QuizAuthController extends Controller
             ], 400);
         }
 
-        // Generate reset token and store in password_reset_tokens
+        // Generate a new secure 8-character password (e.g. k4mz7821)
+        $newPassword = Str::lower(Str::random(4)) . rand(1000, 9999);
+        $user->update([
+            'password' => Hash::make($newPassword),
+        ]);
+
+        // Keep token in password_reset_tokens for audit / compatibility
         $token = Str::random(60);
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $user->email],
@@ -450,27 +457,25 @@ class QuizAuthController extends Controller
             ]
         );
 
-        $resetUrl = url('/quiz?reset_token=' . $token . '&email=' . urlencode($user->email));
-
-        try {
-            Mail::to($user->email)->send(new QuizPasswordResetMail($user, $resetUrl));
-        } catch (Exception $e) {
-            Log::error("Failed to send password reset email: " . $e->getMessage());
-            return response()->json([
-                'code' => 'MAIL_ERROR',
-                'message' => 'Unable to send password reset email. Please try again later.',
-            ], 500);
-        }
-
         // Mask email for user privacy (e.g. j***n@gmail.com)
         $parts = explode('@', $user->email);
         $namePart = $parts[0];
         $maskedName = strlen($namePart) > 2 ? substr($namePart, 0, 1) . str_repeat('*', strlen($namePart) - 2) . substr($namePart, -1) : $namePart . '**';
         $maskedEmail = $maskedName . '@' . ($parts[1] ?? '');
 
+        try {
+            Mail::to($user->email)->send(new QuizParticipantPasswordMail($user, $newPassword, url('/quiz'), 'forgot_password'));
+        } catch (Exception $e) {
+            Log::error("Failed to send password email: " . $e->getMessage());
+            return response()->json([
+                'code' => 'MAIL_ERROR',
+                'message' => 'Unable to send password email. Please try again later.',
+            ], 500);
+        }
+
         return response()->json([
             'success' => true,
-            'message' => "A password reset link has been sent to {$maskedEmail}. Please check your inbox.",
+            'message' => "പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് ({$maskedEmail}) അയച്ചിട്ടുണ്ട്. ഇൻബോക്സ് പരിശോധിച്ച് ലോഗിൻ ചെയ്യുക.",
         ]);
     }
 

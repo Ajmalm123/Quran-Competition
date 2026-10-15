@@ -10,7 +10,8 @@
 <link rel="apple-touch-icon" href="{{ asset('images/quiz/logo_icon.svg') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Serif+Display&family=Figtree:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/pcp3wlv.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Serif+Display&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -57,7 +58,7 @@ body {
   margin: 0;
   background: var(--bg-tan);
   color: var(--ink-dark);
-  font-family: 'DM Sans', 'Noto Sans Malayalam', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'DM Sans', "sama-malayalam", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -133,6 +134,12 @@ nav a:hover, nav button:hover {
   background: rgba(133, 77, 58, 0.08);
   color: var(--ink-brown);
 }
+.header-actions {
+  display: none;
+}
+.header-user-chip {
+  display: none;
+}
 .burger {
   display: none;
   background: none;
@@ -145,11 +152,75 @@ nav a:hover, nav button:hover {
 }
 
 @media(max-width: 768px) {
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .header-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(133, 77, 58, 0.08);
+    border: 1px solid var(--border-tan);
+    border-radius: 10px;
+    padding: 0 10px 0 6px;
+    height: 38px;
+    cursor: pointer;
+    color: var(--ink-brown);
+    font-family: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    min-width: 0;
+    max-width: 135px;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .header-user-chip:hover {
+    background: rgba(133, 77, 58, 0.14);
+    border-color: var(--border-card);
+  }
+  .header-user-chip:active {
+    transform: scale(0.97);
+  }
+  .header-user-chip.active {
+    background: rgba(133, 77, 58, 0.16);
+    border-color: var(--bg-hero);
+  }
+  .header-user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-hero);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(133, 77, 58, 0.25);
+  }
+  .header-user-avatar svg {
+    display: block;
+  }
+  .header-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', "sama-malayalam", sans-serif;
+    color: var(--ink-brown);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    min-width: 0;
+  }
   .burger {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 14px;
+    height: 38px;
+    box-sizing: border-box;
+    white-space: nowrap;
   }
   nav {
     display: none;
@@ -173,6 +244,44 @@ nav a:hover, nav button:hover {
     text-align: left;
     width: 100%;
     font-size: 16px;
+  }
+}
+
+@media(max-width: 380px) {
+  .header-actions {
+    gap: 6px;
+  }
+  .header-user-chip {
+    max-width: 100px;
+    padding: 0 8px 0 5px;
+    gap: 5px;
+  }
+  .header-user-avatar {
+    width: 22px;
+    height: 22px;
+  }
+  .header-user-name {
+    font-size: 12px;
+  }
+  .burger {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .logo-btn {
+    gap: 8px;
+  }
+}
+
+@media(max-width: 330px) {
+  .header-actions {
+    gap: 4px;
+  }
+  .header-user-chip {
+    max-width: 78px;
+    padding: 0 6px 0 4px;
+  }
+  .header-user-name {
+    font-size: 11px;
   }
 }
 
@@ -219,11 +328,11 @@ nav a:hover, nav button:hover {
 }
 
 .hero-title {
-  font-family: 'DM Serif Display', 'Noto Sans Malayalam', serif;
+  font-family: "sama-malayalam", 'DM Serif Display', serif;
   font-size: clamp(42px, 7vw, 68px);
   line-height: 1.15;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   background: linear-gradient(90deg, #FFEEDC 0%, #F5F4D8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -241,8 +350,9 @@ nav a:hover, nav button:hover {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  font-family: 'Noto Sans Malayalam', 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
   font-size: 16px;
+  font-weight: 500;
   color: #FFFFFF;
   line-height: 1.6;
 }
@@ -702,7 +812,7 @@ nav a:hover, nav button:hover {
   margin: 0 0 28px;
 }
 .rules-category-title {
-  font-family: 'DM Sans', 'Noto Sans Malayalam', sans-serif;
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
   font-size: 19px;
   font-weight: 700;
   color: var(--ink-brown);
@@ -751,8 +861,9 @@ nav a:hover, nav button:hover {
   flex-shrink: 0;
 }
 .rule-text {
-  font-family: 'Noto Sans Malayalam', 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
   font-size: 15.5px;
+  font-weight: 400;
   line-height: 1.6;
   color: var(--ink-dark);
 }
@@ -761,10 +872,12 @@ nav a:hover, nav button:hover {
 footer {
   background: var(--bg-hero);
   color: #FFFFFF;
-  padding: 26px 16px;
+  padding: 24px 16px;
   text-align: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
+  font-family: 'DM Sans', "sama-malayalam", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
 }
 
 /* ================= REGISTER / LOGIN MODAL & CONTAINER (NODES 1:340 & 1:386) ================= */
@@ -817,7 +930,7 @@ footer {
 }
 
 .auth-hint-text {
-  font-family: 'Noto Sans Malayalam', sans-serif;
+  font-family: "sama-malayalam", sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #000000;
@@ -860,7 +973,7 @@ footer {
   box-shadow: 0 0 0 3px rgba(133, 77, 58, 0.12);
 }
 .form-subtext {
-  font-family: 'Noto Sans Malayalam', sans-serif;
+  font-family: "sama-malayalam", sans-serif;
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--ink-sub);
@@ -897,6 +1010,10 @@ footer {
   outline: none;
   box-shadow: 0 0 0 3px rgba(133, 77, 58, 0.12);
 }
+.country-select optgroup {
+  font-weight: 700;
+  color: var(--ink-brown);
+}
 .phone-number-field {
   flex: 1;
   min-width: 0;
@@ -932,7 +1049,7 @@ footer {
   min-height: 52px;
   border-radius: 99px;
   border: 2px solid transparent;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', "sama-malayalam", sans-serif;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
@@ -987,8 +1104,9 @@ footer {
   transition: width 0.3s ease;
 }
 .quiz-question-title {
-  font-family: 'DM Serif Display', 'Bricolage Grotesque', serif;
+  font-family: "sama-malayalam", 'DM Serif Display', 'Bricolage Grotesque', serif;
   font-size: 24px;
+  font-weight: 700;
   line-height: 1.4;
   color: var(--ink-dark);
   margin-bottom: 22px;
@@ -1004,8 +1122,8 @@ footer {
   border: 2px solid var(--border-tan);
   background: var(--bg-card-light);
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-weight: 500;
   font-size: 16px;
   color: var(--ink-dark);
   transition: all 0.15s;
@@ -1033,6 +1151,7 @@ footer {
   padding: 12px 16px;
   font-size: 14.5px;
   margin: 14px 0;
+  font-family: 'DM Sans', "sama-malayalam", sans-serif;
 }
 .alert-box.bad {
   background: #FBE4E2;
@@ -1062,7 +1181,7 @@ footer {
 /* ================= COMPREHENSIVE MOBILE RESPONSIVE STYLES ================= */
 @media (max-width: 640px) {
   .wrap {
-    padding: 0 14px;
+    padding: 0 16px;
   }
 
   /* Header */
@@ -1087,7 +1206,7 @@ footer {
 
   /* Hero Section */
   .hero-section {
-    padding: 30px 0 40px;
+    padding: 26px 0 28px;
   }
   .hero-container {
     gap: 12px;
@@ -1097,14 +1216,15 @@ footer {
     font-size: 13px;
   }
   .hero-title {
-    font-size: clamp(36px, 12vw, 56px);
+    font-size: clamp(34px, 11vw, 52px);
+    line-height: 1.15;
   }
   .hero-features {
     gap: 6px;
-    padding: 4px 0 6px;
+    padding: 2px 0 6px;
   }
   .hero-feat-row {
-    font-size: 14px;
+    font-size: 13.5px;
     gap: 8px;
     line-height: 1.5;
   }
@@ -1113,16 +1233,17 @@ footer {
     height: 6px;
   }
   .hero-countdown-box {
-    padding: 12px 14px;
+    padding: 13px 16px;
     border-radius: 16px;
     max-width: 100%;
-    margin: 4px 0 12px;
+    margin: 4px 0 10px;
   }
   .hero-countdown-sub {
     font-size: 12px;
+    margin-bottom: 3px;
   }
   .hero-countdown-main {
-    font-size: clamp(18px, 5.5vw, 26px);
+    font-size: clamp(18px, 5.2vw, 24px);
   }
   .hero-actions {
     flex-direction: column;
@@ -1134,13 +1255,14 @@ footer {
   .hero-actions .btn-outline-white {
     width: 100%;
     min-height: 48px;
-    font-size: 15.5px;
+    font-size: 15px;
     padding: 0 18px;
+    border-radius: 13px;
   }
 
   /* Winner Banner */
   .winner-section {
-    padding: 22px 0;
+    padding: 20px 0 24px;
   }
   .winner-card {
     padding: 14px 16px;
@@ -1151,10 +1273,11 @@ footer {
     font-size: 32px;
   }
   .winner-sub {
-    font-size: 12.5px;
+    font-size: 12px;
+    margin-bottom: 2px;
   }
   .winner-name {
-    font-size: 18px;
+    font-size: 17.5px;
     line-height: 1.25;
   }
   .winner-place {
@@ -1163,43 +1286,58 @@ footer {
 
   /* Schedule */
   .schedule-section {
-    padding: 34px 0 42px;
+    padding: 28px 0 34px;
   }
   .sec-title {
-    font-size: clamp(23px, 6vw, 28px);
+    font-size: clamp(22px, 5.8vw, 27px);
   }
   .sec-subtitle {
-    font-size: 14px;
-    margin: 0 0 18px;
+    font-size: 13.5px;
+    margin: 2px 0 16px;
+  }
+  .schedule-grid {
+    gap: 12px;
   }
   .wk-card {
-    padding: 15px 14px;
+    padding: 16px;
     border-radius: 16px;
     min-height: auto;
+    gap: 6px;
   }
   .wk-card-title {
-    font-size: 19px;
+    font-size: 18px;
   }
   .wk-card-date {
     font-size: 13.5px;
   }
+  .wk-badge {
+    margin: 2px 0 4px;
+    padding: 3px 10px;
+    font-size: 12px;
+  }
+  .wk-bottom-info {
+    margin-top: 6px;
+  }
+  .wk-winner-name {
+    font-size: 14.5px;
+  }
 
   /* Leaderboard */
   .leaderboard-section {
-    padding: 34px 0 42px;
+    padding: 30px 0 38px;
   }
   .lb-title {
-    font-size: clamp(24px, 6vw, 28px);
+    font-size: clamp(23px, 5.8vw, 27px);
   }
   .lb-subtitle {
-    font-size: 14px;
-    margin: 0 0 18px;
+    font-size: 13.5px;
+    margin: 2px 0 16px;
   }
 
   /* 3-Column Olympic Podium Mobile Scaling */
   .podium-container {
     gap: 6px;
-    margin: 0 auto 14px;
+    margin: 0 auto 16px;
   }
   .podium-card {
     padding: 10px 4px 12px;
@@ -1244,7 +1382,7 @@ footer {
   /* Leaderboard Table */
   .table-card {
     border-radius: 18px;
-    padding: 4px 2px;
+    padding: 6px 4px;
   }
   .lb-table th {
     padding: 8px 6px;
@@ -1274,7 +1412,7 @@ footer {
   /* My Rank Bar */
   .me-rank-bar {
     padding: 12px 14px;
-    border-radius: 18px;
+    border-radius: 16px;
     gap: 12px;
     margin-top: 14px;
   }
@@ -1295,18 +1433,18 @@ footer {
 
   /* Rules Section */
   .rules-section {
-    padding: 34px 0 42px;
+    padding: 28px 0 34px;
   }
   .rules-title {
-    font-size: clamp(28px, 7.5vw, 36px);
+    font-size: clamp(24px, 6vw, 32px);
   }
   .rules-sub {
-    font-size: 14px;
-    margin: 0 0 18px;
+    font-size: 13.5px;
+    margin: 2px 0 16px;
   }
   .rules-category-title {
-    font-size: 16px;
-    margin: 18px 0 10px;
+    font-size: 15.5px;
+    margin: 16px 0 8px;
     gap: 8px;
   }
   .rules-category-title::before {
@@ -1314,12 +1452,12 @@ footer {
     height: 16px;
   }
   .rules-list {
-    gap: 9px;
+    gap: 8px;
   }
   .rule-item-card {
-    padding: 11px 13px;
-    border-radius: 16px;
-    gap: 11px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    gap: 10px;
     align-items: flex-start;
   }
   .rule-bullet {
@@ -1338,11 +1476,11 @@ footer {
 
   /* Auth Modals (Register / Login / Reset) */
   .auth-wrapper {
-    padding: 16px 8px 32px;
+    padding: 16px 12px 32px;
   }
   .auth-card {
-    padding: 18px 14px;
-    border-radius: 18px;
+    padding: 20px 16px;
+    border-radius: 20px;
   }
   .auth-card-title {
     font-size: 21px;
@@ -1393,8 +1531,8 @@ footer {
   /* Quiz Taking & Results */
   .quiz-card {
     margin: 14px auto;
-    padding: 18px 14px;
-    border-radius: 18px;
+    padding: 18px 16px;
+    border-radius: 20px;
   }
   .quiz-question-title {
     font-size: 18px;
@@ -1402,7 +1540,7 @@ footer {
   }
   .quiz-opt-btn {
     min-height: 48px;
-    padding: 11px 13px;
+    padding: 12px 14px;
     font-size: 14.5px;
     border-radius: 12px;
     margin-bottom: 9px;
@@ -1414,7 +1552,7 @@ footer {
 
   /* Footer */
   footer {
-    padding: 20px 14px calc(20px + env(safe-area-inset-bottom, 0px));
+    padding: 24px 16px calc(24px + env(safe-area-inset-bottom, 0px));
     font-size: 12.5px;
   }
 }
@@ -1422,7 +1560,7 @@ footer {
 /* Extra small devices (<= 360px width) */
 @media (max-width: 360px) {
   .wrap {
-    padding: 0 8px;
+    padding: 0 14px;
   }
   .hero-feat-row {
     font-size: 12.5px;
@@ -1716,30 +1854,35 @@ const ERR = {
 };
 
 const FALLBACK_COUNTRIES = [
-  { code: '+91', name: 'India', flag: '🇮🇳', placeholder: '98765 43210', hint: '10 digits' },
-  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪', placeholder: '50 123 4567', hint: '9 digits' },
-  { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦', placeholder: '55 123 4567', hint: '9 digits' },
-  { code: '+974', name: 'Qatar', flag: '🇶🇦', placeholder: '5512 3456', hint: '8 digits' },
-  { code: '+965', name: 'Kuwait', flag: '🇰🇼', placeholder: '5012 3456', hint: '8 digits' },
-  { code: '+968', name: 'Oman', flag: '🇴🇲', placeholder: '9123 4567', hint: '8 digits' },
-  { code: '+973', name: 'Bahrain', flag: '🇧🇭', placeholder: '3612 3456', hint: '8 digits' },
-  { code: '+44', name: 'United Kingdom', flag: '🇬🇧', placeholder: '7911 123456', hint: '10 digits' },
-  { code: '+1', name: 'USA / Canada', flag: '🇺🇸', placeholder: '202 555 0143', hint: '10 digits' },
-  { code: '+60', name: 'Malaysia', flag: '🇲🇾', placeholder: '12 345 6789', hint: '9-10 digits' },
-  { code: '+65', name: 'Singapore', flag: '🇸🇬', placeholder: '8123 4567', hint: '8 digits' },
-  { code: '+61', name: 'Australia', flag: '🇦🇺', placeholder: '412 345 678', hint: '9 digits' },
-  { code: '+64', name: 'New Zealand', flag: '🇳🇿', placeholder: '21 123 4567', hint: '8-10 digits' },
-  { code: '+49', name: 'Germany', flag: '🇩🇪', placeholder: '151 12345678', hint: '10-11 digits' },
-  { code: '+33', name: 'France', flag: '🇫🇷', placeholder: '6 12 34 56 78', hint: '9 digits' },
-  { code: '+39', name: 'Italy', flag: '🇮🇹', placeholder: '312 345 6789', hint: '9-10 digits' },
-  { code: '+353', name: 'Ireland', flag: '🇮🇪', placeholder: '85 123 4567', hint: '9 digits' },
-  { code: '+960', name: 'Maldives', flag: '🇲🇻', placeholder: '712 3456', hint: '7 digits' },
-  { code: '+94', name: 'Sri Lanka', flag: '🇱🇰', placeholder: '71 234 5678', hint: '9 digits' },
-  { code: '+92', name: 'Pakistan', flag: '🇵🇰', placeholder: '301 2345678', hint: '10 digits' },
-  { code: '+880', name: 'Bangladesh', flag: '🇧🇩', placeholder: '1712 345678', hint: '10 digits' },
-  { code: '+20', name: 'Egypt', flag: '🇪🇬', placeholder: '10 1234 5678', hint: '10 digits' },
-  { code: '+90', name: 'Turkey', flag: '🇹🇷', placeholder: '501 234 5678', hint: '10 digits' },
-  { code: '+27', name: 'South Africa', flag: '🇿🇦', placeholder: '71 234 5678', hint: '9 digits' }
+  // India (Default)
+  { code: '+91', name: 'India', flag: '🇮🇳', iso: 'IN', hint: '10 digits', group: 'India' },
+
+  // Gulf Countries (GCC)
+  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪', iso: 'AE', hint: '9 digits', group: 'Gulf' },
+  { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦', iso: 'SA', hint: '9 digits', group: 'Gulf' },
+  { code: '+974', name: 'Qatar', flag: '🇶🇦', iso: 'QA', hint: '8 digits', group: 'Gulf' },
+  { code: '+965', name: 'Kuwait', flag: '🇰🇼', iso: 'KW', hint: '8 digits', group: 'Gulf' },
+  { code: '+968', name: 'Oman', flag: '🇴🇲', iso: 'OM', hint: '8 digits', group: 'Gulf' },
+  { code: '+973', name: 'Bahrain', flag: '🇧🇭', iso: 'BH', hint: '8 digits', group: 'Gulf' },
+
+  // Other Countries
+  { code: '+44', name: 'United Kingdom', flag: '🇬🇧', iso: 'GB', hint: '10 digits', group: 'Other' },
+  { code: '+1', name: 'USA / Canada', flag: '🇺🇸', iso: 'US', hint: '10 digits', group: 'Other' },
+  { code: '+60', name: 'Malaysia', flag: '🇲🇾', iso: 'MY', hint: '9-10 digits', group: 'Other' },
+  { code: '+65', name: 'Singapore', flag: '🇸🇬', iso: 'SG', hint: '8 digits', group: 'Other' },
+  { code: '+61', name: 'Australia', flag: '🇦🇺', iso: 'AU', hint: '9 digits', group: 'Other' },
+  { code: '+64', name: 'New Zealand', flag: '🇳🇿', iso: 'NZ', hint: '8-10 digits', group: 'Other' },
+  { code: '+49', name: 'Germany', flag: '🇩🇪', iso: 'DE', hint: '10-11 digits', group: 'Other' },
+  { code: '+33', name: 'France', flag: '🇫🇷', iso: 'FR', hint: '9 digits', group: 'Other' },
+  { code: '+39', name: 'Italy', flag: '🇮🇹', iso: 'IT', hint: '9-10 digits', group: 'Other' },
+  { code: '+353', name: 'Ireland', flag: '🇮🇪', iso: 'IE', hint: '9 digits', group: 'Other' },
+  { code: '+960', name: 'Maldives', flag: '🇲🇻', iso: 'MV', hint: '7 digits', group: 'Other' },
+  { code: '+94', name: 'Sri Lanka', flag: '🇱🇰', iso: 'LK', hint: '9 digits', group: 'Other' },
+  { code: '+92', name: 'Pakistan', flag: '🇵🇰', iso: 'PK', hint: '10 digits', group: 'Other' },
+  { code: '+880', name: 'Bangladesh', flag: '🇧🇩', iso: 'BD', hint: '10 digits', group: 'Other' },
+  { code: '+20', name: 'Egypt', flag: '🇪🇬', iso: 'EG', hint: '10 digits', group: 'Other' },
+  { code: '+90', name: 'Turkey', flag: '🇹🇷', iso: 'TR', hint: '10 digits', group: 'Other' },
+  { code: '+27', name: 'South Africa', flag: '🇿🇦', iso: 'ZA', hint: '9 digits', group: 'Other' }
 ];
 
 const COUNTRIES = (window.INITIAL_DATA?.countries && window.INITIAL_DATA.countries.length > 0)
@@ -1806,9 +1949,29 @@ function Header({ onGo, user, onLogout }) {
           <img src="/images/quiz/logo_text.svg" alt="Award Logo Text" width="62" height="32"/>
         </button>
 
-        <button className="burger" onClick=${() => setOpen(!open)} aria-expanded=${open} aria-label="Toggle navigation">
-          ${open ? "✕ Close" : "☰ Menu"}
-        </button>
+        <div className="header-actions">
+          ${user && user.name ? html`
+            <button 
+              type="button" 
+              className=${"header-user-chip " + (open ? "active" : "")} 
+              onClick=${() => setOpen(!open)} 
+              title=${user.name} 
+              aria-label=${"Logged in as " + user.name + ". Toggle menu"}
+            >
+              <span className="header-user-avatar" aria-hidden="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <span className="header-user-name">${user.name}</span>
+            </button>
+          ` : null}
+
+          <button className="burger" onClick=${() => setOpen(!open)} aria-expanded=${open} aria-label="Toggle navigation">
+            ${open ? "✕ Close" : "☰ Menu"}
+          </button>
+        </div>
 
         <nav className=${open ? "open" : ""}>
           <a href="#top" onClick=${(e) => { e.preventDefault(); setOpen(false); onGo("top"); }}>Home</a>
@@ -2158,7 +2321,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
 
   const [form, setForm] = useState({
     name: "",
-    dob: "",
+    age: "",
     place: "",
     phone: "",
     email: resetInfo?.email || "",
@@ -2179,7 +2342,8 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     // Auto-detect country code if pasted/typed with + or 00
     if (val.startsWith("+") || val.startsWith("00")) {
       const clean = val.startsWith("00") ? "+" + val.slice(2) : val;
-      const matched = COUNTRIES.find(c => clean.startsWith(c.code));
+      const sorted = [...COUNTRIES].sort((a, b) => b.code.length - a.code.length);
+      const matched = sorted.find(c => clean.startsWith(c.code));
       if (matched) {
         setCountryCode(matched.code);
         val = clean.slice(matched.code.length).replace(/^0+/, '').trim();
@@ -2189,15 +2353,15 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   };
 
   const getPlacePlaceholder = () => {
-    if (countryCode === "+971") return "e.g. Dubai / Abu Dhabi";
-    if (countryCode === "+966") return "e.g. Riyadh / Jeddah";
+    if (countryCode === "+971") return "e.g. Dubai";
+    if (countryCode === "+966") return "e.g. Riyadh";
     if (countryCode === "+974") return "e.g. Doha";
     if (countryCode === "+968") return "e.g. Muscat";
     if (countryCode === "+965") return "e.g. Kuwait City";
     if (countryCode === "+973") return "e.g. Manama";
-    if (countryCode === "+44") return "e.g. London / Birmingham";
-    if (countryCode === "+1") return "e.g. New York / Toronto";
-    return "e.g. Kozhikode / Malappuram";
+    if (countryCode === "+44") return "e.g. London";
+    if (countryCode === "+1") return "e.g. New York";
+    return "e.g. Kozhikode";
   };
 
   // Registration Submit
@@ -2215,7 +2379,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     try {
       const u = await api.registerPassword({
         name: form.name.trim(),
-        dob: form.dob,
+        age: form.age ? parseInt(form.age, 10) : null,
         place: form.place.trim(),
         country_code: countryCode,
         phone: form.phone.trim(),
@@ -2249,7 +2413,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     }
   };
 
-  // Forgot password request
+  // Forgot password request (email password)
   const handleForgot = async () => {
     setErr("");
     setInfo("");
@@ -2259,7 +2423,8 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     setBusy(true);
     try {
       const res = await api.forgotPassword(form.email.trim());
-      setInfo(res.message || "പാസ്‌വേഡ് റീസെറ്റ് ലിങ്ക് ഇമെയിലിലേക്ക് അയച്ചിട്ടുണ്ട്!");
+      setInfo(res.message || "പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് അയച്ചിട്ടുണ്ട്!");
+      setLoginMethod("email");
     } catch (e) {
       setErr(e.message || ERR[e.code] || ERR.NETWORK);
     }
@@ -2334,18 +2499,33 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                       value=${countryCode} 
                       onChange=${e => setCountryCode(e.target.value)}
                       aria-label="Country Code">
-                      ${COUNTRIES.map(c => html`
-                        <option key=${c.code} value=${c.code}>
-                          ${c.flag} ${c.code} (${c.name})
-                        </option>
-                      `)}
+                      <optgroup label="India">
+                        ${COUNTRIES.filter(c => c.group === 'India' || c.code === '+91').map(c => html`
+                          <option key=${c.iso || c.code} value=${c.code}>
+                            ${c.flag} ${c.code} (${c.name})
+                          </option>
+                        `)}
+                      </optgroup>
+                      <optgroup label="Gulf Countries (GCC)">
+                        ${COUNTRIES.filter(c => (c.group === 'Gulf' || ['+971', '+966', '+974', '+965', '+968', '+973'].includes(c.code)) && c.code !== '+91').map(c => html`
+                          <option key=${c.iso || c.code} value=${c.code}>
+                            ${c.flag} ${c.code} (${c.name})
+                          </option>
+                        `)}
+                      </optgroup>
+                      <optgroup label="Other Countries">
+                        ${COUNTRIES.filter(c => c.group !== 'India' && c.group !== 'Gulf' && c.code !== '+91' && !['+971', '+966', '+974', '+965', '+968', '+973'].includes(c.code)).map(c => html`
+                          <option key=${c.iso || c.code} value=${c.code}>
+                            ${c.flag} ${c.code} (${c.name})
+                          </option>
+                        `)}
+                      </optgroup>
                     </select>
                     <input 
                       id="reg_phone" 
                       className="form-input phone-number-field" 
                       type="tel" 
                       inputMode="tel"
-                      placeholder=${currentCountry?.placeholder || "Mobile number"} 
                       value=${form.phone} 
                       onChange=${handlePhoneChange} 
                       required/>
@@ -2370,17 +2550,21 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="reg_dob">Date of birth</label>
+                  <label className="form-label" htmlFor="reg_age">Age</label>
                   <input 
-                    id="reg_dob" 
+                    id="reg_age" 
                     className="form-input" 
-                    type="date" 
-                    value=${form.dob} 
-                    onChange=${update("dob")}/>
+                    type="number" 
+                    inputMode="numeric"
+                    min="5"
+                    max="120"
+                    placeholder="e.g. 24" 
+                    value=${form.age} 
+                    onChange=${update("age")}/>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="reg_place">Place / City</label>
+                  <label className="form-label" htmlFor="reg_place">Place</label>
                   <input 
                     id="reg_place" 
                     className="form-input" 
@@ -2454,18 +2638,33 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                         value=${countryCode} 
                         onChange=${e => setCountryCode(e.target.value)}
                         aria-label="Country Code">
-                        ${COUNTRIES.map(c => html`
-                          <option key=${c.code} value=${c.code}>
-                            ${c.flag} ${c.code} (${c.name})
-                          </option>
-                        `)}
+                        <optgroup label="India">
+                          ${COUNTRIES.filter(c => c.group === 'India' || c.code === '+91').map(c => html`
+                            <option key=${c.iso || c.code} value=${c.code}>
+                              ${c.flag} ${c.code} (${c.name})
+                            </option>
+                          `)}
+                        </optgroup>
+                        <optgroup label="Gulf Countries (GCC)">
+                          ${COUNTRIES.filter(c => (c.group === 'Gulf' || ['+971', '+966', '+974', '+965', '+968', '+973'].includes(c.code)) && c.code !== '+91').map(c => html`
+                            <option key=${c.iso || c.code} value=${c.code}>
+                              ${c.flag} ${c.code} (${c.name})
+                            </option>
+                          `)}
+                        </optgroup>
+                        <optgroup label="Other Countries">
+                          ${COUNTRIES.filter(c => c.group !== 'India' && c.group !== 'Gulf' && c.code !== '+91' && !['+971', '+966', '+974', '+965', '+968', '+973'].includes(c.code)).map(c => html`
+                            <option key=${c.iso || c.code} value=${c.code}>
+                              ${c.flag} ${c.code} (${c.name})
+                            </option>
+                          `)}
+                        </optgroup>
                       </select>
                       <input 
                         id="login_phone" 
                         className="form-input phone-number-field" 
                         type="tel" 
                         inputMode="tel"
-                        placeholder=${currentCountry?.placeholder || "Registered mobile number"} 
                         value=${form.phone} 
                         onChange=${handlePhoneChange} 
                         required/>
@@ -2511,19 +2710,25 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
           </div>
         ` : step === "forgot" ? html`
           <div>
-            <h3 style=${{ fontSize: 20, marginBottom: 8 }}>Password Reset</h3>
+            <h3 style=${{ fontSize: 20, marginBottom: 8 }}>Password by Email</h3>
             <p style=${{ fontSize: 14, color: "var(--ink-mute)", marginBottom: 16 }}>
-              നിങ്ങളുടെ രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഐഡി നൽകുക. പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യാനുള്ള ലിങ്ക് അയക്കുന്നതാണ്.
+              നിങ്ങളുടെ രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഐഡി നൽകുക. ലോഗിൻ ചെയ്യാനുള്ള പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് അയക്കുന്നതാണ്.
             </p>
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label">Registered Email</label>
               <input className="form-input" type="email" placeholder="yourname@gmail.com" value=${form.email} onChange=${update("email")}/>
             </div>
             ${err && html`<${Err} code=${err}/>`}
             ${info && html`<div className="alert-box ok">${info}</div>`}
-            <button className="auth-btn-pill primary" onClick=${handleForgot} disabled=${busy}>
-              ${busy ? "Sending…" : "Send Reset Link"}
-            </button>
+            ${info ? html`
+              <button className="auth-btn-pill primary" onClick=${() => { setStep("form"); setTab("login"); setLoginMethod("email"); setErr(""); }}>
+                Proceed to Login →
+              </button>
+            ` : html`
+              <button className="auth-btn-pill primary" onClick=${handleForgot} disabled=${busy}>
+                ${busy ? "Sending…" : "Send Password to Email"}
+              </button>
+            `}
             <button className="auth-btn-pill secondary" onClick=${() => { setStep("form"); setErr(""); setInfo(""); }}>
               Back to Login
             </button>
@@ -2641,26 +2846,14 @@ function QuizResultView({ r, onHome }) {
           ${r.score}<span style=${{ fontSize: 32, opacity: 0.6 }}>/50</span>
         </div>
         <p style=${{ fontSize: 16, color: "var(--ink-dark)", margin: "8px 0 16px" }}>
-          5-ൽ <b>${r.correct.filter(Boolean).length}</b> ചോദ്യങ്ങൾക്ക് ശരിയുത്തരം നൽകി. നിങ്ങളുടെ ആകെ പോയിന്റ്: <b>${r.total}</b>.
+          5-ൽ <b>${r.correct.filter(Boolean).length}</b> ചോദ്യങ്ങൾക്ക് ശരിയുത്തരം നൽകി.
         </p>
 
         ${r.eligible ? html`
           <div className="alert-box ok">
-            🎉 അഭിനന്ദനങ്ങൾ! 50/50 നേടിയതിനാൽ നിങ്ങൾ ഈ ആഴ്ചയിലെ ലക്കി ഡ്രോയിലേക്ക് തെരഞ്ഞെടുക്കപ്പെട്ടിരിക്കുന്നു!
+            🎉 അഭിനന്ദനങ്ങൾ! നിങ്ങൾ മുഴുവൻ ചോദ്യങ്ങൾക്കും ശരിയുത്തരം നൽകിയിരിക്കുന്നു!
           </div>
-        ` : html`
-          <div className="alert-box info">
-            50/50 നേടുന്നവർക്കാണ് ലക്കി ഡ്രോയിൽ അവസരം. അടുത്ത ആഴ്ച വീണ്ടും മത്സരിക്കൂ!
-          </div>
-        `}
-
-        <div style=${{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", margin: "16px 0" }}>
-          ${r.correct.map((c, k) => html`
-            <span key=${k} className=${"wk-badge " + (c ? "completed" : "upcoming")}>
-              Q${k + 1}: ${c ? "ശരി ✓" : "തെറ്റ് ✕"}
-            </span>
-          `)}
-        </div>
+        ` : null}
 
         <button className="auth-btn-pill primary" style=${{ marginTop: 14 }} onClick=${onHome}>
           Leaderboard കാണുക
@@ -2669,6 +2862,7 @@ function QuizResultView({ r, onHome }) {
     </div>
   `;
 }
+
 
 /* ============ MAIN APPLICATION ============ */
 function App() {
@@ -2826,7 +3020,7 @@ function App() {
         `}
       </main>
 
-      <footer>Friday Night Quiz · Quran Competition Online Award</footer>
+      <footer>© 2026 AP Aslam Holy Qur’an Award. All rights reserved.</footer>
     </div>
   `;
 }
