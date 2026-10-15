@@ -382,7 +382,7 @@ nav a:hover, nav button:hover {
 }
 .hero-countdown-main {
   font-family: 'Figtree', sans-serif;
-  font-size: clamp(24px, 4vw, 32px);
+  font-size: clamp(20px, 3.2vw, 28px);
   font-weight: 700;
   color: var(--ink-dark);
   font-variant-numeric: tabular-nums;
@@ -1280,7 +1280,7 @@ footer {
     margin-bottom: 3px;
   }
   .hero-countdown-main {
-    font-size: clamp(18px, 5.2vw, 24px);
+    font-size: clamp(14px, 4.3vw, 20px);
   }
   .hero-actions {
     flex-direction: column;
@@ -1949,8 +1949,12 @@ const useLoad = (fn, deps) => {
 };
 
 const hms = ms => {
-  const s = Math.max(0, Math.floor(ms / 1e3)), d = Math.floor(s / 86400), p = n => String(n).padStart(2, "0");
-  return (d ? d + "d " : "") + [Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60].map(p).join(" : ");
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  return `${d} Days · ${h} Hrs · ${m} Mins · ${sec} Secs`;
 };
 
 const fmt = (t, o) => new Intl.DateTimeFormat(undefined, o).format(t);
@@ -2054,6 +2058,16 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
   const next = weekList.find(w => wkStatus(w, now) === "upcoming");
   const isAllDone = weekList.length >= 10 && weekList.every(w => wkStatus(w, now) === "completed");
 
+  const getNextFriday = () => {
+    const d = new Date(now);
+    const day = d.getDay();
+    const diff = (5 - day + 7) % 7;
+    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
+    d.setHours(20, 0, 0, 0);
+    return d.getTime();
+  };
+  const targetTime = live ? live.end : (next ? next.start : getNextFriday());
+
   const btnText = live 
     ? "Start quiz" 
     : user 
@@ -2089,20 +2103,14 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
           <div className="hero-countdown-sub">
             ${live 
               ? `Week ${live.id} · Closes in` 
-              : next 
-                ? `Next quiz · ${fmt(next.start, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST` 
-                : isAllDone 
-                  ? "Season Finale"
-                  : "Season 1 · Coming Soon"}
+              : isAllDone
+                ? "Season Finale"
+                : `Next quiz · ${fmt(targetTime, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST`}
           </div>
           <div className="hero-countdown-main">
-            ${live 
-              ? `Closes in ${hms(live.end - now)}` 
-              : next 
-                ? `Starts in ${hms(next.start - now)}` 
-                : isAllDone 
-                  ? "All quizzes completed"
-                  : "Starts this Friday · 08:00 PM"}
+            ${isAllDone 
+              ? "All quizzes completed"
+              : hms(targetTime - now)}
           </div>
         </div>
 
