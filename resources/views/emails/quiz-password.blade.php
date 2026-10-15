@@ -176,11 +176,11 @@
                                 </a>
                             </div>
 
-                            <div class="info-box" style="background-color: #F7F0E3; border-radius: 10px; padding: 12px 16px; margin-top: 24px;">
+                            {{-- <div class="info-box" style="background-color: #F7F0E3; border-radius: 10px; padding: 12px 16px; margin-top: 24px;">
                                 <p class="info-box-text" style="margin: 0; font-size: 13px; line-height: 1.5; color: #6F5C44;">
                                     <strong>ശ്രദ്ധിക്കുക:</strong> ലോഗിൻ ചെയ്ത ശേഷം നിങ്ങൾക്ക് ആവശ്യമെങ്കിൽ അക്കൗണ്ടിൽ നിന്ന് പാസ്‌വേഡ് മാറ്റാവുന്നതാണ്. സുരക്ഷിതത്വത്തിനായി ഈ പാസ്‌വേഡ് മറ്റാരുമായും പങ്കുവെക്കാതിരിക്കുക.
                                 </p>
-                            </div>
+                            </div> --}}
                         </td>
                     </tr>
 
