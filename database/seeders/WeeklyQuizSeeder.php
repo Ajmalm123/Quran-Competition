@@ -42,15 +42,15 @@ class WeeklyQuizSeeder extends Seeder
             ]
         );
 
-        // Upcoming Weeks (Every following Friday at 8:00 PM IST)
-        $nextFriday = $now->copy()->next(Carbon::FRIDAY)->setTime(20, 0, 0);
+        // Upcoming Weeks (Every following Friday at 5:00 AM IST)
+        $nextFriday = $now->copy()->next(Carbon::FRIDAY)->setTime(5, 0, 0);
         if ($nextFriday->isPast()) {
             $nextFriday->addWeek();
         }
 
         for ($w = 2; $w <= 10; $w++) {
             $start = $nextFriday->copy()->addWeeks($w - 2);
-            $end = $start->copy()->addHours(2); // 8:00 PM to 10:00 PM
+            $end = $start->copy()->addHours(24); // 5:00 AM Friday to 5:00 AM Saturday (24 hours)
 
             QuizWeek::updateOrCreate(
                 ['week_number' => $w],

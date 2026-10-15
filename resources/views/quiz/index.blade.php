@@ -2663,6 +2663,30 @@ const fmtQuizTimer = s => {
 const fmt = (t, o) => new Intl.DateTimeFormat(undefined, o).format(t);
 const wkStatus = (w, now = Date.now()) => now < w.start ? "upcoming" : now <= w.end ? "live" : "completed";
 
+const getNextFriday = (now = Date.now()) => {
+  const istOffset = 5.5 * 3600 * 1000;
+  const istNow = new Date(now + istOffset);
+  const day = istNow.getUTCDay();
+  const hours = istNow.getUTCHours();
+  let diff = (5 - day + 7) % 7;
+  if (diff === 0 && hours >= 5) {
+    diff = 7;
+  }
+  const targetUtc = new Date(Date.UTC(
+    istNow.getUTCFullYear(),
+    istNow.getUTCMonth(),
+    istNow.getUTCDate() + diff,
+    5, 0, 0, 0
+  ));
+  return targetUtc.getTime() - istOffset;
+};
+
+const fmtQuizBadgeTime = (t) => {
+  const dateStr = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', weekday: 'short' }).format(t);
+  const timeStr = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }).format(t);
+  return `${dateStr} ${timeStr} IST`;
+};
+
 const Err = ({ code, retry }) => html`
   <div className="alert-box bad" role="alert">
     ${ERR[code] || code || ERR.NETWORK}
@@ -2830,15 +2854,7 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
   const next = weekList.find(w => wkStatus(w, now) === "upcoming");
   const isAllDone = weekList.length >= 10 && weekList.every(w => wkStatus(w, now) === "completed");
 
-  const getNextFriday = () => {
-    const d = new Date(now);
-    const day = d.getDay();
-    const diff = (5 - day + 7) % 7;
-    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
-    d.setHours(20, 0, 0, 0);
-    return d.getTime();
-  };
-  const targetTime = live ? live.end : (next ? next.start : getNextFriday());
+  const targetTime = live ? live.end : (next ? next.start : getNextFriday(now));
 
   const btnText = live 
     ? "Start quiz" 
@@ -2882,7 +2898,7 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
                 ? `Week ${live.id} · Closes in` 
                 : isAllDone
                   ? "Season Finale"
-                  : `Next quiz · ${fmt(targetTime, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST`}
+                  : `Next quiz · ${fmtQuizBadgeTime(targetTime)}`}
             </span>
           </div>
 
@@ -2931,15 +2947,7 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 
 /* Winner Banner Section (Figma Node 1:71) */
 function WinnerBanner({ weeks, now = Date.now() }) {
-  const getNextFriday = () => {
-    const d = new Date(now);
-    const day = d.getDay();
-    const diff = (5 - day + 7) % 7;
-    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
-    d.setHours(20, 0, 0, 0);
-    return d.getTime();
-  };
-  const baseFriday = getNextFriday();
+  const baseFriday = getNextFriday(now);
 
   const totalWeeks = Array.from({ length: 10 }, (_, index) => {
     const w = (weeks || [])[index];
@@ -2948,7 +2956,7 @@ function WinnerBanner({ weeks, now = Date.now() }) {
     return {
       id: index + 1,
       start: start,
-      end: start + 2 * 3600000,
+      end: start + 24 * 3600000,
       winner: null
     };
   });
@@ -3027,16 +3035,8 @@ function WinnerBanner({ weeks, now = Date.now() }) {
 
 /* Weekly Quiz Schedule Section (Figma Node 1:84) */
 function WeeklySchedule({ weeks, now }) {
-  // Ensure upcoming Friday 8:00 PM fallback if schedule from backend is not yet populated
-  const getNextFriday = () => {
-    const d = new Date(now);
-    const day = d.getDay();
-    const diff = (5 - day + 7) % 7;
-    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
-    d.setHours(20, 0, 0, 0);
-    return d.getTime();
-  };
-  const baseFriday = getNextFriday();
+  // Ensure upcoming Friday 5:00 AM IST fallback if schedule from backend is not yet populated
+  const baseFriday = getNextFriday(now);
 
   const totalWeeks = Array.from({ length: 10 }, (_, index) => {
     const w = (weeks || [])[index];
@@ -3045,7 +3045,7 @@ function WeeklySchedule({ weeks, now }) {
     return {
       id: index + 1,
       start: start,
-      end: start + 2 * 3600000,
+      end: start + 24 * 3600000,
       winner: null
     };
   });
@@ -3232,7 +3232,7 @@ const QUIZ_RULE_CATEGORIES = [
   {
     category: "സമ്മാനങ്ങൾ",
     rules: [
-      { num: 11, text: "ഡിസംബർ 18-ലെ അവസാന ക്വിസ് പൂർത്തിയാക്കുമ്പോൾ, ഏറ്റവും കൂടുതൽ ആകെ പോയിന്റ് നേടുന്ന മത്സരാർത്ഥിക്ക് ₹1,00,000 ക്യാഷ് പ്രൈസ് ലഭിക്കും." },
+      { num: 11, text: "ഡിസംബർ 18-ലെ അവസാന ക്വിസ് പൂർത്തിയാക്കുമ്പോൾ, ഏറ്റവും കൂടുതൽ ആകെ പോയിന്റ് നേടുന്ന മത്സരാർത്ഥികൾക്ക് ₹1,00,000 ക്യാഷ് പ്രൈസ് ലഭിക്കും." },
       { num: 12, text: "ഓരോ ആഴ്ചയും അഞ്ച് ചോദ്യങ്ങൾക്കും ശരിയുത്തരം നൽകിയവരിൽ നിന്ന് നറുക്കെടുപ്പിലൂടെ ഒരാളെ തിരഞ്ഞെടുത്ത് പ്രത്യേക സമ്മാനം നൽകും. ഈ നറുക്കെടുപ്പിൽ ക്വിസ് പൂർത്തിയാക്കാൻ എടുത്ത സമയം പരിഗണിക്കില്ല." }
     ]
   },
