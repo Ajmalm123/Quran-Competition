@@ -33,6 +33,17 @@ class QuizWeek extends Model
         'end_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('quiz_public_schedule');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('quiz_public_schedule');
+        });
+    }
+
     /**
      * Questions belonging to this week (configured to exactly 6 questions)
      */
