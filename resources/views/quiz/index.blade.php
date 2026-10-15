@@ -1994,9 +1994,10 @@ function Header({ onGo, user, onLogout }) {
 
 /* Hero Section (Figma Node 1:3) */
 function Hero({ weeks, onStart, now, user, onGoRules }) {
-  const live = weeks.find(w => wkStatus(w, now) === "live");
-  const next = weeks.find(w => wkStatus(w, now) === "upcoming");
-  const isCompleted = !live && !next;
+  const weekList = Array.isArray(weeks) ? weeks : [];
+  const live = weekList.find(w => wkStatus(w, now) === "live");
+  const next = weekList.find(w => wkStatus(w, now) === "upcoming");
+  const isAllDone = weekList.length >= 10 && weekList.every(w => wkStatus(w, now) === "completed");
 
   const btnText = live 
     ? "Start quiz" 
@@ -2009,7 +2010,7 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
       <div className="wrap hero-container">
         <div className=${"hero-status-pill " + (!live ? "upcoming" : "")}>
           ${live ? html`<div className="dot-pulse"></div>` : null}
-          ${live ? "Quiz is live" : next ? "Quiz upcoming" : "Season completed"}
+          ${live ? "Quiz is live" : isAllDone ? "Season completed" : "Quiz upcoming"}
         </div>
 
         <h1 className="hero-title">തിബ്‌യാൻ</h1>
@@ -2034,20 +2035,24 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
             ${live 
               ? `Week ${live.id} · Closes in` 
               : next 
-                ? `Next quiz · ${fmt(next.start, { day: "numeric", month: "short", weekday: "short" })} 05:00 IST` 
-                : "Season Finale"}
+                ? `Next quiz · ${fmt(next.start, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST` 
+                : isAllDone 
+                  ? "Season Finale"
+                  : "Season 1 · Coming Soon"}
           </div>
           <div className="hero-countdown-main">
             ${live 
               ? `Closes in ${hms(live.end - now)}` 
               : next 
                 ? `Starts in ${hms(next.start - now)}` 
-                : "All quizzes completed"}
+                : isAllDone 
+                  ? "All quizzes completed"
+                  : "Starts this Friday · 08:00 PM"}
           </div>
         </div>
 
         <div className="hero-actions">
-          <button className="btn-gold" onClick=${onStart} disabled=${isCompleted}>
+          <button className="btn-gold" onClick=${onStart} disabled=${isAllDone}>
             ${btnText}
           </button>
           <button className="btn-outline-white" onClick=${onGoRules}>
@@ -2061,7 +2066,8 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 
 /* Winner Banner Section (Figma Node 1:71) */
 function WinnerBanner({ weeks }) {
-  const winnerWeek = [...weeks].reverse().find(w => w.winner);
+  const weekList = Array.isArray(weeks) ? weeks : [];
+  const winnerWeek = [...weekList].reverse().find(w => w && w.winner);
 
   return html`
     <section className="winner-section">
@@ -2072,13 +2078,15 @@ function WinnerBanner({ weeks }) {
             <div className="winner-sub">
               ${winnerWeek 
                 ? `${fmt(winnerWeek.start, { day: "2-digit", month: "2-digit", year: "2-digit" })} · Week ${winnerWeek.id} Winner` 
-                : "Week 1 Winner"}
+                : "ആദ്യ ആഴ്ചയിലെ ലക്കി ഡ്രോ വിജയി"}
             </div>
             <div className="winner-name">
-              ${winnerWeek ? winnerWeek.winner.name : "Fathima Beevi"}
+              ${winnerWeek ? winnerWeek.winner.name : "വിജയിയെ ഉടൻ പ്രഖ്യാപിക്കും"}
             </div>
             <div className="winner-place">
-              ${winnerWeek ? (winnerWeek.winner.territory || winnerWeek.winner.locality || "Kerala") : "Kozhikode"}
+              ${winnerWeek 
+                ? (winnerWeek.winner.territory || winnerWeek.winner.locality || "Kerala") 
+                : "ക്വിസിന് ശേഷം 50/50 നേടിയവരിൽ നിന്ന് നറുക്കെടുപ്പിലൂടെ വിജയിയെ തെരഞ്ഞെടുക്കും"}
             </div>
           </div>
         </div>
@@ -2089,14 +2097,25 @@ function WinnerBanner({ weeks }) {
 
 /* Weekly Quiz Schedule Section (Figma Node 1:84) */
 function WeeklySchedule({ weeks, now }) {
-  // Ensure exactly 10 weeks are displayed as in Figma
+  // Ensure upcoming Friday 8:00 PM fallback if schedule from backend is not yet populated
+  const getNextFriday = () => {
+    const d = new Date(now);
+    const day = d.getDay();
+    const diff = (5 - day + 7) % 7;
+    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
+    d.setHours(20, 0, 0, 0);
+    return d.getTime();
+  };
+  const baseFriday = getNextFriday();
+
   const totalWeeks = Array.from({ length: 10 }, (_, index) => {
-    const w = weeks[index];
+    const w = (weeks || [])[index];
     if (w) return w;
+    const start = baseFriday + index * 7 * 86400000;
     return {
       id: index + 1,
-      start: Date.now() + index * 7 * 86400000,
-      end: Date.now() + index * 7 * 86400000 + 86400000,
+      start: start,
+      end: start + 2 * 3600000,
       winner: null
     };
   });
@@ -2145,10 +2164,11 @@ function WeeklySchedule({ weeks, now }) {
 }
 
 /* Leaderboard Section with Top 3 Podium & Table (Figma Node 1:189) */
-function Leaderboard({ user, tick }) {
+function Leaderboard({ user, tick, onStart }) {
   const { data, err, loading, retry } = useLoad(() => api.leaderboard(user && user.id), [user && user.id, tick]);
   const top = data?.top || [];
   const me = data?.me;
+  const hasContestants = top.length > 0;
 
   // Podium order: 2 (Silver), 1 (Gold), 3 (Bronze)
   const rank1 = top.find(u => u.rank === 1) || top[0];
@@ -2165,34 +2185,34 @@ function Leaderboard({ user, tick }) {
 
         ${loading ? html`<${Skel}/>` : err ? html`<${Err} code=${err} retry=${retry}/>` : html`
           <div>
-            ${top.length > 0 ? html`
-              <div className="podium-container">
-                <!-- Rank 2 -->
-                <div className="podium-card p2">
-                  <div className="podium-rank-num">2</div>
-                  <div className="podium-name">${rank2 ? rank2.name : "Rayan Abdullah"}</div>
-                  <div className="podium-place">${rank2 ? (rank2.territory || rank2.locality) : "Kochi"}</div>
-                  <div className="podium-pts">${rank2 ? rank2.points : "230"}</div>
-                </div>
-
-                <!-- Rank 1 -->
-                <div className="podium-card p1">
-                  <div className="podium-medal">🥇</div>
-                  <div className="podium-name">${rank1 ? rank1.name : "Fathima Beevi"}</div>
-                  <div className="podium-place">${rank1 ? (rank1.territory || rank1.locality) : "Kozhikode"}</div>
-                  <div className="podium-pts">${rank1 ? rank1.points : "260"}</div>
-                </div>
-
-                <!-- Rank 3 -->
-                <div className="podium-card p3">
-                  <div className="podium-rank-num">3</div>
-                  <div className="podium-name">${rank3 ? rank3.name : "Amina Zahra"}</div>
-                  <div className="podium-place">${rank3 ? (rank3.territory || rank3.locality) : "Thrissur"}</div>
-                  <div className="podium-pts">${rank3 ? rank3.points : "220"}</div>
-                </div>
+            <div className="podium-container">
+              <!-- Rank 2 -->
+              <div className="podium-card p2">
+                <div className="podium-rank-num">2</div>
+                <div className="podium-name">${rank2 ? rank2.name : "രണ്ടാം സ്ഥാനം"}</div>
+                <div className="podium-place">${rank2 ? (rank2.territory || rank2.locality) : "2nd Rank"}</div>
+                <div className="podium-pts">${rank2 ? rank2.points : "—"}</div>
               </div>
 
-              <!-- Points Table -->
+              <!-- Rank 1 -->
+              <div className="podium-card p1">
+                <div className="podium-medal">🥇</div>
+                <div className="podium-name">${rank1 ? rank1.name : "ഒന്നാം സ്ഥാനം"}</div>
+                <div className="podium-place">${rank1 ? (rank1.territory || rank1.locality) : "1st Rank"}</div>
+                <div className="podium-pts">${rank1 ? rank1.points : "—"}</div>
+              </div>
+
+              <!-- Rank 3 -->
+              <div className="podium-card p3">
+                <div className="podium-rank-num">3</div>
+                <div className="podium-name">${rank3 ? rank3.name : "മൂന്നാം സ്ഥാനം"}</div>
+                <div className="podium-place">${rank3 ? (rank3.territory || rank3.locality) : "3rd Rank"}</div>
+                <div className="podium-pts">${rank3 ? rank3.points : "—"}</div>
+              </div>
+            </div>
+
+            <!-- Points Table or Empty State Card -->
+            ${hasContestants ? html`
               <div className="table-card">
                 <table className="lb-table">
                   <thead>
@@ -2217,13 +2237,28 @@ function Leaderboard({ user, tick }) {
                 </table>
               </div>
             ` : html`
-              <div className="table-card" style=${{ padding: 28, textAlign: "center", color: "var(--ink-mute)" }}>
-                No points recorded yet. Be the first to play and climb the table!
+              <div className="table-card" style=${{ padding: "34px 20px", textAlign: "center" }}>
+                <div style=${{ fontSize: "38px", marginBottom: "8px" }}>🏆</div>
+                <h3 style=${{ fontSize: "19px", fontWeight: "700", color: "var(--ink-dark)", margin: "0 0 6px" }}>
+                  ലീഡർബോർഡ് ഉടൻ ആരംഭിക്കും
+                </h3>
+                <p style=${{ fontSize: "14px", color: "var(--ink-mute)", maxWidth: "460px", margin: "0 auto 18px", lineHeight: "1.6" }}>
+                  ക്വിസ് ആരംഭിക്കുന്നതോടെ മത്സരാർത്ഥികളുടെ സ്കോറും റാങ്കും ഇവിടെ തത്സമയം ലഭ്യമാകും. ആദ്യ ക്വിസിൽ പങ്കെടുത്ത് ലീഡർബോർഡിൽ മുൻനിരയിലെത്തൂ!
+                </p>
+                ${!user ? html`
+                  <button className="btn-gold" style=${{ minHeight: "44px", padding: "0 22px", fontSize: "14.5px" }} onClick=${onStart}>
+                    ക്വിസിനായി ഇപ്പോൾ രജിസ്റ്റർ ചെയ്യുക
+                  </button>
+                ` : html`
+                  <div style=${{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(133, 77, 58, 0.08)", padding: "7px 16px", borderRadius: "99px", color: "var(--ink-brown)", fontSize: "13.5px", fontWeight: "600" }}>
+                    <span>✓ നിങ്ങൾ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ട്. ക്വിസ് ലൈവ് ആകുമ്പോൾ പങ്കെടുക്കൂ!</span>
+                  </div>
+                `}
               </div>
             `}
 
             <!-- User Position Card (Figma Me-Card) -->
-            ${user && me ? html`
+            ${user && me && me.points > 0 ? html`
               <div className="me-rank-bar">
                 <div className="me-rank-badge">#${me.rank}</div>
                 <div className="me-info">
@@ -3014,7 +3049,7 @@ function App() {
               </div>
             `}
 
-            <${Leaderboard} user=${user} tick=${tick}/>
+            <${Leaderboard} user=${user} tick=${tick} onStart=${handleStart}/>
             <${QuizRules}/>
           </div>
         `}
