@@ -19,8 +19,7 @@ class QuizPasswordResetMail extends Mailable
     public function __construct(
         public User $user,
         public string $resetUrl
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
@@ -28,7 +27,7 @@ class QuizPasswordResetMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Your Password - തിബ്യാൻ',
+            subject: 'Reset Your Password - തിബ്‌യാൻ',
         );
     }
 

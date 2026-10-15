@@ -7,7 +7,7 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<title>പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യുക - തിബ്യാൻ</title>
+<title>പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യുക - തിബ്‌യാൻ</title>
 <style>
     /* Resets & Client Normalization */
     body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
@@ -97,7 +97,7 @@
                             </h2>
 
                             <p class="email-intro" style="margin: 0 0 20px; font-size: 15px; line-height: 1.6; color: #474747;">
-                                നിങ്ങളുടെ തിബ്യാൻ ക്വിസ് അക്കൗണ്ട് പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യാനുള്ള അപേക്ഷ ലഭിച്ചിട്ടുണ്ട്. താഴെ പറയുന്ന ബട്ടണിൽ ക്ലിക്ക് ചെയ്ത് നിങ്ങൾക്ക് പുതിയ പാസ്‌വേഡ് സെറ്റ് ചെയ്യാവുന്നതാണ്:
+                                നിങ്ങളുടെ തിബ്‌യാൻക്വിസ് അക്കൗണ്ട് പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യാനുള്ള അപേക്ഷ ലഭിച്ചിട്ടുണ്ട്. താഴെ പറയുന്ന ബട്ടണിൽ ക്ലിക്ക് ചെയ്ത് നിങ്ങൾക്ക് പുതിയ പാസ്‌വേഡ് സെറ്റ് ചെയ്യാവുന്നതാണ്:
                             </p>
 
                             <!-- Action Button -->
