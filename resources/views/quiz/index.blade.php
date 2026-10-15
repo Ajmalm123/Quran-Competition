@@ -1041,6 +1041,13 @@ footer {
 .form-subtext.highlight {
   color: var(--bg-hero);
 }
+.form-divider {
+  display: block;
+  height: 0;
+  border: 0;
+  border-top: 1px solid var(--border-card);
+  margin: 10px -26px 24px -26px;
+}
 
 .phone-input-group {
   display: flex;
@@ -1175,6 +1182,26 @@ footer {
 }
 .auth-btn-pill.secondary:hover {
   background: rgba(217, 200, 172, 0.2);
+}
+.auth-back-link {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 0 2px;
+  margin-top: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink-mute);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.auth-back-link:hover {
+  color: var(--ink-dark);
 }
 
 /* ================= QUIZ TAKING & RESULTS ================= */
@@ -1638,9 +1665,17 @@ footer {
     font-size: 12px;
     margin-top: 4px;
   }
+  .form-divider {
+    margin: 8px -16px 20px -16px;
+  }
   .auth-btn-pill {
     min-height: 48px;
     font-size: 15px;
+  }
+  .auth-back-link {
+    font-size: 14px;
+    margin-top: 12px;
+    padding: 6px 0 2px;
   }
 
   /* Quiz Taking & Results */
@@ -2730,7 +2765,9 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   return html`
     <div className="auth-wrapper">
       <div className="auth-card">
-        <h2 className="auth-card-title">Register/Start Quiz</h2>
+        <h2 className="auth-card-title">
+          ${step === "forgot" ? "Forgot your password ?" : step === "reset" ? "Set New Password" : "Register/Start Quiz"}
+        </h2>
 
         ${step === "form" ? html`
           <div>
@@ -2753,7 +2790,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
             <!-- Hint text -->
             <div className="auth-hint-text">
               ${tab === "register" ? html`
-                <span>മുൻപ് ഒരു തവണ രജിസ്റ്റർ ചെയ്തതാണെങ്കിൽ </span>
+                <span>മുൻപ് ഒരു തവണ രജിസ്റ്റർ ചെയ്തിട്ടുണ്ടെങ്കിൽ വീണ്ടും രജിസ്റ്റർ ചെയ്യേണ്ടതില്ല. ദയവായി </span>
                 <span className="auth-hint-link" onClick=${() => { setTab("login"); setErr(""); }}>ലോഗിൻ</span>
                 <span> ചെയ്യുക</span>
               ` : html`
@@ -2850,6 +2887,8 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                     onChange=${update("place")}/>
                 </div>
 
+                <div className="form-divider" role="separator" aria-hidden="true"></div>
+
                 <div className="form-group">
                   <label className="form-label" htmlFor="reg_email">Email</label>
                   <input 
@@ -2860,9 +2899,6 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                     value=${form.email} 
                     onChange=${update("email")}
                     required/>
-                  <div className="form-subtext">
-                    പാസ്സ്‌വേർഡ് മറന്നു പോയാൽ ഈ ഇമെയിലിലേക്കായിരിക്കും അയക്കുക
-                  </div>
                 </div>
 
                 <div className="form-group">
@@ -2887,7 +2923,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                     </button>
                   </div>
                   <div className="form-subtext highlight">
-                    പാസ്സ്‌വേർഡ് കുറിച്ച് വെക്കുമല്ലോ.... അടുത്ത ആഴ്ച ക്വിസിൽ പങ്കെടുക്കാൻ ലോഗിൻ ചെയ്‌യുമ്പോൾ ആവശ്യം വരും
+                    ഇ-മെയിൽ ഐഡി യും പാസ്സ്വേർഡും മറന്നു പോകാൻ സാധ്യതയുണ്ടെങ്കിൽ കുറിച്ചു വെക്കുമല്ലോ...
                   </div>
                 </div>
 
@@ -3008,7 +3044,6 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
           </div>
         ` : step === "forgot" ? html`
           <div>
-            <h3 style=${{ fontSize: 20, marginBottom: 8 }}>Password by Email</h3>
             <p style=${{ fontSize: 14, color: "var(--ink-mute)", marginBottom: 16 }}>
               നിങ്ങളുടെ രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഐഡി നൽകുക. ലോഗിൻ ചെയ്യാനുള്ള പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് അയക്കുന്നതാണ്.
             </p>
@@ -3033,7 +3068,6 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
           </div>
         ` : step === "reset" ? html`
           <div>
-            <h3 style=${{ fontSize: 20, marginBottom: 8 }}>Set New Password</h3>
             <div className="form-group">
               <label className="form-label">New Password</label>
               <div className="password-input-wrapper">
@@ -3074,7 +3108,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
           </div>
         ` : null}
 
-        <button type="button" className="auth-btn-pill secondary" onClick=${onCancel}>
+        <button type="button" className="auth-back-link" onClick=${onCancel}>
           Back to home
         </button>
       </div>
@@ -3096,7 +3130,7 @@ function QuizTaking({ user, onFinish, onExit }) {
       <div className="quiz-card" style=${{ textAlign: "center" }}>
         <h2 style=${{ marginBottom: 12 }}>${err === "DONE" ? "ക്വിസ് പൂർത്തിയായി" : err === "CLOSED" ? "ക്വിസ് ക്ലോസ്ഡ് ആണ്" : "ക്ഷമിക്കുക"}</h2>
         <${Err} code=${err} retry=${["NETWORK"].includes(err) ? retry : null}/>
-        <button className="auth-btn-pill secondary" style=${{ marginTop: 18 }} onClick=${onExit}>Back to home</button>
+        <button className="auth-back-link" style=${{ marginTop: 18 }} onClick=${onExit}>Back to home</button>
       </div>
     </div>
   `;
