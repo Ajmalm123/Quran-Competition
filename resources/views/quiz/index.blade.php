@@ -1406,17 +1406,17 @@ a.forgot-option-card:hover .forgot-option-arrow {
   align-items: center;
   justify-content: center;
   padding: 40px 16px 54px;
-  background: radial-gradient(circle at 50% 18%, #201712 0%, #120D0A 60%, #090807 100%);
+  background: var(--bg-tan);
 }
 .quiz-intro-card {
   width: 100%;
-  max-width: 560px;
-  background: #0E0B09;
-  border: 1px solid rgba(212, 162, 89, 0.28);
-  border-radius: 24px;
-  padding: 38px 32px 32px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 4px 20px rgba(133, 77, 58, 0.12);
-  color: #FFFFFF;
+  max-width: 580px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-tan);
+  border-radius: 28px;
+  padding: 36px 32px 32px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+  color: var(--ink-dark);
   position: relative;
 }
 .quiz-intro-icon-wrap {
@@ -1424,35 +1424,40 @@ a.forgot-option-card:hover .forgot-option-arrow {
   justify-content: center;
   align-items: center;
   margin-bottom: 16px;
+  color: var(--bg-hero);
 }
 .quiz-intro-title {
   text-align: center;
-  color: #FFFFFF;
+  color: var(--ink-dark);
   font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
-  font-size: clamp(21px, 5vw, 24px);
+  font-size: clamp(22px, 5vw, 26px);
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  margin: 0 0 26px;
+  margin: 0 0 22px;
 }
 .quiz-intro-guide-heading {
-  color: var(--bg-tan, #F7F0E3);
+  color: var(--ink-brown);
   font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
-  font-size: 15.5px;
-  font-weight: 600;
-  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 14px;
   text-align: left;
 }
 .quiz-intro-rules-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 12px;
+  margin-bottom: 26px;
 }
 .quiz-intro-rule-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card-light);
+  border: 1.5px solid var(--border-tan);
+  border-radius: 16px;
 }
 .quiz-intro-rule-icon {
   display: inline-flex;
@@ -1462,14 +1467,14 @@ a.forgot-option-card:hover .forgot-option-arrow {
   height: 22px;
   flex-shrink: 0;
   margin-top: 1px;
-  color: #D4A259;
+  color: var(--bg-hero);
 }
 .quiz-intro-rule-text {
   font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
-  font-size: 14.5px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.55;
-  color: #E2DDD5;
+  color: var(--ink-dark);
   text-align: left;
   flex: 1;
   overflow-wrap: break-word;
@@ -1484,10 +1489,10 @@ a.forgot-option-card:hover .forgot-option-arrow {
 .quiz-intro-start-btn {
   width: 100%;
   min-height: 52px;
-  background: linear-gradient(180deg, #8A523D 0%, #754231 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
+  background: var(--gold-btn);
+  color: var(--gold-btn-text);
+  border: 2px solid transparent;
+  border-radius: 99px;
   font-family: "sama-malayalam", 'Noto Sans Malayalam', 'Figtree', sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -1496,18 +1501,17 @@ a.forgot-option-card:hover .forgot-option-arrow {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(117, 66, 49, 0.35);
-  transition: background 0.15s, transform 0.1s, filter 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 14px rgba(246, 172, 56, 0.28);
+  transition: transform 0.12s, filter 0.15s;
 }
 .quiz-intro-start-btn:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 6px 18px rgba(117, 66, 49, 0.45);
+  filter: brightness(1.05);
 }
 .quiz-intro-start-btn:active {
-  transform: scale(0.99);
+  transform: scale(0.98);
 }
 .quiz-intro-start-btn:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
   filter: none;
 }
@@ -1515,9 +1519,9 @@ a.forgot-option-card:hover .forgot-option-arrow {
   width: 100%;
   min-height: 50px;
   background: transparent;
-  border: 1.5px solid rgba(217, 200, 172, 0.28);
-  color: var(--border-tan, #D9C8AC);
-  border-radius: 12px;
+  border: 2px solid var(--border-tan);
+  color: var(--ink-dark);
+  border-radius: 99px;
   font-family: "sama-malayalam", 'Noto Sans Malayalam', 'Figtree', 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -1525,15 +1529,13 @@ a.forgot-option-card:hover .forgot-option-arrow {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 .quiz-intro-cancel-btn:hover {
-  background: rgba(217, 200, 172, 0.08);
-  border-color: rgba(217, 200, 172, 0.5);
-  color: #FFFFFF;
+  background: rgba(217, 200, 172, 0.25);
 }
 .quiz-intro-cancel-btn:active {
-  transform: scale(0.99);
+  transform: scale(0.98);
 }
 @media (max-width: 600px) {
   .quiz-intro-overlay {
@@ -1541,26 +1543,27 @@ a.forgot-option-card:hover .forgot-option-arrow {
     min-height: calc(100vh - 56px);
   }
   .quiz-intro-card {
-    padding: 28px 18px 24px;
+    padding: 26px 18px 22px;
     border-radius: 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   }
   .quiz-intro-icon-wrap {
     margin-bottom: 12px;
   }
   .quiz-intro-title {
-    margin: 0 0 20px;
+    margin: 0 0 18px;
   }
   .quiz-intro-guide-heading {
     font-size: 14.5px;
-    margin: 0 0 14px;
+    margin: 0 0 12px;
   }
   .quiz-intro-rules-list {
-    gap: 13px;
-    margin-bottom: 24px;
+    gap: 10px;
+    margin-bottom: 22px;
   }
   .quiz-intro-rule-item {
+    padding: 10px 14px;
     gap: 10px;
+    border-radius: 14px;
   }
   .quiz-intro-rule-icon {
     width: 20px;
@@ -1573,12 +1576,10 @@ a.forgot-option-card:hover .forgot-option-arrow {
   .quiz-intro-start-btn {
     min-height: 48px;
     font-size: 15px;
-    border-radius: 10px;
   }
   .quiz-intro-cancel-btn {
     min-height: 46px;
     font-size: 14px;
-    border-radius: 10px;
   }
 }
 @media (max-width: 360px) {
@@ -1586,16 +1587,16 @@ a.forgot-option-card:hover .forgot-option-arrow {
     padding: 16px 10px 32px;
   }
   .quiz-intro-card {
-    padding: 22px 14px 18px;
+    padding: 20px 14px 18px;
     border-radius: 16px;
   }
   .quiz-intro-title {
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 19px;
+    margin-bottom: 14px;
   }
   .quiz-intro-guide-heading {
     font-size: 13.5px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .quiz-intro-rule-text {
     font-size: 12.8px;
@@ -2625,7 +2626,7 @@ function CheckTickIcon({ size = 22, color = "var(--ink-brown)" }) {
 }
 
 /* Open Book Icon (Quiz Intro Screen) */
-function OpenBookIcon({ size = 32, color = "#D4A259" }) {
+function OpenBookIcon({ size = 34, color = "var(--bg-hero)" }) {
   return html`
     <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -2634,8 +2635,8 @@ function OpenBookIcon({ size = 32, color = "#D4A259" }) {
   `;
 }
 
-/* Golden Circle Check Icon */
-function CircleCheckIcon({ size = 20, color = "#D4A259" }) {
+/* Circle Check Icon */
+function CircleCheckIcon({ size = 20, color = "var(--bg-hero)" }) {
   return html`
     <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10"/>
@@ -2644,8 +2645,8 @@ function CircleCheckIcon({ size = 20, color = "#D4A259" }) {
   `;
 }
 
-/* Golden Circle Clock Icon */
-function CircleClockIcon({ size = 20, color = "#D4A259" }) {
+/* Circle Clock Icon */
+function CircleClockIcon({ size = 20, color = "var(--bg-hero)" }) {
   return html`
     <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10"/>
@@ -2654,8 +2655,8 @@ function CircleClockIcon({ size = 20, color = "#D4A259" }) {
   `;
 }
 
-/* Golden Circle Alert Icon */
-function CircleAlertIcon({ size = 20, color = "#D4A259" }) {
+/* Circle Alert Icon */
+function CircleAlertIcon({ size = 20, color = "var(--bg-hero)" }) {
   return html`
     <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10"/>
@@ -3800,7 +3801,7 @@ function QuizTaking({ user, onFinish, onExit }) {
       <div className="quiz-intro-overlay">
         <div className="quiz-intro-card">
           <div className="quiz-intro-icon-wrap">
-            <${OpenBookIcon} size=${34} color="#D4A259"/>
+            <${OpenBookIcon} size=${36} color="var(--bg-hero)"/>
           </div>
 
           <h2 className="quiz-intro-title">ക്വിസ് തുടങ്ങാൻ തയ്യാറാണോ?</h2>
@@ -3810,28 +3811,28 @@ function QuizTaking({ user, onFinish, onExit }) {
           <div className="quiz-intro-rules-list">
             <div className="quiz-intro-rule-item">
               <span className="quiz-intro-rule-icon">
-                <${CircleCheckIcon} size=${20} color="#D4A259"/>
+                <${CircleCheckIcon} size=${20} color="var(--bg-hero)"/>
               </span>
               <span className="quiz-intro-rule-text">ആകെ 5 ചോദ്യങ്ങൾ ഉണ്ടായിരിക്കും.</span>
             </div>
 
             <div className="quiz-intro-rule-item">
               <span className="quiz-intro-rule-icon">
-                <${CircleCheckIcon} size=${20} color="#D4A259"/>
+                <${CircleCheckIcon} size=${20} color="var(--bg-hero)"/>
               </span>
               <span className="quiz-intro-rule-text">ഓരോ ശരിയുത്തരത്തിനും 10 പോയിന്റ് ലഭിക്കും.</span>
             </div>
 
             <div className="quiz-intro-rule-item">
               <span className="quiz-intro-rule-icon">
-                <${CircleClockIcon} size=${20} color="#D4A259"/>
+                <${CircleClockIcon} size=${20} color="var(--bg-hero)"/>
               </span>
-              <span className="quiz-intro-rule-text">ക്വിസ് ആരംഭിക്കുന്നതോടെ സമയം കണക്കാക്കും.</span>
+              <span className="quiz-intro-rule-text">ക്വിസ് ആരംഭിക്കുന്നതോടെ സമയം കണക്കാക്കും. ലീഡർ ബോർഡിൽ മുന്നിലെത്താൻ കഴിയുന്നത്ര കുറഞ്ഞ സമയത്തിനുള്ളിൽ ക്വിസ് പൂർത്തിയാക്കാൻ ശ്രദ്ധിക്കുക.</span>
             </div>
 
             <div className="quiz-intro-rule-item">
               <span className="quiz-intro-rule-icon">
-                <${CircleAlertIcon} size=${20} color="#D4A259"/>
+                <${CircleAlertIcon} size=${20} color="var(--bg-hero)"/>
               </span>
               <span className="quiz-intro-rule-text">ഒരു തവണ മാത്രമേ പങ്കെടുക്കാൻ കഴിയൂ. തയ്യാറാണെന്ന് ഉറപ്പാക്കിയ ശേഷം ആരംഭിക്കുക.</span>
             </div>
