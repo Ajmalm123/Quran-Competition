@@ -22,7 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'dob',
         'age',
+        'place',
         'locality',
         'territory',
         'country_code',
@@ -53,6 +55,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'whatsapp_verified' => 'boolean',
             'age' => 'integer',
+            'dob' => 'date',
         ];
     }
 

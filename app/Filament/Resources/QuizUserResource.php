@@ -41,30 +41,28 @@ class QuizUserResource extends Resource
                                 ->required()
                                 ->maxLength(255),
 
-                            Forms\Components\TextInput::make('age')
-                                ->label('Age')
-                                ->numeric()
-                                ->minValue(1)
-                                ->maxValue(120),
-
-                            Forms\Components\TextInput::make('locality')
-                                ->label('Locality / Area')
-                                ->maxLength(255),
-                        ]),
-
-                        Forms\Components\Grid::make(3)->schema([
                             Forms\Components\TextInput::make('whatsapp_number')
-                                ->label('WhatsApp Number')
+                                ->label('Mobile Number')
                                 ->required()
                                 ->unique(ignoreRecord: true)
                                 ->maxLength(25)
                                 ->tel()
-                                ->placeholder('e.g. +919876543210'),
+                                ->placeholder('e.g. 9876543210'),
 
-                            Forms\Components\Toggle::make('whatsapp_verified')
-                                ->label('WhatsApp Verified (OTP)')
-                                ->default(false)
-                                ->inline(false),
+                            Forms\Components\TextInput::make('email')
+                                ->label('Email Address')
+                                ->email()
+                                ->maxLength(150),
+                        ]),
+
+                        Forms\Components\Grid::make(3)->schema([
+                            Forms\Components\DatePicker::make('dob')
+                                ->label('Date of Birth')
+                                ->native(false),
+
+                            Forms\Components\TextInput::make('locality')
+                                ->label('Place / Locality')
+                                ->maxLength(255),
 
                             Forms\Components\Select::make('status')
                                 ->label('Account Status')
@@ -100,35 +98,32 @@ class QuizUserResource extends Resource
                     ->sortable()
                     ->weight('bold'),
 
-                Tables\Columns\TextColumn::make('age')
-                    ->label('Age')
-                    ->sortable()
-                    ->alignCenter(),
+                Tables\Columns\TextColumn::make('whatsapp_number')
+                    ->label('Mobile Number')
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Mobile number copied')
+                    ->icon('heroicon-m-phone')
+                    ->badge()
+                    ->color('info'),
+
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable()
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('locality')
-                    ->label('Locality')
+                    ->label('Place')
                     ->searchable()
                     ->sortable()
                     ->badge()
                     ->color('gray'),
 
-                Tables\Columns\TextColumn::make('whatsapp_number')
-                    ->label('WhatsApp Number')
-                    ->searchable()
-                    ->copyable()
-                    ->copyMessage('WhatsApp number copied')
-                    ->icon('heroicon-m-phone')
-                    ->badge()
-                    ->color('info'),
-
-                Tables\Columns\IconColumn::make('whatsapp_verified')
-                    ->label('Verified')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-badge')
-                    ->trueColor('success')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->falseColor('danger')
-                    ->alignCenter(),
+                Tables\Columns\TextColumn::make('dob')
+                    ->label('Date of Birth')
+                    ->date('d M Y')
+                    ->sortable()
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('weekly_scores_sum_score')
                     ->label('Total Points')
@@ -167,10 +162,8 @@ class QuizUserResource extends Resource
                         'disabled' => 'Disabled',
                     ]),
 
-                Tables\Filters\TernaryFilter::make('whatsapp_verified')
-                    ->label('WhatsApp Verified'),
-
                 Tables\Filters\SelectFilter::make('locality')
+                    ->label('Place')
                     ->options(fn () => User::whereNotNull('locality')->distinct()->pluck('locality', 'locality')->toArray()),
             ])
             ->actions([

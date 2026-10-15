@@ -137,38 +137,91 @@ class QuizAuthController extends Controller
         ]);
     }
 
-    /**
-     * Register international user with password and email.
-     */
     public function registerPassword(Request $request): JsonResponse
     {
+        if ($request->filled('place')) {
+            $place = trim($request->input('place'));
+            if (!$request->filled('locality')) {
+                $request->merge(['locality' => $place]);
+            }
+            if (!$request->filled('territory')) {
+                $request->merge(['territory' => $place]);
+            }
+        }
+        if (!$request->filled('country_code')) {
+            $request->merge(['country_code' => '+91']);
+        }
+        if ($request->filled('dob') && !$request->filled('age')) {
+            try {
+                $calculatedAge = Carbon::parse($request->input('dob'))->age;
+                $request->merge(['age' => max(1, min(120, $calculatedAge))]);
+            } catch (\Exception $e) {
+                $request->merge(['age' => null]);
+            }
+        }
+
         $request->validate([
             'name' => 'required|string|max:100',
-            'age' => 'required|integer|min:5|max:120',
-            'locality' => 'required|string|max:100',
-            'territory' => 'required|string|max:100',
-            'country_code' => 'required|string|max:10',
+            'age' => 'nullable|integer|min:1|max:120',
+            'dob' => 'nullable|string|max:30',
+            'place' => 'nullable|string|max:100',
+            'locality' => 'nullable|string|max:100',
+            'territory' => 'nullable|string|max:100',
+            'country_code' => 'nullable|string|max:10',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:150',
             'password' => 'required|string|min:6',
         ]);
 
-        $countryCode = trim($request->input('country_code'));
-        if (!str_starts_with($countryCode, '+')) {
+        $rawPhone = preg_replace('/\D/', '', $request->input('phone'));
+        $countryCode = trim($request->input('country_code', '+91'));
+        if (strlen($rawPhone) === 10 && in_array(substr($rawPhone, 0, 1), ['6','7','8','9'])) {
+            $countryCode = '+91';
+        }
+        if ($countryCode && !str_starts_with($countryCode, '+')) {
             $countryCode = '+' . $countryCode;
         }
 
-        $rawPhone = preg_replace('/\D/', '', $request->input('phone'));
         $fullPhone = $countryCode . $rawPhone;
         $email = strtolower(trim($request->input('email')));
 
         // Check if phone or email already registered
         $existing = User::where('whatsapp_number', $fullPhone)
             ->orWhere('whatsapp_number', $rawPhone)
+            ->orWhere('whatsapp_number', '+91' . $rawPhone)
             ->orWhere('email', $email)
             ->first();
 
         if ($existing) {
+            // If user previously registered without a password, allow setting it now and login
+            if (empty($existing->password)) {
+                $existing->update([
+                    'password' => Hash::make($request->input('password')),
+                    'dob' => $request->input('dob') ?: $existing->dob,
+                    'age' => $request->input('age') ?: $existing->age,
+                    'place' => $request->input('place') ?: $existing->place,
+                    'locality' => $request->input('locality') ?: $existing->locality,
+                    'territory' => $request->input('territory') ?: $existing->territory,
+                    'email' => $existing->email ?: $email,
+                    'whatsapp_verified' => true,
+                    'status' => 'active',
+                ]);
+
+                Auth::guard('web')->login($existing, true);
+                if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+                return response()->json([
+                    'id' => $existing->id,
+                    'name' => $existing->name,
+                    'territory' => $existing->territory ?? $existing->locality ?? 'Contestant',
+                    'locality' => $existing->locality,
+                    'phone' => $existing->whatsapp_number,
+                    'email' => $existing->email,
+                ]);
+            }
+
             return response()->json([
                 'code' => 'EXISTS',
                 'message' => 'This mobile number or email is already registered. Please log in.',
@@ -177,9 +230,11 @@ class QuizAuthController extends Controller
 
         $user = User::create([
             'name' => trim($request->input('name')),
+            'dob' => $request->input('dob'),
             'age' => $request->input('age'),
-            'locality' => trim($request->input('locality')),
-            'territory' => trim($request->input('territory')),
+            'place' => trim($request->input('place', $request->input('locality', ''))),
+            'locality' => trim($request->input('locality', $request->input('place', ''))),
+            'territory' => trim($request->input('territory', $request->input('place', 'Kerala'))),
             'country_code' => $countryCode,
             'whatsapp_number' => $fullPhone,
             'email' => $email,
@@ -189,7 +244,9 @@ class QuizAuthController extends Controller
         ]);
 
         Auth::guard('web')->login($user, true);
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return response()->json([
             'id' => $user->id,
@@ -223,13 +280,20 @@ class QuizAuthController extends Controller
             $user = User::where('email', strtolower($identifier))->first();
         } else {
             $rawPhone = preg_replace('/\D/', '', $identifier);
-            $fullPhone = $countryCode ? ($countryCode . $rawPhone) : $identifier;
+            if (strlen($rawPhone) === 10 && in_array(substr($rawPhone, 0, 1), ['6','7','8','9'])) {
+                $user = User::where('whatsapp_number', '+91' . $rawPhone)
+                    ->orWhere('whatsapp_number', $rawPhone)
+                    ->orWhere('whatsapp_number', 'like', "%{$rawPhone}")
+                    ->first();
+            } else {
+                $fullPhone = $countryCode ? ($countryCode . $rawPhone) : $identifier;
 
-            $user = User::where('whatsapp_number', $fullPhone)
-                ->orWhere('whatsapp_number', $rawPhone)
-                ->orWhere('whatsapp_number', '+' . $rawPhone)
-                ->orWhere('whatsapp_number', 'like', "%{$rawPhone}%")
-                ->first();
+                $user = User::where('whatsapp_number', $fullPhone)
+                    ->orWhere('whatsapp_number', $rawPhone)
+                    ->orWhere('whatsapp_number', '+' . $rawPhone)
+                    ->orWhere('whatsapp_number', 'like', "%{$rawPhone}%")
+                    ->first();
+            }
         }
 
         if (!$user) {
@@ -242,7 +306,7 @@ class QuizAuthController extends Controller
         if (empty($user->password)) {
             return response()->json([
                 'code' => 'NO_PASSWORD',
-                'message' => 'No password is set on this account. Please use WhatsApp OTP to log in.',
+                'message' => 'No password is set on this account. Please register or use Forgot Password to set a password.',
             ], 400);
         }
 
@@ -254,7 +318,9 @@ class QuizAuthController extends Controller
         }
 
         Auth::guard('web')->login($user, true);
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
         return response()->json([
             'id' => $user->id,
