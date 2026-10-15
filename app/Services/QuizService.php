@@ -76,18 +76,24 @@ class QuizService
      */
     public function submitAttempt(QuizAttempt $attempt, array $submittedAnswers): QuizAttempt
     {
-        if ($attempt->status === QuizAttempt::STATUS_COMPLETED) {
-            throw new Exception("This quiz attempt has already been submitted and completed.");
-        }
+        return DB::transaction(function () use ($attempt, $submittedAnswers) {
+            // Lock the attempt row exclusively for update to prevent concurrent race condition submissions
+            $lockedAttempt = QuizAttempt::where('id', $attempt->id)->lockForUpdate()->first();
 
-        $assignedQuestionIds = $attempt->attemptQuestions()->pluck('question_id')->toArray();
+            if (!$lockedAttempt || $lockedAttempt->status === QuizAttempt::STATUS_COMPLETED) {
+                // If already completed concurrently, return the completed record safely
+                return $lockedAttempt ?? $attempt;
+            }
 
-        return DB::transaction(function () use ($attempt, $submittedAnswers, $assignedQuestionIds) {
+            $assignedQuestionIds = $lockedAttempt->attemptQuestions()->pluck('question_id')->toArray();
             $totalScore = 0;
             $now = Carbon::now();
 
             foreach ($assignedQuestionIds as $questionId) {
                 $question = Question::find($questionId);
+                if (!$question) {
+                    continue;
+                }
                 $selectedOption = strtoupper(trim($submittedAnswers[$questionId] ?? ''));
 
                 $isCorrect = ($selectedOption === strtoupper($question->correct_option));
@@ -97,7 +103,7 @@ class QuizService
 
                 Answer::updateOrCreate(
                     [
-                        'attempt_id' => $attempt->id,
+                        'attempt_id' => $lockedAttempt->id,
                         'question_id' => $questionId,
                     ],
                     [
@@ -108,10 +114,10 @@ class QuizService
                 );
             }
 
-            // Cap at 50
+            // Cap at 50 max points
             $totalScore = min(50, max(0, $totalScore));
 
-            $attempt->update([
+            $lockedAttempt->update([
                 'status' => QuizAttempt::STATUS_COMPLETED,
                 'submitted_at' => $now,
                 'weekly_score' => $totalScore,
@@ -120,8 +126,8 @@ class QuizService
             // Update or create weekly score entry
             WeeklyScore::updateOrCreate(
                 [
-                    'user_id' => $attempt->user_id,
-                    'quiz_week_id' => $attempt->quiz_week_id,
+                    'user_id' => $lockedAttempt->user_id,
+                    'quiz_week_id' => $lockedAttempt->quiz_week_id,
                 ],
                 [
                     'score' => $totalScore,
@@ -130,7 +136,7 @@ class QuizService
 
             \Illuminate\Support\Facades\Cache::forget('quiz_leaderboard_top10');
 
-            return $attempt->fresh();
+            return $lockedAttempt->fresh();
         });
     }
 
@@ -225,7 +231,20 @@ class QuizService
             return $existing;
         }
 
-        return $this->startAttempt($user, $quizWeek);
+        try {
+            return $this->startAttempt($user, $quizWeek);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Concurrent request created attempt simultaneously
+            $existing = QuizAttempt::where('user_id', $user->id)
+                ->where('quiz_week_id', $quizWeek->id)
+                ->first();
+
+            if ($existing) {
+                return $existing;
+            }
+
+            throw $e;
+        }
     }
 
     /**

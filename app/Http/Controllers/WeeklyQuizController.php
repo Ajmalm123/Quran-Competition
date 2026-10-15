@@ -158,6 +158,9 @@ class WeeklyQuizController extends Controller
         }
 
         $rawAnswers = $request->input('answers', []);
+        if (!is_array($rawAnswers)) {
+            $rawAnswers = [];
+        }
 
         // Find active in-progress attempt for user
         $attempt = QuizAttempt::where('user_id', $user->id)
@@ -180,6 +183,14 @@ class WeeklyQuizController extends Controller
                 'code' => 'NOTFOUND',
                 'message' => 'No active quiz attempt found.',
             ], 404);
+        }
+
+        // Safeguard against automated instant-submit bots (< 2 seconds duration)
+        if ($attempt->started_at && now()->diffInSeconds($attempt->started_at) < 2) {
+            return response()->json([
+                'code' => 'TOO_FAST',
+                'message' => 'Quiz answers submitted too quickly. Please take time to review your answers.',
+            ], 422);
         }
 
         // Ensure week is still live or allow reasonable submission grace

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\User;
+
 class PhoneService
 {
     /**
@@ -1949,5 +1951,75 @@ class PhoneService
             }
         }
         return $options;
+    }
+
+    /**
+     * Get exact candidate telephone number formats for safe, indexed SQL lookups.
+     * Guaranteed to return only exact candidate strings with >= 7 digits (no wildcards).
+     *
+     * @return array<string>
+     */
+    public static function getPhoneCandidates(string $phone, ?string $countryCode = null): array
+    {
+        $norm = self::normalize($phone, $countryCode);
+        $full = $norm['full_phone'];
+        $fullWithoutPlus = ltrim($full, '+');
+        $local = $norm['local_number'];
+        $raw = $norm['raw_digits'];
+        $code = $norm['country_code'];
+
+        $candidates = [
+            $full,
+            $fullWithoutPlus,
+        ];
+
+        if (!empty($raw)) {
+            $candidates[] = $raw;
+            $candidates[] = '+' . $raw;
+        }
+
+        if (!empty($local)) {
+            $candidates[] = $local;
+            $candidates[] = $code . $local;
+            $candidates[] = ltrim($code, '+') . $local;
+            if ($code === '+91') {
+                $candidates[] = '+91' . $local;
+                $candidates[] = '91' . $local;
+            }
+        }
+
+        // Filter: only strings with at least 7 digits to prevent wildcard/partial collisions
+        $filtered = array_filter(array_unique($candidates), function ($cand) {
+            $digits = preg_replace('/\D/', '', (string) $cand);
+            return strlen($digits) >= 7;
+        });
+
+        return array_values($filtered);
+    }
+
+    /**
+     * Securely find an existing User by phone number using strict equality matching.
+     * Prevents SQL wildcard injection and partial number collisions completely.
+     */
+    public static function findUser(string $phone, ?string $countryCode = null): ?User
+    {
+        $candidates = self::getPhoneCandidates($phone, $countryCode);
+        if (empty($candidates)) {
+            return null;
+        }
+
+        $norm = self::normalize($phone, $countryCode);
+        $code = $norm['country_code'];
+        $local = $norm['local_number'];
+
+        return User::where(function ($q) use ($candidates, $code, $local) {
+            $q->whereIn('whatsapp_number', $candidates);
+            if (!empty($code) && !empty($local) && strlen($local) >= 7) {
+                $q->orWhere(function ($sub) use ($code, $local) {
+                    $sub->where('country_code', $code)
+                        ->where('whatsapp_number', $local);
+                });
+            }
+        })->first();
     }
 }

@@ -96,20 +96,8 @@ class QuizAuthController extends Controller
             ], 422);
         }
 
-        // OTP verified successfully - query existing user
-        $user = User::where('whatsapp_number', $fullPhone)
-            ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
-            ->when($countryCode === '+91', function ($q) use ($local) {
-                $q->orWhere('whatsapp_number', $local)
-                  ->orWhere('whatsapp_number', '+91' . $local);
-            })
-            ->when($countryCode !== '+91', function ($q) use ($countryCode, $local) {
-                $q->orWhere(function ($sub) use ($countryCode, $local) {
-                    $sub->where('country_code', $countryCode)
-                        ->where('whatsapp_number', 'like', "%{$local}");
-                });
-            })
-            ->first();
+        // OTP verified successfully - query existing user securely
+        $user = PhoneService::findUser($fullPhone, $countryCode);
 
         if ($isRegistration) {
             if ($user) {
@@ -214,26 +202,19 @@ class QuizAuthController extends Controller
         }
 
         $email = strtolower(trim($request->input('email')));
+        $candidates = PhoneService::getPhoneCandidates($fullPhone, $countryCode);
 
-        // Check if phone or email already registered
-        $existing = User::where('email', $email)
-            ->orWhere('whatsapp_number', $fullPhone)
-            ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
-            ->when(!empty($rawDigits), function ($q) use ($rawDigits) {
-                $q->orWhere('whatsapp_number', $rawDigits)
-                  ->orWhere('whatsapp_number', '+' . $rawDigits);
-            })
-            ->when($countryCode === '+91', function ($q) use ($localNumber) {
-                $q->orWhere('whatsapp_number', $localNumber)
-                  ->orWhere('whatsapp_number', '+91' . $localNumber);
-            })
-            ->when($countryCode !== '+91', function ($q) use ($countryCode, $localNumber) {
+        // Check if phone or email already registered using exact matching
+        $existing = User::where(function ($q) use ($email, $candidates, $countryCode, $localNumber) {
+            $q->where('email', $email)
+              ->orWhereIn('whatsapp_number', $candidates);
+            if (!empty($countryCode) && !empty($localNumber) && strlen($localNumber) >= 7) {
                 $q->orWhere(function ($sub) use ($countryCode, $localNumber) {
                     $sub->where('country_code', $countryCode)
-                        ->where('whatsapp_number', 'like', "%{$localNumber}");
+                        ->where('whatsapp_number', $localNumber);
                 });
-            })
-            ->first();
+            }
+        })->first();
 
         $countryMeta = PhoneService::getCountryByCode($countryCode);
         $defaultTerritory = ($countryCode !== '+91' && $countryMeta)
@@ -326,30 +307,7 @@ class QuizAuthController extends Controller
         if (str_contains($identifier, '@')) {
             $user = User::where('email', strtolower($identifier))->first();
         } else {
-            $normalized = PhoneService::normalize($identifier, $countryCode);
-            $fullPhone = $normalized['full_phone'];
-            $localNumber = $normalized['local_number'];
-            $rawDigits = $normalized['raw_digits'];
-            $code = $normalized['country_code'];
-
-            $user = User::where('whatsapp_number', $fullPhone)
-                ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
-                ->when(!empty($rawDigits), function ($q) use ($rawDigits) {
-                    $q->orWhere('whatsapp_number', $rawDigits)
-                      ->orWhere('whatsapp_number', '+' . $rawDigits)
-                      ->orWhere('whatsapp_number', 'like', "%{$rawDigits}");
-                })
-                ->when($code === '+91', function ($q) use ($localNumber) {
-                    $q->orWhere('whatsapp_number', $localNumber)
-                      ->orWhere('whatsapp_number', '+91' . $localNumber);
-                })
-                ->when($code !== '+91', function ($q) use ($code, $localNumber) {
-                    $q->orWhere(function ($sub) use ($code, $localNumber) {
-                        $sub->where('country_code', $code)
-                            ->where('whatsapp_number', 'like', "%{$localNumber}");
-                    });
-                })
-                ->first();
+            $user = PhoneService::findUser($identifier, $countryCode);
         }
 
         if (!$user) {
@@ -405,26 +363,7 @@ class QuizAuthController extends Controller
         if (str_contains($identifier, '@')) {
             $user = User::where('email', strtolower($identifier))->first();
         } else {
-            $normalized = PhoneService::normalize($identifier, $countryCode);
-            $fullPhone = $normalized['full_phone'];
-            $localNumber = $normalized['local_number'];
-            $rawDigits = $normalized['raw_digits'];
-            $code = $normalized['country_code'];
-
-            $user = User::where('whatsapp_number', $fullPhone)
-                ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
-                ->when(!empty($rawDigits), function ($q) use ($rawDigits) {
-                    $q->orWhere('whatsapp_number', $rawDigits)
-                      ->orWhere('whatsapp_number', '+' . $rawDigits)
-                      ->orWhere('whatsapp_number', 'like', "%{$rawDigits}%");
-                })
-                ->when($code !== '+91', function ($q) use ($code, $localNumber) {
-                    $q->orWhere(function ($sub) use ($code, $localNumber) {
-                        $sub->where('country_code', $code)
-                            ->where('whatsapp_number', 'like', "%{$localNumber}");
-                    });
-                })
-                ->first();
+            $user = PhoneService::findUser($identifier, $countryCode);
         }
 
         if (!$user) {
@@ -441,8 +380,8 @@ class QuizAuthController extends Controller
             ], 400);
         }
 
-        // Generate a new secure 8-character password (e.g. k4mz7821)
-        $newPassword = Str::lower(Str::random(4)) . rand(1000, 9999);
+        // Generate a new secure 8-character password using cryptographically secure random_int
+        $newPassword = Str::lower(Str::random(4)) . random_int(1000, 9999);
         $user->update([
             'password' => Hash::make($newPassword),
         ]);

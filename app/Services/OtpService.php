@@ -58,20 +58,9 @@ class OtpService
             throw new Exception("BADPHONE", 422);
         }
 
-        // Check user existence across both international and local formats
-        $userExists = User::where('whatsapp_number', $fullPhone)
-            ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
-            ->when($code === '+91', function ($q) use ($local) {
-                $q->orWhere('whatsapp_number', $local)
-                  ->orWhere('whatsapp_number', '+91' . $local);
-            })
-            ->when($code !== '+91', function ($q) use ($code, $local) {
-                $q->orWhere(function ($sub) use ($code, $local) {
-                    $sub->where('country_code', $code)
-                        ->where('whatsapp_number', 'like', "%{$local}");
-                });
-            })
-            ->exists();
+        // Check user existence securely using exact matching
+        $existingUser = PhoneService::findUser($phone, $code);
+        $userExists = ($existingUser !== null);
 
         if ($isRegistration && $userExists) {
             throw new Exception("EXISTS", 409);

@@ -1190,7 +1190,8 @@ footer {
   font-size: 14.5px;
   line-height: 1.6;
   color: var(--ink-mute);
-  margin: 0 0 20px 0;
+  margin: 0 0 18px 0;
+  text-align: left;
 }
 .forgot-options-list {
   display: flex;
@@ -1201,14 +1202,15 @@ footer {
 .forgot-option-item {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .forgot-option-card {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 15px 18px;
+  gap: 12px;
+  padding: 14px 18px;
   background: var(--bg-card);
   border: 1.5px solid var(--border-tan);
   border-radius: 18px;
@@ -1218,11 +1220,28 @@ footer {
   transition: all 0.18s ease;
   box-sizing: border-box;
   text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+button.forgot-option-card {
+  border: 1.5px solid var(--border-tan);
+}
+a.forgot-option-card {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .forgot-option-card:hover {
-  border-color: var(--bg-hero);
+  border-color: var(--border-card);
   background: #FFFFFF;
   box-shadow: 0 4px 14px rgba(133, 77, 58, 0.08);
+  transform: translateY(-1px);
+}
+.forgot-option-card:active {
+  transform: translateY(0);
 }
 .forgot-option-card.active {
   border-color: var(--bg-hero);
@@ -1239,6 +1258,7 @@ footer {
 .forgot-option-icon {
   width: 44px;
   height: 44px;
+  min-width: 44px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -1253,22 +1273,31 @@ footer {
   background: #FDF3E5;
   color: var(--bg-hero);
 }
+.forgot-option-icon svg {
+  display: block;
+}
 .forgot-option-title {
   font-family: "sama-malayalam", 'DM Sans', sans-serif;
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink-dark);
   line-height: 1.4;
+  word-break: break-word;
 }
 .forgot-option-arrow {
   color: var(--ink-mute);
   display: flex;
   align-items: center;
-  transition: transform 0.2s ease, color 0.15s;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s;
   flex-shrink: 0;
 }
 .forgot-option-card:hover .forgot-option-arrow {
   color: var(--bg-hero);
+}
+a.forgot-option-card:hover .forgot-option-arrow {
+  color: #25D366;
+  transform: translate(2px, -2px);
 }
 .forgot-option-card.active .forgot-option-arrow {
   transform: rotate(180deg);
@@ -1276,14 +1305,18 @@ footer {
 }
 .forgot-note {
   font-family: "sama-malayalam", sans-serif;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12.5px;
+  line-height: 1.45;
   color: var(--ink-mute);
   padding: 6px 10px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
 }
 .forgot-note-prefix {
   font-weight: 700;
   color: var(--bg-hero);
+  font-family: 'DM Sans', sans-serif;
 }
 .forgot-email-panel {
   margin-top: 10px;
@@ -1291,7 +1324,19 @@ footer {
   background: #FFFFFF;
   border: 1.5px solid var(--border-tan);
   border-radius: 16px;
-  animation: forgotFadeIn 0.2s ease-out;
+  animation: forgotFadeIn 0.22s ease-out;
+}
+.forgot-email-panel .form-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-dark);
+  margin-bottom: 6px;
+}
+.forgot-email-panel .auth-btn-pill.primary {
+  margin-top: 10px;
+  min-height: 48px;
+  font-size: 15px;
 }
 @keyframes forgotFadeIn {
   from { opacity: 0; transform: translateY(-6px); }
@@ -1792,24 +1837,46 @@ footer {
     margin-top: 12px;
     padding: 6px 0 2px;
   }
+  .forgot-desc {
+    font-size: 13.5px;
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .forgot-options-list {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
   .forgot-option-card {
     padding: 12px 14px;
     border-radius: 14px;
+    gap: 10px;
+    min-height: 52px;
+  }
+  .forgot-option-main {
     gap: 10px;
   }
   .forgot-option-icon {
     width: 38px;
     height: 38px;
+    min-width: 38px;
+    border-radius: 10px;
   }
   .forgot-option-title {
-    font-size: 14.5px;
+    font-size: 13.5px;
   }
   .forgot-note {
     font-size: 12px;
+    padding: 4px 8px 0;
   }
   .forgot-email-panel {
     padding: 14px;
     border-radius: 14px;
+    margin-top: 8px;
+  }
+  .forgot-email-panel .auth-btn-pill.primary {
+    min-height: 46px;
+    font-size: 14.5px;
+    margin-top: 8px;
   }
 
   /* Quiz Taking & Results */
@@ -1891,6 +1958,26 @@ footer {
   .rule-text {
     font-size: 12.5px;
   }
+  .forgot-option-card {
+    padding: 10px 8px;
+    gap: 6px;
+  }
+  .forgot-option-main {
+    gap: 8px;
+  }
+  .forgot-option-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+  .forgot-option-title {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .forgot-option-arrow svg {
+    width: 15px;
+    height: 15px;
+  }
 }
 </style>
 </head>
@@ -1923,8 +2010,17 @@ let initialScheduleLoaded = false;
 let initialLeaderboardLoaded = false;
 
 const api = {
+  async parseJson(res) {
+    if (res.status === 429) {
+      throw { code: 'THROTTLED', message: ERR.THROTTLED };
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
+    return data;
+  },
+
   async schedule() {
-    if (!initialScheduleLoaded && window.INITIAL_DATA?.weeks?.length) {
+    if (!initialScheduleLoaded && window.INITIAL_DATA?.weeks) {
       initialScheduleLoaded = true;
       return window.INITIAL_DATA.weeks;
     }
@@ -1932,8 +2028,7 @@ const api = {
       headers: { 'Accept': 'application/json' },
       credentials: 'same-origin'
     });
-    if (!res.ok) throw { code: 'NETWORK' };
-    return await res.json();
+    return await this.parseJson(res);
   },
 
   async leaderboard(uid) {
@@ -1945,8 +2040,7 @@ const api = {
       headers: { 'Accept': 'application/json' },
       credentials: 'same-origin'
     });
-    if (!res.ok) throw { code: 'NETWORK' };
-    return await res.json();
+    return await this.parseJson(res);
   },
 
   async sendOtp(phone, reg) {
@@ -1961,8 +2055,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify({ phone, register: reg ? 1 : 0 })
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
+    await this.parseJson(res);
     return true;
   },
 
@@ -1988,8 +2081,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify(body)
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
+    const data = await this.parseJson(res);
     return {
       id: data.id,
       name: data.name,
@@ -2011,9 +2103,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify(payload)
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async loginPassword(identifier, password, countryCode) {
@@ -2027,9 +2117,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify({ identifier, password, country_code: countryCode })
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async forgotPassword(identifier) {
@@ -2043,9 +2131,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify({ identifier })
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async resetPassword(email, token, password) {
@@ -2059,9 +2145,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify({ email, token, password })
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async me() {
@@ -2071,7 +2155,7 @@ const api = {
         credentials: 'same-origin'
       });
       if (!res.ok) return null;
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       return data.user || null;
     } catch(e) {
       return null;
@@ -2088,9 +2172,7 @@ const api = {
       },
       credentials: 'same-origin'
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async submit(uid, answers) {
@@ -2104,9 +2186,7 @@ const api = {
       credentials: 'same-origin',
       body: JSON.stringify({ answers })
     });
-    const data = await res.json();
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
-    return data;
+    return await this.parseJson(res);
   },
 
   async logout() {
@@ -2125,14 +2205,18 @@ const api = {
 
 const ERR = {
   NETWORK: "കണക്ഷൻ പരിശോധിച്ച ശേഷം വീണ്ടും ശ്രമിക്കുക.",
+  THROTTLED: "വളരെ കൂടുതൽ ശ്രമങ്ങൾ നടന്നു. ദയവായി കുറച്ചുസമയം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കുക.",
+  TOO_FAST: "ക്വിസ് ഉത്തരങ്ങൾ വളരെ വേഗത്തിൽ സമർപ്പിച്ചു. ചോദ്യങ്ങൾ ശ്രദ്ധാപൂർവ്വം വായിച്ച് സമർപ്പിക്കുക.",
   BADPHONE: "ദയവായി സാധുവായ മൊബൈൽ നമ്പർ നൽകുക.",
   EXISTS: "ഈ മൊബൈൽ നമ്പർ അല്ലെങ്കിൽ ഇമെയിൽ ഇതിനകം രജിസ്റ്റർ ചെയ്തതാണ്. ലോഗിൻ ചെയ്യുക.",
   NOTFOUND: "ഈ നമ്പറിൽ / ഇമെയിലിൽ അക്കൗണ്ട് കണ്ടെത്തിയില്ല. രജിസ്റ്റർ ചെയ്യുക.",
   EXPIRED: "കോഡിന്റെ കാലാവധി കഴിഞ്ഞു. പുതിയ ഒരെണ്ണം ആവശ്യപ്പെടുക.",
   INVALID: "നൽകിയ കോഡ് തെറ്റാണ്. വീണ്ടും പരിശോധിച്ച് നൽകുക.",
   INVALID_PASSWORD: "പാസ്‌വേഡ് തെറ്റാണ്. വീണ്ടും ശ്രമിക്കുക.",
-  NO_PASSWORD: "ഈ അക്കൗണ്ടിൽ പാസ്‌വേഡ് സെറ്റ് ചെയ്തിട്ടില്ല.",
-  NO_EMAIL: "പാസ്‌വേഡ് റീസെറ്റ് ചെയ്യാൻ ഇമെയിൽ ലഭ്യമല്ല.",
+  NO_PASSWORD: "ഈ അക്കൗണ്ടിൽ പാസ്‌വേഡ് സെറ്റ് ചെയ്തിട്ടില്ല. പാസ്‌വേഡ് സെറ്റ് ചെയ്യാൻ Forgot Password ഉപയോഗിക്കുക.",
+  NO_EMAIL: "ഈ അക്കൗണ്ടിൽ ഇമെയിൽ ഐഡി ലഭ്യമല്ല. ദയവായി വാട്സ്ആപ്പ് വഴി പുതിയ പാസ്‌വേഡ് ആവശ്യപ്പെടുക.",
+  MAIL_ERROR: "ഇമെയിൽ അയക്കാൻ കഴിഞ്ഞില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കുക അല്ലെങ്കിൽ വാട്സ്ആപ്പ് വഴി ബന്ധപ്പെടുക.",
+  INVALID_EMAIL: "ദയവായി സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക.",
   CLOSED: "ഈ ആഴ്ചയിലെ ക്വിസ് ഇപ്പോൾ ക്ലോസ് ചെയ്തിരിക്കുന്നു.",
   DONE: "നിങ്ങൾ ഈ ആഴ്ചയിലെ ക്വിസ് ഇതിനകം പൂർത്തിയാക്കിയിട്ടുണ്ട്."
 };
@@ -2833,8 +2917,12 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const handleRegister = async e => {
     e?.preventDefault();
     setErr("");
-    if (!form.phone.trim() || !form.name.trim() || !form.password) {
-      return setErr("ദയവായി ആവശ്യമായ വിവരങ്ങൾ നൽകുക (ഫോൺ, പേര്, പാസ്‌വേഡ്).");
+    if (!form.phone.trim() || !form.name.trim() || !form.email.trim() || !form.password) {
+      return setErr("ദയവായി ആവശ്യമായ വിവരങ്ങൾ നൽകുക (ഫോൺ, പേര്, ഇമെയിൽ, പാസ്‌വേഡ്).");
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email.trim())) {
+      return setErr("ദയവായി സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക.");
     }
     if (form.password.length < 6) {
       return setErr("പാസ്‌വേഡിന് കുറഞ്ഞത് 6 അക്ഷരങ്ങൾ വേണം.");
@@ -2853,7 +2941,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
       });
       onDone(u);
     } catch (e) {
-      setErr(e.message || ERR[e.code] || ERR.NETWORK);
+      setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
     }
   };
@@ -2867,13 +2955,19 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     if (!identifier || !form.password) {
       return setErr(isEmail ? "രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ, പാസ്‌വേഡ് എന്നിവ നൽകുക." : "രജിസ്റ്റർ ചെയ്ത മൊബൈൽ നമ്പർ, പാസ്‌വേഡ് എന്നിവ നൽകുക.");
     }
+    if (isEmail) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(identifier)) {
+        return setErr("ദയവായി സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക.");
+      }
+    }
 
     setBusy(true);
     try {
       const u = await api.loginPassword(identifier, form.password, countryCode);
       onDone(u);
     } catch (e) {
-      setErr(e.message || ERR[e.code] || ERR.NETWORK);
+      setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
     }
   };
@@ -2882,16 +2976,21 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const handleForgot = async () => {
     setErr("");
     setInfo("");
-    if (!form.email.trim()) {
+    const email = form.email.trim();
+    if (!email) {
       return setErr("ദയവായി രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഐഡി നൽകുക.");
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return setErr("ദയവായി സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക.");
     }
     setBusy(true);
     try {
-      const res = await api.forgotPassword(form.email.trim());
+      const res = await api.forgotPassword(email);
       setInfo(res.message || "പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് അയച്ചിട്ടുണ്ട്!");
       setLoginMethod("email");
     } catch (e) {
-      setErr(e.message || ERR[e.code] || ERR.NETWORK);
+      setErr(ERR[e.code] || e.message || ERR.NETWORK);
     }
     setBusy(false);
   };
@@ -2911,7 +3010,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
       if (onClearReset) onClearReset();
       onDone(u);
     } catch (e) {
-      setErr(e.message || ERR[e.code] || ERR.NETWORK);
+      setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
     }
   };
@@ -3247,14 +3346,14 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                   </div>
                   <span className="forgot-option-arrow" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points=${showEmailForgot ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
+                      <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </span>
                 </button>
 
                 ${showEmailForgot ? html`
-                  <div className="forgot-email-panel">
-                    <div className="form-group" style=${{ marginBottom: 12 }}>
+                  <form className="forgot-email-panel" onSubmit=${e => { e.preventDefault(); handleForgot(); }}>
+                    <div className="form-group" style=${{ marginBottom: 10 }}>
                       <label className="form-label" htmlFor="forgot_email">Register email id</label>
                       <input 
                         id="forgot_email" 
@@ -3281,15 +3380,14 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                       </button>
                     ` : html`
                       <button 
-                        type="button" 
+                        type="submit" 
                         className="auth-btn-pill primary" 
-                        onClick=${handleForgot} 
                         disabled=${busy}
                       >
                         ${busy ? "Sending…" : "Send new password to email"}
                       </button>
                     `}
-                  </div>
+                  </form>
                 ` : null}
               </div>
             </div>
@@ -3297,7 +3395,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
             <button 
               type="button" 
               className="auth-btn-pill secondary" 
-              onClick=${() => { setStep("form"); setTab("login"); setErr(""); setInfo(""); setShowEmailForgot(false); }}
+              onClick=${() => { setStep("form"); setTab("login"); if (form.email) setLoginMethod("email"); setErr(""); setInfo(""); setShowEmailForgot(false); }}
             >
               Back to Login
             </button>

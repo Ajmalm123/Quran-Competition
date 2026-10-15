@@ -74,26 +74,26 @@ use App\Http\Controllers\QuizAuthController;
 Route::get('/quiz', [WeeklyQuizController::class, 'index'])->name('quiz.index');
 Route::get('/friday-quiz', [WeeklyQuizController::class, 'index'])->name('quiz.friday');
 
-Route::prefix('quiz/api')->group(function () {
+Route::prefix('quiz/api')->middleware('throttle:quiz-api')->group(function () {
     Route::get('/schedule', [WeeklyQuizController::class, 'schedule'])->name('quiz.api.schedule');
     Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard'])->name('quiz.api.leaderboard');
     Route::post('/start', [WeeklyQuizController::class, 'startQuiz'])->name('quiz.api.start');
     Route::post('/submit', [WeeklyQuizController::class, 'submitQuiz'])->name('quiz.api.submit');
     Route::get('/result/{week}', [WeeklyQuizController::class, 'result'])->name('quiz.api.result');
 
-    // Auth endpoints
-    Route::post('/auth/send-otp', [QuizAuthController::class, 'sendOtp'])->name('quiz.auth.send-otp');
-    Route::post('/auth/verify-otp', [QuizAuthController::class, 'verifyOtp'])->name('quiz.auth.verify-otp');
-    Route::post('/auth/register-password', [QuizAuthController::class, 'registerPassword'])->name('quiz.auth.register-password');
-    Route::post('/auth/login-password', [QuizAuthController::class, 'loginPassword'])->name('quiz.auth.login-password');
-    Route::post('/auth/forgot-password', [QuizAuthController::class, 'forgotPassword'])->name('quiz.auth.forgot-password');
-    Route::post('/auth/reset-password', [QuizAuthController::class, 'resetPassword'])->name('quiz.auth.reset-password');
+    // Auth endpoints with intelligent quiz-auth protection
+    Route::post('/auth/send-otp', [QuizAuthController::class, 'sendOtp'])->middleware('throttle:quiz-auth')->name('quiz.auth.send-otp');
+    Route::post('/auth/verify-otp', [QuizAuthController::class, 'verifyOtp'])->middleware('throttle:quiz-auth')->name('quiz.auth.verify-otp');
+    Route::post('/auth/register-password', [QuizAuthController::class, 'registerPassword'])->middleware('throttle:quiz-auth')->name('quiz.auth.register-password');
+    Route::post('/auth/login-password', [QuizAuthController::class, 'loginPassword'])->middleware('throttle:quiz-auth')->name('quiz.auth.login-password');
+    Route::post('/auth/forgot-password', [QuizAuthController::class, 'forgotPassword'])->middleware('throttle:quiz-auth')->name('quiz.auth.forgot-password');
+    Route::post('/auth/reset-password', [QuizAuthController::class, 'resetPassword'])->middleware('throttle:quiz-auth')->name('quiz.auth.reset-password');
     Route::get('/auth/me', [QuizAuthController::class, 'me'])->name('quiz.auth.me');
     Route::post('/auth/logout', [QuizAuthController::class, 'logout'])->name('quiz.auth.logout');
 });
 
 // Direct Requirement REST endpoints
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('throttle:quiz-auth')->group(function () {
     Route::post('/send-otp', [QuizAuthController::class, 'sendOtp']);
     Route::post('/verify-otp', [QuizAuthController::class, 'verifyOtp']);
     Route::post('/resend-otp', [QuizAuthController::class, 'sendOtp']);
@@ -105,7 +105,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/logout', [QuizAuthController::class, 'logout']);
 });
 
-Route::prefix('quiz')->group(function () {
+Route::prefix('quiz')->middleware('throttle:quiz-api')->group(function () {
     Route::get('/weeks', [WeeklyQuizController::class, 'schedule']);
     Route::get('/current', [WeeklyQuizController::class, 'schedule']);
     Route::post('/start', [WeeklyQuizController::class, 'startQuiz']);
@@ -113,7 +113,7 @@ Route::prefix('quiz')->group(function () {
     Route::get('/result/{week}', [WeeklyQuizController::class, 'result']);
 });
 
-Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard']);
+Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard'])->middleware('throttle:quiz-api');
 
 use App\Http\Controllers\TibyanController;
 
