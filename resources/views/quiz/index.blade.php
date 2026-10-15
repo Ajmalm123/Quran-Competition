@@ -1400,6 +1400,216 @@ a.forgot-option-card:hover .forgot-option-arrow {
 }
 
 /* ================= QUIZ TAKING & RESULTS ================= */
+.quiz-intro-overlay {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px 54px;
+  background: radial-gradient(circle at 50% 18%, #201712 0%, #120D0A 60%, #090807 100%);
+}
+.quiz-intro-card {
+  width: 100%;
+  max-width: 560px;
+  background: #0E0B09;
+  border: 1px solid rgba(212, 162, 89, 0.28);
+  border-radius: 24px;
+  padding: 38px 32px 32px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 4px 20px rgba(133, 77, 58, 0.12);
+  color: #FFFFFF;
+  position: relative;
+}
+.quiz-intro-icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.quiz-intro-title {
+  text-align: center;
+  color: #FFFFFF;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
+  font-size: clamp(21px, 5vw, 24px);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 0 0 26px;
+}
+.quiz-intro-guide-heading {
+  color: var(--bg-tan, #F7F0E3);
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  text-align: left;
+}
+.quiz-intro-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.quiz-intro-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.quiz-intro-rule-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #D4A259;
+}
+.quiz-intro-rule-text {
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #E2DDD5;
+  text-align: left;
+  flex: 1;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.quiz-intro-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+.quiz-intro-start-btn {
+  width: 100%;
+  min-height: 52px;
+  background: linear-gradient(180deg, #8A523D 0%, #754231 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'Figtree', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(117, 66, 49, 0.35);
+  transition: background 0.15s, transform 0.1s, filter 0.15s, box-shadow 0.15s;
+}
+.quiz-intro-start-btn:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 18px rgba(117, 66, 49, 0.45);
+}
+.quiz-intro-start-btn:active {
+  transform: scale(0.99);
+}
+.quiz-intro-start-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: none;
+}
+.quiz-intro-cancel-btn {
+  width: 100%;
+  min-height: 50px;
+  background: transparent;
+  border: 1.5px solid rgba(217, 200, 172, 0.28);
+  color: var(--border-tan, #D9C8AC);
+  border-radius: 12px;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'Figtree', 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.quiz-intro-cancel-btn:hover {
+  background: rgba(217, 200, 172, 0.08);
+  border-color: rgba(217, 200, 172, 0.5);
+  color: #FFFFFF;
+}
+.quiz-intro-cancel-btn:active {
+  transform: scale(0.99);
+}
+@media (max-width: 600px) {
+  .quiz-intro-overlay {
+    padding: 24px 14px 40px;
+    min-height: calc(100vh - 56px);
+  }
+  .quiz-intro-card {
+    padding: 28px 18px 24px;
+    border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  }
+  .quiz-intro-icon-wrap {
+    margin-bottom: 12px;
+  }
+  .quiz-intro-title {
+    margin: 0 0 20px;
+  }
+  .quiz-intro-guide-heading {
+    font-size: 14.5px;
+    margin: 0 0 14px;
+  }
+  .quiz-intro-rules-list {
+    gap: 13px;
+    margin-bottom: 24px;
+  }
+  .quiz-intro-rule-item {
+    gap: 10px;
+  }
+  .quiz-intro-rule-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .quiz-intro-rule-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .quiz-intro-start-btn {
+    min-height: 48px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+  .quiz-intro-cancel-btn {
+    min-height: 46px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+@media (max-width: 360px) {
+  .quiz-intro-overlay {
+    padding: 16px 10px 32px;
+  }
+  .quiz-intro-card {
+    padding: 22px 14px 18px;
+    border-radius: 16px;
+  }
+  .quiz-intro-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .quiz-intro-guide-heading {
+    font-size: 13.5px;
+    margin-bottom: 12px;
+  }
+  .quiz-intro-rule-text {
+    font-size: 12.8px;
+  }
+  .quiz-intro-start-btn {
+    min-height: 46px;
+    font-size: 14px;
+  }
+  .quiz-intro-cancel-btn {
+    min-height: 44px;
+    font-size: 13.5px;
+  }
+}
+
 .quiz-card {
   max-width: 600px;
   margin: 36px auto;
@@ -2410,6 +2620,47 @@ function CheckTickIcon({ size = 22, color = "var(--ink-brown)" }) {
   return html`
     <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  `;
+}
+
+/* Open Book Icon (Quiz Intro Screen) */
+function OpenBookIcon({ size = 32, color = "#D4A259" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  `;
+}
+
+/* Golden Circle Check Icon */
+function CircleCheckIcon({ size = 20, color = "#D4A259" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="8 12 11 15 16 9"/>
+    </svg>
+  `;
+}
+
+/* Golden Circle Clock Icon */
+function CircleClockIcon({ size = 20, color = "#D4A259" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 15 14"/>
+    </svg>
+  `;
+}
+
+/* Golden Circle Alert Icon */
+function CircleAlertIcon({ size = 20, color = "#D4A259" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
     </svg>
   `;
 }
@@ -3516,22 +3767,107 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
 
 /* Taking the Quiz screen */
 function QuizTaking({ user, onFinish, onExit }) {
-  const { data, err, loading, retry } = useLoad(() => api.startQuiz(user.id), []);
+  const [started, setStarted] = useState(false);
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const [i, setI] = useState(0);
   const [ans, setAns] = useState([]);
   const [busy, setBusy] = useState(false);
   const [e2, setE2] = useState("");
+
+  const handleStartQuiz = async () => {
+    setLoading(true);
+    setErr("");
+    try {
+      const res = await api.startQuiz(user.id);
+      setData(res);
+      setStarted(true);
+    } catch (e) {
+      setErr(e.code || "NETWORK");
+      setStarted(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRetry = () => {
+    handleStartQuiz();
+  };
+
+  if (!started) {
+    return html`
+      <div className="quiz-intro-overlay">
+        <div className="quiz-intro-card">
+          <div className="quiz-intro-icon-wrap">
+            <${OpenBookIcon} size=${34} color="#D4A259"/>
+          </div>
+
+          <h2 className="quiz-intro-title">ക്വിസ് തുടങ്ങാൻ തയ്യാറാണോ?</h2>
+
+          <div className="quiz-intro-guide-heading">ക്വിസ് ആരംഭിക്കുന്നതിന് മുമ്പ് ശ്രദ്ധിക്കുക:</div>
+
+          <div className="quiz-intro-rules-list">
+            <div className="quiz-intro-rule-item">
+              <span className="quiz-intro-rule-icon">
+                <${CircleCheckIcon} size=${20} color="#D4A259"/>
+              </span>
+              <span className="quiz-intro-rule-text">ആകെ 5 ചോദ്യങ്ങൾ ഉണ്ടായിരിക്കും.</span>
+            </div>
+
+            <div className="quiz-intro-rule-item">
+              <span className="quiz-intro-rule-icon">
+                <${CircleCheckIcon} size=${20} color="#D4A259"/>
+              </span>
+              <span className="quiz-intro-rule-text">ഓരോ ശരിയുത്തരത്തിനും 10 പോയിന്റ് ലഭിക്കും.</span>
+            </div>
+
+            <div className="quiz-intro-rule-item">
+              <span className="quiz-intro-rule-icon">
+                <${CircleClockIcon} size=${20} color="#D4A259"/>
+              </span>
+              <span className="quiz-intro-rule-text">ക്വിസ് ആരംഭിക്കുന്നതോടെ സമയം കണക്കാക്കും.</span>
+            </div>
+
+            <div className="quiz-intro-rule-item">
+              <span className="quiz-intro-rule-icon">
+                <${CircleAlertIcon} size=${20} color="#D4A259"/>
+              </span>
+              <span className="quiz-intro-rule-text">ഒരു തവണ മാത്രമേ പങ്കെടുക്കാൻ കഴിയൂ. തയ്യാറാണെന്ന് ഉറപ്പാക്കിയ ശേഷം ആരംഭിക്കുക.</span>
+            </div>
+          </div>
+
+          <div className="quiz-intro-actions">
+            <button 
+              className="quiz-intro-start-btn" 
+              onClick=${handleStartQuiz} 
+              disabled=${loading}>
+              ${loading ? "തുടങ്ങുന്നു…" : "ക്വിസ് ആരംഭിക്കുക →"}
+            </button>
+            <button 
+              type="button" 
+              className="quiz-intro-cancel-btn" 
+              onClick=${onExit}>
+              ഇപ്പോൾ വേണ്ട
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   if (loading) return html`<div className="wrap quiz-card"><${Skel}/></div>`;
   if (err) return html`
     <div className="wrap">
       <div className="quiz-card" style=${{ textAlign: "center" }}>
         <h2 style=${{ marginBottom: 12 }}>${err === "DONE" ? "ക്വിസ് പൂർത്തിയായി" : err === "CLOSED" ? "ക്വിസ് ക്ലോസ്ഡ് ആണ്" : "ക്ഷമിക്കുക"}</h2>
-        <${Err} code=${err} retry=${["NETWORK"].includes(err) ? retry : null}/>
+        <${Err} code=${err} retry=${["NETWORK"].includes(err) ? handleRetry : null}/>
         <button className="auth-back-link" style=${{ marginTop: 18 }} onClick=${onExit}>Back to home</button>
       </div>
     </div>
   `;
+
+  if (!data || !data.questions || !data.questions[i]) return null;
 
   const q = data.questions[i];
   const last = i === data.questions.length - 1;

@@ -107,7 +107,7 @@ class WeeklyQuizController extends Controller
             if (str_contains(strtolower($msg), 'already participated')) {
                 return response()->json([
                     'code' => 'DONE',
-                    'message' => "You have already played this week's quiz.",
+                    'message' => "You have already participated in this week's quiz.",
                 ], 400);
             }
 
