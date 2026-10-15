@@ -20,9 +20,7 @@ use Illuminate\Support\Str;
 
 class QuizAuthController extends Controller
 {
-    public function __construct(protected OtpService $otpService)
-    {
-    }
+    public function __construct(protected OtpService $otpService) {}
 
     /**
      * Send OTP to WhatsApp number for registration or login (supports India & International).
@@ -207,7 +205,7 @@ class QuizAuthController extends Controller
         // Check if phone or email already registered using exact matching
         $existing = User::where(function ($q) use ($email, $candidates, $countryCode, $localNumber) {
             $q->where('email', $email)
-              ->orWhereIn('whatsapp_number', $candidates);
+                ->orWhereIn('whatsapp_number', $candidates);
             if (!empty($countryCode) && !empty($localNumber) && strlen($localNumber) >= 7) {
                 $q->orWhere(function ($sub) use ($countryCode, $localNumber) {
                     $sub->where('country_code', $countryCode)
@@ -403,7 +401,7 @@ class QuizAuthController extends Controller
         $maskedEmail = $maskedName . '@' . ($parts[1] ?? '');
 
         try {
-            Mail::to($user->email)->send(new QuizParticipantPasswordMail($user, $newPassword, url('/quiz'), 'forgot_password'));
+            Mail::to($user->email)->send(new QuizParticipantPasswordMail($user, $newPassword, url('/thibyan'), 'forgot_password'));
         } catch (Exception $e) {
             Log::error("Failed to send password email: " . $e->getMessage());
             return response()->json([

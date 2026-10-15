@@ -24,7 +24,7 @@ class EditQuizUser extends EditRecord
                 ->label('Change Password')
                 ->icon('heroicon-o-key')
                 ->color('warning')
-                ->modalHeading(fn (User $record) => "Change Password: {$record->name}")
+                ->modalHeading(fn(User $record) => "Change Password: {$record->name}")
                 ->modalDescription('Enter a new password or leave blank to auto-generate. It can be emailed to the participant.')
                 ->modalIcon('heroicon-o-key')
                 ->modalWidth('md')
@@ -32,7 +32,7 @@ class EditQuizUser extends EditRecord
                     Forms\Components\TextInput::make('email')
                         ->label('Participant Email')
                         ->email()
-                        ->default(fn (User $record) => $record->email)
+                        ->default(fn(User $record) => $record->email)
                         ->helperText('Password notification will be sent to this email address.'),
 
                     Forms\Components\TextInput::make('new_password')
@@ -48,7 +48,7 @@ class EditQuizUser extends EditRecord
                         ->password()
                         ->revealable()
                         ->same('new_password')
-                        ->visible(fn (Forms\Get $get): bool => filled($get('new_password'))),
+                        ->visible(fn(Forms\Get $get): bool => filled($get('new_password'))),
 
                     Forms\Components\Toggle::make('send_email')
                         ->label('Email new password to participant')
@@ -70,7 +70,7 @@ class EditQuizUser extends EditRecord
                     $emailSent = false;
                     if (!empty($data['send_email']) && !empty($record->email)) {
                         try {
-                            Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/quiz'), 'admin_update'));
+                            Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/thibyan'), 'admin_update'));
                             $emailSent = true;
                         } catch (\Exception $e) {
                             Notification::make()
@@ -96,12 +96,12 @@ class EditQuizUser extends EditRecord
                 ->icon('heroicon-o-paper-airplane')
                 ->color('success')
                 ->requiresConfirmation()
-                ->modalHeading(fn (User $record) => "Generate & Email Password: {$record->name}")
-                ->modalDescription(fn (User $record) => !empty($record->email)
+                ->modalHeading(fn(User $record) => "Generate & Email Password: {$record->name}")
+                ->modalDescription(fn(User $record) => !empty($record->email)
                     ? "A new secure password will be generated and emailed directly to {$record->email}."
                     : "This participant does not have an email registered. Please use 'Change Password' to provide an email first.")
                 ->modalSubmitActionLabel('Generate & Send Email')
-                ->visible(fn (User $record) => !empty($record->email))
+                ->visible(fn(User $record) => !empty($record->email))
                 ->action(function (User $record) {
                     $plainPassword = Str::lower(Str::random(4)) . rand(1000, 9999);
                     $record->update([
@@ -109,7 +109,7 @@ class EditQuizUser extends EditRecord
                     ]);
 
                     try {
-                        Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/quiz'), 'admin_update'));
+                        Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/thibyan'), 'admin_update'));
                     } catch (\Exception $e) {
                         Notification::make()
                             ->title('Failed to send email')

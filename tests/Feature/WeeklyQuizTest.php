@@ -584,7 +584,7 @@ class WeeklyQuizTest extends TestCase
         $loginWithEmailed->assertJsonPath('name', 'Reset User');
 
         // Also test the email template renders cleanly without errors
-        $mailable = new \App\Mail\QuizParticipantPasswordMail($user, $sentPassword, url('/quiz'), 'forgot_password');
+        $mailable = new \App\Mail\QuizParticipantPasswordMail($user, $sentPassword, url('/thibyan'), 'forgot_password');
         $renderedHtml = $mailable->render();
         $this->assertStringContainsString($sentPassword, $renderedHtml);
         $this->assertStringNotContainsString('Friday Night Quiz', $renderedHtml);
@@ -620,7 +620,7 @@ class WeeklyQuizTest extends TestCase
         filament()->setCurrentPanel($panel);
 
         $groups = $panel->getNavigation();
-        $groupLabels = array_values(array_filter(array_map(fn ($g) => $g->getLabel(), $groups)));
+        $groupLabels = array_values(array_filter(array_map(fn($g) => $g->getLabel(), $groups)));
 
         $appIndex = array_search('Applications', $groupLabels);
         $quizIndex = array_search('Weekly Online Quiz', $groupLabels);
@@ -733,5 +733,3 @@ class WeeklyQuizTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 }
-
-

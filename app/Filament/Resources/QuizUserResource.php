@@ -97,9 +97,9 @@ class QuizUserResource extends Resource
                                 ->label('New Password')
                                 ->password()
                                 ->revealable()
-                                ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
-                                ->dehydrated(fn (?string $state): bool => filled($state))
-                                ->required(fn (string $context): bool => $context === 'create')
+                                ->dehydrateStateUsing(fn(?string $state): ?string => filled($state) ? Hash::make($state) : null)
+                                ->dehydrated(fn(?string $state): bool => filled($state))
+                                ->required(fn(string $context): bool => $context === 'create')
                                 ->minLength(6)
                                 ->helperText('Leave empty to keep the existing password (minimum 6 characters).')
                                 ->rules(['nullable', 'min:6']),
@@ -110,7 +110,7 @@ class QuizUserResource extends Resource
                                 ->revealable()
                                 ->dehydrated(false)
                                 ->same('password')
-                                ->visible(fn (Forms\Get $get): bool => filled($get('password'))),
+                                ->visible(fn(Forms\Get $get): bool => filled($get('password'))),
                         ]),
                     ])
                     ->collapsible(),
@@ -181,7 +181,7 @@ class QuizUserResource extends Resource
 
                 Tables\Columns\TextColumn::make('weekly_scores_sum_score')
                     ->label('Total Points')
-                    ->state(fn (User $record) => ($record->weekly_scores_sum_score ?? 0) . ' pts')
+                    ->state(fn(User $record) => ($record->weekly_scores_sum_score ?? 0) . ' pts')
                     ->sortable()
                     ->badge()
                     ->color('success')
@@ -201,7 +201,7 @@ class QuizUserResource extends Resource
                         'success' => 'active',
                         'danger' => 'disabled',
                     ])
-                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+                    ->formatStateUsing(fn($state) => ucfirst($state)),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Registered')
@@ -222,7 +222,7 @@ class QuizUserResource extends Resource
 
                 Tables\Filters\SelectFilter::make('locality')
                     ->label('Place')
-                    ->options(fn () => User::whereNotNull('locality')->distinct()->pluck('locality', 'locality')->toArray()),
+                    ->options(fn() => User::whereNotNull('locality')->distinct()->pluck('locality', 'locality')->toArray()),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -233,7 +233,7 @@ class QuizUserResource extends Resource
                         ->label('Change Password')
                         ->icon('heroicon-o-key')
                         ->color('warning')
-                        ->modalHeading(fn (User $record) => "Change Password: {$record->name}")
+                        ->modalHeading(fn(User $record) => "Change Password: {$record->name}")
                         ->modalDescription('Enter a new password or leave blank to auto-generate. It can be emailed to the participant.')
                         ->modalIcon('heroicon-o-key')
                         ->modalWidth('md')
@@ -241,7 +241,7 @@ class QuizUserResource extends Resource
                             Forms\Components\TextInput::make('email')
                                 ->label('Participant Email')
                                 ->email()
-                                ->default(fn (User $record) => $record->email)
+                                ->default(fn(User $record) => $record->email)
                                 ->helperText('Password notification will be sent to this email address.'),
 
                             Forms\Components\TextInput::make('new_password')
@@ -257,7 +257,7 @@ class QuizUserResource extends Resource
                                 ->password()
                                 ->revealable()
                                 ->same('new_password')
-                                ->visible(fn (Forms\Get $get): bool => filled($get('new_password'))),
+                                ->visible(fn(Forms\Get $get): bool => filled($get('new_password'))),
 
                             Forms\Components\Toggle::make('send_email')
                                 ->label('Email new password to participant')
@@ -279,7 +279,7 @@ class QuizUserResource extends Resource
                             $emailSent = false;
                             if (!empty($data['send_email']) && !empty($record->email)) {
                                 try {
-                                    Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/quiz'), 'admin_update'));
+                                    Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/thibyan'), 'admin_update'));
                                     $emailSent = true;
                                 } catch (\Exception $e) {
                                     Notification::make()
@@ -305,12 +305,12 @@ class QuizUserResource extends Resource
                         ->icon('heroicon-o-paper-airplane')
                         ->color('success')
                         ->requiresConfirmation()
-                        ->modalHeading(fn (User $record) => "Generate & Email Password: {$record->name}")
-                        ->modalDescription(fn (User $record) => !empty($record->email)
+                        ->modalHeading(fn(User $record) => "Generate & Email Password: {$record->name}")
+                        ->modalDescription(fn(User $record) => !empty($record->email)
                             ? "A new secure password will be generated and emailed directly to {$record->email}."
                             : "This participant does not have an email registered. Please use 'Change Password' to provide an email first.")
                         ->modalSubmitActionLabel('Generate & Send Email')
-                        ->visible(fn (User $record) => !empty($record->email))
+                        ->visible(fn(User $record) => !empty($record->email))
                         ->action(function (User $record) {
                             $plainPassword = Str::lower(Str::random(4)) . rand(1000, 9999);
                             $record->update([
@@ -318,7 +318,7 @@ class QuizUserResource extends Resource
                             ]);
 
                             try {
-                                Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/quiz'), 'admin_update'));
+                                Mail::to($record->email)->send(new QuizParticipantPasswordMail($record, $plainPassword, url('/thibyan'), 'admin_update'));
                             } catch (\Exception $e) {
                                 Notification::make()
                                     ->title('Failed to send email')
@@ -336,12 +336,12 @@ class QuizUserResource extends Resource
                         }),
 
                     Tables\Actions\Action::make('toggleStatus')
-                        ->label(fn (User $record) => $record->status === 'active' ? 'Disable Account' : 'Activate Account')
-                        ->icon(fn (User $record) => $record->status === 'active' ? 'heroicon-o-no-symbol' : 'heroicon-o-check-circle')
-                        ->color(fn (User $record) => $record->status === 'active' ? 'danger' : 'success')
+                        ->label(fn(User $record) => $record->status === 'active' ? 'Disable Account' : 'Activate Account')
+                        ->icon(fn(User $record) => $record->status === 'active' ? 'heroicon-o-no-symbol' : 'heroicon-o-check-circle')
+                        ->color(fn(User $record) => $record->status === 'active' ? 'danger' : 'success')
                         ->requiresConfirmation()
-                        ->modalHeading(fn (User $record) => $record->status === 'active' ? 'Disable Participant Account' : 'Activate Participant Account')
-                        ->modalDescription(fn (User $record) => $record->status === 'active'
+                        ->modalHeading(fn(User $record) => $record->status === 'active' ? 'Disable Participant Account' : 'Activate Participant Account')
+                        ->modalDescription(fn(User $record) => $record->status === 'active'
                             ? 'The participant will be blocked from logging in or starting new quizzes.'
                             : 'The participant will regain access to the platform.')
                         ->action(function (User $record) {

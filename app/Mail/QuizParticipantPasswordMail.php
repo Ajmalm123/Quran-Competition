@@ -23,7 +23,7 @@ class QuizParticipantPasswordMail extends Mailable
         public string $reason = 'update' // 'forgot_password', 'admin_update', 'update'
     ) {
         if (empty($this->loginUrl)) {
-            $this->loginUrl = url('/quiz');
+            $this->loginUrl = url('/thibyan');
         }
     }
 

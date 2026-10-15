@@ -71,7 +71,7 @@ Route::get('/api/categories/{id}', function ($id) {
 use App\Http\Controllers\WeeklyQuizController;
 use App\Http\Controllers\QuizAuthController;
 
-Route::get('/quiz', [WeeklyQuizController::class, 'index'])->name('quiz.index');
+Route::get('/thibyan', [WeeklyQuizController::class, 'index'])->name('quiz.index');
 Route::get('/friday-quiz', [WeeklyQuizController::class, 'index'])->name('quiz.friday');
 
 Route::prefix('quiz/api')->middleware('throttle:quiz-api')->group(function () {
@@ -117,16 +117,15 @@ Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard'])->middle
 
 use App\Http\Controllers\TibyanController;
 
-Route::get('/thibyan', [TibyanController::class, 'index'])->name('thibyan');
-Route::get('/tibyan', function () {
-    return redirect('/thibyan');
-})->name('tibyan');
-Route::get('/tibiyan', function () {
-    return redirect('/thibyan');
-});
+// Route::get('/thibyan', [TibyanController::class, 'index'])->name('thibyan');
+// Route::get('/tibyan', function () {
+//     return redirect('/thibyan');
+// })->name('tibyan');
+// Route::get('/tibiyan', function () {
+//     return redirect('/thibyan');
+// });
 
-Route::post('/tibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('tibyan.demo.attempt');
-Route::get('/tibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('tibyan.demo.stats');
-Route::post('/thibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('thibyan.demo.attempt');
-Route::get('/thibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('thibyan.demo.stats');
-
+// Route::post('/tibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('tibyan.demo.attempt');
+// Route::get('/tibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('tibyan.demo.stats');
+// Route::post('/thibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('thibyan.demo.attempt');
+// Route::get('/thibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('thibyan.demo.stats');
