@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="csrf-token" content="{{ $csrfToken }}">
 <title>തിബ്‌യാൻ - Friday Night Quiz</title>
-<link rel="icon" type="image/svg+xml" href="{{ asset('images/aqa_faviocn.svg') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/quiz/favicon.png') }}">
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/quiz/logo_icon.svg') }}">
 <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
 <link rel="apple-touch-icon" href="{{ asset('images/quiz/logo_icon.svg') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
