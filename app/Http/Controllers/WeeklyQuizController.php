@@ -53,6 +53,7 @@ class WeeklyQuizController extends Controller
             'weeks' => $schedule,
             'leaderboard' => $leaderboard,
             'currentUser' => $currentUser,
+            'countries' => \App\Services\PhoneService::COUNTRIES,
             'csrfToken' => csrf_token(),
             'demoCode' => $this->otpService->getDefaultOtp() ?? '',
         ]);

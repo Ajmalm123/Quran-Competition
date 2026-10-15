@@ -35,11 +35,18 @@ class QuizUserResource extends Resource
                 Forms\Components\Section::make('Participant Information')
                     ->description('User details registered for the weekly quiz platform.')
                     ->schema([
-                        Forms\Components\Grid::make(3)->schema([
+                        Forms\Components\Grid::make(4)->schema([
                             Forms\Components\TextInput::make('name')
                                 ->label('Full Name')
                                 ->required()
                                 ->maxLength(255),
+
+                            Forms\Components\Select::make('country_code')
+                                ->label('Country')
+                                ->options(\App\Services\PhoneService::getSelectOptions())
+                                ->searchable()
+                                ->default('+91')
+                                ->required(),
 
                             Forms\Components\TextInput::make('whatsapp_number')
                                 ->label('Mobile Number')
@@ -47,7 +54,7 @@ class QuizUserResource extends Resource
                                 ->unique(ignoreRecord: true)
                                 ->maxLength(25)
                                 ->tel()
-                                ->placeholder('e.g. 9876543210'),
+                                ->placeholder('e.g. +971501234567'),
 
                             Forms\Components\TextInput::make('email')
                                 ->label('Email Address')
@@ -97,6 +104,16 @@ class QuizUserResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+
+                Tables\Columns\TextColumn::make('country_code')
+                    ->label('Country')
+                    ->badge()
+                    ->color('gray')
+                    ->formatStateUsing(function ($state) {
+                        $meta = \App\Services\PhoneService::getCountryByCode($state ?? '+91');
+                        return $meta ? "{$meta['flag']} {$meta['code']}" : ($state ?? '+91');
+                    })
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('whatsapp_number')
                     ->label('Mobile Number')
@@ -161,6 +178,10 @@ class QuizUserResource extends Resource
                         'active' => 'Active',
                         'disabled' => 'Disabled',
                     ]),
+
+                Tables\Filters\SelectFilter::make('country_code')
+                    ->label('Country')
+                    ->options(\App\Services\PhoneService::getSelectOptions()),
 
                 Tables\Filters\SelectFilter::make('locality')
                     ->label('Place')

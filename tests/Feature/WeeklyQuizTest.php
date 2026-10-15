@@ -271,7 +271,7 @@ class WeeklyQuizTest extends TestCase
         $uaePhone = '50' . $uniqueNum;
         $email = "uae{$uniqueNum}@test.com";
 
-        // 1. International Registration with Password & Email
+        // 1. International Registration with Password & Email (UAE without leading zero)
         $regResp = $this->postJson('/quiz/api/auth/register-password', [
             'name' => 'Ahmed UAE',
             'age' => 28,
@@ -291,7 +291,7 @@ class WeeklyQuizTest extends TestCase
         $this->postJson('/quiz/api/auth/logout');
         $this->assertGuest('web');
 
-        // 2. Login with Password & Phone
+        // 2. Login with Password & Full Phone (+971...)
         $loginResp = $this->postJson('/quiz/api/auth/login-password', [
             'identifier' => '+971' . $uaePhone,
             'password' => 'secret123',
@@ -300,7 +300,19 @@ class WeeklyQuizTest extends TestCase
         $loginResp->assertJsonPath('name', 'Ahmed UAE');
         $this->assertAuthenticated('web');
 
-        // 3. Test wrong password
+        // Logout
+        $this->postJson('/quiz/api/auth/logout');
+
+        // 3. Login with Local Phone + country_code parameter
+        $loginLocalResp = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $uaePhone,
+            'country_code' => '+971',
+            'password' => 'secret123',
+        ]);
+        $loginLocalResp->assertStatus(200);
+        $loginLocalResp->assertJsonPath('name', 'Ahmed UAE');
+
+        // 4. Test wrong password
         $this->postJson('/quiz/api/auth/logout');
         $failResp = $this->postJson('/quiz/api/auth/login-password', [
             'identifier' => $email,
@@ -308,6 +320,151 @@ class WeeklyQuizTest extends TestCase
         ]);
         $failResp->assertStatus(422);
         $failResp->assertJsonPath('code', 'INVALID_PASSWORD');
+    }
+
+    public function test_multi_country_support_saudi_qatar_and_leading_zeros(): void
+    {
+        // 1. Saudi Arabia with leading zero (e.g. 055xxxxxxx)
+        $saudiLocal = rand(1000000, 9999999);
+        $saudiPhoneInput = '055' . $saudiLocal;
+        $saudiEmail = "saudi{$saudiLocal}@test.com";
+
+        $saudiReg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Faisal Riyadh',
+            'place' => 'Riyadh',
+            'country_code' => '+966',
+            'phone' => $saudiPhoneInput,
+            'email' => $saudiEmail,
+            'password' => 'password123',
+        ]);
+        $saudiReg->assertStatus(200);
+        $saudiReg->assertJsonPath('phone', '+96655' . $saudiLocal);
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // Login with Saudi phone without leading 0 and with country code
+        $saudiLogin = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => '55' . $saudiLocal,
+            'country_code' => '+966',
+            'password' => 'password123',
+        ]);
+        $saudiLogin->assertStatus(200);
+        $saudiLogin->assertJsonPath('name', 'Faisal Riyadh');
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // 2. Qatar registration (8 digits)
+        $qatarNum = rand(100000, 999999);
+        $qatarPhone = '55' . $qatarNum;
+        $qatarEmail = "qatar{$qatarNum}@test.com";
+
+        $qatarReg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Rashid Doha',
+            'place' => 'Doha',
+            'country_code' => '+974',
+            'phone' => $qatarPhone,
+            'email' => $qatarEmail,
+            'password' => 'qatar123',
+        ]);
+        $qatarReg->assertStatus(200);
+        $qatarReg->assertJsonPath('phone', '+974' . $qatarPhone);
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // Login using email
+        $emailLogin = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $qatarEmail,
+            'password' => 'qatar123',
+        ]);
+        $emailLogin->assertStatus(200);
+        $emailLogin->assertJsonPath('name', 'Rashid Doha');
+
+        // 3. Duplicate phone registration check
+        $dupReg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Duplicate Attempt',
+            'country_code' => '+974',
+            'phone' => $qatarPhone,
+            'email' => 'other_unique@test.com',
+            'password' => 'password123',
+        ]);
+        $dupReg->assertStatus(409);
+        $dupReg->assertJsonPath('code', 'EXISTS');
+
+        // 4. Invalid phone format check (e.g. 4 digits for Qatar)
+        $invalidReg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Invalid Phone',
+            'country_code' => '+974',
+            'phone' => '1234',
+            'email' => 'invalid_phone@test.com',
+            'password' => 'password123',
+        ]);
+        $invalidReg->assertStatus(422);
+        $invalidReg->assertJsonPath('code', 'BADPHONE');
+    }
+
+    public function test_auto_detect_dial_code_from_pasted_phone_and_indian_defaults(): void
+    {
+        // 1. User pastes full phone with +971 into phone input (e.g. +971 50 765 4321)
+        $num = rand(1000000, 9999999);
+        $pastedPhone = "+971 50 {$num}";
+        $email = "pasted{$num}@test.com";
+
+        $reg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Pasted UAE',
+            'place' => 'Dubai',
+            'phone' => $pastedPhone,
+            'email' => $email,
+            'password' => 'password123',
+        ]);
+        $reg->assertStatus(200);
+        $reg->assertJsonPath('phone', "+97150{$num}");
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // 2. User logs in by typing full number with international prefix 00971...
+        $login = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => "0097150{$num}",
+            'password' => 'password123',
+        ]);
+        $login->assertStatus(200);
+        $login->assertJsonPath('name', 'Pasted UAE');
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // 3. Indian default registration (10 digits starting with 9)
+        $inNum = '98' . rand(10000000, 99999999);
+        $inEmail = "india{$inNum}@test.com";
+
+        $inReg = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Kerala Participant',
+            'place' => 'Kozhikode',
+            'phone' => $inNum,
+            'email' => $inEmail,
+            'password' => 'kerala123',
+        ]);
+        $inReg->assertStatus(200);
+        $inReg->assertJsonPath('phone', "+91{$inNum}");
+
+        $this->postJson('/quiz/api/auth/logout');
+
+        // Login with 10 digits without +91
+        $inLogin = $this->postJson('/quiz/api/auth/login-password', [
+            'identifier' => $inNum,
+            'password' => 'kerala123',
+        ]);
+        $inLogin->assertStatus(200);
+        $inLogin->assertJsonPath('name', 'Kerala Participant');
+
+        // Invalid Indian mobile number (e.g. 9 digits)
+        $invalidIn = $this->postJson('/quiz/api/auth/register-password', [
+            'name' => 'Bad Indian Phone',
+            'country_code' => '+91',
+            'phone' => '987654321', // 9 digits
+            'email' => 'bad_in@test.com',
+            'password' => 'kerala123',
+        ]);
+        $invalidIn->assertStatus(422);
+        $invalidIn->assertJsonPath('code', 'BADPHONE');
     }
 
     public function test_forgot_password_flow_sends_email_and_resets_password(): void

@@ -870,6 +870,63 @@ footer {
   color: var(--bg-hero);
 }
 
+.phone-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.country-select {
+  width: 145px;
+  min-width: 130px;
+  max-width: 165px;
+  min-height: 52px;
+  border-radius: 12px;
+  border: 2px solid var(--border-tan);
+  background: var(--bg-card);
+  padding: 0 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-dark);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.country-select:focus {
+  border-color: var(--bg-hero);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(133, 77, 58, 0.12);
+}
+.phone-number-field {
+  flex: 1;
+  min-width: 0;
+}
+.login-method-toggle {
+  display: flex;
+  background: var(--border-tan);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+.login-method-btn {
+  flex: 1;
+  border: 0;
+  background: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-mute);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.login-method-btn.active {
+  background: var(--bg-card);
+  color: var(--ink-dark);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
 .auth-btn-pill {
   width: 100%;
   min-height: 52px;
@@ -1316,6 +1373,14 @@ footer {
     padding: 0 12px;
     border-radius: 10px;
   }
+  .country-select {
+    width: 120px;
+    min-width: 110px;
+    min-height: 48px;
+    font-size: 13.5px;
+    padding: 0 8px;
+    border-radius: 10px;
+  }
   .form-subtext {
     font-size: 12px;
     margin-top: 4px;
@@ -1391,6 +1456,12 @@ footer {
     font-size: 12.5px;
     padding-right: 4px;
   }
+  .country-select {
+    width: 105px;
+    min-width: 95px;
+    font-size: 12px;
+    padding: 0 4px;
+  }
   .rule-item-card {
     padding: 10px 10px;
     gap: 8px;
@@ -1409,6 +1480,7 @@ window.INITIAL_DATA = {
     weeks: @json($weeks),
     leaderboard: @json($leaderboard),
     user: @json($currentUser),
+    countries: @json($countries ?? []),
     csrfToken: @json($csrfToken),
     demoCode: @json($demoCode)
 };
@@ -1631,9 +1703,9 @@ const api = {
 
 const ERR = {
   NETWORK: "കണക്ഷൻ പരിശോധിച്ച ശേഷം വീണ്ടും ശ്രമിക്കുക.",
-  BADPHONE: "ദയവായി സാധുവായ 10 അക്ക മൊബൈൽ നമ്പർ നൽകുക.",
+  BADPHONE: "ദയവായി സാധുവായ മൊബൈൽ നമ്പർ നൽകുക.",
   EXISTS: "ഈ മൊബൈൽ നമ്പർ അല്ലെങ്കിൽ ഇമെയിൽ ഇതിനകം രജിസ്റ്റർ ചെയ്തതാണ്. ലോഗിൻ ചെയ്യുക.",
-  NOTFOUND: "ഈ നമ്പറിൽ അക്കൗണ്ട് കണ്ടെത്തിയില്ല. രജിസ്റ്റർ ചെയ്യുക.",
+  NOTFOUND: "ഈ നമ്പറിൽ / ഇമെയിലിൽ അക്കൗണ്ട് കണ്ടെത്തിയില്ല. രജിസ്റ്റർ ചെയ്യുക.",
   EXPIRED: "കോഡിന്റെ കാലാവധി കഴിഞ്ഞു. പുതിയ ഒരെണ്ണം ആവശ്യപ്പെടുക.",
   INVALID: "നൽകിയ കോഡ് തെറ്റാണ്. വീണ്ടും പരിശോധിച്ച് നൽകുക.",
   INVALID_PASSWORD: "പാസ്‌വേഡ് തെറ്റാണ്. വീണ്ടും ശ്രമിക്കുക.",
@@ -1642,6 +1714,37 @@ const ERR = {
   CLOSED: "ഈ ആഴ്ചയിലെ ക്വിസ് ഇപ്പോൾ ക്ലോസ് ചെയ്തിരിക്കുന്നു.",
   DONE: "നിങ്ങൾ ഈ ആഴ്ചയിലെ ക്വിസ് ഇതിനകം പൂർത്തിയാക്കിയിട്ടുണ്ട്."
 };
+
+const FALLBACK_COUNTRIES = [
+  { code: '+91', name: 'India', flag: '🇮🇳', placeholder: '98765 43210', hint: '10 digits' },
+  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪', placeholder: '50 123 4567', hint: '9 digits' },
+  { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦', placeholder: '55 123 4567', hint: '9 digits' },
+  { code: '+974', name: 'Qatar', flag: '🇶🇦', placeholder: '5512 3456', hint: '8 digits' },
+  { code: '+965', name: 'Kuwait', flag: '🇰🇼', placeholder: '5012 3456', hint: '8 digits' },
+  { code: '+968', name: 'Oman', flag: '🇴🇲', placeholder: '9123 4567', hint: '8 digits' },
+  { code: '+973', name: 'Bahrain', flag: '🇧🇭', placeholder: '3612 3456', hint: '8 digits' },
+  { code: '+44', name: 'United Kingdom', flag: '🇬🇧', placeholder: '7911 123456', hint: '10 digits' },
+  { code: '+1', name: 'USA / Canada', flag: '🇺🇸', placeholder: '202 555 0143', hint: '10 digits' },
+  { code: '+60', name: 'Malaysia', flag: '🇲🇾', placeholder: '12 345 6789', hint: '9-10 digits' },
+  { code: '+65', name: 'Singapore', flag: '🇸🇬', placeholder: '8123 4567', hint: '8 digits' },
+  { code: '+61', name: 'Australia', flag: '🇦🇺', placeholder: '412 345 678', hint: '9 digits' },
+  { code: '+64', name: 'New Zealand', flag: '🇳🇿', placeholder: '21 123 4567', hint: '8-10 digits' },
+  { code: '+49', name: 'Germany', flag: '🇩🇪', placeholder: '151 12345678', hint: '10-11 digits' },
+  { code: '+33', name: 'France', flag: '🇫🇷', placeholder: '6 12 34 56 78', hint: '9 digits' },
+  { code: '+39', name: 'Italy', flag: '🇮🇹', placeholder: '312 345 6789', hint: '9-10 digits' },
+  { code: '+353', name: 'Ireland', flag: '🇮🇪', placeholder: '85 123 4567', hint: '9 digits' },
+  { code: '+960', name: 'Maldives', flag: '🇲🇻', placeholder: '712 3456', hint: '7 digits' },
+  { code: '+94', name: 'Sri Lanka', flag: '🇱🇰', placeholder: '71 234 5678', hint: '9 digits' },
+  { code: '+92', name: 'Pakistan', flag: '🇵🇰', placeholder: '301 2345678', hint: '10 digits' },
+  { code: '+880', name: 'Bangladesh', flag: '🇧🇩', placeholder: '1712 345678', hint: '10 digits' },
+  { code: '+20', name: 'Egypt', flag: '🇪🇬', placeholder: '10 1234 5678', hint: '10 digits' },
+  { code: '+90', name: 'Turkey', flag: '🇹🇷', placeholder: '501 234 5678', hint: '10 digits' },
+  { code: '+27', name: 'South Africa', flag: '🇿🇦', placeholder: '71 234 5678', hint: '9 digits' }
+];
+
+const COUNTRIES = (window.INITIAL_DATA?.countries && window.INITIAL_DATA.countries.length > 0)
+  ? window.INITIAL_DATA.countries
+  : FALLBACK_COUNTRIES;
 
 /* ============ HELPERS ============ */
 const useNow = () => {
@@ -1980,7 +2083,7 @@ const QUIZ_RULE_CATEGORIES = [
     category: "രജിസ്ട്രേഷൻ",
     rules: [
       { num: 1, text: "www.aslamquranaward.com/thibyan എന്ന ലിങ്കിൽ പ്രവേശിച്ച് പേരും മൊബൈൽ നമ്പറും നൽകി വളരെ എളുപ്പത്തിൽ രജിസ്റ്റർ ചെയ്യാം. ഒരുതവണ രജിസ്റ്റർ ചെയ്താൽ പിന്നീടിത് മൊബൈൽ നമ്പർ നൽകി ലോഗിൻ ചെയ്താൽ മതിയാകും." },
-      { num: 2, text: "ഇന്ത്യക്കു പുറത്തുള്ളവർക്ക് ഇമെയിൽ ഐഡിയും പാസ്വേഡും നൽകി രജിസ്റ്റർ ചെയ്യാം." },
+      { num: 2, text: "ഇന്ത്യയിലുള്ളവർക്കും വിദേശത്തുള്ളവർക്കും (ഗൾഫ് രാജ്യങ്ങൾ ഉൾപ്പെടെ) രാജ്യത്തിന്റെ കോഡ് തിരഞ്ഞെടുത്ത് മൊബൈൽ നമ്പറോ ഇമെയിലോ ഉപയോഗിച്ച് പങ്കെടുക്കാം." },
       { num: 3, text: "പ്രായപരിധിയില്ല. ആർക്കും പങ്കെടുക്കാം." }
     ]
   },
@@ -2050,6 +2153,8 @@ function QuizRules() {
 function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const [tab, setTab] = useState("register"); // 'register' or 'login'
   const [step, setStep] = useState(resetInfo?.token ? "reset" : "form");
+  const [loginMethod, setLoginMethod] = useState("phone"); // 'phone' or 'email'
+  const [countryCode, setCountryCode] = useState("+91");
 
   const [form, setForm] = useState({
     name: "",
@@ -2061,12 +2166,39 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     confirmPassword: ""
   });
 
-  const [otpCode, setOtpCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [info, setInfo] = useState("");
 
   const update = field => e => setForm({ ...form, [field]: e.target.value });
+
+  const currentCountry = COUNTRIES.find(c => c.code === countryCode) || COUNTRIES[0];
+
+  const handlePhoneChange = e => {
+    let val = e.target.value;
+    // Auto-detect country code if pasted/typed with + or 00
+    if (val.startsWith("+") || val.startsWith("00")) {
+      const clean = val.startsWith("00") ? "+" + val.slice(2) : val;
+      const matched = COUNTRIES.find(c => clean.startsWith(c.code));
+      if (matched) {
+        setCountryCode(matched.code);
+        val = clean.slice(matched.code.length).replace(/^0+/, '').trim();
+      }
+    }
+    setForm(prev => ({ ...prev, phone: val }));
+  };
+
+  const getPlacePlaceholder = () => {
+    if (countryCode === "+971") return "e.g. Dubai / Abu Dhabi";
+    if (countryCode === "+966") return "e.g. Riyadh / Jeddah";
+    if (countryCode === "+974") return "e.g. Doha";
+    if (countryCode === "+968") return "e.g. Muscat";
+    if (countryCode === "+965") return "e.g. Kuwait City";
+    if (countryCode === "+973") return "e.g. Manama";
+    if (countryCode === "+44") return "e.g. London / Birmingham";
+    if (countryCode === "+1") return "e.g. New York / Toronto";
+    return "e.g. Kozhikode / Malappuram";
+  };
 
   // Registration Submit
   const handleRegister = async e => {
@@ -2085,6 +2217,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
         name: form.name.trim(),
         dob: form.dob,
         place: form.place.trim(),
+        country_code: countryCode,
         phone: form.phone.trim(),
         email: form.email.trim(),
         password: form.password
@@ -2100,14 +2233,15 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const handleLogin = async e => {
     e?.preventDefault();
     setErr("");
-    const identifier = form.phone.trim() || form.email.trim();
+    const isEmail = loginMethod === "email";
+    const identifier = isEmail ? form.email.trim() : form.phone.trim();
     if (!identifier || !form.password) {
-      return setErr("മൊബൈൽ നമ്പർ / ഇമെയിൽ, പാസ്‌വേഡ് എന്നിവ നൽകുക.");
+      return setErr(isEmail ? "രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ, പാസ്‌വേഡ് എന്നിവ നൽകുക." : "രജിസ്റ്റർ ചെയ്ത മൊബൈൽ നമ്പർ, പാസ്‌വേഡ് എന്നിവ നൽകുക.");
     }
 
     setBusy(true);
     try {
-      const u = await api.loginPassword(identifier, form.password);
+      const u = await api.loginPassword(identifier, form.password, countryCode);
       onDone(u);
     } catch (e) {
       setErr(e.message || ERR[e.code] || ERR.NETWORK);
@@ -2193,15 +2327,34 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
               <form onSubmit=${handleRegister}>
                 <div className="form-group">
                   <label className="form-label" htmlFor="reg_phone">Mobile Number</label>
-                  <input 
-                    id="reg_phone" 
-                    className="form-input" 
-                    type="tel" 
-                    inputMode="tel"
-                    placeholder="10-digit mobile number" 
-                    value=${form.phone} 
-                    onChange=${update("phone")} 
-                    required/>
+                  <div className="phone-input-group">
+                    <select 
+                      id="reg_country_code"
+                      className="country-select" 
+                      value=${countryCode} 
+                      onChange=${e => setCountryCode(e.target.value)}
+                      aria-label="Country Code">
+                      ${COUNTRIES.map(c => html`
+                        <option key=${c.code} value=${c.code}>
+                          ${c.flag} ${c.code} (${c.name})
+                        </option>
+                      `)}
+                    </select>
+                    <input 
+                      id="reg_phone" 
+                      className="form-input phone-number-field" 
+                      type="tel" 
+                      inputMode="tel"
+                      placeholder=${currentCountry?.placeholder || "Mobile number"} 
+                      value=${form.phone} 
+                      onChange=${handlePhoneChange} 
+                      required/>
+                  </div>
+                  ${currentCountry?.hint ? html`
+                    <div className="form-subtext" style=${{ fontSize: "12px", opacity: 0.85 }}>
+                      നമ്പർ ഫോർമാറ്റ്: ${currentCountry.hint}
+                    </div>
+                  ` : null}
                 </div>
 
                 <div className="form-group">
@@ -2227,12 +2380,12 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" htmlFor="reg_place">Place</label>
+                  <label className="form-label" htmlFor="reg_place">Place / City</label>
                   <input 
                     id="reg_place" 
                     className="form-input" 
                     type="text" 
-                    placeholder="e.g. Kozhikode / Dubai" 
+                    placeholder=${getPlacePlaceholder()} 
                     value=${form.place} 
                     onChange=${update("place")}/>
                 </div>
@@ -2276,17 +2429,61 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
               </form>
             ` : html`
               <form onSubmit=${handleLogin}>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="login_ident">Mobile Number / Email</label>
-                  <input 
-                    id="login_ident" 
-                    className="form-input" 
-                    type="text" 
-                    placeholder="Registered phone or email" 
-                    value=${form.phone} 
-                    onChange=${update("phone")} 
-                    required/>
+                <div className="login-method-toggle" role="tablist">
+                  <button 
+                    type="button" 
+                    className=${"login-method-btn " + (loginMethod === "phone" ? "active" : "")}
+                    onClick=${() => { setLoginMethod("phone"); setErr(""); }}>
+                    📱 Mobile Number
+                  </button>
+                  <button 
+                    type="button" 
+                    className=${"login-method-btn " + (loginMethod === "email" ? "active" : "")}
+                    onClick=${() => { setLoginMethod("email"); setErr(""); }}>
+                    ✉️ Email
+                  </button>
                 </div>
+
+                ${loginMethod === "phone" ? html`
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="login_phone">Registered Mobile Number</label>
+                    <div className="phone-input-group">
+                      <select 
+                        id="login_country_code"
+                        className="country-select" 
+                        value=${countryCode} 
+                        onChange=${e => setCountryCode(e.target.value)}
+                        aria-label="Country Code">
+                        ${COUNTRIES.map(c => html`
+                          <option key=${c.code} value=${c.code}>
+                            ${c.flag} ${c.code} (${c.name})
+                          </option>
+                        `)}
+                      </select>
+                      <input 
+                        id="login_phone" 
+                        className="form-input phone-number-field" 
+                        type="tel" 
+                        inputMode="tel"
+                        placeholder=${currentCountry?.placeholder || "Registered mobile number"} 
+                        value=${form.phone} 
+                        onChange=${handlePhoneChange} 
+                        required/>
+                    </div>
+                  </div>
+                ` : html`
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="login_email">Registered Email</label>
+                    <input 
+                      id="login_email" 
+                      className="form-input" 
+                      type="email" 
+                      placeholder="yourname@gmail.com" 
+                      value=${form.email} 
+                      onChange=${update("email")} 
+                      required/>
+                  </div>
+                `}
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="login_pass">Password</label>

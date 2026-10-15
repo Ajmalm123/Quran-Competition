@@ -14,18 +14,12 @@ class OtpService
     public const MAX_ATTEMPTS = 5;
 
     /**
-     * Clean and normalize a 10-digit phone number.
+     * Clean and normalize a phone number with country support.
      */
-    public function normalizePhone(string $phone): string
+    public function normalizePhone(string $phone, ?string $countryCode = null): string
     {
-        $digits = preg_replace('/\D/', '', $phone);
-
-        // If it starts with country code 91 and has 12 digits, strip 91
-        if (strlen($digits) === 12 && str_starts_with($digits, '91')) {
-            $digits = substr($digits, 2);
-        }
-
-        return $digits;
+        $res = PhoneService::normalize($phone, $countryCode);
+        return $res['full_phone'];
     }
 
     /**
@@ -44,24 +38,39 @@ class OtpService
     }
 
     /**
-     * Send OTP to a WhatsApp number.
+     * Send OTP to a WhatsApp number (supports India and international numbers).
      *
-     * @param string $phone 10-digit phone number
+     * @param string $phone Phone number
      * @param bool $isRegistration True if user is registering, false if logging in
+     * @param string|null $countryCode Dial code (e.g. +91, +971)
      * @return array
      * @throws Exception
      */
-    public function sendOtp(string $phone, bool $isRegistration): array
+    public function sendOtp(string $phone, bool $isRegistration, ?string $countryCode = null): array
     {
-        $normalized = $this->normalizePhone($phone);
+        $res = PhoneService::normalize($phone, $countryCode);
+        $fullPhone = $res['full_phone'];
+        $local = $res['local_number'];
+        $code = $res['country_code'];
 
-        if (strlen($normalized) !== 10) {
+        $phoneError = PhoneService::validate($phone, $code);
+        if ($phoneError) {
             throw new Exception("BADPHONE", 422);
         }
 
-        // Check user existence
-        $userExists = User::where('whatsapp_number', $normalized)
-            ->orWhere('whatsapp_number', '+91' . $normalized)
+        // Check user existence across both international and local formats
+        $userExists = User::where('whatsapp_number', $fullPhone)
+            ->orWhere('whatsapp_number', ltrim($fullPhone, '+'))
+            ->when($code === '+91', function ($q) use ($local) {
+                $q->orWhere('whatsapp_number', $local)
+                  ->orWhere('whatsapp_number', '+91' . $local);
+            })
+            ->when($code !== '+91', function ($q) use ($code, $local) {
+                $q->orWhere(function ($sub) use ($code, $local) {
+                    $sub->where('country_code', $code)
+                        ->where('whatsapp_number', 'like', "%{$local}");
+                });
+            })
             ->exists();
 
         if ($isRegistration && $userExists) {
@@ -71,6 +80,8 @@ class OtpService
         if (!$isRegistration && !$userExists) {
             throw new Exception("NOTFOUND", 404);
         }
+
+        $normalized = $fullPhone;
 
         // Check resend cooldown
         $cooldownKey = "quiz_otp_cooldown_{$normalized}";
@@ -120,12 +131,13 @@ class OtpService
      *
      * @param string $phone
      * @param string $code
+     * @param string|null $countryCode
      * @return bool
      * @throws Exception
      */
-    public function verifyOtp(string $phone, string $code): bool
+    public function verifyOtp(string $phone, string $code, ?string $countryCode = null): bool
     {
-        $normalized = $this->normalizePhone($phone);
+        $normalized = $this->normalizePhone($phone, $countryCode);
         $otpKey = "quiz_otp_{$normalized}";
         $attemptsKey = "quiz_otp_attempts_{$normalized}";
 
