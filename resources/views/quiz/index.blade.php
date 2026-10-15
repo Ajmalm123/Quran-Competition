@@ -1627,6 +1627,89 @@ a.forgot-option-card:hover .forgot-option-arrow {
   padding: 28px 24px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.06);
 }
+.quiz-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.quiz-q-counter {
+  color: var(--bg-hero);
+  font-family: 'Figtree', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.quiz-week-label {
+  color: var(--ink-mute);
+  font-family: 'Figtree', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.quiz-timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-tan);
+  color: var(--ink-brown);
+  padding: 4px 12px;
+  border-radius: 99px;
+  box-shadow: 0 2px 6px rgba(89, 51, 32, 0.05);
+  user-select: none;
+}
+.quiz-timer-pill svg {
+  flex-shrink: 0;
+  color: var(--bg-hero);
+}
+.quiz-timer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--live-red);
+  animation: pulse-dot 1.4s infinite;
+  flex-shrink: 0;
+}
+.quiz-timer-digits {
+  font-family: 'Nohemi', 'Figtree', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+@media (max-width: 480px) {
+  .quiz-card-header {
+    gap: 6px;
+  }
+  .quiz-q-counter {
+    font-size: 14px;
+  }
+  .quiz-timer-pill {
+    padding: 3px 9px;
+    gap: 5px;
+  }
+  .quiz-timer-digits {
+    font-size: 13.5px;
+  }
+  .quiz-week-label {
+    font-size: 13px;
+  }
+}
+@media (max-width: 360px) {
+  .quiz-card-header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .quiz-timer-pill {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+}
+
 .quiz-progress-bar {
   height: 8px;
   background: var(--border-tan);
@@ -2564,6 +2647,17 @@ const getTimeParts = ms => {
 const hms = ms => {
   const { d, h, m, sec } = getTimeParts(ms);
   return `${d} Days · ${h} Hrs · ${m} Mins · ${sec} Secs`;
+};
+
+const fmtQuizTimer = s => {
+  const secVal = Math.max(0, Math.floor(s || 0));
+  const hrs = Math.floor(secVal / 3600);
+  const m = Math.floor((secVal % 3600) / 60);
+  const sec = secVal % 60;
+  if (hrs > 0) {
+    return `${hrs}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  }
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 };
 
 const fmt = (t, o) => new Intl.DateTimeFormat(undefined, o).format(t);
@@ -3783,6 +3877,19 @@ function QuizTaking({ user, onFinish, onExit }) {
   const [ans, setAns] = useState([]);
   const [busy, setBusy] = useState(false);
   const [e2, setE2] = useState("");
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!data) return;
+    const startMs = data.started_at ? Number(data.started_at) : Date.now();
+    const tick = () => {
+      const s = Math.max(0, Math.floor((Date.now() - startMs) / 1000));
+      setElapsed(s);
+    };
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, [data]);
 
   const handleStartQuiz = async () => {
     setLoading(true);
@@ -3897,9 +4004,19 @@ function QuizTaking({ user, onFinish, onExit }) {
   return html`
     <div className="wrap">
       <div className="quiz-card">
-        <div style=${{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <b style=${{ color: "var(--bg-hero)", fontFamily: "Figtree" }}>ചോദ്യം ${i + 1} / ${data.questions.length}</b>
-          <span style=${{ color: "var(--ink-mute)", fontSize: 14 }}>Week ${data.week}</span>
+        <div className="quiz-card-header">
+          <b className="quiz-q-counter">ചോദ്യം ${i + 1} / ${data.questions.length}</b>
+
+          <div className="quiz-timer-pill" title="സമയം / Elapsed Time" aria-label="Elapsed Time">
+            <span className="quiz-timer-dot" aria-hidden="true"></span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 15 14"/>
+            </svg>
+            <span className="quiz-timer-digits">${fmtQuizTimer(elapsed)}</span>
+          </div>
+
+          <span className="quiz-week-label">Week ${data.week}</span>
         </div>
 
         <div className="quiz-progress-bar">

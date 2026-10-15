@@ -140,6 +140,7 @@ class WeeklyQuizController extends Controller
             'week' => (int) $liveWeek->week_number,
             'week_id' => (int) $liveWeek->id,
             'attempt_id' => (int) $attempt->id,
+            'started_at' => (int) ($attempt->started_at ? $attempt->started_at->timestamp * 1000 : now()->timestamp * 1000),
             'questions' => $questions,
         ]);
     }

@@ -50,6 +50,7 @@ class QuizParticipantPasswordMail extends Mailable
     {
         return new Content(
             view: 'emails.quiz-password',
+            text: 'emails.quiz-password-text',
             with: [
                 'user' => $this->user,
                 'plainPassword' => $this->plainPassword,
