@@ -2294,9 +2294,6 @@ function Leaderboard({ user, tick, onStart }) {
             ` : html`
               <div className="table-card" style=${{ padding: "34px 20px", textAlign: "center" }}>
                 <div style=${{ fontSize: "38px", marginBottom: "8px" }}>🏆</div>
-                <h3 style=${{ fontSize: "19px", fontWeight: "700", color: "var(--ink-dark)", margin: "0 0 6px" }}>
-                  ലീഡർബോർഡ് ഉടൻ ആരംഭിക്കും
-                </h3>
                 <p style=${{ fontSize: "14px", color: "var(--ink-mute)", maxWidth: "460px", margin: "0 auto 18px", lineHeight: "1.6" }}>
                   ക്വിസ് ആരംഭിക്കുന്നതോടെ മത്സരാർത്ഥികളുടെ സ്കോറും റാങ്കും ഇവിടെ തത്സമയം ലഭ്യമാകും. ആദ്യ ക്വിസിൽ പങ്കെടുത്ത് ലീഡർബോർഡിൽ മുൻനിരയിലെത്തൂ!
                 </p>
