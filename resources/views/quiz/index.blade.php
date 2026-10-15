@@ -368,25 +368,83 @@ nav a:hover, nav button:hover {
 
 .hero-countdown-box {
   background: var(--bg-tan);
-  border: 0.8px solid rgba(255, 255, 255, 0.25);
-  border-radius: 18px;
-  padding: 12px 20px;
-  max-width: 440px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 14px 18px;
+  display: inline-flex;
+  flex-direction: column;
+  width: fit-content;
+  max-width: 100%;
   margin: 8px 0 16px;
 }
 .hero-countdown-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-family: 'Figtree', sans-serif;
   font-size: 13.5px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ink-mute);
-  margin-bottom: 4px;
+  margin-bottom: 10px;
+  white-space: nowrap;
 }
-.hero-countdown-main {
+.hero-countdown-clock {
+  flex-shrink: 0;
+  color: var(--ink-brown);
+  opacity: 0.85;
+}
+.hero-countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.cd-tile {
+  background: #FFFFFF;
+  border: 1px solid rgba(89, 51, 32, 0.12);
+  border-radius: 12px;
+  min-width: 62px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(89, 51, 32, 0.05);
+}
+.cd-num {
   font-family: 'Figtree', sans-serif;
-  font-size: clamp(20px, 3.2vw, 28px);
+  font-size: 24px;
   font-weight: 700;
   color: var(--ink-dark);
+  line-height: 1;
   font-variant-numeric: tabular-nums;
+}
+.cd-unit {
+  font-family: 'Figtree', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+  margin-top: 4px;
+  line-height: 1;
+}
+.cd-sep {
+  font-family: 'Figtree', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #BDA585;
+  user-select: none;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.hero-countdown-done {
+  font-family: 'Figtree', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-dark);
 }
 
 .hero-actions {
@@ -1271,17 +1329,36 @@ footer {
     height: 6px;
   }
   .hero-countdown-box {
-    padding: 13px 16px;
+    padding: 12px 14px;
     border-radius: 16px;
+    width: fit-content;
     max-width: 100%;
-    margin: 4px 0 10px;
+    margin: 4px 0 12px;
   }
   .hero-countdown-sub {
     font-size: 12px;
-    margin-bottom: 3px;
+    gap: 5px;
+    margin-bottom: 8px;
   }
-  .hero-countdown-main {
-    font-size: clamp(14px, 4.3vw, 20px);
+  .hero-countdown-timer {
+    gap: 5px;
+  }
+  .cd-tile {
+    min-width: 48px;
+    padding: 6px 5px;
+    border-radius: 10px;
+  }
+  .cd-num {
+    font-size: 19px;
+  }
+  .cd-unit {
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    margin-top: 3px;
+  }
+  .cd-sep {
+    font-size: 16px;
+    margin-bottom: 9px;
   }
   .hero-actions {
     flex-direction: column;
@@ -1949,12 +2026,17 @@ const useLoad = (fn, deps) => {
   return { ...st, retry: () => setK(k + 1) };
 };
 
-const hms = ms => {
+const getTimeParts = ms => {
   const s = Math.max(0, Math.floor(ms / 1000));
   const d = Math.floor(s / 86400);
   const h = Math.floor((s % 86400) / 3600);
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
+  return { d, h, m, sec, total: s };
+};
+
+const hms = ms => {
+  const { d, h, m, sec } = getTimeParts(ms);
   return `${d} Days · ${h} Hrs · ${m} Mins · ${sec} Secs`;
 };
 
@@ -2102,17 +2184,47 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 
         <div className="hero-countdown-box">
           <div className="hero-countdown-sub">
-            ${live 
-              ? `Week ${live.id} · Closes in` 
-              : isAllDone
-                ? "Season Finale"
-                : `Next quiz · ${fmt(targetTime, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST`}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="hero-countdown-clock">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>
+              ${live 
+                ? `Week ${live.id} · Closes in` 
+                : isAllDone
+                  ? "Season Finale"
+                  : `Next quiz · ${fmt(targetTime, { day: "numeric", month: "short", weekday: "short" })} 08:00 PM IST`}
+            </span>
           </div>
-          <div className="hero-countdown-main">
-            ${isAllDone 
-              ? "All quizzes completed"
-              : hms(targetTime - now)}
-          </div>
+
+          ${isAllDone ? html`
+            <div className="hero-countdown-done">All quizzes completed</div>
+          ` : (() => {
+            const cd = getTimeParts(targetTime - now);
+            return html`
+              <div className="hero-countdown-timer" role="timer" aria-live="polite">
+                <div className="cd-tile">
+                  <span className="cd-num">${String(cd.d).padStart(2, '0')}</span>
+                  <span className="cd-unit">${cd.d === 1 ? 'Day' : 'Days'}</span>
+                </div>
+                <span className="cd-sep" aria-hidden="true">:</span>
+                <div className="cd-tile">
+                  <span className="cd-num">${String(cd.h).padStart(2, '0')}</span>
+                  <span className="cd-unit">Hours</span>
+                </div>
+                <span className="cd-sep" aria-hidden="true">:</span>
+                <div className="cd-tile">
+                  <span className="cd-num">${String(cd.m).padStart(2, '0')}</span>
+                  <span className="cd-unit">Mins</span>
+                </div>
+                <span className="cd-sep" aria-hidden="true">:</span>
+                <div className="cd-tile">
+                  <span className="cd-num">${String(cd.sec).padStart(2, '0')}</span>
+                  <span className="cd-unit">Secs</span>
+                </div>
+              </div>
+            `;
+          })()}
         </div>
 
         <div className="hero-actions">
