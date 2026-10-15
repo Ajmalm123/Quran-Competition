@@ -185,13 +185,6 @@ class WeeklyQuizController extends Controller
             ], 404);
         }
 
-        // Safeguard against automated instant-submit bots (< 2 seconds duration)
-        if ($attempt->started_at && now()->diffInSeconds($attempt->started_at) < 2) {
-            return response()->json([
-                'code' => 'TOO_FAST',
-                'message' => 'Quiz answers submitted too quickly. Please take time to review your answers.',
-            ], 422);
-        }
 
         // Ensure week is still live or allow reasonable submission grace
         if (!$attempt->quizWeek->isLive()) {

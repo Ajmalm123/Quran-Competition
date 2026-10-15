@@ -15,6 +15,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Serif+Display&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ================= NOHEMI FONT (FIGMA) ================= */
+@font-face {
+  font-family: 'Nohemi';
+  src: url("{{ asset('fonts/Nohemi-Regular.ttf') }}") format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nohemi';
+  src: url("{{ asset('fonts/Nohemi-Medium.ttf') }}") format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nohemi';
+  src: url("{{ asset('fonts/Nohemi-SemiBold.ttf') }}") format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nohemi';
+  src: url("{{ asset('fonts/Nohemi-Bold.ttf') }}") format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg-header: #F6EEE1;
   --bg-hero: #854D3A;
@@ -59,7 +89,7 @@ body {
   margin: 0;
   background: var(--bg-tan);
   color: var(--ink-dark);
-  font-family: 'DM Sans', "sama-malayalam", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'DM Sans', "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -126,7 +156,7 @@ nav a, nav button {
   background: none;
   border: 0;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Figtree', 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 500;
   transition: background 0.15s, color 0.15s;
@@ -329,11 +359,11 @@ nav a:hover, nav button:hover {
 }
 
 .hero-title {
-  font-family: "sama-malayalam";
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
   font-size: clamp(42px, 7vw, 68px);
   line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   background: linear-gradient(90deg, #FFEEDC 0%, #F5F4D8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -351,9 +381,9 @@ nav a:hover, nav button:hover {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   color: #FFFFFF;
   line-height: 1.6;
 }
@@ -414,9 +444,10 @@ nav a:hover, nav button:hover {
   box-shadow: 0 2px 6px rgba(89, 51, 32, 0.05);
 }
 .cd-num {
-  font-family: 'Figtree', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
+  font-family: 'Nohemi', 'Figtree', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--ink-dark);
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -432,13 +463,13 @@ nav a:hover, nav button:hover {
   line-height: 1;
 }
 .cd-sep {
-  font-family: 'Figtree', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
+  font-family: 'Nohemi', 'Figtree', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
   color: #BDA585;
   user-select: none;
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .hero-countdown-done {
   font-family: 'Figtree', sans-serif;
@@ -531,10 +562,11 @@ nav a:hover, nav button:hover {
 }
 .winner-name {
   color: var(--bg-tan);
-  font-family: 'Figtree', 'DM Serif Display', sans-serif;
+  font-family: 'Nohemi', 'Figtree', sans-serif;
   font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
 }
 .winner-place {
   color: var(--bg-tan);
@@ -557,7 +589,7 @@ nav a:hover, nav button:hover {
   margin-bottom: 4px;
 }
 .sec-subtitle {
-  font-family: 'DM Sans', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Figtree', 'DM Sans', sans-serif;
   font-size: 16px;
   color: #474747;
   margin: 0 0 28px;
@@ -610,7 +642,7 @@ nav a:hover, nav button:hover {
   color: var(--bg-tan);
 }
 .wk-card-date {
-  font-family: 'DM Sans', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Figtree', 'DM Sans', sans-serif;
   font-size: 15px;
   color: #4F4F4F;
 }
@@ -685,7 +717,7 @@ nav a:hover, nav button:hover {
   margin-bottom: 4px;
 }
 .lb-subtitle {
-  font-family: 'DM Sans', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'DM Sans', sans-serif;
   font-size: 16px;
   color: var(--bg-tan);
   margin: 0 0 28px;
@@ -734,18 +766,20 @@ nav a:hover, nav button:hover {
   line-height: 1;
 }
 .podium-name {
-  font-family: 'SF Pro', 'DM Sans', sans-serif;
-  font-weight: 700;
+  font-family: 'Nohemi', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'DM Sans', sans-serif;
+  font-weight: 600;
   font-size: 16px;
+  letter-spacing: 0.02em;
   margin: 6px 0 2px;
   overflow-wrap: anywhere;
 }
 .podium-place {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'DM Sans', sans-serif;
   font-size: 13px;
   opacity: 0.75;
 }
 .podium-pts {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Bricolage Grotesque', 'Nohemi', sans-serif;
   font-size: 22px;
   font-weight: 800;
   margin-top: 6px;
@@ -871,7 +905,7 @@ nav a:hover, nav button:hover {
   margin: 0 0 28px;
 }
 .rules-category-title {
-  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'DM Sans', sans-serif;
   font-size: 19px;
   font-weight: 700;
   color: var(--ink-brown);
@@ -920,7 +954,7 @@ nav a:hover, nav button:hover {
   flex-shrink: 0;
 }
 .rule-text {
-  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'DM Sans', sans-serif;
   font-size: 15.5px;
   font-weight: 400;
   line-height: 1.6;
@@ -933,10 +967,10 @@ footer {
   color: #FFFFFF;
   padding: 24px 16px;
   text-align: center;
-  font-family: 'DM Sans', "sama-malayalam", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14.5px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 /* ================= REGISTER / LOGIN MODAL & CONTAINER (NODES 1:340 & 1:386) ================= */
@@ -1395,7 +1429,10 @@ a.forgot-option-card:hover .forgot-option-arrow {
   margin-bottom: 22px;
 }
 .quiz-opt-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
   text-align: left;
   min-height: 56px;
@@ -1417,6 +1454,23 @@ a.forgot-option-card:hover .forgot-option-arrow {
 .quiz-opt-btn.selected {
   border-color: var(--bg-hero);
   background: rgba(246, 172, 56, 0.22);
+}
+.quiz-opt-text {
+  flex: 1;
+  text-align: left;
+  line-height: 1.4;
+}
+.quiz-opt-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-brown);
+  flex-shrink: 0;
+  animation: tickPop 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes tickPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .score-display {
@@ -2350,6 +2404,15 @@ function MailIcon({ size = 20, color = "currentColor" }) {
   `;
 }
 
+/* Check / Tick Icon for selected option */
+function CheckTickIcon({ size = 22, color = "var(--ink-brown)" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  `;
+}
+
 /* Top Navigation Bar */
 function Header({ onGo, user, onLogout }) {
   const [open, setOpen] = useState(false);
@@ -2939,7 +3002,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
         email: form.email.trim(),
         password: form.password
       });
-      onDone(u);
+      onDone(u, 'register');
     } catch (e) {
       setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
@@ -2965,7 +3028,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     setBusy(true);
     try {
       const u = await api.loginPassword(identifier, form.password, countryCode);
-      onDone(u);
+      onDone(u, 'login');
     } catch (e) {
       setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
@@ -3008,7 +3071,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     try {
       const u = await api.resetPassword(form.email.trim(), resetInfo.token.trim(), form.password);
       if (onClearReset) onClearReset();
-      onDone(u);
+      onDone(u, 'reset');
     } catch (e) {
       setErr(ERR[e.code] || e.message || ERR.NETWORK);
       setBusy(false);
@@ -3506,7 +3569,12 @@ function QuizTaking({ user, onFinish, onExit }) {
               key=${optIdx} 
               className=${"quiz-opt-btn " + (sel === optIdx ? "selected" : "")} 
               onClick=${() => { const a = [...ans]; a[i] = optIdx; setAns(a); }}>
-              ${opt}
+              <span className="quiz-opt-text">${opt}</span>
+              ${sel === optIdx ? html`
+                <span className="quiz-opt-check" aria-hidden="true">
+                  <${CheckTickIcon} size=${22} color="var(--ink-brown)"/>
+                </span>
+              ` : null}
             </button>
           `)}
         </div>
@@ -3517,7 +3585,7 @@ function QuizTaking({ user, onFinish, onExit }) {
           className="auth-btn-pill primary" 
           onClick=${next} 
           disabled=${sel === undefined || busy}>
-          ${busy ? "സബ്മിറ്റ് ചെയ്യുന്നു…" : last ? "സബ്മിറ്റ് ചെയ്യുക" : "അടുത്ത ചോദ്യം →"}
+          ${busy ? "Submitting…" : last ? "Submit Quiz" : "Submit & Next"}
         </button>
       </div>
     </div>
@@ -3625,7 +3693,7 @@ function App() {
     }
   };
 
-  const handleAuthDone = u => {
+  const handleAuthDone = (u, mode = 'register') => {
     clearResetParams();
     try { localStorage.setItem('fnq_user', JSON.stringify(u)); } catch(e){}
     setUser(u);
@@ -3634,7 +3702,14 @@ function App() {
     if (isLive) {
       setView("quiz");
     } else {
-      setNotice(`സ്വാഗതം, ${u.name ? u.name.split(" ")[0] : "മത്സരാർത്ഥി"}! നിങ്ങളുടെ രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി.`);
+      const name = u.name ? u.name.split(" ")[0] : "മത്സരാർത്ഥി";
+      if (mode === 'login') {
+        setNotice(`അസ്സലാമു അലൈക്കും, ${name}! നിങ്ങൾ വിജയകരമായി ലോഗിൻ ചെയ്തു.`);
+      } else if (mode === 'reset') {
+        setNotice(`അസ്സലാമു അലൈക്കും, ${name}! പുതിയ പാസ്‌വേഡ് വിജയകരമായി സേവ് ചെയ്ത് ലോഗിൻ ചെയ്തു.`);
+      } else {
+        setNotice(`അസ്സലാമു അലൈക്കും, ${name}! നിങ്ങളുടെ രജിസ്ട്രേഷൻ വിജയകരമായി പൂർത്തിയായി.`);
+      }
       setView("home");
     }
   };
