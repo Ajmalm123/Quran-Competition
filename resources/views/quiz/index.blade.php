@@ -2129,9 +2129,74 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 }
 
 /* Winner Banner Section (Figma Node 1:71) */
-function WinnerBanner({ weeks }) {
-  const weekList = Array.isArray(weeks) ? weeks : [];
-  const winnerWeek = [...weekList].reverse().find(w => w && w.winner);
+function WinnerBanner({ weeks, now = Date.now() }) {
+  const getNextFriday = () => {
+    const d = new Date(now);
+    const day = d.getDay();
+    const diff = (5 - day + 7) % 7;
+    d.setDate(d.getDate() + (diff === 0 && d.getHours() >= 22 ? 7 : diff));
+    d.setHours(20, 0, 0, 0);
+    return d.getTime();
+  };
+  const baseFriday = getNextFriday();
+
+  const totalWeeks = Array.from({ length: 10 }, (_, index) => {
+    const w = (weeks || [])[index];
+    if (w) return w;
+    const start = baseFriday + index * 7 * 86400000;
+    return {
+      id: index + 1,
+      start: start,
+      end: start + 2 * 3600000,
+      winner: null
+    };
+  });
+
+  // Check if a quiz is currently live
+  const liveWeek = totalWeeks.find(w => wkStatus(w, now) === "live");
+
+  // Find all completed weeks
+  const completedWeeks = totalWeeks.filter(w => wkStatus(w, now) === "completed");
+  const latestCompletedWeek = completedWeeks.length > 0 ? completedWeeks[completedWeeks.length - 1] : null;
+
+  // Find upcoming weeks
+  const upcomingWeeks = totalWeeks.filter(w => wkStatus(w, now) === "upcoming");
+  const nextUpcomingWeek = upcomingWeeks[0] || null;
+
+  let bannerState = "pending"; // 'winner' or 'pending'
+  let displayData = null;
+
+  if (liveWeek) {
+    // If a quiz has started for the week, reset card to that week's upcoming announcement
+    if (liveWeek.winner) {
+      bannerState = "winner";
+      displayData = liveWeek;
+    } else {
+      bannerState = "pending";
+      displayData = { weekId: liveWeek.id };
+    }
+  } else if (latestCompletedWeek && latestCompletedWeek.winner) {
+    // Completed week has published winner, and next week's quiz has not started yet -> show published winner
+    bannerState = "winner";
+    displayData = latestCompletedWeek;
+  } else if (latestCompletedWeek && !latestCompletedWeek.winner) {
+    // Completed week waiting for winner publication
+    bannerState = "pending";
+    displayData = { weekId: latestCompletedWeek.id };
+  } else {
+    // No completed week yet (before Week 1 finishes) -> show Week 1 pending announcement
+    bannerState = "pending";
+    displayData = { weekId: nextUpcomingWeek?.id || 1 };
+  }
+
+  const formatCardDate = (timestamp) => {
+    if (!timestamp) return "";
+    const d = new Date(timestamp);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}-${month}-${year}`;
+  };
 
   return html`
     <section className="winner-section">
@@ -2139,19 +2204,19 @@ function WinnerBanner({ weeks }) {
         <div className="winner-card">
           <div className="winner-trophy" aria-hidden="true">🏆</div>
           <div className="winner-info">
-            <div className="winner-sub">
-              ${winnerWeek 
-                ? `${fmt(winnerWeek.start, { day: "2-digit", month: "2-digit", year: "2-digit" })} · Week ${winnerWeek.id} Winner` 
-                : "ആദ്യ ആഴ്ചയിലെ ലക്കി ഡ്രോ വിജയി"}
-            </div>
-            <div className="winner-name">
-              ${winnerWeek ? winnerWeek.winner.name : "വിജയിയെ ഉടൻ പ്രഖ്യാപിക്കും"}
-            </div>
-            <div className="winner-place">
-              ${winnerWeek 
-                ? (winnerWeek.winner.territory || winnerWeek.winner.locality || "Kerala") 
-                : "ക്വിസിന് ശേഷം 50/50 നേടിയവരിൽ നിന്ന് നറുക്കെടുപ്പിലൂടെ വിജയിയെ തെരഞ്ഞെടുക്കും"}
-            </div>
+            ${bannerState === "winner" ? html`
+              <div className="winner-sub">
+                ${formatCardDate(displayData.start)} · Week ${displayData.id} Winner
+              </div>
+              <div className="winner-name">${displayData.winner.name}</div>
+              <div className="winner-place">
+                ${displayData.winner.territory || displayData.winner.locality || "Kerala"}
+              </div>
+            ` : html`
+              <div className="winner-sub">Week ${displayData.weekId}</div>
+              <div className="winner-name">Winner to Be Announced</div>
+              <div className="winner-place">Saturday · 7:00 PM</div>
+            `}
           </div>
         </div>
       </div>
@@ -3151,7 +3216,7 @@ function App() {
                   user=${user} 
                   onGoRules=${() => scrollTo("rules")}/>
 
-                <${WinnerBanner} weeks=${sch.data}/>
+                <${WinnerBanner} weeks=${sch.data} now=${now}/>
 
                 <${WeeklySchedule} weeks=${sch.data} now=${now}/>
               </div>
