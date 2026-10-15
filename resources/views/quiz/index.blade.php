@@ -1183,6 +1183,121 @@ footer {
 .auth-btn-pill.secondary:hover {
   background: rgba(217, 200, 172, 0.2);
 }
+
+/* ================= FORGOT PASSWORD OPTIONS ================= */
+.forgot-desc {
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  margin: 0 0 20px 0;
+}
+.forgot-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.forgot-option-item {
+  display: flex;
+  flex-direction: column;
+}
+.forgot-option-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 18px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-tan);
+  border-radius: 18px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ink-dark);
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+  text-align: left;
+}
+.forgot-option-card:hover {
+  border-color: var(--bg-hero);
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(133, 77, 58, 0.08);
+}
+.forgot-option-card.active {
+  border-color: var(--bg-hero);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(133, 77, 58, 0.14);
+}
+.forgot-option-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+.forgot-option-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.forgot-option-icon.whatsapp {
+  background: #E8F8EE;
+  color: #25D366;
+}
+.forgot-option-icon.email {
+  background: #FDF3E5;
+  color: var(--bg-hero);
+}
+.forgot-option-title {
+  font-family: "sama-malayalam", 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink-dark);
+  line-height: 1.4;
+}
+.forgot-option-arrow {
+  color: var(--ink-mute);
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease, color 0.15s;
+  flex-shrink: 0;
+}
+.forgot-option-card:hover .forgot-option-arrow {
+  color: var(--bg-hero);
+}
+.forgot-option-card.active .forgot-option-arrow {
+  transform: rotate(180deg);
+  color: var(--bg-hero);
+}
+.forgot-note {
+  font-family: "sama-malayalam", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-mute);
+  padding: 6px 10px 0;
+}
+.forgot-note-prefix {
+  font-weight: 700;
+  color: var(--bg-hero);
+}
+.forgot-email-panel {
+  margin-top: 10px;
+  padding: 16px 18px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-tan);
+  border-radius: 16px;
+  animation: forgotFadeIn 0.2s ease-out;
+}
+@keyframes forgotFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .auth-back-link {
   display: block;
   width: 100%;
@@ -1677,6 +1792,25 @@ footer {
     margin-top: 12px;
     padding: 6px 0 2px;
   }
+  .forgot-option-card {
+    padding: 12px 14px;
+    border-radius: 14px;
+    gap: 10px;
+  }
+  .forgot-option-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .forgot-option-title {
+    font-size: 14.5px;
+  }
+  .forgot-note {
+    font-size: 12px;
+  }
+  .forgot-email-panel {
+    padding: 14px;
+    border-radius: 14px;
+  }
 
   /* Quiz Taking & Results */
   .quiz-card {
@@ -2109,6 +2243,25 @@ function EyeIcon({ show }) {
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
       <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  `;
+}
+
+/* WhatsApp Icon */
+function WhatsAppIcon({ size = 22, color = "currentColor" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill=${color} aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.61 20.16 9.22 19.78 8.01 19.07L7.72 18.9L4.62 19.71L5.45 16.69L5.25 16.38C4.47 15.13 4.05 13.68 4.05 11.91C4.05 7.37 7.75 3.67 12.05 3.67ZM8.82 7.22C8.61 7.22 8.41 7.23 8.24 7.54C8.03 7.85 7.42 8.42 7.42 9.58C7.42 10.74 8.26 11.85 8.38 12.01C8.5 12.17 10.04 14.53 12.39 15.54C12.95 15.78 13.38 15.93 13.73 16.04C14.29 16.22 14.81 16.19 15.22 16.13C15.67 16.06 16.6 15.56 16.79 15.01C16.99 14.47 16.99 14.01 16.93 13.91C16.87 13.81 16.71 13.75 16.46 13.63C16.21 13.5 14.99 12.9 14.76 12.82C14.54 12.73 14.38 12.69 14.21 12.94C14.05 13.19 13.57 13.75 13.43 13.91C13.28 14.08 13.14 14.1 12.89 13.97C12.64 13.85 11.84 13.58 10.89 12.74C10.15 12.08 9.65 11.27 9.51 11.02C9.36 10.77 9.49 10.63 9.62 10.51C9.73 10.4 9.87 10.22 9.99 10.07C10.12 9.93 10.16 9.82 10.24 9.66C10.32 9.49 10.28 9.35 10.22 9.22C10.16 9.1 9.69 7.95 9.49 7.47C9.3 7.01 9.1 7.07 8.95 7.06C8.81 7.06 8.65 7.06 8.48 7.06L8.82 7.22Z"/>
+    </svg>
+  `;
+}
+
+/* Mail / Envelope Icon */
+function MailIcon({ size = 20, color = "currentColor" }) {
+  return html`
+    <svg viewBox="0 0 24 24" width=${size} height=${size} fill="none" stroke=${color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
     </svg>
   `;
 }
