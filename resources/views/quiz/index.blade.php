@@ -95,6 +95,7 @@ body {
 
 h1, h2, h3, h4 {
   margin: 0;
+  font-family: 'Nohemi', sans-serif;
 }
 button, input, select {
   font: inherit;
@@ -581,10 +582,10 @@ nav a:hover, nav button:hover {
   padding: 48px 0 56px;
 }
 .sec-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Nohemi', sans-serif;
   font-size: clamp(26px, 4vw, 32px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: #373737;
   margin-bottom: 4px;
 }
@@ -633,9 +634,9 @@ nav a:hover, nav button:hover {
   box-shadow: 0 10px 24px rgba(196, 53, 55, 0.22);
 }
 .wk-card-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Nohemi', sans-serif;
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 700;
   color: #3D3D3D;
 }
 .wk-card.is-live .wk-card-title {
@@ -711,9 +712,10 @@ nav a:hover, nav button:hover {
   padding: 48px 0 56px;
 }
 .lb-title {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: 'Nohemi', sans-serif;
   font-size: clamp(28px, 4vw, 34px);
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: #EAF0F8;
   margin-bottom: 4px;
 }
@@ -894,8 +896,10 @@ nav a:hover, nav button:hover {
   padding: 56px 0 64px;
 }
 .rules-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 44px;
+  font-family: 'Nohemi', sans-serif;
+  font-size: clamp(32px, 5vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--ink-dark);
   margin-bottom: 4px;
 }
@@ -906,7 +910,7 @@ nav a:hover, nav button:hover {
   margin: 0 0 28px;
 }
 .rules-category-title {
-  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'DM Sans', sans-serif;
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'Nohemi', sans-serif;
   font-size: 19px;
   font-weight: 700;
   color: var(--ink-brown);
@@ -990,8 +994,10 @@ footer {
   box-shadow: 0 16px 36px rgba(0,0,0,0.06);
 }
 .auth-card-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 28px;
+  font-family: 'Nohemi', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--ink-dark);
   margin-bottom: 20px;
 }
@@ -1455,9 +1461,10 @@ a.forgot-option-card:hover .forgot-option-arrow {
   align-items: flex-start;
   gap: 12px;
   padding: 12px 16px;
-  background: var(--bg-card-light);
+  background: #FFFFFF;
   border: 1.5px solid var(--border-tan);
   border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(89, 51, 32, 0.04);
 }
 .quiz-intro-rule-icon {
   display: inline-flex;
@@ -3052,7 +3059,7 @@ function Leaderboard({ user, tick, onStart }) {
                     </tr>
                   </thead>
                   <tbody>
-                    ${remaining.map(u => html`
+                    ${top.map(u => html`
                       <tr key=${u.id} className=${user && u.id === user.id ? "is-me" : ""}>
                         <td className="rank-col">${u.rank}</td>
                         <td className="contestant-col">
@@ -3084,7 +3091,7 @@ function Leaderboard({ user, tick, onStart }) {
             `}
 
             <!-- User Position Card (Figma Me-Card) -->
-            ${user && me && me.points > 0 ? html`
+            ${user && me && me.points !== undefined && me.points !== null ? html`
               <div className="me-rank-bar">
                 <div className="me-rank-badge">#${me.rank}</div>
                 <div className="me-info">

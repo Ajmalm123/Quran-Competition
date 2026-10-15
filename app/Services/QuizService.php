@@ -315,7 +315,6 @@ class QuizService
                 ->join('weekly_scores', 'users.id', '=', 'weekly_scores.user_id')
                 ->groupBy('users.id', 'users.name', 'users.locality', 'users.territory')
                 ->selectRaw('CAST(SUM(weekly_scores.score) AS UNSIGNED) as total_points')
-                ->having('total_points', '>', 0)
                 ->orderByDesc('total_points')
                 ->orderBy('users.id', 'asc')
                 ->limit(10)
@@ -342,8 +341,9 @@ class QuizService
             if ($foundInTop) {
                 $me = $foundInTop;
             } else {
-                $userPoints = (int) WeeklyScore::where('user_id', $user->id)->sum('score');
-                if ($userPoints > 0) {
+                $hasScore = WeeklyScore::where('user_id', $user->id)->exists();
+                if ($hasScore) {
+                    $userPoints = (int) WeeklyScore::where('user_id', $user->id)->sum('score');
                     $higherCount = DB::table('weekly_scores')
                         ->select('user_id', DB::raw('SUM(score) as total'))
                         ->groupBy('user_id')
