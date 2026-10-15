@@ -2796,6 +2796,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const [info, setInfo] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [showEmailForgot, setShowEmailForgot] = useState(false);
 
   const update = field => e => setForm({ ...form, [field]: e.target.value });
 
@@ -2919,7 +2920,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
     <div className="auth-wrapper">
       <div className="auth-card">
         <h2 className="auth-card-title">
-          ${step === "forgot" ? "Forgot your password ?" : step === "reset" ? "Set New Password" : "Register/Start Quiz"}
+          ${step === "forgot" ? "Forgot Password ?" : step === "reset" ? "Set New Password" : "Register/Start Quiz"}
         </h2>
 
         ${step === "form" ? html`
@@ -3182,7 +3183,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
                     </button>
                   </div>
                   <div className="form-subtext">
-                    പാസ്സ്‌വേർഡ് മറന്നു പോയെങ്കിൽ <span className="auth-hint-link" style=${{ color: "#303030" }} onClick=${() => { setStep("forgot"); setErr(""); setInfo(""); }}>ഇവിടെ ക്ലിക്ക് ചെയ്യുക</span>
+                    പാസ്സ്‌വേർഡ് മറന്നു പോയെങ്കിൽ <span className="auth-hint-link" style=${{ color: "#303030" }} onClick=${() => { setStep("forgot"); setErr(""); setInfo(""); setShowEmailForgot(false); }}>ഇവിടെ ക്ലിക്ക് ചെയ്യുക</span>
                   </div>
                 </div>
 
@@ -3196,26 +3197,108 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
             `}
           </div>
         ` : step === "forgot" ? html`
-          <div>
-            <p style=${{ fontSize: 14, color: "var(--ink-mute)", marginBottom: 16 }}>
-              നിങ്ങളുടെ രജിസ്റ്റർ ചെയ്ത ഇമെയിൽ ഐഡി നൽകുക. ലോഗിൻ ചെയ്യാനുള്ള പുതിയ പാസ്‌വേഡ് നിങ്ങളുടെ ഇമെയിലിലേക്ക് അയക്കുന്നതാണ്.
+          <div className="forgot-container">
+            <p className="forgot-desc">
+              നിങ്ങളുടെ പാസ്‌വേഡ് മറന്നു പോയെങ്കിൽ വാട്സ്ആപ്പ് അല്ലെങ്കിൽ നിങ്ങൾ നൽകിയ ഇമെയിൽ മുഖേനെയോ പുതിയ പാസ്‌വേഡ് ലഭ്യമാക്കാം .
             </p>
-            <div className="form-group">
-              <label className="form-label">Registered Email</label>
-              <input className="form-input" type="email" placeholder="yourname@gmail.com" value=${form.email} onChange=${update("email")}/>
+
+            <div className="forgot-options-list">
+              <!-- Option 1: WhatsApp -->
+              <div className="forgot-option-item">
+                <a 
+                  href="https://wa.me/919846310383?text=I%20forgot%20my%20password.%20Please%20share%20new%20password." 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="forgot-option-card"
+                  title="WhatsApp വഴി പുതിയ പാസ്‌വേഡ് ലഭിക്കാൻ ക്ലിക്ക് ചെയ്യുക"
+                >
+                  <div className="forgot-option-main">
+                    <div className="forgot-option-icon whatsapp" aria-hidden="true">
+                      <${WhatsAppIcon} size=${24} color="#25D366"/>
+                    </div>
+                    <span className="forgot-option-title">വാട്സ്ആപ്പ് വഴി password ലഭിക്കാൻ</span>
+                  </div>
+                  <span className="forgot-option-arrow" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M7 17L17 7"/>
+                      <path d="M7 7h10v10"/>
+                    </svg>
+                  </span>
+                </a>
+                <div className="forgot-note">
+                  <span className="forgot-note-prefix">Note: </span>
+                  <span>നിങ്ങൾ നൽകിയ നമ്പറിൽ നിന്ന് അയക്കുക</span>
+                </div>
+              </div>
+
+              <!-- Option 2: Email -->
+              <div className="forgot-option-item">
+                <button 
+                  type="button" 
+                  className=${"forgot-option-card " + (showEmailForgot ? "active" : "")} 
+                  onClick=${() => { setShowEmailForgot(!showEmailForgot); setErr(""); }}
+                  aria-expanded=${showEmailForgot}
+                >
+                  <div className="forgot-option-main">
+                    <div className="forgot-option-icon email" aria-hidden="true">
+                      <${MailIcon} size=${22} color="var(--bg-hero)"/>
+                    </div>
+                    <span className="forgot-option-title">ഇമെയിൽ വഴി password ലഭിക്കാൻ</span>
+                  </div>
+                  <span className="forgot-option-arrow" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points=${showEmailForgot ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
+                    </svg>
+                  </span>
+                </button>
+
+                ${showEmailForgot ? html`
+                  <div className="forgot-email-panel">
+                    <div className="form-group" style=${{ marginBottom: 12 }}>
+                      <label className="form-label" htmlFor="forgot_email">Register email id</label>
+                      <input 
+                        id="forgot_email" 
+                        className="form-input" 
+                        type="email" 
+                        placeholder="yourname@gmail.com" 
+                        value=${form.email} 
+                        onChange=${update("email")}
+                        autoFocus
+                        required
+                      />
+                    </div>
+
+                    ${err && html`<${Err} code=${err}/>`}
+                    ${info && html`<div className="alert-box ok" style=${{ marginBottom: 12 }}>${info}</div>`}
+
+                    ${info ? html`
+                      <button 
+                        type="button" 
+                        className="auth-btn-pill primary" 
+                        onClick=${() => { setStep("form"); setTab("login"); setLoginMethod("email"); setErr(""); setInfo(""); }}
+                      >
+                        Proceed to Login →
+                      </button>
+                    ` : html`
+                      <button 
+                        type="button" 
+                        className="auth-btn-pill primary" 
+                        onClick=${handleForgot} 
+                        disabled=${busy}
+                      >
+                        ${busy ? "Sending…" : "Send new password to email"}
+                      </button>
+                    `}
+                  </div>
+                ` : null}
+              </div>
             </div>
-            ${err && html`<${Err} code=${err}/>`}
-            ${info && html`<div className="alert-box ok">${info}</div>`}
-            ${info ? html`
-              <button className="auth-btn-pill primary" onClick=${() => { setStep("form"); setTab("login"); setLoginMethod("email"); setErr(""); }}>
-                Proceed to Login →
-              </button>
-            ` : html`
-              <button className="auth-btn-pill primary" onClick=${handleForgot} disabled=${busy}>
-                ${busy ? "Sending…" : "Send Password to Email"}
-              </button>
-            `}
-            <button className="auth-btn-pill secondary" onClick=${() => { setStep("form"); setErr(""); setInfo(""); }}>
+
+            <button 
+              type="button" 
+              className="auth-btn-pill secondary" 
+              onClick=${() => { setStep("form"); setTab("login"); setErr(""); setInfo(""); setShowEmailForgot(false); }}
+            >
               Back to Login
             </button>
           </div>
