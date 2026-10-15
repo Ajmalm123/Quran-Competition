@@ -692,7 +692,8 @@ nav a:hover, nav button:hover {
 }
 .wk-winner-name {
   color: #CE4B43;
-  font-weight: 700;
+  font-family: 'Nohemi', 'Figtree', sans-serif;
+  font-weight: 600;
   font-size: 15px;
 }
 .wk-bottom-mute {
@@ -1186,7 +1187,7 @@ footer {
   min-height: 52px;
   border-radius: 99px;
   border: 2px solid transparent;
-  font-family: 'DM Sans', "sama-malayalam", sans-serif;
+  font-family: 'Figtree', 'DM Sans', "sama-malayalam", sans-serif;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
