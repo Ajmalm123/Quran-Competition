@@ -2422,6 +2422,8 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [info, setInfo] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   const update = field => e => setForm({ ...form, [field]: e.target.value });
 
@@ -2681,14 +2683,25 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="reg_pass">Password</label>
-                  <input 
-                    id="reg_pass" 
-                    className="form-input" 
-                    type="password" 
-                    placeholder="Create a password (min 6 chars)" 
-                    value=${form.password} 
-                    onChange=${update("password")} 
-                    required/>
+                  <div className="password-input-wrapper">
+                    <input 
+                      id="reg_pass" 
+                      className="form-input" 
+                      type=${showPass ? "text" : "password"} 
+                      placeholder="Create a password (min 6 chars)" 
+                      value=${form.password} 
+                      onChange=${update("password")} 
+                      required/>
+                    <button 
+                      type="button" 
+                      className="password-toggle-btn" 
+                      onClick=${() => setShowPass(!showPass)} 
+                      aria-label=${showPass ? "Hide password" : "Show password"}
+                      title=${showPass ? "Hide password" : "Show password"}
+                      tabIndex="-1">
+                      <${EyeIcon} show=${showPass}/>
+                    </button>
+                  </div>
                   <div className="form-subtext highlight">
                     പാസ്സ്‌വേർഡ് കുറിച്ച് വെക്കുമല്ലോ.... അടുത്ത ആഴ്ച ക്വിസിൽ പങ്കെടുക്കാൻ ലോഗിൻ ചെയ്‌യുമ്പോൾ ആവശ്യം വരും
                   </div>
@@ -2776,14 +2789,25 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="login_pass">Password</label>
-                  <input 
-                    id="login_pass" 
-                    className="form-input" 
-                    type="password" 
-                    placeholder="Your password" 
-                    value=${form.password} 
-                    onChange=${update("password")} 
-                    required/>
+                  <div className="password-input-wrapper">
+                    <input 
+                      id="login_pass" 
+                      className="form-input" 
+                      type=${showPass ? "text" : "password"} 
+                      placeholder="Your password" 
+                      value=${form.password} 
+                      onChange=${update("password")} 
+                      required/>
+                    <button 
+                      type="button" 
+                      className="password-toggle-btn" 
+                      onClick=${() => setShowPass(!showPass)} 
+                      aria-label=${showPass ? "Hide password" : "Show password"}
+                      title=${showPass ? "Hide password" : "Show password"}
+                      tabIndex="-1">
+                      <${EyeIcon} show=${showPass}/>
+                    </button>
+                  </div>
                   <div className="form-subtext">
                     പാസ്സ്‌വേർഡ് മറന്നു പോയെങ്കിൽ <span className="auth-hint-link" style=${{ color: "#303030" }} onClick=${() => { setStep("forgot"); setErr(""); setInfo(""); }}>ഇവിടെ ക്ലിക്ക് ചെയ്യുക</span>
                   </div>
@@ -2828,11 +2852,33 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
             <h3 style=${{ fontSize: 20, marginBottom: 8 }}>Set New Password</h3>
             <div className="form-group">
               <label className="form-label">New Password</label>
-              <input className="form-input" type="password" value=${form.password} onChange=${update("password")}/>
+              <div className="password-input-wrapper">
+                <input className="form-input" type=${showPass ? "text" : "password"} value=${form.password} onChange=${update("password")}/>
+                <button 
+                  type="button" 
+                  className="password-toggle-btn" 
+                  onClick=${() => setShowPass(!showPass)} 
+                  aria-label=${showPass ? "Hide password" : "Show password"}
+                  title=${showPass ? "Hide password" : "Show password"}
+                  tabIndex="-1">
+                  <${EyeIcon} show=${showPass}/>
+                </button>
+              </div>
             </div>
             <div className="form-group">
               <label className="form-label">Confirm Password</label>
-              <input className="form-input" type="password" value=${form.confirmPassword} onChange=${update("confirmPassword")}/>
+              <div className="password-input-wrapper">
+                <input className="form-input" type=${showConfirmPass ? "text" : "password"} value=${form.confirmPassword} onChange=${update("confirmPassword")}/>
+                <button 
+                  type="button" 
+                  className="password-toggle-btn" 
+                  onClick=${() => setShowConfirmPass(!showConfirmPass)} 
+                  aria-label=${showConfirmPass ? "Hide password" : "Show password"}
+                  title=${showConfirmPass ? "Hide password" : "Show password"}
+                  tabIndex="-1">
+                  <${EyeIcon} show=${showConfirmPass}/>
+                </button>
+              </div>
             </div>
             ${err && html`<${Err} code=${err}/>`}
             <button className="auth-btn-pill primary" onClick=${handleReset} disabled=${busy}>

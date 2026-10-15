@@ -33,9 +33,9 @@ class QuizParticipantPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         $subject = match ($this->reason) {
-            'forgot_password' => 'നിങ്ങളുടെ പുതിയ ക്വിസ് പാസ്‌വേഡ് - Friday Night Quiz',
-            'admin_update' => 'Your Friday Night Quiz Login Password - Aslam Quran Award',
-            default => 'Friday Night Quiz - നിങ്ങളുടെ ലോഗിൻ വിവരങ്ങൾ',
+            'forgot_password' => 'നിങ്ങളുടെ പുതിയ ക്വിസ് പാസ്‌വേഡ് - തിബ്യാൻ',
+            'admin_update' => 'Your Quiz Login Password - Aslam Quran Award',
+            default => 'തിബ്യാൻ ക്വിസ് - നിങ്ങളുടെ ലോഗിൻ വിവരങ്ങൾ',
         };
 
         return new Envelope(

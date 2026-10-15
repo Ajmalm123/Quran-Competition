@@ -28,7 +28,7 @@ class QuizPasswordResetMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Your Password - Friday Night Quiz',
+            subject: 'Reset Your Password - തിബ്യാൻ',
         );
     }
 

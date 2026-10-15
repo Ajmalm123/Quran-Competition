@@ -587,7 +587,7 @@ class WeeklyQuizTest extends TestCase
         $mailable = new \App\Mail\QuizParticipantPasswordMail($user, $sentPassword, url('/quiz'), 'forgot_password');
         $renderedHtml = $mailable->render();
         $this->assertStringContainsString($sentPassword, $renderedHtml);
-        $this->assertStringContainsString('Friday Night Quiz', $renderedHtml);
+        $this->assertStringNotContainsString('Friday Night Quiz', $renderedHtml);
         $this->assertStringContainsString('تبيان', $renderedHtml);
 
         // 2. We can also simulate manual token reset if needed
