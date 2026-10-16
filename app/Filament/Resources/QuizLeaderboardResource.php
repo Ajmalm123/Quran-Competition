@@ -37,16 +37,11 @@ class QuizLeaderboardResource extends Resource
                 $query->withSum('weeklyScores', 'score')
                     ->withCount('quizAttempts')
                     ->whereHas('weeklyScores')
-                    ->select('users.*')
-                    ->selectSub(function ($sub) {
-                        $sub->from('quiz_attempts')
-                            ->whereColumn('quiz_attempts.user_id', 'users.id')
-                            ->where('quiz_attempts.status', QuizAttempt::STATUS_COMPLETED)
-                            ->selectRaw('COALESCE(SUM(TIMESTAMPDIFF(SECOND, quiz_attempts.started_at, quiz_attempts.submitted_at)), 999999999)');
-                    }, 'total_time_seconds')
-                    ->orderByDesc('weekly_scores_sum_score')
-                    ->orderBy('total_time_seconds', 'asc')
-                    ->orderBy('users.id', 'asc');
+                    ->addSelect([
+                        'total_time_seconds' => QuizAttempt::selectRaw('COALESCE(SUM(TIMESTAMPDIFF(SECOND, started_at, submitted_at)), 999999999)')
+                            ->whereColumn('user_id', 'users.id')
+                            ->where('status', QuizAttempt::STATUS_COMPLETED),
+                    ]);
             })
             ->columns([
                 Tables\Columns\TextColumn::make('rank')
