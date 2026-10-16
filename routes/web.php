@@ -73,6 +73,7 @@ use App\Http\Controllers\QuizAuthController;
 
 Route::get('/thibyan', [WeeklyQuizController::class, 'index'])->name('quiz.index');
 Route::get('/friday-quiz', [WeeklyQuizController::class, 'index'])->name('quiz.friday');
+Route::get('/quiz', [WeeklyQuizController::class, 'index'])->name('quiz');
 
 Route::prefix('quiz/api')->middleware('throttle:quiz-api')->group(function () {
     Route::get('/schedule', [WeeklyQuizController::class, 'schedule'])->name('quiz.api.schedule');

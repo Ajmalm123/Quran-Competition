@@ -103,6 +103,7 @@ class LuckyDrawStageController extends Controller
                 'winner' => [
                     'id' => $winner->id,
                     'name' => $winner->name,
+                    'place' => !empty($winner->place) ? $winner->place : (!empty($winner->locality) ? $winner->locality : (!empty($winner->territory) ? $winner->territory : '')),
                     'whatsapp_number' => $winner->whatsapp_number,
                     'locality' => $winner->locality,
                     'territory' => $winner->territory,
@@ -184,11 +185,13 @@ class LuckyDrawStageController extends Controller
 
             $winner = null;
             if ($w->luckyDraw && $w->luckyDraw->winner) {
+                $winnerUser = $w->luckyDraw->winner;
                 $winner = [
-                    'id' => $w->luckyDraw->winner->id,
-                    'name' => $w->luckyDraw->winner->name,
-                    'locality' => $w->luckyDraw->winner->locality,
-                    'territory' => $w->luckyDraw->winner->territory,
+                    'id' => $winnerUser->id,
+                    'name' => $winnerUser->name,
+                    'place' => !empty($winnerUser->place) ? $winnerUser->place : (!empty($winnerUser->locality) ? $winnerUser->locality : (!empty($winnerUser->territory) ? $winnerUser->territory : '')),
+                    'locality' => $winnerUser->locality,
+                    'territory' => $winnerUser->territory,
                 ];
             }
 
@@ -218,6 +221,7 @@ class LuckyDrawStageController extends Controller
                 return [
                     'id' => (int) $u->id,
                     'name' => $u->name,
+                    'place' => !empty($u->place) ? $u->place : (!empty($u->locality) ? $u->locality : (!empty($u->territory) ? $u->territory : '')),
                     'whatsapp_number' => $u->whatsapp_number,
                     'locality' => $u->locality ?? '',
                     'territory' => $u->territory ?? '',
@@ -228,12 +232,14 @@ class LuckyDrawStageController extends Controller
             if ($draw) {
                 $winnerInfo = null;
                 if ($draw->winner) {
+                    $wUser = $draw->winner;
                     $winnerInfo = [
-                        'id' => (int) $draw->winner->id,
-                        'name' => $draw->winner->name,
-                        'whatsapp_number' => $draw->winner->whatsapp_number,
-                        'locality' => $draw->winner->locality ?? '',
-                        'territory' => $draw->winner->territory ?? '',
+                        'id' => (int) $wUser->id,
+                        'name' => $wUser->name,
+                        'place' => !empty($wUser->place) ? $wUser->place : (!empty($wUser->locality) ? $wUser->locality : (!empty($wUser->territory) ? $wUser->territory : '')),
+                        'whatsapp_number' => $wUser->whatsapp_number,
+                        'locality' => $wUser->locality ?? '',
+                        'territory' => $wUser->territory ?? '',
                     ];
                 }
 

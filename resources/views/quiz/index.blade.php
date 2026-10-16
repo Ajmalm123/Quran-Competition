@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="csrf-token" content="{{ $csrfToken }}">
 <title>തിബ്‌യാൻ - weekly online quran quiz</title>
+<meta name="application-name" content="Friday Night Quiz">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/quiz/favicon.png') }}">
 <link rel="icon" type="image/svg+xml" href="{{ asset('images/quiz/logo_icon.svg') }}">
 <link rel="alternate icon" href="{{ asset('favicon.ico') }}">

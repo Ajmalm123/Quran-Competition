@@ -9,7 +9,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('zone_assignments', function (Blueprint $table) {
-            $table->string('location')->nullable()->after('time');
+            if (!Schema::hasColumn('zone_assignments', 'location')) {
+                $table->string('location')->nullable()->after('time');
+            }
         });
     }
 
