@@ -2687,6 +2687,23 @@ const fmtQuizBadgeTime = (t) => {
   return `${dateStr} ${timeStr} IST`;
 };
 
+const SEASON_START_IST = new Date('2026-10-16T05:00:00+05:30').getTime();
+
+const getSeasonWeeks = (weeks) => {
+  const seasonBase = (weeks && weeks[0]?.start) || SEASON_START_IST;
+  return Array.from({ length: 10 }, (_, index) => {
+    const w = (weeks || [])[index];
+    if (w) return w;
+    const start = seasonBase + index * 7 * 86400000;
+    return {
+      id: index + 1,
+      start: start,
+      end: start + 24 * 3600000,
+      winner: null
+    };
+  });
+};
+
 const Err = ({ code, retry }) => html`
   <div className="alert-box bad" role="alert">
     ${ERR[code] || code || ERR.NETWORK}
@@ -2849,10 +2866,10 @@ function Header({ onGo, user, onLogout }) {
 
 /* Hero Section (Figma Node 1:3) */
 function Hero({ weeks, onStart, now, user, onGoRules }) {
-  const weekList = Array.isArray(weeks) ? weeks : [];
-  const live = weekList.find(w => wkStatus(w, now) === "live");
-  const next = weekList.find(w => wkStatus(w, now) === "upcoming");
-  const isAllDone = weekList.length >= 10 && weekList.every(w => wkStatus(w, now) === "completed");
+  const totalWeeks = getSeasonWeeks(weeks);
+  const live = totalWeeks.find(w => wkStatus(w, now) === "live");
+  const next = totalWeeks.find(w => wkStatus(w, now) === "upcoming");
+  const isAllDone = totalWeeks.every(w => wkStatus(w, now) === "completed");
 
   const targetTime = live ? live.end : (next ? next.start : getNextFriday(now));
 
@@ -2947,19 +2964,7 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 
 /* Winner Banner Section (Figma Node 1:71) */
 function WinnerBanner({ weeks, now = Date.now() }) {
-  const baseFriday = getNextFriday(now);
-
-  const totalWeeks = Array.from({ length: 10 }, (_, index) => {
-    const w = (weeks || [])[index];
-    if (w) return w;
-    const start = baseFriday + index * 7 * 86400000;
-    return {
-      id: index + 1,
-      start: start,
-      end: start + 24 * 3600000,
-      winner: null
-    };
-  });
+  const totalWeeks = getSeasonWeeks(weeks);
 
   // Check if a quiz is currently live
   const liveWeek = totalWeeks.find(w => wkStatus(w, now) === "live");
@@ -3035,20 +3040,7 @@ function WinnerBanner({ weeks, now = Date.now() }) {
 
 /* Weekly Quiz Schedule Section (Figma Node 1:84) */
 function WeeklySchedule({ weeks, now }) {
-  // Ensure upcoming Friday 5:00 AM IST fallback if schedule from backend is not yet populated
-  const baseFriday = getNextFriday(now);
-
-  const totalWeeks = Array.from({ length: 10 }, (_, index) => {
-    const w = (weeks || [])[index];
-    if (w) return w;
-    const start = baseFriday + index * 7 * 86400000;
-    return {
-      id: index + 1,
-      start: start,
-      end: start + 24 * 3600000,
-      winner: null
-    };
-  });
+  const totalWeeks = getSeasonWeeks(weeks);
 
   return html`
     <section className="schedule-section" id="schedule">
