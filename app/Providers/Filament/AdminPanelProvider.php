@@ -38,6 +38,13 @@ class AdminPanelProvider extends PanelProvider
                 'Weekly Online Quiz',
                 'Configuration',
             ])
+            ->navigationItems([
+                \Filament\Navigation\NavigationItem::make('Lucky Draw Stage')
+                    ->url('/admin/lucky-draw', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-sparkles')
+                    ->group('Weekly Online Quiz')
+                    ->sort(5),
+            ])
             ->colors([
                 'info' => Color::Blue,
             ])

@@ -40,15 +40,7 @@ class RankingResource extends Resource
             ->columns([
                 TextColumn::make('index')
                     ->label('Rank')
-                    ->state(static function ($record, $rowLoop): string {
-                        // Get the current page and per page values
-                        $perPage = request()->get('tableRecordsPerPage', 10);
-                        $currentPage = request()->get('page', 1);
-                        
-                        // Calculate the correct rank
-                        $rank = (($currentPage - 1) * $perPage) + $rowLoop->iteration;
-                        return $rank;
-                    })
+                    ->rowIndex()
                     ->badge()
                     ->color('success')
                     ->alignCenter(),

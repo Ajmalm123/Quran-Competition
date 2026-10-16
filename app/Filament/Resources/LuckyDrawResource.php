@@ -181,6 +181,13 @@ class LuckyDrawResource extends Resource
                     ]),
             ])
             ->actions([
+                Tables\Actions\Action::make('launchStage')
+                    ->label('🎯 Launch Draw Stage')
+                    ->icon('heroicon-o-sparkles')
+                    ->color('warning')
+                    ->url(fn (LuckyDraw $record) => url("/admin/lucky-draw?week_id={$record->quiz_week_id}"))
+                    ->openUrlInNewTab(),
+
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('runLuckyDraw')
                         ->label('Run Random Lucky Draw')

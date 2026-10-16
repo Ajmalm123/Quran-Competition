@@ -8,8 +8,10 @@ use App\Models\User;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use stdClass;
 
 class QuizLeaderboardResource extends Resource
 {
@@ -46,10 +48,9 @@ class QuizLeaderboardResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('rank')
                     ->label('Rank')
-                    ->state(function ($record, $rowLoop): string {
-                        $perPage = (int) request()->get('tableRecordsPerPage', 25);
-                        $page = (int) request()->get('page', 1);
-                        $rank = (($page - 1) * $perPage) + $rowLoop->iteration;
+                    ->state(function (HasTable $livewire, stdClass $rowLoop): string {
+                        $recordsPerPage = is_numeric($livewire->getTableRecordsPerPage()) ? (int) $livewire->getTableRecordsPerPage() : 25;
+                        $rank = $rowLoop->iteration + ($recordsPerPage * ($livewire->getTablePage() - 1));
 
                         return match ($rank) {
                             1 => '#1 🥇',
@@ -59,15 +60,11 @@ class QuizLeaderboardResource extends Resource
                         };
                     })
                     ->badge()
-                    ->color(function ($record, $rowLoop): string {
-                        $perPage = (int) request()->get('tableRecordsPerPage', 25);
-                        $page = (int) request()->get('page', 1);
-                        $rank = (($page - 1) * $perPage) + $rowLoop->iteration;
-
-                        return match ($rank) {
-                            1 => 'warning',
-                            2 => 'gray',
-                            3 => 'danger',
+                    ->color(function (string $state): string {
+                        return match ($state) {
+                            '#1 🥇' => 'warning',
+                            '#2 🥈' => 'gray',
+                            '#3 🥉' => 'danger',
                             default => 'primary',
                         };
                     })

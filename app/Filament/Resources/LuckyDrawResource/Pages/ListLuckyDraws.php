@@ -16,6 +16,13 @@ class ListLuckyDraws extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('launchStage')
+                ->label('🎯 Launch Lucky Draw Stage')
+                ->icon('heroicon-o-sparkles')
+                ->color('warning')
+                ->url(url('/admin/lucky-draw'))
+                ->openUrlInNewTab(),
+
             Actions\Action::make('syncDraws')
                 ->label('Check Completed Weeks')
                 ->icon('heroicon-o-arrow-path')

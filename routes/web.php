@@ -129,3 +129,16 @@ use App\Http\Controllers\TibyanController;
 // Route::get('/tibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('tibyan.demo.stats');
 // Route::post('/thibyan/api/demo-attempt', [TibyanController::class, 'recordDemoAttempt'])->name('thibyan.demo.attempt');
 // Route::get('/thibyan/api/demo-stats', [TibyanController::class, 'getDemoStats'])->name('thibyan.demo.stats');
+
+// ==========================================
+// Admin Live Lucky Draw Stage (Fullscreen Ceremony)
+// ==========================================
+use App\Http\Controllers\Admin\LuckyDrawStageController;
+
+Route::middleware(['web', 'auth:admin'])->prefix('admin/lucky-draw')->group(function () {
+    Route::get('/', [LuckyDrawStageController::class, 'index'])->name('admin.lucky-draw.stage');
+    Route::get('/api/data', [LuckyDrawStageController::class, 'getData'])->name('admin.lucky-draw.api.data');
+    Route::post('/api/publish', [LuckyDrawStageController::class, 'publishWinner'])->name('admin.lucky-draw.api.publish');
+    Route::post('/api/redraw', [LuckyDrawStageController::class, 'redraw'])->name('admin.lucky-draw.api.redraw');
+});
+

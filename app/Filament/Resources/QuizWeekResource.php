@@ -206,12 +206,12 @@ class QuizWeekResource extends Resource
                                 ->send();
                         }),
 
-                    Tables\Actions\Action::make('luckyDraw')
-                        ->label('Run Lucky Draw')
+                    Tables\Actions\Action::make('luckyDrawStage')
+                        ->label('🎯 Launch Lucky Draw Stage')
                         ->icon('heroicon-o-sparkles')
                         ->color('warning')
-                        ->visible(fn (QuizWeek $record) => $record->computed_status === QuizWeek::STATUS_COMPLETED)
-                        ->url(fn (QuizWeek $record) => route('filament.admin.resources.lucky-draws.index', ['tableFilters[quiz_week_id][value]' => $record->id])),
+                        ->url(fn (QuizWeek $record) => url("/admin/lucky-draw?week_id={$record->id}"))
+                        ->openUrlInNewTab(),
 
                     Tables\Actions\DeleteAction::make(),
                 ]),
