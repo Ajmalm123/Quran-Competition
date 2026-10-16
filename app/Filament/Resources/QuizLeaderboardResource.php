@@ -37,7 +37,16 @@ class QuizLeaderboardResource extends Resource
                 $query->withSum('weeklyScores', 'score')
                     ->withCount('quizAttempts')
                     ->whereHas('weeklyScores')
-                    ->orderByDesc('weekly_scores_sum_score');
+                    ->select('users.*')
+                    ->selectSub(function ($sub) {
+                        $sub->from('quiz_attempts')
+                            ->whereColumn('quiz_attempts.user_id', 'users.id')
+                            ->where('quiz_attempts.status', QuizAttempt::STATUS_COMPLETED)
+                            ->selectRaw('COALESCE(SUM(TIMESTAMPDIFF(SECOND, quiz_attempts.started_at, quiz_attempts.submitted_at)), 999999999)');
+                    }, 'total_time_seconds')
+                    ->orderByDesc('weekly_scores_sum_score')
+                    ->orderBy('total_time_seconds', 'asc')
+                    ->orderBy('users.id', 'asc');
             })
             ->columns([
                 Tables\Columns\TextColumn::make('rank')
@@ -94,6 +103,25 @@ class QuizLeaderboardResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn ($state) => "{$state} Pts")
                     ->color('success')
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('weekly_scores_sum_score', $direction)
+                            ->orderBy('total_time_seconds', 'asc')
+                            ->orderBy('users.id', 'asc');
+                    })
+                    ->alignCenter(),
+
+                Tables\Columns\TextColumn::make('total_time_seconds')
+                    ->label('Total Time')
+                    ->badge()
+                    ->color('info')
+                    ->formatStateUsing(function ($state) {
+                        if (!$state || $state >= 999999999) {
+                            return '—';
+                        }
+                        $minutes = floor($state / 60);
+                        $seconds = $state % 60;
+                        return $minutes > 0 ? "{$minutes}m {$seconds}s" : "{$seconds}s";
+                    })
                     ->sortable()
                     ->alignCenter(),
 

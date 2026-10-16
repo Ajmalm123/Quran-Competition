@@ -313,9 +313,16 @@ class QuizService
             $topUsers = User::query()
                 ->select('users.id', 'users.name', 'users.locality', 'users.territory')
                 ->join('weekly_scores', 'users.id', '=', 'weekly_scores.user_id')
+                ->leftJoin('quiz_attempts', function ($join) {
+                    $join->on('weekly_scores.user_id', '=', 'quiz_attempts.user_id')
+                        ->on('weekly_scores.quiz_week_id', '=', 'quiz_attempts.quiz_week_id')
+                        ->where('quiz_attempts.status', '=', QuizAttempt::STATUS_COMPLETED);
+                })
                 ->groupBy('users.id', 'users.name', 'users.locality', 'users.territory')
                 ->selectRaw('CAST(SUM(weekly_scores.score) AS UNSIGNED) as total_points')
+                ->selectRaw('COALESCE(SUM(TIMESTAMPDIFF(SECOND, quiz_attempts.started_at, quiz_attempts.submitted_at)), 999999999) as total_time_seconds')
                 ->orderByDesc('total_points')
+                ->orderBy('total_time_seconds', 'asc')
                 ->orderBy('users.id', 'asc')
                 ->limit(10)
                 ->get();
