@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="csrf-token" content="{{ $csrfToken }}">
-<title>തിബ്‌യാൻ - Friday Night Quiz</title>
+<title>തിബ്‌യാൻ - weekly online quran quiz</title>
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/quiz/favicon.png') }}">
 <link rel="icon" type="image/svg+xml" href="{{ asset('images/quiz/logo_icon.svg') }}">
 <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
@@ -2873,11 +2873,13 @@ function Hero({ weeks, onStart, now, user, onGoRules }) {
 
   const targetTime = live ? live.end : (next ? next.start : getNextFriday(now));
 
-  const btnText = live 
-    ? "Start quiz" 
-    : user 
-      ? "✓ Registered · View schedule" 
-      : "Register / Start quiz";
+  const btnText = isAllDone
+    ? "Season completed"
+    : !user 
+      ? "Register / Start Quiz" 
+      : live 
+        ? "Start quiz" 
+        : "✓ Registered · View schedule";
 
   return html`
     <section className="hero-section" id="top">
