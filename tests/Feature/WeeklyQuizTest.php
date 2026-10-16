@@ -732,4 +732,50 @@ class WeeklyQuizTest extends TestCase
         // Verify users table is emptied
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
+
+    public function test_leaderboard_me_rank_only_shown_if_within_top_100(): void
+    {
+        \Illuminate\Support\Facades\Cache::forget('quiz_leaderboard_top10');
+
+        $quizWeek = QuizWeek::create([
+            'week_number' => 99,
+            'quiz_date' => Carbon::today(),
+            'start_at' => Carbon::now()->subHours(2),
+            'end_at' => Carbon::now()->addHours(2),
+            'status' => QuizWeek::STATUS_LIVE,
+        ]);
+
+        // Create 105 participants with scores
+        $users = [];
+        for ($i = 1; $i <= 105; $i++) {
+            $u = User::factory()->create([
+                'name' => "User {$i}",
+                'locality' => 'Test Locality',
+            ]);
+            $users[] = $u;
+
+            \App\Models\WeeklyScore::create([
+                'user_id' => $u->id,
+                'quiz_week_id' => $quizWeek->id,
+                'score' => 200 - $i, // User 1 has highest score, User 105 has lowest
+            ]);
+        }
+
+        $service = app(\App\Services\QuizService::class);
+
+        // Test user within top 100 (rank 15)
+        $user15 = $users[14];
+        $lb15 = $service->getLeaderboard($user15);
+        $this->assertNotNull($lb15['me']);
+        $this->assertEquals(15, $lb15['me']['rank']);
+        $this->assertEquals(185, $lb15['me']['points']);
+
+        // Test user beyond top 100 (rank 105)
+        $user105 = $users[104];
+        $lb105 = $service->getLeaderboard($user105);
+        $this->assertNotNull($lb105['me']);
+        $this->assertNull($lb105['me']['rank'], 'Rank should be null when > 100');
+        $this->assertEquals(95, $lb105['me']['points'], 'Points should still be present');
+    }
 }
+

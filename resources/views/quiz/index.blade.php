@@ -856,6 +856,8 @@ nav a:hover, nav button:hover {
   margin-left: auto;
   margin-right: auto;
   color: var(--ink-dark);
+  min-height: 76px;
+  box-sizing: border-box;
 }
 .me-rank-badge {
   width: 48px;
@@ -2073,6 +2075,7 @@ a.forgot-option-card:hover .forgot-option-arrow {
     border-radius: 16px;
     gap: 12px;
     margin-top: 14px;
+    min-height: 62px;
   }
   .me-rank-badge {
     width: 38px;
@@ -3181,7 +3184,9 @@ function Leaderboard({ user, tick, onStart }) {
             <!-- User Position Card (Figma Me-Card) -->
             ${user && me && me.points !== undefined && me.points !== null ? html`
               <div className="me-rank-bar">
-                <div className="me-rank-badge">#${me.rank}</div>
+                ${me.rank && Number(me.rank) > 0 && Number(me.rank) <= 100 ? html`
+                  <div className="me-rank-badge">#${me.rank}</div>
+                ` : null}
                 <div className="me-info">
                   <div className="me-info-title">${me.name} (You)</div>
                   <div className="me-info-sub">${me.territory || me.locality || "Kerala"}</div>

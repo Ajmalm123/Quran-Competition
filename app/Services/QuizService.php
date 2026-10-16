@@ -379,7 +379,7 @@ class QuizService
                         'name' => $user->name,
                         'territory' => $user->territory ?? $user->locality ?? 'Contestant',
                         'points' => $userPoints,
-                        'rank' => $userRank,
+                        'rank' => ($userRank !== null && $userRank <= 100) ? $userRank : null,
                     ];
                 }
             }
