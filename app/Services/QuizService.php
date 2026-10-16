@@ -351,19 +351,35 @@ class QuizService
                 $hasScore = WeeklyScore::where('user_id', $user->id)->exists();
                 if ($hasScore) {
                     $userPoints = (int) WeeklyScore::where('user_id', $user->id)->sum('score');
-                    $higherCount = DB::table('weekly_scores')
-                        ->select('user_id', DB::raw('SUM(score) as total'))
-                        ->groupBy('user_id')
-                        ->having('total', '>', $userPoints)
-                        ->get()
-                        ->count();
+
+                    $rankResult = DB::selectOne("
+                        SELECT ranked.user_rank
+                        FROM (
+                            SELECT 
+                                weekly_scores.user_id,
+                                ROW_NUMBER() OVER (
+                                    ORDER BY 
+                                        SUM(weekly_scores.score) DESC,
+                                        COALESCE(SUM(TIMESTAMPDIFF(SECOND, quiz_attempts.started_at, quiz_attempts.submitted_at)), 999999999) ASC,
+                                        weekly_scores.user_id ASC
+                                ) as user_rank
+                            FROM weekly_scores
+                            LEFT JOIN quiz_attempts ON weekly_scores.user_id = quiz_attempts.user_id 
+                                AND weekly_scores.quiz_week_id = quiz_attempts.quiz_week_id 
+                                AND quiz_attempts.status = ?
+                            GROUP BY weekly_scores.user_id
+                        ) as ranked
+                        WHERE ranked.user_id = ?
+                    ", [QuizAttempt::STATUS_COMPLETED, $user->id]);
+
+                    $userRank = $rankResult ? (int) $rankResult->user_rank : null;
 
                     $me = [
                         'id' => (int) $user->id,
                         'name' => $user->name,
                         'territory' => $user->territory ?? $user->locality ?? 'Contestant',
                         'points' => $userPoints,
-                        'rank' => $higherCount + 1,
+                        'rank' => $userRank,
                     ];
                 }
             }
