@@ -893,6 +893,57 @@ nav a:hover, nav button:hover {
   font-weight: 700;
 }
 
+/* ================= AWARD PROMO BANNER SECTION ================= */
+.award-banner-section {
+  background: var(--bg-tan);
+  padding: 48px 0 16px;
+}
+.award-banner-container {
+  max-width: 1008px;
+  margin: 0 auto;
+}
+.award-banner-card {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  background: #F9F4EB;
+  border: 1px solid var(--border-tan);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(75, 51, 43, 0.08);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+  outline: none;
+}
+.award-banner-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(75, 51, 43, 0.14);
+  border-color: var(--border-card);
+}
+.award-banner-card:active {
+  transform: scale(0.995) translateY(-1px);
+}
+.award-banner-card:focus-visible {
+  outline: 3px solid var(--gold-btn);
+  outline-offset: 3px;
+}
+.award-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 680 / 360;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+@media (max-width: 640px) {
+  .award-banner-section {
+    padding: 32px 0 10px;
+  }
+  .award-banner-card {
+    border-radius: 18px;
+  }
+}
+
 /* ================= QUIZ RULES SECTION ================= */
 .rules-section {
   background: var(--bg-tan);
@@ -2351,7 +2402,8 @@ window.INITIAL_DATA = {
     user: @json($currentUser),
     countries: @json($countries ?? []),
     csrfToken: @json($csrfToken),
-    demoCode: @json($demoCode)
+    demoCode: @json($demoCode),
+    bannerUrl: @json(asset('images/quiz/award-banner.jpg'))
 };
 </script>
 
@@ -3207,6 +3259,37 @@ function Leaderboard({ user, tick, onStart }) {
             ` : null}
           </div>
         `}
+      </div>
+    </section>
+  `;
+}
+
+/* AP Aslam Holy Qur'an Award 2026 Promo Banner */
+function AwardPromoBanner() {
+  const bannerUrl = window.INITIAL_DATA?.bannerUrl || '/images/quiz/award-banner.jpg';
+
+  return html`
+    <section className="award-banner-section" aria-label="AP Aslam Holy Qur'an Award 2026">
+      <div className="wrap">
+        <div className="award-banner-container">
+          <a 
+            href="https://www.aslamquranaward.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="award-banner-card"
+            title="AP Aslam Holy Qur'an Award 2026 - Apply Now"
+            aria-label="AP Aslam Holy Qur'an Award 2026 - ₹40 Lakhs Cash Prize. Apply now at www.aslamquranaward.com (opens in new tab)"
+          >
+            <img 
+              src=${bannerUrl} 
+              alt="എപി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2026 - ₹40 ലക്ഷം രൂപയുടെ ക്യാഷ് പ്രൈസ്! 2026 ഡിസംബർ 23, 24 അൻസാർ ക്യാമ്പസ്, വളവന്നൂർ. Apply now: www.aslamquranaward.com" 
+              className="award-banner-img" 
+              loading="lazy"
+              width="680"
+              height="360"
+            />
+          </a>
+        </div>
       </div>
     </section>
   `;
@@ -4250,6 +4333,7 @@ function App() {
             `}
 
             <${Leaderboard} user=${user} tick=${tick} onStart=${handleStart}/>
+            <${AwardPromoBanner}/>
             <${QuizRules}/>
           </div>
         `}
