@@ -23,6 +23,7 @@ class QuizWeek extends Model
         'quiz_date',
         'start_at',
         'end_at',
+        'winner_announcement_day',
         'status',
     ];
 

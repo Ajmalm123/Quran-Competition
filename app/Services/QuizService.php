@@ -299,6 +299,7 @@ class QuizService
                     'end' => (int) ($w->end_at->timestamp * 1000),
                     'status' => $w->computed_status,
                     'winner' => $winner,
+                    'winner_announcement_day' => $w->winner_announcement_day ?? 'Saturday · 7:00 PM',
                 ];
             })->toArray();
         });

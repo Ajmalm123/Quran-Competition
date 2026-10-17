@@ -777,5 +777,33 @@ class WeeklyQuizTest extends TestCase
         $this->assertNull($lb105['me']['rank'], 'Rank should be null when > 100');
         $this->assertEquals(95, $lb105['me']['points'], 'Points should still be present');
     }
+
+    public function test_quiz_week_supports_custom_winner_announcement_day(): void
+    {
+        $weekNum = (QuizWeek::max('week_number') ?? 0) + 20;
+        $quizWeek = QuizWeek::create([
+            'week_number' => $weekNum,
+            'quiz_date' => Carbon::today(),
+            'start_at' => Carbon::now()->addDay(),
+            'end_at' => Carbon::now()->addDays(2),
+            'status' => QuizWeek::STATUS_UPCOMING,
+            'winner_announcement_day' => 'Sunday · 8:30 PM',
+        ]);
+
+        $this->assertEquals('Sunday · 8:30 PM', $quizWeek->fresh()->winner_announcement_day);
+
+        // Check QuizService getPublicSchedule
+        $service = app(QuizService::class);
+        $schedule = $service->getPublicSchedule();
+        $weekData = collect($schedule)->firstWhere('id', $weekNum);
+
+        $this->assertNotNull($weekData);
+        $this->assertEquals('Sunday · 8:30 PM', $weekData['winner_announcement_day']);
+
+        // Check public page renders the custom text
+        $response = $this->get('/thibyan');
+        $response->assertStatus(200);
+        $response->assertSee('Sunday · 8:30 PM');
+    }
 }
 

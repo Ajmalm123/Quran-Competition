@@ -19,6 +19,7 @@ class LuckyDrawStageTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
+        QuizWeek::where('week_number', 1)->delete();
     }
 
     public function test_lucky_draw_page_renders_successfully(): void

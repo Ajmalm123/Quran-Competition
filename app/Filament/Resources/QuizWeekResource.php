@@ -66,7 +66,7 @@ class QuizWeekResource extends Resource
                                 ->native(false),
                         ]),
 
-                        Forms\Components\Grid::make(2)->schema([
+                        Forms\Components\Grid::make(3)->schema([
                             Forms\Components\DateTimePicker::make('start_at')
                                 ->label('Live Start Time')
                                 ->required()
@@ -77,6 +77,12 @@ class QuizWeekResource extends Resource
                                 ->required()
                                 ->after('start_at')
                                 ->native(false),
+
+                            Forms\Components\TextInput::make('winner_announcement_day')
+                                ->label('Winner Announcement Day')
+                                ->required()
+                                ->placeholder('e.g. Saturday · 7:00 PM')
+                                ->maxLength(255),
                         ]),
                     ]),
             ]);
@@ -109,6 +115,12 @@ class QuizWeekResource extends Resource
                     ->label('End Time')
                     ->dateTime('d M Y, h:i A')
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('winner_announcement_day')
+                    ->label('Winner Announcement')
+                    ->badge()
+                    ->color('warning')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('questions_count')
                     ->label('Questions Pool')

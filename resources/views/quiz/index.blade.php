@@ -2346,7 +2346,7 @@ a.forgot-option-card:hover .forgot-option-arrow {
 
 <script>
 window.INITIAL_DATA = {
-    weeks: @json($weeks),
+    weeks: @json($weeks, JSON_UNESCAPED_UNICODE),
     leaderboard: @json($leaderboard),
     user: @json($currentUser),
     countries: @json($countries ?? []),
@@ -2703,7 +2703,8 @@ const getSeasonWeeks = (weeks) => {
       id: index + 1,
       start: start,
       end: start + 24 * 3600000,
-      winner: null
+      winner: null,
+      winner_announcement_day: "Saturday · 7:00 PM"
     };
   });
 };
@@ -2993,7 +2994,10 @@ function WinnerBanner({ weeks, now = Date.now() }) {
       displayData = liveWeek;
     } else {
       bannerState = "pending";
-      displayData = { weekId: liveWeek.id };
+      displayData = {
+        weekId: liveWeek.id,
+        announcementDay: liveWeek.winner_announcement_day
+      };
     }
   } else if (latestCompletedWeek && latestCompletedWeek.winner) {
     // Completed week has published winner, and next week's quiz has not started yet -> show published winner
@@ -3002,11 +3006,17 @@ function WinnerBanner({ weeks, now = Date.now() }) {
   } else if (latestCompletedWeek && !latestCompletedWeek.winner) {
     // Completed week waiting for winner publication
     bannerState = "pending";
-    displayData = { weekId: latestCompletedWeek.id };
+    displayData = {
+      weekId: latestCompletedWeek.id,
+      announcementDay: latestCompletedWeek.winner_announcement_day
+    };
   } else {
     // No completed week yet (before Week 1 finishes) -> show Week 1 pending announcement
     bannerState = "pending";
-    displayData = { weekId: nextUpcomingWeek?.id || 1 };
+    displayData = {
+      weekId: nextUpcomingWeek?.id || 1,
+      announcementDay: nextUpcomingWeek?.winner_announcement_day
+    };
   }
 
   const formatCardDate = (timestamp) => {
@@ -3035,7 +3045,7 @@ function WinnerBanner({ weeks, now = Date.now() }) {
             ` : html`
               <div className="winner-sub">Week ${displayData.weekId}</div>
               <div className="winner-name">Winner to Be Announced</div>
-              <div className="winner-place">Saturday · 7:00 PM</div>
+              <div className="winner-place">${displayData.announcementDay || "Saturday · 7:00 PM"}</div>
             `}
           </div>
         </div>

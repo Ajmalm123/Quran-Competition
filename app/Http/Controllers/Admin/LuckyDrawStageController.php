@@ -104,6 +104,7 @@ class LuckyDrawStageController extends Controller
                     'id' => $winner->id,
                     'name' => $winner->name,
                     'place' => $this->formatCleanPlace($winner->place, $winner->locality, $winner->territory),
+                    'country_code' => $winner->country_code ?? '',
                     'whatsapp_number' => $winner->whatsapp_number,
                     'locality' => $winner->locality,
                     'territory' => $winner->territory,
@@ -222,7 +223,8 @@ class LuckyDrawStageController extends Controller
                     'id' => (int) $u->id,
                     'name' => $u->name,
                     'place' => $this->formatCleanPlace($u->place, $u->locality, $u->territory),
-                    'whatsapp_number' => $u->whatsapp_number,
+                    'country_code' => $u->country_code ?? '',
+                    'whatsapp_number' => $u->whatsapp_number ?? '',
                     'locality' => $u->locality ?? '',
                     'territory' => $u->territory ?? '',
                 ];
@@ -237,7 +239,8 @@ class LuckyDrawStageController extends Controller
                         'id' => (int) $wUser->id,
                         'name' => $wUser->name,
                         'place' => $this->formatCleanPlace($wUser->place, $wUser->locality, $wUser->territory),
-                        'whatsapp_number' => $wUser->whatsapp_number,
+                        'country_code' => $wUser->country_code ?? '',
+                        'whatsapp_number' => $wUser->whatsapp_number ?? '',
                         'locality' => $wUser->locality ?? '',
                         'territory' => $wUser->territory ?? '',
                     ];
