@@ -62,7 +62,29 @@ declare global {
 // React 18 typings don't include `inert`; it keeps dimmed UI out of the tab order while rolling.
 const inertProps = (on: boolean) => (on ? ({ inert: "" } as Record<string, string>) : {});
 
-const getInitialParticipants = (): Participant[] => {
+const DEFAULT_WEEKS: WeekSummary[] = [
+  { id: 1, week_number: 1, quiz_date: "10 Oct 2026", status: "completed", lucky_draw_status: "published", eligible_count: 36, winner: { id: 1, name: "Ameen Rahman" } },
+  { id: 2, week_number: 2, quiz_date: "17 Oct 2026", status: "completed", lucky_draw_status: "drawn", eligible_count: 25, winner: null },
+  { id: 3, week_number: 3, quiz_date: "24 Oct 2026", status: "active", lucky_draw_status: "pending", eligible_count: 25, winner: null },
+  { id: 4, week_number: 4, quiz_date: "31 Oct 2026", status: "upcoming", lucky_draw_status: "pending", eligible_count: 18, winner: null },
+];
+
+const getMockParticipantsForWeek = (weekNumber: number): Participant[] => {
+  switch (weekNumber) {
+    case 1:
+      return PARTICIPANTS;
+    case 2:
+      return PARTICIPANTS.slice(5, 30);
+    case 3:
+      return PARTICIPANTS.slice(10, 35);
+    case 4:
+      return PARTICIPANTS.slice(0, 18);
+    default:
+      return PARTICIPANTS;
+  }
+};
+
+const getInitialParticipants = (initialWeekNum = 1): Participant[] => {
   if (typeof window !== "undefined" && window.__INITIAL_DATA__) {
     const list = window.__INITIAL_DATA__.eligibleParticipants;
     if (Array.isArray(list)) {
@@ -76,7 +98,7 @@ const getInitialParticipants = (): Participant[] => {
     }
   }
   // Standalone preview fallback
-  return PARTICIPANTS;
+  return getMockParticipantsForWeek(initialWeekNum);
 };
 
 const getInitialState = () => {
@@ -112,7 +134,30 @@ export default function App() {
   const initialData = typeof window !== "undefined" ? window.__INITIAL_DATA__ : undefined;
   const isProduction = !!initialData?.currentWeek?.id;
 
-  const [participants, setParticipants] = useState<Participant[]>(getInitialParticipants);
+  const initialWeeks =
+    initialData?.weeks && initialData.weeks.length > 0 ? initialData.weeks : DEFAULT_WEEKS;
+
+  const [weeks, setWeeks] = useState<WeekSummary[]>(initialWeeks);
+
+  const [currentWeekId, setCurrentWeekId] = useState<number>(() => {
+    if (initialData?.currentWeek?.id) return initialData.currentWeek.id;
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlWeek = params.get("week_id");
+      if (urlWeek && !isNaN(Number(urlWeek))) {
+        const found = initialWeeks.find((w) => w.id === Number(urlWeek));
+        if (found) return found.id;
+      }
+    }
+    return initialWeeks[0]?.id ?? 1;
+  });
+
+  const currentWeek =
+    weeks.find((w) => w.id === currentWeekId) || initialData?.currentWeek || weeks[0];
+
+  const [participants, setParticipants] = useState<Participant[]>(() =>
+    getInitialParticipants(currentWeek?.week_number ?? 1)
+  );
   const [initial] = useState(getInitialState);
   const [phase, setPhase] = useState<Phase>(initial.phase);
   const [winner, setWinner] = useState<Participant | null>(initial.winner);
@@ -137,9 +182,8 @@ export default function App() {
   const celebrating = phase === "revealed" || phase === "confirming" || phase === "published";
   const winnersSelected = celebrating && winner ? 1 : 0;
 
-  const currentWeek = initialData?.currentWeek;
   const subtitle = currentWeek
-    ? `Week ${currentWeek.week_number} · ${currentWeek.quiz_date ?? ""} · The moment we've all been waiting for`
+    ? `Week ${currentWeek.week_number}${currentWeek.quiz_date ? ` · ${currentWeek.quiz_date}` : ""} · The moment we've all been waiting for`
     : undefined;
 
   const choose = useCallback(() => {
@@ -263,9 +307,114 @@ export default function App() {
     }
   }, [isProduction, currentWeek, winner]);
 
-  const selectWeek = useCallback((weekId: number) => {
-    window.location.search = `?week_id=${weekId}`;
-  }, []);
+  const selectWeek = useCallback(
+    async (newWeekId: number) => {
+      if (newWeekId === currentWeekId && phase !== "ready") return;
+
+      setCurrentWeekId(newWeekId);
+      lock.current = false;
+      setWinner(null);
+      setPhase("ready");
+      setPanelOpen(false);
+
+      const targetWeek = weeks.find((w) => w.id === newWeekId);
+      const weekLabel = targetWeek ? `Week ${targetWeek.week_number}` : `Week #${newWeekId}`;
+
+      if (isProduction) {
+        setLoading(true);
+        try {
+          const res = await fetch(`/admin/lucky-draw/api/data?week_id=${newWeekId}`, {
+            headers: { Accept: "application/json" },
+            credentials: "same-origin",
+          });
+
+          if (res.ok) {
+            const data: InitialData = await res.json();
+            if (data.weeks && data.weeks.length > 0) {
+              setWeeks(data.weeks);
+            }
+            if (Array.isArray(data.eligibleParticipants)) {
+              setParticipants(
+                data.eligibleParticipants.map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  place: p.place || p.locality || p.territory || "",
+                  locality: p.locality,
+                  territory: p.territory,
+                }))
+              );
+            }
+            if (data.luckyDraw?.winner && data.luckyDraw.status === "published") {
+              setPhase("published");
+              setWinner({
+                id: data.luckyDraw.winner.id,
+                name: data.luckyDraw.winner.name,
+                place:
+                  data.luckyDraw.winner.place ||
+                  data.luckyDraw.winner.locality ||
+                  data.luckyDraw.winner.territory ||
+                  "",
+              });
+            } else if (data.luckyDraw?.winner && data.luckyDraw.status === "drawn") {
+              setPhase("revealed");
+              setWinner({
+                id: data.luckyDraw.winner.id,
+                name: data.luckyDraw.winner.name,
+                place:
+                  data.luckyDraw.winner.place ||
+                  data.luckyDraw.winner.locality ||
+                  data.luckyDraw.winner.territory ||
+                  "",
+              });
+            }
+
+            // Sync URL query without full page reload
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.set("week_id", String(newWeekId));
+              window.history.pushState({ week_id: newWeekId }, "", url.toString());
+            } catch {
+              // ignore
+            }
+
+            setToast({
+              open: true,
+              title: `${weekLabel} Selected`,
+              description: `Loaded ${(data.eligibleParticipants || []).length} eligible participants.`,
+              type: "success",
+            });
+            return;
+          }
+        } catch (err) {
+          console.warn("Could not fetch week data dynamically, falling back", err);
+          window.location.search = `?week_id=${newWeekId}`;
+          return;
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      // Standalone Preview Mode
+      const mockList = getMockParticipantsForWeek(targetWeek?.week_number ?? 1);
+      setParticipants(mockList);
+
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("week_id", String(newWeekId));
+        window.history.pushState({ week_id: newWeekId }, "", url.toString());
+      } catch {
+        // ignore
+      }
+
+      setToast({
+        open: true,
+        title: `${weekLabel} Selected`,
+        description: `Switched ceremony to ${weekLabel} (${mockList.length} eligible participants).`,
+        type: "success",
+      });
+    },
+    [currentWeekId, phase, weeks, isProduction]
+  );
 
   const loadSampleParticipants = useCallback(() => {
     setParticipants(PARTICIPANTS);
@@ -329,8 +478,8 @@ export default function App() {
             winners={winnersSelected}
             listOpen={panelOpen}
             onToggleList={() => setPanelOpen((v) => !v)}
-            weeks={initialData?.weeks}
-            currentWeekId={currentWeek?.id}
+            weeks={weeks}
+            currentWeekId={currentWeekId}
             onSelectWeek={selectWeek}
           />
         </motion.div>

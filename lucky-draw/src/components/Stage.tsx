@@ -99,8 +99,8 @@ export function Stage({
             </AnimatePresence>
           </div>
 
-          {/* NAME: fixed min height so nothing shifts while rolling */}
-          <div className="relative z-10 flex min-h-[8.5rem] w-full flex-col items-center justify-center sm:min-h-[11.5rem]">
+          {/* NAME: fixed height so nothing shifts while rolling */}
+          <div className="relative z-10 h-[8rem] w-full sm:h-[11rem]">
             <AnimatePresence mode="wait">
               {view === "ready" && (
                 <motion.div
@@ -116,7 +116,7 @@ export function Stage({
               {view === "rolling" && winner && (
                 <motion.div
                   key="name-rolling"
-                  className="h-full w-full"
+                  className="h-full"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0, transition: { duration: 0.25 } }}
@@ -132,7 +132,7 @@ export function Stage({
               {view === "reveal" && winner && (
                 <motion.div
                   key="name-reveal"
-                  className="h-full w-full"
+                  className="h-full"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}

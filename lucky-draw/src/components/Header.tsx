@@ -1,4 +1,3 @@
-import { Crown } from "lucide-react";
 import type { Phase } from "../types";
 
 const STATUS: Record<Phase, { label: string; dot: string; text: string }> = {
@@ -13,18 +12,27 @@ export function Header({ phase, subtitle }: { phase: Phase; subtitle?: string })
   const s = STATUS[phase];
   return (
     <header className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-5 sm:grid-cols-[1fr_auto_1fr]">
-      {/* Logo placeholder */}
+      {/* Brand Logo */}
       <div className="flex items-center gap-3">
         <div
-          className="grid h-12 w-12 place-items-center rounded-xl border border-dashed border-gold-400/50 bg-gold-400/5 text-gold-300"
+          className="grid h-11 w-11 place-items-center rounded-xl border border-gold-400/40 bg-gradient-to-b from-gold-400/15 to-transparent p-2 shadow-[0_0_20px_rgba(240,208,120,0.15)] backdrop-blur-sm sm:h-12 sm:w-12"
           role="img"
-          aria-label="Event logo placeholder"
+          aria-label="Aslam Holy Qur'an Award Logo"
         >
-          <Crown className="h-5 w-5" aria-hidden />
+          <img
+            src="/images/quiz/logo_icon.svg"
+            alt="Aslam Qur'an Award"
+            className="h-7 w-auto object-contain drop-shadow-[0_0_8px_rgba(240,208,120,0.4)] sm:h-8"
+          />
         </div>
-        <span className="hidden text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-400 lg:block">
-          Your logo
-        </span>
+        <div className="flex flex-col leading-tight">
+          <span className="font-display text-sm font-semibold tracking-[0.16em] text-gold-100 sm:text-base">
+            ASLAM QUR'AN AWARD
+          </span>
+          <span className="text-[0.6rem] font-medium uppercase tracking-[0.24em] text-gold-400/80 sm:text-[0.64rem]">
+            Holy Qur'an Competition
+          </span>
+        </div>
       </div>
 
       {/* Status (mobile: top right) */}
