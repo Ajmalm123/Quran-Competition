@@ -103,7 +103,7 @@ class LuckyDrawStageController extends Controller
                 'winner' => [
                     'id' => $winner->id,
                     'name' => $winner->name,
-                    'place' => !empty($winner->place) ? $winner->place : (!empty($winner->locality) ? $winner->locality : (!empty($winner->territory) ? $winner->territory : '')),
+                    'place' => $this->formatCleanPlace($winner->place, $winner->locality, $winner->territory),
                     'whatsapp_number' => $winner->whatsapp_number,
                     'locality' => $winner->locality,
                     'territory' => $winner->territory,
@@ -189,7 +189,7 @@ class LuckyDrawStageController extends Controller
                 $winner = [
                     'id' => $winnerUser->id,
                     'name' => $winnerUser->name,
-                    'place' => !empty($winnerUser->place) ? $winnerUser->place : (!empty($winnerUser->locality) ? $winnerUser->locality : (!empty($winnerUser->territory) ? $winnerUser->territory : '')),
+                    'place' => $this->formatCleanPlace($winnerUser->place, $winnerUser->locality, $winnerUser->territory),
                     'locality' => $winnerUser->locality,
                     'territory' => $winnerUser->territory,
                 ];
@@ -221,7 +221,7 @@ class LuckyDrawStageController extends Controller
                 return [
                     'id' => (int) $u->id,
                     'name' => $u->name,
-                    'place' => !empty($u->place) ? $u->place : (!empty($u->locality) ? $u->locality : (!empty($u->territory) ? $u->territory : '')),
+                    'place' => $this->formatCleanPlace($u->place, $u->locality, $u->territory),
                     'whatsapp_number' => $u->whatsapp_number,
                     'locality' => $u->locality ?? '',
                     'territory' => $u->territory ?? '',
@@ -236,7 +236,7 @@ class LuckyDrawStageController extends Controller
                     $winnerInfo = [
                         'id' => (int) $wUser->id,
                         'name' => $wUser->name,
-                        'place' => !empty($wUser->place) ? $wUser->place : (!empty($wUser->locality) ? $wUser->locality : (!empty($wUser->territory) ? $wUser->territory : '')),
+                        'place' => $this->formatCleanPlace($wUser->place, $wUser->locality, $wUser->territory),
                         'whatsapp_number' => $wUser->whatsapp_number,
                         'locality' => $wUser->locality ?? '',
                         'territory' => $wUser->territory ?? '',
@@ -268,5 +268,50 @@ class LuckyDrawStageController extends Controller
             'luckyDraw' => $luckyDrawData,
             'adminUser' => $adminUser ? $adminUser->name : 'Administrator',
         ];
+    }
+
+    /**
+     * Format a clean, non-duplicated place string from place, locality, and territory.
+     */
+    protected function formatCleanPlace(?string $place, ?string $locality, ?string $territory): string
+    {
+        $loc = trim($locality ?? '');
+        $ter = trim($territory ?? '');
+        $plc = trim($place ?? '');
+
+        if (!empty($loc) && !empty($ter)) {
+            if (strcasecmp($loc, $ter) === 0) {
+                return $loc;
+            }
+            if (stripos($loc, $ter) !== false) {
+                return $loc;
+            }
+            if (stripos($ter, $loc) !== false) {
+                return $ter;
+            }
+            return "{$loc} · {$ter}";
+        }
+
+        $single = !empty($loc) ? $loc : (!empty($ter) ? $ter : $plc);
+
+        if (str_contains($single, ' · ')) {
+            $parts = array_filter(array_map('trim', explode(' · ', $single)));
+            $unique = [];
+            foreach ($parts as $p) {
+                $exists = false;
+                foreach ($unique as $u) {
+                    if (strcasecmp($u, $p) === 0) {
+                        $exists = true;
+                        break;
+                    }
+                }
+                if (!$exists) {
+                    $unique[] = $p;
+                }
+            }
+            return implode(' · ', $unique);
+        }
+
+        return $single;
     }
 }

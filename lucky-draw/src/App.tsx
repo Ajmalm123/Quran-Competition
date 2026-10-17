@@ -6,7 +6,7 @@ import type { Phase } from "./types";
 import { Header } from "./components/Header";
 import { InfoRow } from "./components/InfoRow";
 import { Particles } from "./components/Particles";
-import { ParticipantPanel } from "./components/ParticipantPanel";
+import { ParticipantPanel, getDisplayPlace } from "./components/ParticipantPanel";
 import { Stage } from "./components/Stage";
 import { ConfirmModal } from "./components/ConfirmModal";
 import { Toast } from "./components/Toast";
@@ -91,7 +91,7 @@ const getInitialParticipants = (initialWeekNum = 1): Participant[] => {
       return list.map((p) => ({
         id: p.id,
         name: p.name,
-        place: p.place || p.locality || p.territory || "",
+        place: getDisplayPlace(p),
         locality: p.locality,
         territory: p.territory,
       }));
@@ -109,7 +109,7 @@ const getInitialState = () => {
       winner: {
         id: luckyDraw.winner.id,
         name: luckyDraw.winner.name,
-        place: luckyDraw.winner.place || luckyDraw.winner.locality || luckyDraw.winner.territory || "",
+        place: getDisplayPlace(luckyDraw.winner),
       },
     };
   }
@@ -119,7 +119,7 @@ const getInitialState = () => {
       winner: {
         id: luckyDraw.winner.id,
         name: luckyDraw.winner.name,
-        place: luckyDraw.winner.place || luckyDraw.winner.locality || luckyDraw.winner.territory || "",
+        place: getDisplayPlace(luckyDraw.winner),
       },
     };
   }
@@ -338,7 +338,7 @@ export default function App() {
                 data.eligibleParticipants.map((p) => ({
                   id: p.id,
                   name: p.name,
-                  place: p.place || p.locality || p.territory || "",
+                  place: getDisplayPlace(p),
                   locality: p.locality,
                   territory: p.territory,
                 }))
@@ -349,22 +349,14 @@ export default function App() {
               setWinner({
                 id: data.luckyDraw.winner.id,
                 name: data.luckyDraw.winner.name,
-                place:
-                  data.luckyDraw.winner.place ||
-                  data.luckyDraw.winner.locality ||
-                  data.luckyDraw.winner.territory ||
-                  "",
+                place: getDisplayPlace(data.luckyDraw.winner),
               });
             } else if (data.luckyDraw?.winner && data.luckyDraw.status === "drawn") {
               setPhase("revealed");
               setWinner({
                 id: data.luckyDraw.winner.id,
                 name: data.luckyDraw.winner.name,
-                place:
-                  data.luckyDraw.winner.place ||
-                  data.luckyDraw.winner.locality ||
-                  data.luckyDraw.winner.territory ||
-                  "",
+                place: getDisplayPlace(data.luckyDraw.winner),
               });
             }
 
