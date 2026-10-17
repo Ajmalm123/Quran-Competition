@@ -38,6 +38,14 @@ export function getWeekDateString(weekNumber: number, customDate?: string): stri
 
 export const DEFAULT_TIBIYAN_LOGO_SRC = thibyanLogo;
 
+const LOGO_CANDIDATES = [
+  thibyanLogo,
+  '/lucky-draw-assets/assets/thibyan-logo.png',
+  '/lucky-draw-assets/thibyan-logo.png',
+  '/thibyan-logo.png',
+  '/assets/thibyan-logo.png',
+];
+
 // Build a shuffled sequence ending with the winner
 function buildSequence(pool: Participant[], winner: Participant, totalNames: number): string[] {
   const eligiblePool = pool.filter(p => p.id !== winner.id);
@@ -60,7 +68,17 @@ export default function RollingNameDisplay({
   selectedWeekDate,
   logoSrc = DEFAULT_TIBIYAN_LOGO_SRC,
 }: RollingNameDisplayProps) {
+  const [logoIdx, setLogoIdx] = useState(0);
   const [logoError, setLogoError] = useState(false);
+  const currentLogo = logoSrc && logoIdx === 0 ? logoSrc : (LOGO_CANDIDATES[logoIdx] || null);
+
+  const handleLogoError = () => {
+    if (logoIdx < LOGO_CANDIDATES.length - 1) {
+      setLogoIdx(prev => prev + 1);
+    } else {
+      setLogoError(true);
+    }
+  };
   const [displayName, setDisplayName] = useState('WHO WILL IT BE?');
   const [selectedWinner, setSelectedWinner] = useState<Participant | null>(null);
   const [isRolling, setIsRolling] = useState(false);
@@ -220,9 +238,9 @@ export default function RollingNameDisplay({
             height: 64,
           }}
         >
-          {logoSrc && !logoError ? (
+          {currentLogo && !logoError ? (
             <img
-              src={logoSrc}
+              src={currentLogo}
               alt="Tibiyan Logo"
               style={{
                 maxWidth: '100%',
@@ -231,7 +249,7 @@ export default function RollingNameDisplay({
                 background: 'transparent',
                 display: 'block',
               }}
-              onError={() => setLogoError(true)}
+              onError={handleLogoError}
             />
           ) : (
             <div
