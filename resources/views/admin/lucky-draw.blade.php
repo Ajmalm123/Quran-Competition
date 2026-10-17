@@ -13,7 +13,10 @@
       href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Noto+Sans:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{{ asset('lucky-draw-assets/lucky-draw.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ asset('lucky-draw-assets/lucky-draw.css') }}?v={{ file_exists(public_path('lucky-draw-assets/lucky-draw.css')) ? filemtime(public_path('lucky-draw-assets/lucky-draw.css')) : time() }}"
+    />
     <script>
       window.__CSRF_TOKEN__ = "{{ $csrfToken }}";
       window.__INITIAL_DATA__ = @json($initialData);
@@ -21,6 +24,9 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="{{ asset('lucky-draw-assets/lucky-draw.js') }}"></script>
+    <script
+      type="module"
+      src="{{ asset('lucky-draw-assets/lucky-draw.js') }}?v={{ file_exists(public_path('lucky-draw-assets/lucky-draw.js')) ? filemtime(public_path('lucky-draw-assets/lucky-draw.js')) : time() }}"
+    ></script>
   </body>
 </html>
