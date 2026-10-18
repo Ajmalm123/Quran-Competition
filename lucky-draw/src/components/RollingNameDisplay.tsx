@@ -46,14 +46,70 @@ const LOGO_CANDIDATES = [
   '/assets/thibyan-logo.png',
 ];
 
-// Build a shuffled sequence ending with the winner
-function buildSequence(pool: Participant[], winner: Participant, totalNames: number): string[] {
+// Helper function to randomly shuffle an array using Fisher-Yates algorithm
+function shuffleArray<T>(items: readonly T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// Build a randomized sequence of participant names for the rolling animation.
+// Generates a fresh, shuffled permutation on each draw so different participants appear every time.
+export function buildSequence(pool: Participant[], winner: Participant, totalNames: number): string[] {
   const eligiblePool = pool.filter(p => p.id !== winner.id);
   const source = eligiblePool.length > 0 ? eligiblePool : [winner];
-  const result: string[] = [];
-  for (let i = 0; i < totalNames - 1; i++) {
-    result.push(source[i % source.length].name);
+
+  if (source.length === 1) {
+    const singleName = source[0].name;
+    const result = Array(Math.max(1, totalNames - 1)).fill(singleName);
+    result.push(winner.name);
+    return result;
   }
+
+  const result: string[] = [];
+  let lastPushedName: string | null = null;
+  const targetCount = Math.max(1, totalNames - 1);
+
+  while (result.length < targetCount) {
+    // Fresh random permutation across all eligible participants in the pool
+    const shuffled = shuffleArray(source);
+
+    // If first name in this batch matches the last pushed name, swap it with another in batch
+    if (lastPushedName !== null && shuffled.length > 1 && shuffled[0].name === lastPushedName) {
+      const swapIndex = 1 + Math.floor(Math.random() * (shuffled.length - 1));
+      [shuffled[0], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[0]];
+    }
+
+    for (const participant of shuffled) {
+      if (result.length >= targetCount) break;
+
+      // Skip consecutive duplicates if alternatives are available
+      if (participant.name === lastPushedName && source.some(p => p.name !== lastPushedName)) {
+        continue;
+      }
+
+      result.push(participant.name);
+      lastPushedName = participant.name;
+    }
+  }
+
+  // Safety fallback if skips prevented reaching targetCount
+  while (result.length < targetCount) {
+    const randomPick = source[Math.floor(Math.random() * source.length)];
+    result.push(randomPick.name);
+  }
+
+  // Ensure the name right before the final reveal is not the winner itself (builds suspense)
+  if (result.length > 0 && result[result.length - 1] === winner.name) {
+    const alternative = source.find(p => p.name !== winner.name);
+    if (alternative) {
+      result[result.length - 1] = alternative.name;
+    }
+  }
+
   result.push(winner.name);
   return result;
 }
