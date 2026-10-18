@@ -930,7 +930,7 @@ nav a:hover, nav button:hover {
   width: 100%;
   height: auto;
   display: block;
-  aspect-ratio: 680 / 360;
+  aspect-ratio: 1360 / 720;
   object-fit: cover;
   border-radius: inherit;
 }
@@ -2403,7 +2403,7 @@ window.INITIAL_DATA = {
     countries: @json($countries ?? []),
     csrfToken: @json($csrfToken),
     demoCode: @json($demoCode),
-    bannerUrl: @json(asset('images/quiz/award-banner.jpg'))
+    bannerUrl: @json(asset('images/quiz/award-banner.jpg') . '?v=' . filemtime(public_path('images/quiz/award-banner.jpg')))
 };
 </script>
 
@@ -3285,8 +3285,8 @@ function AwardPromoBanner() {
               alt="എപി അസ്‌ലം ഹോളി ഖുർആൻ അവാർഡ് 2026 - ₹40 ലക്ഷം രൂപയുടെ ക്യാഷ് പ്രൈസ്! 2026 ഡിസംബർ 23, 24 അൻസാർ ക്യാമ്പസ്, വളവന്നൂർ. Apply now: www.aslamquranaward.com" 
               className="award-banner-img" 
               loading="lazy"
-              width="680"
-              height="360"
+              width="1360"
+              height="720"
             />
           </a>
         </div>
