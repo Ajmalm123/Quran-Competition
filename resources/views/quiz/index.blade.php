@@ -3640,16 +3640,6 @@ function CompletedWeeksQA({ onGoSchedule }) {
                 })}
               </div>
 
-              ${currentWeek.winner ? html`
-                <div style=${{ marginBottom: "16px" }}>
-                  <div className="qa-week-winner" title="Lucky Draw Winner">
-                    <span aria-hidden="true">🏆</span>
-                    <span>വിജയി: <b>${currentWeek.winner.name}</b></span>
-                    ${currentWeek.winner.territory ? html`<small style=${{ opacity: 0.85 }}>(${currentWeek.winner.territory})</small>` : null}
-                  </div>
-                </div>
-              ` : null}
-
               <!-- Questions Cards List -->
               <div className="qa-card-list">
                 ${questions.map(q => {
@@ -3662,12 +3652,9 @@ function CompletedWeeksQA({ onGoSchedule }) {
                       <div className="qa-q-body">
                         <h3 className="qa-q-text">${q.question_text || ''}</h3>
                         <div className="qa-ans-chip">
-                          <span className="qa-ans-tag">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span>ശരിയുത്തരം:</span>
-                          </span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B5E20" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style=${{ flexShrink: 0 }}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
                           <span className="qa-ans-val">${correctText}</span>
                         </div>
                       </div>
