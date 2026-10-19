@@ -168,13 +168,13 @@ export default function RollingNameDisplay({
     setSelectedWinner(chosenWinner);
     onSelectWinner(chosenWinner);
 
-    const sequence = buildSequence(participants, chosenWinner, 60);
+    const sequence = buildSequence(participants, chosenWinner, 350);
     setIsRolling(true);
 
     let sequenceIdx = 0;
 
-    // Phase 1: rapid cycling (0–3.4s) – 42 names at 80ms each
-    const RAPID_COUNT = 42;
+    // Phase 1: rapid cycling (0–22s) – 275 names at 80ms each
+    const RAPID_COUNT = 275;
     for (let i = 0; i < RAPID_COUNT; i++) {
       const delay = i * 80;
       const t = setTimeout(() => {
@@ -185,10 +185,10 @@ export default function RollingNameDisplay({
       timeoutsRef.current.push(t);
     }
 
-    const rapidEnd = RAPID_COUNT * 80; // ~3360ms
+    const rapidEnd = RAPID_COUNT * 80; // 22,000ms
 
-    // Phase 2: slowing intervals
-    const slowIntervals = [130, 200, 300, 450, 650, 900, 1200];
+    // Phase 2: slowing intervals (22s–28.4s) – gradual deceleration
+    const slowIntervals = [110, 140, 180, 230, 290, 360, 450, 560, 700, 880, 1100, 1400];
     let slowTime = rapidEnd;
     for (const interval of slowIntervals) {
       slowTime += interval;
@@ -201,8 +201,8 @@ export default function RollingNameDisplay({
       timeoutsRef.current.push(t);
     }
 
-    // Final reveal – winner
-    const revealTime = slowTime + 1200;
+    // Final reveal – winner at 30 seconds (28,400ms + 1,600ms = 30,000ms)
+    const revealTime = slowTime + 1600;
     const t2 = setTimeout(() => {
       setDisplayName(chosenWinner.name);
       setFrameKey(k => k + 1);
