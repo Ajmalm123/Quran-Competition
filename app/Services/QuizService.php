@@ -18,7 +18,7 @@ class QuizService
 {
     /**
      * Start a quiz attempt for a user on a given week.
-     * Enforces one attempt per week and randomly selects 5 questions from the pool (up to 8 questions).
+     * Enforces one attempt per week and randomly selects 5 questions from the pool (minimum 5 questions, no upper limit).
      */
     public function startAttempt(User $user, QuizWeek $quizWeek): QuizAttempt
     {
@@ -391,5 +391,75 @@ class QuizService
             'me' => $me,
         ];
     }
+
+    /**
+     * Get questions and correct answers for completed quiz weeks.
+     * STRICT SECURITY: Only weeks whose computed_status is 'completed' (or past end_at) are included.
+     * Questions and answers for live or upcoming weeks are NEVER returned.
+     *
+     * @param int|null $weekNumber Optional week number to filter
+     * @return array
+     */
+    public function getCompletedWeeksQuestions(?int $weekNumber = null): array
+    {
+        $cacheKey = $weekNumber ? "quiz_completed_questions_week_{$weekNumber}" : 'quiz_completed_weeks_questions';
+
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 60, function () use ($weekNumber) {
+            $query = QuizWeek::with([
+                'questions' => function ($q) {
+                    $q->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+                },
+                'luckyDraw.winner'
+            ])
+                ->where('status', '!=', QuizWeek::STATUS_DRAFT)
+                ->where('status', '!=', QuizWeek::STATUS_CANCELLED)
+                ->orderBy('week_number', 'asc');
+
+            if ($weekNumber !== null) {
+                $query->where('week_number', $weekNumber);
+            }
+
+            $completedWeeks = $query->get()->filter(fn (QuizWeek $w) => $w->isCompleted());
+
+            return $completedWeeks->map(function (QuizWeek $w) {
+                $winner = null;
+                if ($w->luckyDraw && $w->luckyDraw->isPublished() && $w->luckyDraw->winner) {
+                    $winner = [
+                        'id' => (int) $w->luckyDraw->winner->id,
+                        'name' => $w->luckyDraw->winner->name,
+                        'territory' => $w->luckyDraw->winner->territory ?? $w->luckyDraw->winner->locality ?? 'Contestant',
+                    ];
+                }
+
+                $questions = $w->questions->map(function (Question $q, int $index) {
+                    return [
+                        'id' => (int) $q->id,
+                        'number' => $index + 1,
+                        'question_text' => trim($q->question_text ?? ''),
+                        'options' => [
+                            'A' => trim($q->option_a ?? ''),
+                            'B' => trim($q->option_b ?? ''),
+                            'C' => trim($q->option_c ?? ''),
+                            'D' => trim($q->option_d ?? ''),
+                        ],
+                        'correct_option' => strtoupper(trim($q->correct_option ?? '')),
+                        'correct_option_text' => trim($q->correct_option_text ?? ''),
+                    ];
+                })->values()->toArray();
+
+                return [
+                    'id' => (int) $w->week_number,
+                    'week_id' => (int) $w->id,
+                    'week_number' => (int) $w->week_number,
+                    'quiz_date' => $w->quiz_date ? $w->quiz_date->format('Y-m-d') : null,
+                    'quiz_date_formatted' => $w->quiz_date ? $w->quiz_date->format('d M Y') : 'Week ' . $w->week_number,
+                    'winner' => $winner,
+                    'total_questions' => count($questions),
+                    'questions' => $questions,
+                ];
+            })->values()->toArray();
+        });
+    }
 }
+
 

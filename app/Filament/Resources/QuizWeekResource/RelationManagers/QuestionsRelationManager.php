@@ -27,7 +27,6 @@ class QuestionsRelationManager extends RelationManager
                         ->default(fn () => ($this->getOwnerRecord()->questions()->max('sort_order') ?? 0) + 1)
                         ->required()
                         ->minValue(1)
-                        ->maxValue(8)
                         ->columnSpan(1),
 
                     Forms\Components\Select::make('correct_option')
@@ -80,7 +79,7 @@ class QuestionsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->description(fn () => 'Weekly quiz questions pool (maximum 8, minimum 5 required). Currently configured: ' . $this->getOwnerRecord()->questions()->count() . ' / 8')
+            ->description(fn () => 'Weekly quiz questions pool (minimum 5 required). Currently configured: ' . $this->getOwnerRecord()->questions()->count() . ' questions')
             ->columns([
                 Tables\Columns\TextColumn::make('sort_order')
                     ->label('#')
@@ -111,17 +110,7 @@ class QuestionsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()
                     ->label('Add Question')
                     ->icon('heroicon-o-plus')
-                    ->modalHeading('Add Quiz Question (Up to 8 questions)')
-                    ->before(function (Tables\Actions\CreateAction $action) {
-                        if ($this->getOwnerRecord()->questions()->count() >= 8) {
-                            Notification::make()
-                                ->danger()
-                                ->title('Question Limit Reached')
-                                ->body('Each weekly quiz can have a maximum of 8 questions. Please edit or delete an existing question.')
-                                ->send();
-                            $action->halt();
-                        }
-                    }),
+                    ->modalHeading('Add Quiz Question'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

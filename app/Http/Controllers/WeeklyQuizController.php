@@ -31,6 +31,13 @@ class WeeklyQuizController extends Controller
 
         $schedule = $this->quizService->getPublicSchedule();
         $leaderboard = $this->quizService->getLeaderboard($user);
+        
+        try {
+            $completedWeeks = $this->quizService->getCompletedWeeksQuestions();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Unable to preload completed weeks questions: ' . $e->getMessage());
+            $completedWeeks = [];
+        }
 
         $currentUser = null;
         if ($user) {
@@ -52,6 +59,7 @@ class WeeklyQuizController extends Controller
         return view('quiz.index', [
             'weeks' => $schedule,
             'leaderboard' => $leaderboard,
+            'completedWeeks' => $completedWeeks,
             'currentUser' => $currentUser,
             'countries' => \App\Services\PhoneService::COUNTRIES,
             'csrfToken' => csrf_token(),
@@ -74,6 +82,34 @@ class WeeklyQuizController extends Controller
     {
         $user = Auth::guard('web')->user();
         return response()->json($this->quizService->getLeaderboard($user));
+    }
+
+    /**
+     * Get questions and correct answers for completed quiz weeks.
+     * STRICT SECURITY: Only completed weeks are returned.
+     */
+    public function completedQuestions(Request $request): JsonResponse
+    {
+        $weekNumber = $request->query('week') ? (int) $request->query('week') : null;
+
+        if ($weekNumber !== null) {
+            $week = QuizWeek::where('week_number', $weekNumber)->first();
+            if (!$week) {
+                return response()->json([
+                    'code' => 'NOT_FOUND',
+                    'message' => 'Week not found.',
+                ], 404);
+            }
+
+            if (!$week->isCompleted()) {
+                return response()->json([
+                    'code' => 'NOT_COMPLETED',
+                    'message' => 'Questions and answers for this week are only available after the quiz is completed.',
+                ], 403);
+            }
+        }
+
+        return response()->json($this->quizService->getCompletedWeeksQuestions($weekNumber));
     }
 
     /**

@@ -893,6 +893,279 @@ nav a:hover, nav button:hover {
   font-weight: 700;
 }
 
+/* ================= COMPLETED WEEKS QUESTIONS & ANSWERS (Q&A) ================= */
+.qa-section {
+  background: var(--bg-tan);
+  padding: 56px 0 48px;
+  border-top: 1px solid var(--border-tan);
+}
+.qa-container {
+  max-width: 1008px;
+  margin: 0 auto;
+}
+.qa-header {
+  margin-bottom: 24px;
+}
+.qa-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(133, 77, 58, 0.1);
+  color: var(--ink-brown);
+  border: 1px solid rgba(133, 77, 58, 0.22);
+  padding: 4px 14px;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.qa-title {
+  font-family: 'Nohemi', sans-serif;
+  font-size: clamp(26px, 3.8vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-brown);
+  margin-bottom: 6px;
+}
+.qa-subtitle {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--ink-mute);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Week Selector Tabs */
+.qa-tabs-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 14px;
+  margin-bottom: 20px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.qa-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-tan);
+  background: var(--bg-card);
+  color: var(--ink-dark);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+.qa-tab-btn:hover {
+  border-color: var(--border-card);
+  background: #FFFFFF;
+  transform: translateY(-1px);
+}
+.qa-tab-btn.active {
+  background: var(--bg-hero);
+  color: #FFFFFF;
+  border-color: var(--bg-hero);
+  box-shadow: 0 4px 14px rgba(133, 77, 58, 0.28);
+}
+.qa-tab-btn .tab-count {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+.qa-tab-btn.active .tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* Selected Week Info Strip */
+.qa-week-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-tan);
+  border-radius: 16px;
+  padding: 12px 20px;
+  margin-bottom: 22px;
+}
+.qa-week-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--ink-brown);
+  font-weight: 600;
+}
+.qa-week-winner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(246, 172, 56, 0.15);
+  border: 1px solid rgba(246, 172, 56, 0.4);
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-brown);
+}
+
+/* Question Rows (Compact & Modern) */
+.qa-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qa-q-row {
+  background: #FFFFFF;
+  border: 1px solid var(--border-tan);
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 8px rgba(75, 51, 43, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.qa-q-row:hover {
+  border-color: var(--border-card);
+  box-shadow: 0 4px 14px rgba(75, 51, 43, 0.06);
+  transform: translateY(-1px);
+}
+.qa-q-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(133, 77, 58, 0.1);
+  border: 1px solid rgba(133, 77, 58, 0.2);
+  color: var(--ink-brown);
+  font-family: 'Nohemi', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.qa-q-body {
+  flex: 1;
+  min-width: 0;
+}
+.qa-q-text {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink-dark);
+  margin: 0 0 8px;
+}
+.qa-ans-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #EBF7EE;
+  border: 1px solid #A5D6A7;
+  border-radius: 8px;
+  padding: 5px 12px;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.qa-ans-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #1B5E20;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.qa-ans-val {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "sama-malayalam", 'Noto Sans Malayalam', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #14594E;
+}
+
+/* Empty State Card */
+.qa-empty-card {
+  background: #FFFFFF;
+  border: 1px dashed var(--border-card);
+  border-radius: 24px;
+  padding: 36px 20px;
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto;
+}
+.qa-empty-icon {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+.qa-empty-title {
+  font-family: 'Nohemi', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink-brown);
+  margin-bottom: 6px;
+}
+.qa-empty-desc {
+  font-size: 14px;
+  color: var(--ink-mute);
+  line-height: 1.6;
+  margin: 0 auto 18px;
+  max-width: 460px;
+}
+
+@media (max-width: 640px) {
+  .qa-section {
+    padding: 34px 0 32px;
+  }
+  .qa-q-row {
+    padding: 12px 14px;
+    gap: 10px;
+    border-radius: 14px;
+  }
+  .qa-q-num {
+    min-width: 26px;
+    height: 26px;
+    font-size: 11.5px;
+    border-radius: 8px;
+  }
+  .qa-q-text {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .qa-ans-chip {
+    padding: 4px 10px;
+    gap: 6px;
+  }
+  .qa-ans-tag {
+    font-size: 11px;
+  }
+  .qa-ans-val {
+    font-size: 13.5px;
+  }
+  .qa-week-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* ================= AWARD PROMO BANNER SECTION ================= */
 .award-banner-section {
   background: var(--bg-tan);
@@ -2399,6 +2672,7 @@ a.forgot-option-card:hover .forgot-option-arrow {
 window.INITIAL_DATA = {
     weeks: @json($weeks, JSON_UNESCAPED_UNICODE),
     leaderboard: @json($leaderboard),
+    completedWeeks: @json($completedWeeks ?? [], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP),
     user: @json($currentUser),
     countries: @json($countries ?? []),
     csrfToken: @json($csrfToken),
@@ -2420,6 +2694,7 @@ const CSRF_TOKEN = window.INITIAL_DATA?.csrfToken || document.querySelector('met
 
 let initialScheduleLoaded = false;
 let initialLeaderboardLoaded = false;
+let initialCompletedWeeksLoaded = false;
 
 const api = {
   async parseJson(res) {
@@ -2449,6 +2724,19 @@ const api = {
       return window.INITIAL_DATA.leaderboard;
     }
     const res = await fetch('/quiz/api/leaderboard', {
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin'
+    });
+    return await this.parseJson(res);
+  },
+
+  async completedQuestions(week) {
+    if (!initialCompletedWeeksLoaded && window.INITIAL_DATA?.completedWeeks && !week) {
+      initialCompletedWeeksLoaded = true;
+      return window.INITIAL_DATA.completedWeeks;
+    }
+    const url = week ? `/quiz/api/completed-questions?week=${week}` : '/quiz/api/completed-questions';
+    const res = await fetch(url, {
       headers: { 'Accept': 'application/json' },
       credentials: 'same-origin'
     });
@@ -2906,6 +3194,7 @@ function Header({ onGo, user, onLogout }) {
           <a href="#top" onClick=${(e) => { e.preventDefault(); setOpen(false); onGo("top"); }}>Home</a>
           <button onClick=${() => { setOpen(false); onGo("schedule"); }}>Schedule</button>
           <button onClick=${() => { setOpen(false); onGo("leaderboard"); }}>Leaderboard</button>
+          <button onClick=${() => { setOpen(false); onGo("completed-qa"); }}>Q&A</button>
           <button onClick=${() => { setOpen(false); onGo("rules"); }}>Rules</button>
           ${user ? html`
             <button onClick=${() => { setOpen(false); onGo("leaderboard"); }} style=${{ color: "var(--bg-hero)", fontWeight: 700 }}>
@@ -3262,6 +3551,139 @@ function Leaderboard({ user, tick, onStart }) {
       </div>
     </section>
   `;
+}
+
+/* ================= COMPLETED WEEKS QUESTIONS & ANSWERS (Q&A) ================= */
+function CompletedWeeksQA({ onGoSchedule }) {
+  try {
+    const [completedWeeks, setCompletedWeeks] = useState(() => {
+      const initial = window.INITIAL_DATA?.completedWeeks;
+      return Array.isArray(initial) ? initial : [];
+    });
+    const [selectedWeekNum, setSelectedWeekNum] = useState(() => {
+      const list = window.INITIAL_DATA?.completedWeeks;
+      if (Array.isArray(list) && list.length > 0) {
+        return list[list.length - 1].week_number;
+      }
+      return 1;
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      if (!window.INITIAL_DATA?.completedWeeks) {
+        setLoading(true);
+        api.completedQuestions()
+          .then(data => {
+            if (Array.isArray(data)) {
+              setCompletedWeeks(data);
+              if (data.length > 0) {
+                setSelectedWeekNum(data[data.length - 1].week_number);
+              }
+            }
+          })
+          .catch(err => {
+            console.warn('Completed questions fetch error:', err);
+            setError(err);
+          })
+          .finally(() => setLoading(false));
+      }
+    }, []);
+
+    const safeList = Array.isArray(completedWeeks) ? completedWeeks : [];
+    const currentWeek = safeList.find(w => w && w.week_number === selectedWeekNum) || safeList[0];
+    const questions = Array.isArray(currentWeek?.questions) ? currentWeek.questions : [];
+
+    return html`
+      <section className="qa-section" id="completed-qa" aria-labelledby="qa-section-title">
+        <div className="wrap qa-container">
+          <div className="qa-header">
+        
+            <h2 className="qa-title" id="qa-section-title">Quiz Answers</h2>
+
+          </div>
+
+          ${loading ? html`<${Skel}/>` : error ? html`<${Err} code=${error.code || 'NETWORK'} retry=${() => window.location.reload()}/>` : null}
+
+          ${!loading && safeList.length === 0 ? html`
+            <div className="qa-empty-card">
+              <div className="qa-empty-icon" aria-hidden="true">⏳</div>
+              <div className="qa-empty-title">ആദ്യ ക്വിസ് ഉടൻ പൂർത്തിയാകും</div>
+              <p className="qa-empty-desc">
+                വെള്ളിയാഴ്ച ക്വിസ് അവസാനിക്കുന്നതോടെ (ശനിയാഴ്ച രാവിലെ 5:00 ന് ശേഷം) ആ ആഴ്ചയിലെ മുഴുവൻ ചോദ്യങ്ങളും ശരിയുത്തരങ്ങളും ഇവിടെ പ്രസിദ്ധീകരിക്കുന്നതാണ്.
+              </p>
+              <button className="btn-gold" style=${{ minHeight: "42px", padding: "0 22px", fontSize: "14px" }} onClick=${onGoSchedule}>
+                ക്വിസ് ഷെഡ്യൂൾ കാണുക
+              </button>
+            </div>
+          ` : null}
+
+          ${!loading && safeList.length > 0 && currentWeek ? html`
+            <div>
+              <!-- Week Selector Tabs (Secondary Nav) -->
+              <div className="qa-tabs-scroll" role="tablist" aria-label="Completed Quiz Weeks">
+                ${safeList.map(w => {
+                  if (!w) return null;
+                  const qCount = Array.isArray(w.questions) ? w.questions.length : 0;
+                  return html`
+                    <button
+                      key=${w.week_number}
+                      role="tab"
+                      aria-selected=${w.week_number === selectedWeekNum}
+                      className=${"qa-tab-btn " + (w.week_number === selectedWeekNum ? "active" : "")}
+                      onClick=${() => setSelectedWeekNum(w.week_number)}
+                    >
+                      <span>Week ${w.week_number} - (${qCount})</span>
+                    </button>
+                  `;
+                })}
+              </div>
+
+              ${currentWeek.winner ? html`
+                <div style=${{ marginBottom: "16px" }}>
+                  <div className="qa-week-winner" title="Lucky Draw Winner">
+                    <span aria-hidden="true">🏆</span>
+                    <span>വിജയി: <b>${currentWeek.winner.name}</b></span>
+                    ${currentWeek.winner.territory ? html`<small style=${{ opacity: 0.85 }}>(${currentWeek.winner.territory})</small>` : null}
+                  </div>
+                </div>
+              ` : null}
+
+              <!-- Questions Cards List -->
+              <div className="qa-card-list">
+                ${questions.map(q => {
+                  if (!q) return null;
+                  const correctText = q.correct_option_text || (q.options && q.options[q.correct_option]) || '';
+
+                  return html`
+                    <article key=${q.id} className="qa-q-row">
+                      <div className="qa-q-num" aria-hidden="true">${String(q.number || 1).padStart(2, '0')}</div>
+                      <div className="qa-q-body">
+                        <h3 className="qa-q-text">${q.question_text || ''}</h3>
+                        <div className="qa-ans-chip">
+                          <span className="qa-ans-tag">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>ശരിയുത്തരം:</span>
+                          </span>
+                          <span className="qa-ans-val">${correctText}</span>
+                        </div>
+                      </div>
+                    </article>
+                  `;
+                })}
+              </div>
+            </div>
+          ` : null}
+        </div>
+      </section>
+    `;
+  } catch (componentError) {
+    console.error("CompletedWeeksQA component error caught safely:", componentError);
+    return null;
+  }
 }
 
 /* AP Aslam Holy Qur'an Award 2026 Promo Banner */
@@ -4333,6 +4755,7 @@ function App() {
             `}
 
             <${Leaderboard} user=${user} tick=${tick} onStart=${handleStart}/>
+            <${CompletedWeeksQA} onGoSchedule=${() => scrollTo("schedule")}/>
             <${AwardPromoBanner}/>
             <${QuizRules}/>
           </div>

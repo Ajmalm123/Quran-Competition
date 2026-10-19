@@ -29,8 +29,36 @@ class WeeklyQuizTest extends TestCase
 
         $this->assertFalse($quizWeek->canPublish());
 
-        // Add 8 questions
-        for ($i = 1; $i <= 8; $i++) {
+        // Add 4 questions (below minimum 5)
+        for ($i = 1; $i <= 4; $i++) {
+            Question::create([
+                'quiz_week_id' => $quizWeek->id,
+                'question_text' => "Question number {$i}?",
+                'option_a' => 'Answer A',
+                'option_b' => 'Answer B',
+                'option_c' => 'Answer C',
+                'option_d' => 'Answer D',
+                'correct_option' => 'A',
+                'sort_order' => $i,
+            ]);
+        }
+        $this->assertFalse($quizWeek->fresh()->canPublish());
+
+        // Add 5th question (minimum met)
+        Question::create([
+            'quiz_week_id' => $quizWeek->id,
+            'question_text' => "Question number 5?",
+            'option_a' => 'Answer A',
+            'option_b' => 'Answer B',
+            'option_c' => 'Answer C',
+            'option_d' => 'Answer D',
+            'correct_option' => 'A',
+            'sort_order' => 5,
+        ]);
+        $this->assertTrue($quizWeek->fresh()->canPublish());
+
+        // Add more questions beyond 8 (e.g. up to 12 questions pool)
+        for ($i = 6; $i <= 12; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question number {$i}?",
@@ -43,6 +71,8 @@ class WeeklyQuizTest extends TestCase
             ]);
         }
 
+        // Must still be publishable with 12 questions in pool
+        $this->assertEquals(12, $quizWeek->fresh()->questions()->count());
         $this->assertTrue($quizWeek->fresh()->canPublish());
     }
 
@@ -57,7 +87,7 @@ class WeeklyQuizTest extends TestCase
             'status' => QuizWeek::STATUS_LIVE,
         ]);
 
-        for ($i = 1; $i <= 8; $i++) {
+        for ($i = 1; $i <= 15; $i++) {
             Question::create([
                 'quiz_week_id' => $quizWeek->id,
                 'question_text' => "Question {$i}?",
@@ -805,5 +835,101 @@ class WeeklyQuizTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Sunday · 8:30 PM');
     }
-}
 
+    public function test_completed_questions_api_returns_only_completed_weeks(): void
+    {
+        $baseWeek = (QuizWeek::max('week_number') ?? 0) + 20;
+
+        // 1. Completed week with questions
+        $completedWeek = QuizWeek::create([
+            'week_number' => $baseWeek + 1,
+            'quiz_date' => Carbon::now()->subDays(3)->toDateString(),
+            'start_at' => Carbon::now()->subDays(3),
+            'end_at' => Carbon::now()->subDays(2),
+            'status' => QuizWeek::STATUS_COMPLETED,
+        ]);
+
+        Question::create([
+            'quiz_week_id' => $completedWeek->id,
+            'question_text' => 'Completed question test?',
+            'option_a' => 'Answer A',
+            'option_b' => 'Answer B',
+            'option_c' => 'Answer C',
+            'option_d' => 'Answer D',
+            'correct_option' => 'C',
+            'sort_order' => 1,
+        ]);
+
+        // 2. Live week with secret questions
+        $liveWeek = QuizWeek::create([
+            'week_number' => $baseWeek + 2,
+            'quiz_date' => Carbon::today()->toDateString(),
+            'start_at' => Carbon::now()->subHour(),
+            'end_at' => Carbon::now()->addHour(),
+            'status' => QuizWeek::STATUS_LIVE,
+        ]);
+
+        Question::create([
+            'quiz_week_id' => $liveWeek->id,
+            'question_text' => 'SECRET live question must never leak!',
+            'option_a' => 'Secret A',
+            'option_b' => 'Secret B',
+            'option_c' => 'Secret C',
+            'option_d' => 'Secret D',
+            'correct_option' => 'A',
+            'sort_order' => 1,
+        ]);
+
+        // 3. Upcoming week
+        $upcomingWeek = QuizWeek::create([
+            'week_number' => $baseWeek + 3,
+            'quiz_date' => Carbon::today()->addDays(7)->toDateString(),
+            'start_at' => Carbon::now()->addDays(7),
+            'end_at' => Carbon::now()->addDays(8),
+            'status' => QuizWeek::STATUS_UPCOMING,
+        ]);
+
+        Question::create([
+            'quiz_week_id' => $upcomingWeek->id,
+            'question_text' => 'SECRET upcoming question must never leak!',
+            'option_a' => 'Secret Up A',
+            'option_b' => 'Secret Up B',
+            'option_c' => 'Secret Up C',
+            'option_d' => 'Secret Up D',
+            'correct_option' => 'B',
+            'sort_order' => 1,
+        ]);
+
+        // Call API for all completed questions
+        $response = $this->getJson('/quiz/api/completed-questions');
+        $response->assertStatus(200);
+
+        $json = $response->json();
+        $weekNumbers = collect($json)->pluck('week_number')->toArray();
+
+        $this->assertContains($completedWeek->week_number, $weekNumbers);
+        $this->assertNotContains($liveWeek->week_number, $weekNumbers);
+        $this->assertNotContains($upcomingWeek->week_number, $weekNumbers);
+
+        $response->assertSee('Completed question test?');
+        $response->assertDontSee('SECRET live question must never leak!');
+        $response->assertDontSee('SECRET upcoming question must never leak!');
+
+        // Attempting to query live week specifically must be rejected with 403
+        $forbiddenResponse = $this->getJson('/quiz/api/completed-questions?week=' . $liveWeek->week_number);
+        $forbiddenResponse->assertStatus(403);
+        $forbiddenResponse->assertJson(['code' => 'NOT_COMPLETED']);
+
+        // Attempting to query upcoming week specifically must be rejected with 403
+        $forbiddenUpcoming = $this->getJson('/quiz/api/completed-questions?week=' . $upcomingWeek->week_number);
+        $forbiddenUpcoming->assertStatus(403);
+        $forbiddenUpcoming->assertJson(['code' => 'NOT_COMPLETED']);
+
+        // Public page must include completedWeeks in initial data without leaking secret questions
+        $pageResponse = $this->get('/thibyan');
+        $pageResponse->assertStatus(200);
+        $pageResponse->assertSee('completedWeeks', false);
+        $pageResponse->assertSee('Completed question test?');
+        $pageResponse->assertDontSee('SECRET live question must never leak!');
+    }
+}

@@ -38,15 +38,17 @@ class QuizWeek extends Model
     {
         static::saved(function () {
             \Illuminate\Support\Facades\Cache::forget('quiz_public_schedule');
+            \Illuminate\Support\Facades\Cache::forget('quiz_completed_weeks_questions');
         });
 
         static::deleted(function () {
             \Illuminate\Support\Facades\Cache::forget('quiz_public_schedule');
+            \Illuminate\Support\Facades\Cache::forget('quiz_completed_weeks_questions');
         });
     }
 
     /**
-     * Questions belonging to this week (configured to exactly 6 questions)
+     * Questions belonging to this week (minimum 5 questions required, no upper limit)
      */
     public function questions(): HasMany
     {
@@ -100,12 +102,12 @@ class QuizWeek extends Model
     }
 
     /**
-     * Check if valid questions are configured (between 5 and 8 questions required)
+     * Check if valid questions are configured (minimum 5 questions required)
      */
     public function canPublish(): bool
     {
         $count = $this->questions()->count();
-        if ($count < 5 || $count > 8) {
+        if ($count < 5) {
             return false;
         }
 

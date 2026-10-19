@@ -26,6 +26,17 @@ class Question extends Model
         'sort_order' => 'integer',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('quiz_completed_weeks_questions');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('quiz_completed_weeks_questions');
+        });
+    }
+
     public function quizWeek(): BelongsTo
     {
         return $this->belongsTo(QuizWeek::class, 'quiz_week_id');

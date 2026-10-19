@@ -78,6 +78,7 @@ Route::get('/quiz', [WeeklyQuizController::class, 'index'])->name('quiz');
 Route::prefix('quiz/api')->middleware('throttle:quiz-api')->group(function () {
     Route::get('/schedule', [WeeklyQuizController::class, 'schedule'])->name('quiz.api.schedule');
     Route::get('/leaderboard', [WeeklyQuizController::class, 'leaderboard'])->name('quiz.api.leaderboard');
+    Route::get('/completed-questions', [WeeklyQuizController::class, 'completedQuestions'])->name('quiz.api.completed-questions');
     Route::post('/start', [WeeklyQuizController::class, 'startQuiz'])->name('quiz.api.start');
     Route::post('/submit', [WeeklyQuizController::class, 'submitQuiz'])->name('quiz.api.submit');
     Route::get('/result/{week}', [WeeklyQuizController::class, 'result'])->name('quiz.api.result');
@@ -109,6 +110,7 @@ Route::prefix('auth')->middleware('throttle:quiz-auth')->group(function () {
 Route::prefix('quiz')->middleware('throttle:quiz-api')->group(function () {
     Route::get('/weeks', [WeeklyQuizController::class, 'schedule']);
     Route::get('/current', [WeeklyQuizController::class, 'schedule']);
+    Route::get('/completed-questions', [WeeklyQuizController::class, 'completedQuestions']);
     Route::post('/start', [WeeklyQuizController::class, 'startQuiz']);
     Route::post('/submit', [WeeklyQuizController::class, 'submitQuiz']);
     Route::get('/result/{week}', [WeeklyQuizController::class, 'result']);
