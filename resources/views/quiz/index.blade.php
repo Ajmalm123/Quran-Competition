@@ -536,25 +536,35 @@ nav a:hover, nav button:hover {
   background: var(--bg-tan);
   padding: 36px 0;
 }
+.winner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
 .winner-card {
-  max-width: 618px;
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   background: var(--coral-grad);
   border: 1px solid rgba(239, 150, 106, 0.5);
   border-radius: 28px;
-  padding: 22px 26px;
+  padding: 24px 26px;
   display: flex;
   align-items: center;
   gap: 22px;
   box-shadow: 0 12px 30px rgba(196, 53, 55, 0.15);
+  box-sizing: border-box;
 }
 .winner-trophy {
   font-size: 44px;
   line-height: 1;
+  flex-shrink: 0;
 }
 .winner-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 .winner-sub {
   color: #F3DFC4;
@@ -569,12 +579,97 @@ nav a:hover, nav button:hover {
   font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .winner-place {
   color: var(--bg-tan);
   font-family: 'Figtree', sans-serif;
   font-size: 15px;
   opacity: 0.9;
+}
+
+/* ================= INSTAGRAM CARD ================= */
+.insta-card {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: var(--bg-card-light);
+  border: 1px solid var(--border-card);
+  border-radius: 28px;
+  padding: 24px 26px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 24px rgba(89, 51, 32, 0.06);
+  box-sizing: border-box;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.insta-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(89, 51, 32, 0.12);
+  border-color: rgba(133, 77, 58, 0.45);
+}
+.insta-icon-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(220, 39, 67, 0.28);
+  transition: transform 0.15s ease;
+}
+.insta-card:hover .insta-icon-badge {
+  transform: scale(1.05);
+}
+.insta-icon-badge svg {
+  display: block;
+}
+.insta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.insta-text {
+  font-family: "sama-malayalam", 'Noto Sans Malayalam', 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink-brown);
+  letter-spacing: -0.01em;
+}
+.insta-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Figtree', 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #854D3A;
+}
+.insta-handle {
+  font-weight: 700;
+  color: #854D3A;
+}
+.insta-arrow {
+  font-size: 13px;
+  transition: transform 0.15s ease;
+}
+.insta-card:hover .insta-arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 860px) {
+  .winner-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 /* ================= WEEKLY QUIZ SCHEDULE SECTION ================= */
@@ -2249,9 +2344,13 @@ a.forgot-option-card:hover .forgot-option-arrow {
   .winner-section {
     padding: 20px 0 24px;
   }
+  .winner-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
   .winner-card {
-    padding: 14px 16px;
-    border-radius: 18px;
+    padding: 16px 18px;
+    border-radius: 20px;
     gap: 14px;
   }
   .winner-trophy {
@@ -2267,6 +2366,52 @@ a.forgot-option-card:hover .forgot-option-arrow {
   }
   .winner-place {
     font-size: 12.5px;
+  }
+  .insta-card {
+    padding: 16px 18px;
+    border-radius: 20px;
+    gap: 14px;
+  }
+  .insta-icon-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+  }
+  .insta-icon-badge svg {
+    width: 20px;
+    height: 20px;
+  }
+  .insta-info {
+    gap: 4px;
+  }
+  .insta-text {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .insta-cta {
+    font-size: 12.5px;
+  }
+
+  @media (max-width: 400px) {
+    .insta-card {
+      padding: 14px 14px;
+      gap: 12px;
+    }
+    .insta-icon-badge {
+      width: 36px;
+      height: 36px;
+    }
+    .insta-icon-badge svg {
+      width: 18px;
+      height: 18px;
+    }
+    .insta-text {
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .insta-cta {
+      font-size: 11.5px;
+    }
   }
 
   /* Schedule */
@@ -3370,25 +3515,54 @@ function WinnerBanner({ weeks, now = Date.now() }) {
   };
 
   return html`
-    <section className="winner-section">
+    <section className="winner-section" aria-label="Winner and Announcements">
       <div className="wrap">
-        <div className="winner-card">
-          <div className="winner-trophy" aria-hidden="true">🏆</div>
-          <div className="winner-info">
-            ${bannerState === "winner" ? html`
-              <div className="winner-sub">
-                ${formatCardDate(displayData.start)} · Week ${displayData.id} Winner
-              </div>
-              <div className="winner-name">${displayData.winner.name}</div>
-              <div className="winner-place">
-                ${displayData.winner.territory || displayData.winner.locality || "Kerala"}
-              </div>
-            ` : html`
-              <div className="winner-sub">Week ${displayData.weekId}</div>
-              <div className="winner-name">Winner to Be Announced</div>
-              <div className="winner-place">${displayData.announcementDay || "Saturday · 7:00 PM"}</div>
-            `}
+        <div className="winner-grid">
+          <div className="winner-card">
+            <div className="winner-trophy" aria-hidden="true">🏆</div>
+            <div className="winner-info">
+              ${bannerState === "winner" ? html`
+                <div className="winner-sub">
+                  ${formatCardDate(displayData.start)} · Week ${displayData.id} Winner
+                </div>
+                <div className="winner-name">${displayData.winner.name}</div>
+                <div className="winner-place">
+                  ${displayData.winner.territory || displayData.winner.locality || "Kerala"}
+                </div>
+              ` : html`
+                <div className="winner-sub">Week ${displayData.weekId}</div>
+                <div className="winner-name">Winner to Be Announced</div>
+                <div className="winner-place">${displayData.announcementDay || "Saturday · 7:00 PM"}</div>
+              `}
+            </div>
           </div>
+
+          <a
+            href="https://www.instagram.com/apaslamquranaward/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="insta-card"
+            title="Follow @apaslamquranaward on Instagram"
+            aria-label="ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും. Follow @apaslamquranaward on Instagram"
+          >
+            <div className="insta-icon-badge" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </div>
+            <div className="insta-info">
+              <div className="insta-text">
+                ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും
+              </div>
+              <div className="insta-cta">
+                <span>Follow:</span>
+                <span className="insta-handle">@apaslamquranaward</span>
+                <span className="insta-arrow" aria-hidden="true">↗</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>
