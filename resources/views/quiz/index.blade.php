@@ -710,41 +710,10 @@ nav a:hover, nav button:hover {
 @media (max-width: 860px) {
   .winner-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .winner-social-col {
-    gap: 12px;
-  }
-  .winner-card {
-    padding: 18px 20px;
-    border-radius: 22px;
     gap: 16px;
   }
-  .insta-card,
-  .wa-card {
-    padding: 14px 16px;
-    border-radius: 20px;
+  .winner-social-col {
     gap: 14px;
-  }
-  .insta-icon-badge,
-  .wa-icon-badge {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-  }
-  .insta-icon-badge svg,
-  .wa-icon-badge svg {
-    width: 20px;
-    height: 20px;
-  }
-  .insta-text,
-  .wa-text {
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  .insta-cta,
-  .wa-cta {
-    font-size: 12.5px;
   }
 }
 
@@ -2443,49 +2412,66 @@ a.forgot-option-card:hover .forgot-option-arrow {
   .winner-place {
     font-size: 12.5px;
   }
-  .insta-card {
+  .winner-social-col {
+    gap: 12px;
+  }
+  .insta-card,
+  .wa-card {
     padding: 16px 18px;
     border-radius: 20px;
     gap: 14px;
   }
-  .insta-icon-badge {
+  .insta-icon-badge,
+  .wa-icon-badge {
     width: 40px;
     height: 40px;
     border-radius: 11px;
   }
-  .insta-icon-badge svg {
+  .insta-icon-badge svg,
+  .wa-icon-badge svg {
     width: 20px;
     height: 20px;
   }
-  .insta-info {
+  .insta-info,
+  .wa-info {
     gap: 4px;
   }
-  .insta-text {
+  .insta-text,
+  .wa-text {
     font-size: 13.5px;
     line-height: 1.4;
   }
-  .insta-cta {
+  .insta-cta,
+  .wa-cta {
     font-size: 12.5px;
   }
 
   @media (max-width: 400px) {
-    .insta-card {
+    .winner-social-col {
+      gap: 10px;
+    }
+    .insta-card,
+    .wa-card {
       padding: 14px 14px;
       gap: 12px;
     }
-    .insta-icon-badge {
+    .insta-icon-badge,
+    .wa-icon-badge {
       width: 36px;
       height: 36px;
     }
-    .insta-icon-badge svg {
+    .insta-icon-badge svg,
+    .wa-icon-badge svg {
       width: 18px;
       height: 18px;
     }
-    .insta-text {
+    .insta-text,
+    .wa-text {
       font-size: 12.5px;
       line-height: 1.35;
     }
-    .insta-cta {
+    .insta-cta,
+    .wa-cta {
       font-size: 11.5px;
     }
   }
