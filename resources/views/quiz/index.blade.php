@@ -710,10 +710,41 @@ nav a:hover, nav button:hover {
 @media (max-width: 860px) {
   .winner-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 12px;
   }
   .winner-social-col {
+    gap: 12px;
+  }
+  .winner-card {
+    padding: 18px 20px;
+    border-radius: 22px;
+    gap: 16px;
+  }
+  .insta-card,
+  .wa-card {
+    padding: 14px 16px;
+    border-radius: 20px;
     gap: 14px;
+  }
+  .insta-icon-badge,
+  .wa-icon-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .insta-icon-badge svg,
+  .wa-icon-badge svg {
+    width: 20px;
+    height: 20px;
+  }
+  .insta-text,
+  .wa-text {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .insta-cta,
+  .wa-cta {
+    font-size: 12.5px;
   }
 }
 
@@ -3625,7 +3656,7 @@ function WinnerBanner({ weeks, now = Date.now() }) {
               </div>
               <div className="wa-info">
                 <div className="wa-text">
-                  ക്വിസ് അറിയിപ്പുകളും മത്സരവിവരങ്ങളും വിജയികളുടെ വിവരങ്ങളും പ്രധാന അപ്‌ഡേറ്റുകളും അറിയാൻ തിബ്‌യാൻ വാട്‌സ്ആപ്പ് കമ്മ്യൂണിറ്റിയിൽ ജോയിൻ ചെയ്യൂ
+                  ക്വിസ് അറിയിപ്പുകളും മത്സരവിവരങ്ങളും വിജയികളുടെ വിവരങ്ങളും പ്രധാന അപ്‌ഡേറ്റുകളും അറിയാൻ
                 </div>
                 <div className="wa-cta">
                   <span>Join:</span>
