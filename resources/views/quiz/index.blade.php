@@ -589,22 +589,31 @@ nav a:hover, nav button:hover {
   opacity: 0.9;
 }
 
-/* ================= INSTAGRAM CARD ================= */
-.insta-card {
+/* ================= INSTAGRAM & WHATSAPP SOCIAL CARDS ================= */
+.winner-social-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  justify-content: stretch;
+}
+.insta-card,
+.wa-card {
   width: 100%;
   max-width: 100%;
   margin: 0;
   background: var(--bg-card-light);
   border: 1px solid var(--border-card);
-  border-radius: 28px;
-  padding: 24px 26px;
+  border-radius: 24px;
+  padding: 18px 22px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   box-shadow: 0 8px 24px rgba(89, 51, 32, 0.06);
   box-sizing: border-box;
   text-decoration: none;
   cursor: pointer;
+  flex: 1;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .insta-card:hover {
@@ -612,9 +621,14 @@ nav a:hover, nav button:hover {
   box-shadow: 0 12px 28px rgba(89, 51, 32, 0.12);
   border-color: rgba(133, 77, 58, 0.45);
 }
+.wa-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(37, 211, 102, 0.18);
+  border-color: rgba(37, 211, 102, 0.55);
+}
 .insta-icon-badge {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 14px;
   background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   display: flex;
@@ -624,19 +638,35 @@ nav a:hover, nav button:hover {
   box-shadow: 0 4px 14px rgba(220, 39, 67, 0.28);
   transition: transform 0.15s ease;
 }
-.insta-card:hover .insta-icon-badge {
+.wa-icon-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.32);
+  transition: transform 0.15s ease;
+}
+.insta-card:hover .insta-icon-badge,
+.wa-card:hover .wa-icon-badge {
   transform: scale(1.05);
 }
-.insta-icon-badge svg {
+.insta-icon-badge svg,
+.wa-icon-badge svg {
   display: block;
 }
-.insta-info {
+.insta-info,
+.wa-info {
   display: flex;
   flex-direction: column;
   gap: 5px;
   min-width: 0;
 }
-.insta-text {
+.insta-text,
+.wa-text {
   font-family: "sama-malayalam", 'Noto Sans Malayalam', 'DM Sans', sans-serif;
   font-size: 15.5px;
   font-weight: 600;
@@ -644,24 +674,36 @@ nav a:hover, nav button:hover {
   color: var(--ink-brown);
   letter-spacing: -0.01em;
 }
-.insta-cta {
+.insta-cta,
+.wa-cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-family: 'Figtree', 'DM Sans', sans-serif;
   font-size: 13.5px;
   font-weight: 600;
+}
+.insta-cta {
   color: #854D3A;
 }
 .insta-handle {
   font-weight: 700;
   color: #854D3A;
 }
-.insta-arrow {
+.wa-cta {
+  color: #0d8052;
+}
+.wa-handle {
+  font-weight: 700;
+  color: #0d8052;
+}
+.insta-arrow,
+.wa-arrow {
   font-size: 13px;
   transition: transform 0.15s ease;
 }
-.insta-card:hover .insta-arrow {
+.insta-card:hover .insta-arrow,
+.wa-card:hover .wa-arrow {
   transform: translate(2px, -2px);
 }
 
@@ -669,6 +711,9 @@ nav a:hover, nav button:hover {
   .winner-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+  .winner-social-col {
+    gap: 14px;
   }
 }
 
@@ -3537,32 +3582,59 @@ function WinnerBanner({ weeks, now = Date.now() }) {
             </div>
           </div>
 
-          <a
-            href="https://www.instagram.com/apaslamquranaward/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="insta-card"
-            title="Follow @apaslamquranaward on Instagram"
-            aria-label="ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും. Follow @apaslamquranaward on Instagram"
-          >
-            <div className="insta-icon-badge" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </div>
-            <div className="insta-info">
-              <div className="insta-text">
-                ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും
+          <div className="winner-social-col">
+            <a
+              href="https://www.instagram.com/apaslamquranaward/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="insta-card"
+              title="Follow @apaslamquranaward on Instagram"
+              aria-label="ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും. Follow @apaslamquranaward on Instagram"
+            >
+              <div className="insta-icon-badge" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
               </div>
-              <div className="insta-cta">
-                <span>Follow:</span>
-                <span className="insta-handle">@apaslamquranaward</span>
-                <span className="insta-arrow" aria-hidden="true">↗</span>
+              <div className="insta-info">
+                <div className="insta-text">
+                  ഓരോ ആഴ്ചയിലെയും വിജയിയെ ഇൻസ്റ്റാഗ്രാം പേജിൽ ലൈവ് ആയി തിരഞ്ഞെടുക്കും
+                </div>
+                <div className="insta-cta">
+                  <span>Follow:</span>
+                  <span className="insta-handle">@apaslamquranaward</span>
+                  <span className="insta-arrow" aria-hidden="true">↗</span>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
+
+            <a
+              href="https://chat.whatsapp.com/DFs4YeP0t26G8M3meX1BC0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wa-card"
+              title="Join Thibyan WhatsApp Community"
+              aria-label="ക്വിസ് അറിയിപ്പുകളും മത്സരവിവരങ്ങളും വിജയികളുടെ വിവരങ്ങളും പ്രധാന അപ്‌ഡേറ്റുകളും അറിയാൻ തിബ്‌യാൻ വാട്‌സ്ആപ്പ് കമ്മ്യൂണിറ്റിയിൽ ജോയിൻ ചെയ്യൂ. Join WhatsApp Community"
+            >
+              <div className="wa-icon-badge" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.456 5.711 1.457h.004c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.405z"></path>
+                </svg>
+              </div>
+              <div className="wa-info">
+                <div className="wa-text">
+                  ക്വിസ് അറിയിപ്പുകളും മത്സരവിവരങ്ങളും വിജയികളുടെ വിവരങ്ങളും പ്രധാന അപ്‌ഡേറ്റുകളും അറിയാൻ തിബ്‌യാൻ വാട്‌സ്ആപ്പ് കമ്മ്യൂണിറ്റിയിൽ ജോയിൻ ചെയ്യൂ
+                </div>
+                <div className="wa-cta">
+                  <span>Join:</span>
+                  <span className="wa-handle">WhatsApp Community</span>
+                  <span className="wa-arrow" aria-hidden="true">↗</span>
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </section>
