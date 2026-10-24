@@ -41,13 +41,13 @@ class QuizOverviewWidget extends BaseWidget
         $totalUsers = User::count();
         $verifiedUsers = User::where('whatsapp_verified', true)->count();
 
-        // 3. Current week attempts and 30/30 count
+        // 3. Current week attempts and 50/50 count
         $attemptsCount = 0;
         $perfectCount = 0;
         if ($currentWeek) {
             $attemptsCount = QuizAttempt::where('quiz_week_id', $currentWeek->id)->count();
             $perfectCount = QuizAttempt::where('quiz_week_id', $currentWeek->id)
-                ->where('weekly_score', 30)
+                ->where('weekly_score', 50)
                 ->where('status', QuizAttempt::STATUS_COMPLETED)
                 ->count();
         }
@@ -73,7 +73,7 @@ class QuizOverviewWidget extends BaseWidget
                 ->color('primary'),
 
             Stat::make('Weekly Attempts', number_format($attemptsCount))
-                ->description("{$perfectCount} participants achieved 30/30")
+                ->description("{$perfectCount} participants achieved 50/50")
                 ->descriptionIcon('heroicon-m-clipboard-document-check')
                 ->color('info'),
 

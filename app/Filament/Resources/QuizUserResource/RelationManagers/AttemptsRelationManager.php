@@ -57,19 +57,19 @@ class AttemptsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('weekly_score')
                     ->label('Weekly Score')
                     ->badge()
-                    ->formatStateUsing(fn ($state) => "{$state} / 30")
+                    ->formatStateUsing(fn ($state) => "{$state} / 50")
                     ->colors([
-                        'success' => 30,
-                        'warning' => 20,
-                        'info' => 10,
+                        'success' => 50,
+                        'warning' => 30,
+                        'info' => 20,
                         'gray' => 0,
                     ])
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_perfect')
-                    ->label('Perfect 30')
+                    ->label('Perfect 50/50')
                     ->boolean()
-                    ->state(fn (QuizAttempt $record) => $record->weekly_score === 30)
+                    ->state(fn (QuizAttempt $record) => $record->weekly_score === 50)
                     ->trueIcon('heroicon-s-star')
                     ->trueColor('warning')
                     ->falseIcon('heroicon-o-minus')

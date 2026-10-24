@@ -120,7 +120,7 @@ class QuizResultResource extends Resource
                     ]),
 
                 Infolists\Components\Section::make('Attempted Questions & Submitted Answers')
-                    ->description('Review the 3 randomly selected questions, selected options, and correctness.')
+                    ->description('Review the 5 randomly selected questions, selected options, and correctness.')
                     ->schema([
                         Infolists\Components\RepeatableEntry::make('attemptQuestions')
                             ->label('')

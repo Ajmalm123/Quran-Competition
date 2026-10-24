@@ -218,7 +218,7 @@ class WeeklyQuizSeeder extends Seeder
                     'drawn_at' => $now,
                     'confirmed_at' => $now,
                     'published_at' => $now,
-                    'notes' => 'Weekly lucky draw selected from 30/30 participants.',
+                    'notes' => 'Weekly lucky draw selected from 50/50 participants.',
                 ]
             );
         }

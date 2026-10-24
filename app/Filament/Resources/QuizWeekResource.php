@@ -125,8 +125,14 @@ class QuizWeekResource extends Resource
                 Tables\Columns\TextColumn::make('questions_count')
                     ->label('Questions Pool')
                     ->badge()
-                    ->state(fn ($record) => "{$record->questions_count} / 6 Questions")
-                    ->color(fn ($record) => $record->questions_count === 6 ? 'success' : 'warning')
+                    ->state(fn ($record) => "{$record->questions_count} Questions")
+                    ->description(fn ($record) => $record->questions_count < 5 ? 'Min. 5 required' : '5 served per user')
+                    ->color(fn ($record) => match (true) {
+                        $record->questions_count >= 5 => 'success',
+                        $record->questions_count > 0 => 'warning',
+                        default => 'danger',
+                    })
+                    ->tooltip(fn ($record) => "Pool contains {$record->questions_count} questions. 5 questions are randomly selected per participant.")
                     ->alignCenter(),
 
                 Tables\Columns\TextColumn::make('computed_status')

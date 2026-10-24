@@ -932,4 +932,42 @@ class WeeklyQuizTest extends TestCase
         $pageResponse->assertSee('Completed question test?');
         $pageResponse->assertDontSee('SECRET live question must never leak!');
     }
+
+    public function test_admin_quiz_weeks_table_renders_questions_pool_correctly(): void
+    {
+        $admin = Admin::first() ?? Admin::create([
+            'name' => 'Admin Pool Tester',
+            'email' => 'admin_pool@test.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $weekNumber = (QuizWeek::max('week_number') ?? 0) + 50;
+        $quizWeek = QuizWeek::create([
+            'week_number' => $weekNumber,
+            'quiz_date' => Carbon::today(),
+            'start_at' => Carbon::now()->subHour(),
+            'end_at' => Carbon::now()->addHour(),
+            'status' => QuizWeek::STATUS_LIVE,
+        ]);
+
+        for ($i = 1; $i <= 10; $i++) {
+            Question::create([
+                'quiz_week_id' => $quizWeek->id,
+                'question_text' => "Pool Question {$i}?",
+                'option_a' => 'A',
+                'option_b' => 'B',
+                'option_c' => 'C',
+                'option_d' => 'D',
+                'correct_option' => 'A',
+                'sort_order' => $i,
+            ]);
+        }
+
+        $response = $this->actingAs($admin, 'admin')->get('/admin/quiz-weeks');
+        $response->assertStatus(200);
+        $response->assertSee('10 Questions');
+        $response->assertSee('5 served per user');
+        $response->assertDontSee('/ 6 Questions');
+    }
 }
+

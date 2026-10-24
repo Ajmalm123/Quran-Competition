@@ -60,6 +60,6 @@ class QuizAttempt extends Model
 
     public function isPerfectScore(): bool
     {
-        return $this->weekly_score === 30 && $this->status === self::STATUS_COMPLETED;
+        return $this->weekly_score === 50 && $this->status === self::STATUS_COMPLETED;
     }
 }
