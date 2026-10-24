@@ -2906,7 +2906,7 @@ window.INITIAL_DATA = {
 <script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
 @verbatim
 <script>
-const { useState, useEffect, useCallback } = React;
+const { useState, useEffect, useCallback, useMemo } = React;
 const html = htm.bind(React.createElement);
 
 /* ============ CSRF & API LAYER ============ */
@@ -4672,6 +4672,19 @@ function QuizTaking({ user, onFinish, onExit }) {
     setErr("");
     try {
       const res = await api.startQuiz(user.id);
+      if (res && Array.isArray(res.questions)) {
+        res.questions = res.questions.map(q => {
+          const indexed = (q.options || []).map((text, originalIndex) => ({
+            text,
+            originalIndex
+          }));
+          for (let j = indexed.length - 1; j > 0; j--) {
+            const k = Math.floor(Math.random() * (j + 1));
+            [indexed[j], indexed[k]] = [indexed[k], indexed[j]];
+          }
+          return { ...q, shuffledOptions: indexed };
+        });
+      }
       setData(res);
       setStarted(true);
     } catch (e) {
@@ -4764,6 +4777,11 @@ function QuizTaking({ user, onFinish, onExit }) {
   const last = i === data.questions.length - 1;
   const sel = ans[i];
 
+  const currentOptions = q.shuffledOptions || (q.options || []).map((text, originalIndex) => ({
+    text,
+    originalIndex
+  }));
+
   const next = async () => {
     if (!last) return setI(i + 1);
     setBusy(true);
@@ -4802,13 +4820,13 @@ function QuizTaking({ user, onFinish, onExit }) {
         <h3 className="quiz-question-title">${q.text}</h3>
 
         <div>
-          ${q.options.map((opt, optIdx) => html`
+          ${currentOptions.map((opt) => html`
             <button 
-              key=${optIdx} 
-              className=${"quiz-opt-btn " + (sel === optIdx ? "selected" : "")} 
-              onClick=${() => { const a = [...ans]; a[i] = optIdx; setAns(a); }}>
-              <span className="quiz-opt-text">${opt}</span>
-              ${sel === optIdx ? html`
+              key=${opt.originalIndex} 
+              className=${"quiz-opt-btn " + (sel === opt.originalIndex ? "selected" : "")} 
+              onClick=${() => { const a = [...ans]; a[i] = opt.originalIndex; setAns(a); }}>
+              <span className="quiz-opt-text">${opt.text}</span>
+              ${sel === opt.originalIndex ? html`
                 <span className="quiz-opt-check" aria-hidden="true">
                   <${CheckTickIcon} size=${22} color="var(--ink-brown)"/>
                 </span>
