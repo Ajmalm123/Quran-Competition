@@ -2922,7 +2922,14 @@ const api = {
       throw { code: 'THROTTLED', message: ERR.THROTTLED };
     }
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw { code: data.code || 'NETWORK', message: data.message };
+    if (!res.ok) {
+      const code = data.code || (res.status === 401 ? 'UNAUTHORIZED' : 'NETWORK');
+      if (res.status === 401 || code === 'UNAUTHORIZED') {
+        try { localStorage.removeItem('fnq_user'); } catch(e){}
+        window.dispatchEvent(new CustomEvent('auth:unauthorized', { detail: { message: data.message } }));
+      }
+      throw { code, message: data.message || ERR[code] || ERR.NETWORK };
+    }
     return data;
   },
 
@@ -3138,7 +3145,8 @@ const ERR = {
   MAIL_ERROR: "ഇമെയിൽ അയക്കാൻ കഴിഞ്ഞില്ല. ദയവായി അല്പം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കുക അല്ലെങ്കിൽ വാട്സ്ആപ്പ് വഴി ബന്ധപ്പെടുക.",
   INVALID_EMAIL: "ദയവായി സാധുവായ ഒരു ഇമെയിൽ വിലാസം നൽകുക.",
   CLOSED: "ഈ ആഴ്ചയിലെ ക്വിസ് ഇപ്പോൾ ക്ലോസ് ചെയ്തിരിക്കുന്നു.",
-  DONE: "നിങ്ങൾ ഈ ആഴ്ചയിലെ ക്വിസ് ഇതിനകം പൂർത്തിയാക്കിയിട്ടുണ്ട്."
+  DONE: "നിങ്ങൾ ഈ ആഴ്ചയിലെ ക്വിസ് ഇതിനകം പൂർത്തിയാക്കിയിട്ടുണ്ട്.",
+  UNAUTHORIZED: "നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക."
 };
 
 const FALLBACK_COUNTRIES = [
@@ -4052,8 +4060,8 @@ function QuizRules() {
 }
 
 /* Register / Login Modal (Figma Nodes 1:340 & 1:386) */
-function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
-  const [tab, setTab] = useState("register"); // 'register' or 'login'
+function AuthModal({ onDone, onCancel, resetInfo, onClearReset, initialTab = "register", authError = "" }) {
+  const [tab, setTab] = useState(initialTab || "register"); // 'register' or 'login'
   const [step, setStep] = useState(resetInfo?.token ? "reset" : "form");
   const [loginMethod, setLoginMethod] = useState("phone"); // 'phone' or 'email'
   const [countryCode, setCountryCode] = useState("+91");
@@ -4069,7 +4077,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
   });
 
   const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState(authError || "");
   const [info, setInfo] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
@@ -4644,7 +4652,7 @@ function AuthModal({ onDone, onCancel, resetInfo, onClearReset }) {
 }
 
 /* Taking the Quiz screen */
-function QuizTaking({ user, onFinish, onExit }) {
+function QuizTaking({ user, onFinish, onExit, onNeedAuth }) {
   const [started, setStarted] = useState(false);
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
@@ -4671,7 +4679,7 @@ function QuizTaking({ user, onFinish, onExit }) {
     setLoading(true);
     setErr("");
     try {
-      const res = await api.startQuiz(user.id);
+      const res = await api.startQuiz(user?.id);
       if (res && Array.isArray(res.questions)) {
         res.questions = res.questions.map(q => {
           const indexed = (q.options || []).map((text, originalIndex) => ({
@@ -4688,6 +4696,10 @@ function QuizTaking({ user, onFinish, onExit }) {
       setData(res);
       setStarted(true);
     } catch (e) {
+      if (e.code === "UNAUTHORIZED" && onNeedAuth) {
+        onNeedAuth("നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്ത് ക്വിസ് ആരംഭിക്കുക.");
+        return;
+      }
       setErr(e.code || "NETWORK");
       setStarted(true);
     } finally {
@@ -4764,9 +4776,24 @@ function QuizTaking({ user, onFinish, onExit }) {
   if (err) return html`
     <div className="wrap">
       <div className="quiz-card" style=${{ textAlign: "center" }}>
-        <h2 style=${{ marginBottom: 12 }}>${err === "DONE" ? "ക്വിസ് പൂർത്തിയായി" : err === "CLOSED" ? "ക്വിസ് ക്ലോസ്ഡ് ആണ്" : "ക്ഷമിക്കുക"}</h2>
+        <h2 style=${{ marginBottom: 12 }}>${err === "DONE" ? "ക്വിസ് പൂർത്തിയായി" : err === "CLOSED" ? "ക്വിസ് ക്ലോസ്ഡ് ആണ്" : err === "UNAUTHORIZED" ? "ലോഗിൻ കാലാവധി കഴിഞ്ഞു" : "ക്ഷമിക്കുക"}</h2>
         <${Err} code=${err} retry=${["NETWORK"].includes(err) ? handleRetry : null}/>
-        <button className="auth-back-link" style=${{ marginTop: 18 }} onClick=${onExit}>Back to home</button>
+        ${err === "UNAUTHORIZED" && onNeedAuth ? html`
+          <button 
+            type="button"
+            className="quiz-intro-start-btn" 
+            style=${{ marginTop: 18, width: "100%", maxWidth: 280, margin: "18px auto 0", display: "inline-block" }} 
+            onClick=${() => onNeedAuth("നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.")}>
+            വീണ്ടും ലോഗിൻ ചെയ്യുക →
+          </button>
+        ` : null}
+        <button className="auth-back-link" style=${{ marginTop: 18 }} onClick=${() => {
+          if (err === "UNAUTHORIZED") {
+            try { localStorage.removeItem('fnq_user'); } catch(e){}
+            if (onNeedAuth) { onNeedAuth(); return; }
+          }
+          onExit();
+        }}>Back to home</button>
       </div>
     </div>
   `;
@@ -4787,9 +4814,13 @@ function QuizTaking({ user, onFinish, onExit }) {
     setBusy(true);
     setE2("");
     try {
-      const res = await api.submit(user.id, ans);
+      const res = await api.submit(user?.id, ans);
       onFinish(res);
     } catch (e) {
+      if (e.code === "UNAUTHORIZED" && onNeedAuth) {
+        onNeedAuth("നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.");
+        return;
+      }
       setE2(e.message || ERR[e.code] || "NETWORK");
       setBusy(false);
     }
@@ -4885,6 +4916,10 @@ function App() {
       return window.INITIAL_DATA.user;
     }
     try {
+      if (window.INITIAL_DATA && window.INITIAL_DATA.user === null) {
+        localStorage.removeItem('fnq_user');
+        return null;
+      }
       const cached = localStorage.getItem('fnq_user');
       return cached ? JSON.parse(cached) : null;
     } catch (e) {
@@ -4896,6 +4931,8 @@ function App() {
   const [tick, setTick] = useState(0);
   const [resetInfo, setResetInfo] = useState(null);
   const [notice, setNotice] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authInitialTab, setAuthInitialTab] = useState("register");
   const now = useNow();
 
   useEffect(() => {
@@ -4903,12 +4940,27 @@ function App() {
       if (serverUser) {
         setUser(serverUser);
         try { localStorage.setItem('fnq_user', JSON.stringify(serverUser)); } catch(e){}
-      } else if (!window.INITIAL_DATA?.user) {
+      } else {
         try { localStorage.removeItem('fnq_user'); } catch(e){}
         setUser(null);
       }
     });
+
+    const handleUnauthorized = (e) => {
+      const msg = e?.detail?.message || "നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.";
+      handleRequireLogin(msg);
+    };
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
   }, []);
+
+  const handleRequireLogin = (msg) => {
+    try { localStorage.removeItem('fnq_user'); } catch(e){}
+    setUser(null);
+    setAuthError(msg || "നിങ്ങളുടെ ലോഗിൻ കാലാവധി കഴിഞ്ഞിരിക്കുന്നു. ദയവായി വീണ്ടും ലോഗിൻ ചെയ്യുക.");
+    setAuthInitialTab("login");
+    setView("auth");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -4941,6 +4993,8 @@ function App() {
     const isLive = sch.data && Array.isArray(sch.data) && sch.data.some(w => wkStatus(w, Date.now()) === "live");
     if (!user) {
       clearResetParams();
+      setAuthError("");
+      setAuthInitialTab("register");
       setView("auth");
     } else if (isLive) {
       setView("quiz");
@@ -4951,6 +5005,7 @@ function App() {
 
   const handleAuthDone = (u, mode = 'register') => {
     clearResetParams();
+    setAuthError("");
     try { localStorage.setItem('fnq_user', JSON.stringify(u)); } catch(e){}
     setUser(u);
     setTick(t => t + 1);
@@ -4975,6 +5030,7 @@ function App() {
     await api.logout();
     setUser(null);
     setNotice("");
+    setAuthError("");
     setTick(t => t + 1);
     setView("home");
   };
@@ -4995,9 +5051,11 @@ function App() {
 
         ${view === "auth" && html`
           <${AuthModal} 
-            onCancel=${() => { clearResetParams(); setView("home"); }} 
+            onCancel=${() => { clearResetParams(); setAuthError(""); setView("home"); }} 
             resetInfo=${resetInfo} 
             onClearReset=${clearResetParams} 
+            initialTab=${authInitialTab}
+            authError=${authError}
             onDone=${handleAuthDone}/>
         `}
 
@@ -5005,6 +5063,7 @@ function App() {
           <${QuizTaking} 
             user=${user} 
             onExit=${() => setView("home")} 
+            onNeedAuth=${handleRequireLogin}
             onFinish=${r => { setRes(r); setTick(t => t + 1); setView("result"); }}/>
         `}
 
