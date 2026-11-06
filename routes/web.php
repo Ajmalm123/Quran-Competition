@@ -20,7 +20,7 @@ Route::get('/apply', function () {
     $abroadZones = Zone::where('area', 'Abroad')->select('id', 'name')->get();
     $nativeZones = Zone::where('area', 'Native')->select('id', 'name')->get();
     $categories = \App\Models\Category::where('is_active', true)->orderBy('id', 'desc')->get();
-    return view('welcome-old', compact('abroadZones', 'nativeZones', 'categories'));
+    return view('welcome', compact('abroadZones', 'nativeZones', 'categories'));
 })->name('apply');
 
 Route::get('/application', function () {
@@ -144,4 +144,3 @@ Route::middleware(['web', 'auth:admin'])->prefix('admin/lucky-draw')->group(func
     Route::post('/api/publish', [LuckyDrawStageController::class, 'publishWinner'])->name('admin.lucky-draw.api.publish');
     Route::post('/api/redraw', [LuckyDrawStageController::class, 'redraw'])->name('admin.lucky-draw.api.redraw');
 });
-
