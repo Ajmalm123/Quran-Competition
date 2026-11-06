@@ -1098,20 +1098,19 @@ nav a:hover, nav button:hover {
 .qa-tabs-scroll {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  overflow-x: auto;
-  padding: 4px 2px 14px;
+  padding: 4px 0 6px;
   margin-bottom: 20px;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
 }
 .qa-tab-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 9px 20px;
   border-radius: 99px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 600;
   border: 1px solid var(--border-tan);
@@ -1121,6 +1120,7 @@ nav a:hover, nav button:hover {
   white-space: nowrap;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 .qa-tab-btn:hover {
   border-color: var(--border-card);
@@ -1132,17 +1132,6 @@ nav a:hover, nav button:hover {
   color: #FFFFFF;
   border-color: var(--bg-hero);
   box-shadow: 0 4px 14px rgba(133, 77, 58, 0.28);
-}
-.qa-tab-btn .tab-count {
-  font-size: 11px;
-  padding: 2px 7px;
-  border-radius: 99px;
-  background: rgba(0, 0, 0, 0.08);
-  font-weight: 700;
-}
-.qa-tab-btn.active .tab-count {
-  background: rgba(255, 255, 255, 0.25);
-  color: #FFFFFF;
 }
 
 /* Selected Week Info Strip */
@@ -1291,6 +1280,16 @@ nav a:hover, nav button:hover {
   .qa-section {
     padding: 34px 0 32px;
   }
+  .qa-tabs-scroll {
+    gap: 8px;
+    padding: 2px 0 4px;
+    margin-bottom: 16px;
+  }
+  .qa-tab-btn {
+    padding: 8px 16px;
+    font-size: 13.5px;
+    min-height: 38px;
+  }
   .qa-q-row {
     padding: 12px 14px;
     gap: 10px;
@@ -1305,6 +1304,7 @@ nav a:hover, nav button:hover {
   .qa-q-text {
     font-size: 14px;
     margin-bottom: 6px;
+    word-break: break-word;
   }
   .qa-ans-chip {
     padding: 4px 10px;
@@ -1315,6 +1315,7 @@ nav a:hover, nav button:hover {
   }
   .qa-ans-val {
     font-size: 13.5px;
+    word-break: break-word;
   }
   .qa-week-banner {
     flex-direction: column;
@@ -2862,6 +2863,11 @@ a.forgot-option-card:hover .forgot-option-arrow {
   .rule-text {
     font-size: 12.5px;
   }
+  .qa-tab-btn {
+    padding: 7px 12px;
+    font-size: 12.5px;
+    min-height: 36px;
+  }
   .forgot-option-card {
     padding: 10px 8px;
     gap: 6px;
@@ -3845,7 +3851,7 @@ function CompletedWeeksQA({ onGoSchedule }) {
     const [selectedWeekNum, setSelectedWeekNum] = useState(() => {
       const list = window.INITIAL_DATA?.completedWeeks;
       if (Array.isArray(list) && list.length > 0) {
-        return list[list.length - 1].week_number;
+        return list.reduce((max, w) => (w && w.week_number > max ? w.week_number : max), list[0]?.week_number || 1);
       }
       return 1;
     });
@@ -3861,7 +3867,8 @@ function CompletedWeeksQA({ onGoSchedule }) {
             if (Array.isArray(data)) {
               setCompletedWeeks(data);
               if (data.length > 0) {
-                setSelectedWeekNum(data[data.length - 1].week_number);
+                const maxWeek = data.reduce((max, w) => (w && w.week_number > max ? w.week_number : max), data[0]?.week_number || 1);
+                setSelectedWeekNum(maxWeek);
               }
             }
           })
@@ -3874,7 +3881,8 @@ function CompletedWeeksQA({ onGoSchedule }) {
     }, []);
 
     const safeList = Array.isArray(completedWeeks) ? completedWeeks : [];
-    const currentWeek = safeList.find(w => w && w.week_number === selectedWeekNum) || safeList[0];
+    const sortedWeeks = [...safeList].sort((a, b) => (b?.week_number || 0) - (a?.week_number || 0));
+    const currentWeek = sortedWeeks.find(w => w && w.week_number === selectedWeekNum) || sortedWeeks[0];
     const questions = Array.isArray(currentWeek?.questions) ? currentWeek.questions : [];
 
     return html`
@@ -3901,22 +3909,22 @@ function CompletedWeeksQA({ onGoSchedule }) {
             </div>
           ` : null}
 
-          ${!loading && safeList.length > 0 && currentWeek ? html`
+          ${!loading && sortedWeeks.length > 0 && currentWeek ? html`
             <div>
               <!-- Week Selector Tabs (Secondary Nav) -->
               <div className="qa-tabs-scroll" role="tablist" aria-label="Completed Quiz Weeks">
-                ${safeList.map(w => {
+                ${sortedWeeks.map(w => {
                   if (!w) return null;
-                  const qCount = Array.isArray(w.questions) ? w.questions.length : 0;
                   return html`
                     <button
                       key=${w.week_number}
+                      type="button"
                       role="tab"
                       aria-selected=${w.week_number === selectedWeekNum}
                       className=${"qa-tab-btn " + (w.week_number === selectedWeekNum ? "active" : "")}
                       onClick=${() => setSelectedWeekNum(w.week_number)}
                     >
-                      <span>Week ${w.week_number} - (${qCount})</span>
+                      <span>Week ${w.week_number}</span>
                     </button>
                   `;
                 })}
